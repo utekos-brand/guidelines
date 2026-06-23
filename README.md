@@ -19,3 +19,7 @@ pnpm build
 
 The color data lives in `lib/brand/color-tokens.json` and was copied from
 `utekos-headless` without importing that project's global CSS.
+
+## Deployment
+
+Current Vercel and DNS status is tracked in `docs/deployment.md`.
