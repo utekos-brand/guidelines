@@ -1,13 +1,11 @@
 ## Chapter 2: Target the (Whole) Market — Byron Sharp and Jenni Romaniuk
 
 Chapter 1 established the double jeopardy law: brand growth requires increased penetration, defined as acquiring more customers within each time period. This chapter examines the composition of brand customer bases. It demonstrates that reaching non-buyers within the time period and infrequent category buyers is essential for growth. It also addresses the heavy-buyer fallacy.
-
 The empirical laws presented have direct implications for brand strategy, including brand equity, media planning, and advertising content. These laws explain why effective marketers operate with mass-market strategies.
 
 ### All that glitters …
 
 Large markets with incomplete information often lead marketers to focus on existing customers, particularly frequent buyers. ROI-driven approaches reinforce this focus. This chapter provides evidence against loyalty-based assumptions.
-
 - Heavy buyers are not a primary source of growth.
 
 ## The heavy-buyer fallacy
@@ -29,15 +27,10 @@ For televisions:
 - 10% purchased three or more units
 
 Heavy buyers are few. Increasing their purchase frequency has limited impact on total sales.
-
 Second, increasing heavy buyer purchasing is difficult. Heavy buyers are typically heavy category buyers. Their category consumption is already high. Increasing it further is unlikely. They are also highly loyal, limiting opportunities to capture additional share from competitors (Sharp, Trinh & Dawes, 2014).
-
 Example: A consumer taking three international holidays annually has limited capacity to increase to four.
-
 Heavy buyers represent a saturated sub-market. They are experienced category users and already favor the brand. Growth rarely originates from this segment.
-
 Retention remains necessary. Heavy buyers are highly exposed to marketing activity. They notice promotions, service changes, and advertising due to established brand familiarity.
-
 Reducing defection among heavy buyers is limited by external factors. An Ehrenberg–Bass Institute study (Bogomolova & Romaniuk, 2009) found:
 
 - 60% of defection occurred due to uncontrollable factors (e.g., relocation, life changes)
@@ -45,33 +38,23 @@ Reducing defection among heavy buyers is limited by external factors. An Ehrenbe
 - 4% resulted from service issues
 
 Cross-selling additional services is also limited. Service brands show minimal variation in the number of products held per customer (Mundt, Dawes & Sharp, 2006). Heavy buyers represent a small portion of both the customer base and total market.
-
 Word-of-mouth contribution from heavy buyers is also limited. A study of Matahari customers in Indonesia found:
 
 - 11% of heavy shoppers (3+ visits/month) generated 15% of word of mouth
 - Light and medium buyers generated five times more word of mouth due to their larger numbers
 
 This pattern is consistent across retailers such as SOGO and Lazada.
-
 Segment size determines total impact. Even if heavy buyers have higher individual propensity for word of mouth, their small population limits total contribution.
-
 Analogy: If 1–2% of the population (e.g., red-haired individuals) generated ten times more negative word of mouth, total impact would remain low due to small segment size.
-
 Word-of-mouth occurrence depends on situational factors. Light and medium buyers are more likely to be present in relevant situations due to their larger numbers.
-
 Focusing on heavy buyers for word-of-mouth generation is inefficient.
-
 ### Why light/infrequent buyers matter
-
 Heavy buyers have limited growth potential due to low incremental capacity and small population size. Light buyers represent the primary growth opportunity.
-
 Brand purchase frequency follows a reverse-J distribution:
-
 - Many buyers purchase infrequently
 - Few buyers purchase frequently
 
 This pattern, identified by Andrew Ehrenberg in 1959, is consistent across countries, categories, and time periods.
-
 This distribution is critical for marketing strategy.
 
 Larger brands have:
@@ -80,7 +63,6 @@ Larger brands have:
 - Slightly higher purchase frequency (double jeopardy law)
 
 The distribution is modeled by the negative binomial distribution.
-
 Growth primarily affects the zero-purchase segment:
 
 - Growth reduces the proportion of non-buyers (increases penetration)
@@ -117,11 +99,8 @@ Example:
 - Smaller brands have fewer buyers across all frequency levels, not just heavy buyers
 
 Example comparison: Tesco vs Esso — Tesco has more buyers at all frequency levels except non-buyers.
-
 There is no evidence that brands grow by disproportionately attracting heavy buyers.
-
 The negative binomial distribution enables forecasting:
-
 - Future frequency distribution can be predicted based on target market share
 
 ### Pareto law and light buyers
@@ -236,17 +215,13 @@ As a brand grows, its customer base shifts. The proportion of light category buy
 ### The natural monopoly law
 
 The advantage held by larger brands is described as the natural monopoly law (Ehrenberg, 2000; Dawes, 2020). Larger brands capture a greater share of light category buyers.
-
 Consider television programming. Low-rating programs are viewed by a small audience. These viewers are typically heavy television viewers. However, heavy viewers represent a minority. High-rating programs must therefore attract light viewers to achieve large audiences. This explains why top-rated shows are valuable to advertisers: they reach individuals who rarely watch television. This principle applies similarly to brands and retailers.
-
 Large brands must attract light category buyers to achieve scale. All large brands attract light buyers; this is not optional. Sustained growth requires continued marketing activity that reaches these buyers. Failure to maintain reach risks losing them.
-
 An exclusive focus on ROI can restrict growth. Targeting only high-frequency buyers appears efficient but limits scale. Reaching light buyers may produce lower immediate ROI but enables long-term growth and profitability through scale.
 
 ### Resist the seduction of sole loyalty
 
 Efforts to increase loyalty often focus on identifying heavy category buyers who purchase exclusively from one brand. These individuals exist but are extremely rare.
-
 Data from soft drinks in Turkey and Mexico (Table 2.5) shows that fewer than 1% of the heaviest category buyers (those purchasing once per day or more) are solely loyal. Sole loyalty is highest among infrequent buyers (once per month or less), but fewer than 5% of category buyers fall into this group.
 
 **Table 2.5: The relationship between category purchase frequency and sole loyalty for soft drinks in Turkey and Mexico (2014)**
@@ -289,15 +264,12 @@ These options are available to all customers and do not depend on predefined cus
 ### The natural monopoly law
 
 This advantage of large brands is defined as the natural monopoly law (Ehrenberg, 2000; Dawes, 2020). Larger brands have greater reach among light category buyers. Low-rating television programs are viewed by very few people. These viewers are typically heavy television viewers. Heavy viewers represent a minority of the total audience. High-rating programs must therefore attract light viewers to achieve scale. This explains their value to advertisers. The same principle applies to brands and retailers.
-
 Large brands must attract light category buyers. All large brands achieve this. Sustained growth requires continued reach among these buyers. Failure to maintain reach results in loss of customers.
-
 A strict focus on ROI can restrict growth. It shifts attention away from reaching light buyers. Light buyers generate lower immediate ROI but are essential for scale. Prioritizing ROI can reduce long-term profitability.
 
 ### Resist the seduction of sole loyalty
 
 Efforts to maximize loyalty often focus on heavy category buyers who purchase only one brand. These buyers are extremely rare.
-
 Data from soft drinks in Turkey and Mexico (Table 2.5) shows that fewer than 1% of the heaviest buyers (daily or more frequent purchasers) are solely loyal. Sole loyalty is higher among infrequent buyers, but these buyers represent less than 5% of the category.
 
 **Table 2.5: The relationship between category purchase frequency and sole loyalty for soft drinks in Turkey and Mexico (2014)**
@@ -312,9 +284,7 @@ Data from soft drinks in Turkey and Mexico (Table 2.5) shows that fewer than 1% 
 | Less than once a month   | 40                    | 33                    |
 
 In financial services, increased product ownership reduces sole loyalty. For banks in South Africa, moving from one to two products significantly reduces the proportion of 100% loyal customers.
-
 Sole loyalty does not indicate strong preference. It often results from infrequent purchasing or limited purchase occasions. Extending the observation period reduces measured sole loyalty because buyers purchase from multiple brands over time.
-
 Share loyalty becomes relevant only when expanding the customer base is not possible. It is not a primary growth strategy. Attempting to build a fully loyal customer base is ineffective, including in subscription categories such as banking and insurance.
 
 ### Sophisticated mass marketing
@@ -340,21 +310,14 @@ These options are available to all customers. Selection is determined by individ
 ### Don’t shoot yourself in the foot with target marketing
 
 Target marketing is often misapplied. Limited targeting can be useful, but excessive narrowing reduces growth potential.
-
 The assumption that brands appeal to distinct customer segments is not supported by empirical data (see How Brands Grow, Chapter 5; Kennedy & Ehrenberg, 2001; Kennedy, Ehrenberg & Long, 2000; Uncles et al., 2012). Competing brands share similar customer bases. Differences in performance are primarily due to differences in customer base size.
-
 Creating detailed fictional personas, such as a single representative customer, leads to misalignment. It restricts communication to a narrow audience and reduces market reach. This approach can result in insufficient sales volume.
-
 Goya Foods expanded beyond its initial Hispanic immigrant base to reach a broader market. CEO Bob Unanue stated: “We like to say we don’t market to Latinos, we market as Latinos” (Wentz, 2013).
-
 Quorn shifted from targeting vegetarians (approximately 7% of UK households) to a broader healthy eating positioning (approximately 70% of UK households) (Wragg & Regan, 2012, p. 33). By 2011, Quorn contributed 62% of category growth with £6.8 million in increased sales (Wragg & Regan, 2012). In 2020, most Quorn consumers were meat eaters.
-
 These examples demonstrate a focus on category needs rather than predefined customer segments. This approach expands market reach and increases sales opportunities.
 
 ### Conclusion
 
 Growth depends on attracting light and non-buyers due to their large numbers and potential for increased purchasing. The natural monopoly law reinforces the need to reach light category buyers.
-
 Common misconceptions about loyalty and targeting reduce effectiveness. These include overemphasis on sole loyalty and excessive segmentation.
-
 The next section examines brand switching behavior and identifies patterns in customer overlap across competing brands.

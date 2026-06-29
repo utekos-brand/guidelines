@@ -184,7 +184,7 @@
 [data-theme="vy"][data-color-mode="dark"] {
   color-scheme: dark;
 
-  /* bg.DEFAULT → interstellar */
+  /* bg.DEFAULT →  */
   --background: var(--vy-green-1100);
   /* text.DEFAULT */
   --foreground: var(--vy-white);

@@ -1,15 +1,101 @@
 @theme static {
+  /* Utekos core */
   --color-maritime-blue: oklch(0.2948 0.0419 195.12);
   --color-cloud-dancer: oklch(0.9493 0.007 88.64);
+  --color-iced-apricot: oklch(0.86 0.09 63);
+  --color-fjellbla: oklch(0.45 0.055 225);
+  --color-vargnatt: oklch(0.16 0.048 285);
 
+  /* Havdyp */
   --color-havdyp-950: oklch(0.1142 0.0511 290.62);
   --color-havdyp-900: oklch(0.16 0.048 285);
   --color-havdyp-800: oklch(0.22 0.044 280);
 
+  /* Parchment */
   --color-parchment-50: oklch(0.9649 0.005 78.3);
   --color-parchment-100: oklch(0.9306 0.01 93.57);
 
-  --color-iced-apricot: oklch(0.86 0.09 63);
-  --color-fjellbla: oklch(0.45 0.055 225);
-  --color-vargnatt: oklch(0.16 0.048 285);
+  /* Maritime Monochromatic */
+  --color-maritime-50: oklch(0.97 0.008 279.42);
+  --color-maritime-100: oklch(0.92 0.015 279.42);
+  --color-maritime-200: oklch(0.84 0.025 279.42);
+  --color-maritime-300: oklch(0.74 0.032 279.42);
+  --color-maritime-400: oklch(0.64 0.036 279.42);
+  --color-maritime-500: oklch(0.54 0.036 279.42);
+  --color-maritime-600: oklch(0.44 0.036 279.42);
+  --color-maritime-700: oklch(0.35 0.036 279.42);
+  --color-maritime-800: oklch(0.2884 0.0366 279.42);
+  --color-maritime-900: oklch(0.2 0.03 279.42);
+  --color-maritime-950: oklch(0.12 0.02 279.42);
+
+  /* Maritime Monochromatic Secondary — #055F5F arbeidsrampe */
+  --color-maritime-secondary-50: #edfafa;
+  --color-maritime-secondary-100: #d5f3f3;
+  --color-maritime-secondary-200: #aee6e6;
+  --color-maritime-secondary-300: #7bd1d1;
+  --color-maritime-secondary-400: #45b4b4;
+  --color-maritime-secondary-500: #1f9494;
+  --color-maritime-secondary-600: #0f7777;
+  --color-maritime-secondary-700: #055f5f;
+  --color-maritime-secondary-800: #064d4d;
+  --color-maritime-secondary-900: #073f3f;
+  --color-maritime-secondary-950: #042525;
+
+  /* All Year Palette — Amber */
+  --color-amber-50: oklch(98.7% 0.022 95.277);
+  --color-amber-100: oklch(96.2% 0.059 95.617);
+  --color-amber-200: oklch(92.4% 0.12 95.746);
+  --color-amber-300: oklch(87.9% 0.169 91.605);
+  --color-amber-400: oklch(82.8% 0.189 84.429);
+  --color-amber-500: oklch(76.9% 0.188 70.08);
+  --color-amber-600: oklch(66.6% 0.179 58.318);
+  --color-amber-700: oklch(55.5% 0.163 48.998);
+  --color-amber-800: oklch(47.3% 0.137 46.201);
+  --color-amber-900: oklch(41.4% 0.112 45.904);
+  --color-amber-950: oklch(27.9% 0.077 45.635);
+
+  /* All Year Palette — Yellow */
+  --color-yellow-50: oklch(98.7% 0.026 102.212);
+  --color-yellow-100: oklch(97.3% 0.071 103.193);
+  --color-yellow-200: oklch(94.5% 0.129 101.54);
+  --color-yellow-300: oklch(90.5% 0.182 98.111);
+  --color-yellow-400: oklch(85.2% 0.199 91.936);
+  --color-yellow-500: oklch(79.5% 0.184 86.047);
+  --color-yellow-600: oklch(68.1% 0.162 75.834);
+  --color-yellow-700: oklch(55.4% 0.135 66.442);
+  --color-yellow-800: oklch(47.6% 0.114 61.907);
+  --color-yellow-900: oklch(42.1% 0.095 57.708);
+  --color-yellow-950: oklch(28.6% 0.066 53.813);
+
+  /* Teal */
+  --color-teal-50: oklch(98.4% 0.014 180.72);
+  --color-teal-100: oklch(95.3% 0.051 180.801);
+  --color-teal-200: oklch(91% 0.096 180.426);
+  --color-teal-300: oklch(85.5% 0.138 181.071);
+  --color-teal-400: oklch(77.7% 0.152 181.912);
+  --color-teal-500: oklch(70.4% 0.14 182.503);
+  --color-teal-600: oklch(60% 0.118 184.704);
+  --color-teal-700: oklch(51.1% 0.096 186.391);
+  --color-teal-800: oklch(43.7% 0.078 188.216);
+  --color-teal-900: oklch(38.6% 0.063 188.416);
+  --color-teal-950: oklch(27.7% 0.046 192.524);
+
+  /* PrimaryBlue — komplettert arbeidsrampe */
+  --color-primary-blue-scale-50: #ecfbff;
+  --color-primary-blue-scale-100: #d4f5ff;
+  --color-primary-blue-scale-200: #a8eaff;
+  --color-primary-blue-scale-300: #70ddff;
+  --color-primary-blue-scale-400: #29c9ff;
+  --color-primary-blue-scale-500: #009cde;
+  --color-primary-blue-scale-600: #0085b5;
+  --color-primary-blue-scale-700: #006b94;
+  --color-primary-blue-scale-800: #075a7a;
+  --color-primary-blue-scale-900: #0a4b66;
+  --color-primary-blue-scale-950: #063047;
+
+  /* PLAN.md explicit primary aliases */
+  --color-primary-blue-900: #00a0d6;
+
+  --color-primary-blue: #009cde;
+  --color-primary-800: #7499f7;
 }

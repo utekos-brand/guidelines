@@ -1,84 +1,173 @@
-import { Fragment } from "react";
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-import { Separator } from "@/components/ui/separator";
+import { Fragment, useMemo, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ChevronDown, Grid2X2, X } from "lucide-react";
+
+import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { brandNavGroups } from "@/src/config/brand-navigation";
+  brandNavSections,
+  isBrandNavItemActive,
+  type BrandNavAccordion,
+  type BrandNavItem,
+} from "@/src/config/brand-navigation";
+import { cn } from "@/lib/utils";
+
+function getAccordionId(sectionTitle: string, accordionTitle: string) {
+  return `${sectionTitle}:${accordionTitle}`;
+}
+
+function isAccordionActive(pathname: string, accordion: BrandNavAccordion) {
+  return accordion.items.some((item) => isBrandNavItemActive(pathname, item));
+}
+
+function BrandSidebarLink({
+  item,
+  pathname,
+  onNavigate,
+}: {
+  item: BrandNavItem;
+  pathname: string;
+  onNavigate: () => void;
+}) {
+  const isActive = isBrandNavItemActive(pathname, item);
+  const showOverviewIcon = item.title === "Oversikt";
+
+  return (
+    <li>
+      <Link
+        href={item.href}
+        aria-current={isActive ? "page" : undefined}
+        data-active={isActive ? "" : undefined}
+        className={cn("brand-sidebar-link", isActive && "brand-sidebar-link-active")}
+        onClick={onNavigate}
+      >
+        <span className="brand-sidebar-link-label">{item.title}</span>
+        {showOverviewIcon ? (
+          <Grid2X2 className="brand-sidebar-link-icon" aria-hidden="true" />
+        ) : null}
+        {item.badge ? <span className="brand-sidebar-badge">{item.badge}</span> : null}
+      </Link>
+    </li>
+  );
+}
 
 export function BrandSidebar() {
+  const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
+  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({});
+
+  const activeAccordionIds = useMemo(() => {
+    const ids = new Set<string>();
+
+    for (const section of brandNavSections) {
+      for (const accordion of section.accordions ?? []) {
+        if (isAccordionActive(pathname, accordion)) {
+          ids.add(getAccordionId(section.title, accordion.title));
+        }
+      }
+    }
+
+    return ids;
+  }, [pathname]);
+
+  function closeMobileSidebar() {
+    setOpenMobile(false);
+  }
+
+  function toggleAccordion(id: string, fallbackOpen: boolean) {
+    setOpenAccordions((current) => ({
+      ...current,
+      [id]: !(current[id] ?? fallbackOpen),
+    }));
+  }
+
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              render={<Link href="/" />}
-              className="h-12 justify-start px-2"
-              tooltip="Utekos Brand"
-            >
-              <span className="relative block h-6 w-28 overflow-hidden group-data-[collapsible=icon]:hidden">
-                <Image
-                  src="/UtekosWordmarDark.svg"
-                  alt="Utekos Brand"
-                  width={1280}
-                  height={311}
-                  priority
-                  className="h-full w-auto object-contain dark:hidden"
-                />
-                <Image
-                  src="/WordmarkWhite.svg"
-                  alt="Utekos Brand"
-                  width={1280}
-                  height={311}
-                  priority
-                  className="hidden h-full w-auto object-contain dark:block"
-                />
-              </span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+    <Sidebar collapsible="offcanvas" className="brand-sidebar-container">
+      <SidebarContent className="brand-sidebar-content">
+        <button
+          type="button"
+          className="brand-sidebar-close"
+          aria-label="Lukk meny"
+          onClick={closeMobileSidebar}
+        >
+          <X aria-hidden="true" />
+        </button>
 
-      <SidebarContent className="pt-3">
-        {brandNavGroups.map((group) => (
-          <Fragment key={group.title}>
-            {group.title === "Anvendelse" ? (
-              <Separator className="bg-sidebar-border mx-auto my-1.5 data-horizontal:w-[95%]" />
-            ) : null}
+        <nav className="brand-sidebar-nav" aria-label="Sidenavigasjon">
+          {brandNavSections.map((section, sectionIndex) => (
+            <Fragment key={section.title}>
+              {sectionIndex > 0 ? (
+                <div className="brand-sidebar-separator" role="separator" />
+              ) : null}
 
-            <SidebarGroup>
-              <SidebarGroupLabel className="text-sm">{group.title}</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu className="gap-1.5">
-                  {group.items.map((item) => (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton
-                        render={<Link href={item.href} />}
-                        tooltip={item.title}
-                        className="text-base"
+              <section
+                className="brand-sidebar-section"
+                aria-labelledby={`sidebar-${sectionIndex}`}
+              >
+                <p id={`sidebar-${sectionIndex}`} className="brand-sidebar-section-title">
+                  {section.title}
+                </p>
+
+                {section.accordions?.map((accordion) => {
+                  const id = getAccordionId(section.title, accordion.title);
+                  const isActive = activeAccordionIds.has(id);
+                  const fallbackOpen = accordion.defaultOpen ?? false;
+                  const isOpen = isActive || (openAccordions[id] ?? fallbackOpen);
+                  const panelId = `sidebar-panel-${sectionIndex}-${accordion.title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")}`;
+
+                  return (
+                    <div key={id} className="brand-sidebar-accordion">
+                      <button
+                        type="button"
+                        className="brand-sidebar-trigger"
+                        aria-expanded={isOpen}
+                        aria-controls={panelId}
+                        onClick={() => toggleAccordion(id, isOpen)}
                       >
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                      {item.badge ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </Fragment>
-        ))}
+                        <span>{accordion.title}</span>
+                        <ChevronDown
+                          className="brand-sidebar-chevron"
+                          data-open={isOpen ? "" : undefined}
+                          aria-hidden="true"
+                        />
+                      </button>
+
+                      <div id={panelId} hidden={!isOpen}>
+                        <ul className="brand-sidebar-list">
+                          {accordion.items.map((item) => (
+                            <BrandSidebarLink
+                              key={item.href}
+                              item={item}
+                              pathname={pathname}
+                              onNavigate={closeMobileSidebar}
+                            />
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {section.items ? (
+                  <ul className="brand-sidebar-list brand-sidebar-list-flat">
+                    {section.items.map((item) => (
+                      <BrandSidebarLink
+                        key={item.href}
+                        item={item}
+                        pathname={pathname}
+                        onNavigate={closeMobileSidebar}
+                      />
+                    ))}
+                  </ul>
+                ) : null}
+              </section>
+            </Fragment>
+          ))}
+        </nav>
       </SidebarContent>
     </Sidebar>
   );

@@ -19,7 +19,7 @@ export function BrandHeaderActions() {
           const isActive = isBrandHeaderNavItemActive(pathname, item);
 
           return (
-            <li key={item.href} className="hidden md:list-item">
+            <li key={item.href} className="hidden xl:list-item">
               <Link
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}

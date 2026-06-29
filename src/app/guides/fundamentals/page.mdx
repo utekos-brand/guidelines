@@ -1,0 +1,13 @@
+### Grunnprinsipper
+
+Komponenter i Utekos bruker ulike stiler og effekter for å skille mellom funksjoner, viktighet og plassering. Variantene er definert som design tokens og kan brukes når man utformer nye elementer.
+
+### Avrunding
+
+Vi bruker i stor grad avrundede komponenter for å skape et mykere brukergrensesnitt. Avrundingen følger vanligvis størrelsen på komponenten. Små komponenter har liten avrunding, mens store komponenter har større avrunding. Det er få tilfeller hvor vi ikke avrunder komponenter, designelementer og tilstander (_states_). Unntakene er fullskjermselementer, bilder, bildegallerier, eller der to elementer møtes – som for eksempel i åpne søkefelt.
+
+En enkel måte å avgjøre hvilken avrunding du bør bruke, er å følge denne tommelfingerregelen: Komponenter med 1–2 tekstlinjer eller svært kompakte elementer skal alltid ha en avrunding på **12 px**. Når innholdet strekker seg over flere linjer horisontalt, som i kort eller bokser, bruker vi en avrunding på **18 px**. I tillegg brukes **24 px** avrunding på uttrekksmenyer (_drawers_), og **30–36 px** på komponenter som skal være fullstendig avrundet, for eksempel knapper.
+
+De fleste komponenter i Utekos benytter en form for kontrast mot bakgrunnen, enten i form av farge, omriss (_outlines_) eller skygge. Skygge brukes for å løfte noe frem fra bakgrunnen, enten det ligger over et annet element eller utelukkende for å skape kontrast. Vi bruker også skygge for å visualisere og tydeliggjøre at et element er klikkbart.
+
+Ikke alle klikkbare elementer har skygge, som for eksempel inndatafelt og knapper. Noen ganger benyttes skygge kun i bestemte tilstander av en komponent for å tydeliggjøre en interaksjon eller handling. Komponenter med sterke farger eller tydelige omriss har ikke behov for skygge. Vi opererer med tre nivåer av skygge: **Elevation 1**, **Elevation 2** og **Elevation 3**. Disse ulike skyggenivåene kan brukes systematisk for å bygge opp et visuelt hierarki basert på viktighet.

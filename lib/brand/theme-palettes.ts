@@ -2,8 +2,6 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Route } from "next";
 
-import { brandColorTokens, type BrandColorToken } from "@/lib/brand/color-tokens";
-
 export type ThemeDocId = "utekos" | "havdyp" | "dnb" | "vy" | "custom";
 
 export type ThemePaletteColor = {
@@ -120,7 +118,7 @@ export function getThemePaletteIndex(): ThemePaletteIndexItem[] {
     return {
       theme,
       title: palette.title,
-      href: `/themes/${theme}` as Route,
+      href: `/theme/${theme}` as Route,
       sourceLabel: palette.sourceLabel,
       colorCount: colors.length,
       swatches: colors.slice(0, 8),
@@ -159,7 +157,7 @@ function buildDnbPalette(): ThemePalette {
     theme: "dnb",
     title: "DNB theme",
     summary:
-      "Eksakt DNB/Eufemia tokenpalett med lys og mørk tokenmodell, først som hovedpalett og deretter gruppert etter Eufemia-kategoriene.",
+      "DNB-theme dokumenterer Eufemia-tokenene med hovedpalett, semantiske light/dark-mappinger og full tokenstruktur.",
     sourceLabel: "Eufemia tokens + styles/themes/dnb.css",
     sourceDetail:
       "DNB-verdiene kommer fra Eufemia-tokenkilden som allerede ligger i theme-CSS-en. Semantiske shadcn-variabler løses tilbake til de samme DNB-tokenene.",
@@ -167,7 +165,6 @@ function buildDnbPalette(): ThemePalette {
       createGroupFromNames(
         "dnb-main",
         "Hovedpalett",
-        "Kjernefarger som styrer handling, flater, tekst, status og dekorative DNB-roller.",
         [
           "--dnb-light-token-color-background-action",
           "--dnb-light-token-color-background-page-background",
@@ -213,7 +210,6 @@ function createDnbTokenGroups(entries: Array<[string, string]>, rawVars: Map<str
       createGroupFromNames(
         `dnb-${mode}-${category}`,
         `DNB ${mode === "light" ? "Light" : "Dark"} - ${title}`,
-        `Alle ${title.toLowerCase()}-tokens i DNB ${mode}.`,
         namesByPrefix(entries, `--dnb-${mode}-token-color-${category}-`),
         rawVars,
       ),
@@ -236,7 +232,7 @@ function buildVyPalette(): ThemePalette {
     theme: "vy",
     title: "Vy theme",
     summary:
-      "Eksakt Spor/Vy digitalpalett, med hovedpalett først og full skala for grå, grønn, blå, gul, oransje, rød og alpha-toner.",
+      "Vy-theme viser Spor/Vy-paletten med hovedfarger, semantikk, shades og alpha-toner fra repoets theme-CSS.",
     sourceLabel: "Spor MCP snapshot + styles/themes/vy.css",
     sourceDetail:
       "Vy-verdiene er hentet fra Spor vyDigital-paletten i repoets theme-CSS. Semantiske tokens vises med hvilken rå Vy-verdi de peker på.",
@@ -244,7 +240,6 @@ function buildVyPalette(): ThemePalette {
       createGroupFromNames(
         "vy-main",
         "Hovedpalett",
-        "Fargene som bærer Vy-opplevelsen og de primære semantiske rollene.",
         [
           "--vy-green-700",
           "--vy-green-200",
@@ -258,7 +253,7 @@ function buildVyPalette(): ThemePalette {
         ],
         rawVars,
       ),
-      createSemanticGroup("vy-light-semantic", "Semantikk - light", {
+      createSemanticGroup("vy-light-semantic", "Light", {
         sourceVars: lightSemanticVars,
         resolveVars: rawVars,
       }),
@@ -266,66 +261,22 @@ function buildVyPalette(): ThemePalette {
         sourceVars: darkSemanticVars,
         resolveVars: rawVars,
       }),
-      createGroupFromNames(
-        "vy-grey",
-        "Grey",
-        "Vy gråskala fra 50 til 1100.",
-        namesByPrefix(entries, "--vy-grey-"),
-        rawVars,
-      ),
-      createGroupFromNames(
-        "vy-green",
-        "Green",
-        "Vy grønnskala fra 50 til 1100.",
-        namesByPrefix(entries, "--vy-green-"),
-        rawVars,
-      ),
-      createGroupFromNames(
-        "vy-blue",
-        "Blue",
-        "Vy blåskala fra 50 til 1100.",
-        namesByPrefix(entries, "--vy-blue-"),
-        rawVars,
-      ),
-      createGroupFromNames(
-        "vy-yellow",
-        "Yellow",
-        "Vy gulskala fra 50 til 1100.",
-        namesByPrefix(entries, "--vy-yellow-"),
-        rawVars,
-      ),
-      createGroupFromNames(
-        "vy-orange",
-        "Orange",
-        "Vy oransjeskala fra 50 til 1100.",
-        namesByPrefix(entries, "--vy-orange-"),
-        rawVars,
-      ),
-      createGroupFromNames(
-        "vy-red",
-        "Red",
-        "Vy rødskala fra 50 til 1100.",
-        namesByPrefix(entries, "--vy-red-"),
-        rawVars,
-      ),
-      createGroupFromNames(
-        "vy-base",
-        "Base",
-        "Hvitt og sort i Vy-paletten.",
-        ["--vy-white", "--vy-black"],
-        rawVars,
-      ),
+      createGroupFromNames("vy-grey", "Grey", namesByPrefix(entries, "--vy-grey-"), rawVars),
+      createGroupFromNames("vy-green", "Green", namesByPrefix(entries, "--vy-green-"), rawVars),
+      createGroupFromNames("vy-blue", "Blue", namesByPrefix(entries, "--vy-blue-"), rawVars),
+      createGroupFromNames("vy-yellow", "Yellow", namesByPrefix(entries, "--vy-yellow-"), rawVars),
+      createGroupFromNames("vy-orange", "Orange", namesByPrefix(entries, "--vy-orange-"), rawVars),
+      createGroupFromNames("vy-red", "Red", namesByPrefix(entries, "--vy-red-"), rawVars),
+      createGroupFromNames("vy-base", "Base", ["--vy-white", "--vy-black"], rawVars),
       createGroupFromNames(
         "vy-white-alpha",
         "White alpha",
-        "Transparente hvitverdier for mørke flater.",
         namesByPrefix(entries, "--vy-white-alpha-"),
         rawVars,
       ),
       createGroupFromNames(
         "vy-black-alpha",
         "Black alpha",
-        "Transparente sortverdier for lyse flater.",
         namesByPrefix(entries, "--vy-black-alpha-"),
         rawVars,
       ),
@@ -344,19 +295,21 @@ function buildUtekosPalette(): ThemePalette {
     extractCssBlock(themeCss, '[data-theme="utekos"][data-color-mode="dark"]'),
   );
 
+  const mergedLightVars = new Map([...baseVars, ...lightSemanticVars]);
+  const mergedDarkVars = new Map([...baseVars, ...darkSemanticVars]);
+
   return {
     theme: "utekos",
-    title: "Utekos theme",
+    title: "Primary Palette",
     summary:
-      "Arbeidsretningen for Utekos, basert på aktive semantiske tokens, rå basefarger og eksisterende fargedata i color-tokens.json.",
-    sourceLabel: "styles/tokens/palette.css + color-tokens.json + PLAN.md",
+      "Utekos-theme dokumenterer den aktive brand-retningen: hovedpalett, semantiske light/dark-mappinger og tokenstruktur. Arbeidspaletter ligger på egne palettsider.",
+    sourceLabel: "styles/tokens/palette.css + styles/themes/utekos.css",
     sourceDetail:
-      "UI-komponenter skal fortsatt bruke semantiske tokens. Rå farger vises her fordi dette er en brand-dokumentasjonsside.",
+      "Theme-siden viser primitive basefarger og semantiske tokens fra repoets faktiske CSS. UI-komponenter skal bruke semantiske tokens, ikke rå palettverdier.",
     groups: [
       createGroupFromNames(
         "utekos-main",
         "Hovedpalett",
-        "Aktive basefarger som dagens Utekos-theme peker på.",
         [
           "--color-maritime-blue",
           "--color-cloud-dancer",
@@ -372,21 +325,12 @@ function buildUtekosPalette(): ThemePalette {
       ),
       createSemanticGroup("utekos-light-semantic", "Semantikk - light", {
         sourceVars: lightSemanticVars,
-        resolveVars: baseVars,
+        resolveVars: mergedLightVars,
       }),
       createSemanticGroup("utekos-dark-semantic", "Semantikk - dark", {
         sourceVars: darkSemanticVars,
-        resolveVars: baseVars,
+        resolveVars: mergedDarkVars,
       }),
-      ...createPlanPaletteGroups({ includeMissing: false }),
-      ...createBrandTokenGroups([
-        "maritime-blue",
-        "maritime-blue-scale",
-        "cloud-dancer",
-        "maritime-blue-complementary",
-        "dazzling-blue",
-        "utekos-svale",
-      ]),
     ],
   };
 }
@@ -402,18 +346,21 @@ function buildHavdypPalette(): ThemePalette {
     extractCssBlock(themeCss, '[data-theme="havdyp"][data-color-mode="dark"]'),
   );
 
+  const mergedLightVars = new Map([...baseVars, ...lightSemanticVars]);
+  const mergedDarkVars = new Map([...baseVars, ...darkSemanticVars]);
+
   return {
     theme: "havdyp",
     title: "Havdyp theme",
-    summary: "Mørkere Utekos-retning som bruker havdyp- og parchment-tokenene i dagens repo.",
+    summary:
+      "Havdyp-theme dokumenterer den mørkere brand-retningen med havdyp-, parchment- og Utekos-baseverdier samt semantiske light/dark-mappinger.",
     sourceLabel: "styles/themes/havdyp.css + styles/tokens/palette.css",
     sourceDetail:
-      "Havdyp-siden viser de faktiske repo-tokenene theme-et bruker, med semantiske light/dark-mappinger.",
+      "Havdyp-siden viser de faktiske repo-tokenene theme-et bruker, med semantiske light/dark-mappinger og shadcn compatibility layer.",
     groups: [
       createGroupFromNames(
         "havdyp-main",
         "Hovedpalett",
-        "Kjerneverdier for Havdyp-retningen.",
         [
           "--color-havdyp-950",
           "--color-havdyp-900",
@@ -429,19 +376,12 @@ function buildHavdypPalette(): ThemePalette {
       ),
       createSemanticGroup("havdyp-light-semantic", "Semantikk - light", {
         sourceVars: lightSemanticVars,
-        resolveVars: baseVars,
+        resolveVars: mergedLightVars,
       }),
       createSemanticGroup("havdyp-dark-semantic", "Semantikk - dark", {
         sourceVars: darkSemanticVars,
-        resolveVars: baseVars,
+        resolveVars: mergedDarkVars,
       }),
-      createGroupFromNames(
-        "havdyp-base",
-        "Rå repo-verdier",
-        "Alle rå basefarger som ligger i den delte palette-filen nå.",
-        [...baseVars.keys()].filter((name) => name.startsWith("--color-")),
-        baseVars,
-      ),
     ],
   };
 }
@@ -451,7 +391,7 @@ function buildCustomPalette(): ThemePalette {
     theme: "custom",
     title: "Custom palettes",
     summary:
-      "Canva-navngitte arbeids-paletter basert på verdiene i PLAN.md fra `--color-maritime-50` og nedover.",
+      "Custom-siden viser PLAN.md-paletter og arbeidsforslag som ennå ikke er knyttet til et dedikert theme.",
     sourceLabel: "PLAN.md",
     sourceDetail:
       "Siden viser bare verdier som finnes i PLAN.md eller repoets fargedata. Manglende Canva-paletter får statusfelt i stedet for oppdiktede swatches.",
@@ -466,7 +406,6 @@ function createPlanPaletteGroups({ includeMissing }: { includeMissing: boolean }
     createGroupFromNames(
       "plan-maritime-monochromatic",
       "Maritime Monochromatic",
-      "PLAN.md-skalaen fra --color-maritime-50 til --color-maritime-950.",
       planScaleNames("--color-maritime"),
       planVars,
     ),
@@ -486,28 +425,19 @@ function createPlanPaletteGroups({ includeMissing }: { includeMissing: boolean }
     createGroupFromNames(
       "plan-all-year-amber",
       "All Year Pallet - Amber",
-      "Amber-skalaen i PLAN.md.",
       planScaleNames("--color-amber"),
       planVars,
     ),
     createGroupFromNames(
       "plan-all-year-yellow",
       "All Year Pallet - Yellow",
-      "Yellow-skalaen i PLAN.md.",
       planScaleNames("--color-yellow"),
       planVars,
     ),
-    createGroupFromNames(
-      "plan-teal",
-      "Teal",
-      "Teal-skalaen i PLAN.md.",
-      planScaleNames("--color-teal"),
-      planVars,
-    ),
+    createGroupFromNames("plan-teal", "Teal", planScaleNames("--color-teal"), planVars),
     createGroupFromNames(
       "plan-primary-blue",
       "PrimaryBlue",
-      "Primærblå verdier som er definert i PLAN.md.",
       ["--color-primary-blue-900", "--color-primary-blue", "--color-primary-800"],
       planVars,
     ),
@@ -526,41 +456,6 @@ function createPlanPaletteGroups({ includeMissing }: { includeMissing: boolean }
   return groups;
 }
 
-function createBrandTokenGroups(sectionIds: string[]): ThemePaletteGroup[] {
-  return sectionIds.flatMap((sectionId) => {
-    const section = brandColorTokens.sections.find((candidate) => candidate.id === sectionId);
-
-    if (!section) {
-      return [];
-    }
-
-    return [
-      {
-        id: `brand-token-${section.id}`,
-        title: section.title,
-        description: `${section.sourceTitle}. ${section.tokens.length} verdier fra lib/brand/color-tokens.json.`,
-        colors: section.tokens.map(createColorFromBrandToken),
-      },
-    ];
-  });
-}
-
-function createColorFromBrandToken(token: BrandColorToken): ThemePaletteColor {
-  const displayValue = token.hex ?? token.value;
-  const sourceToken = token.value !== displayValue ? token.value : undefined;
-
-  return {
-    id: slugify(token.id),
-    label: token.label,
-    value: token.value,
-    displayValue,
-    copyValue: displayValue,
-    color: token.hex ?? token.resolvedValue,
-    cssVar: token.cssVar,
-    sourceToken,
-  };
-}
-
 function createSemanticGroup(
   id: string,
   title: string,
@@ -577,7 +472,6 @@ function createSemanticGroup(
   return {
     id,
     title,
-    description: "Semantiske shadcn-variabler med faktisk fargeverdi og kilde-token.",
     colors: semanticTokenNames
       .map((name) => createColorFromDeclaration(name, sourceVars.get(name), mergedVars))
       .filter((color): color is ThemePaletteColor => Boolean(color)),
@@ -587,14 +481,12 @@ function createSemanticGroup(
 function createGroupFromNames(
   id: string,
   title: string,
-  description: string,
   names: string[],
   vars: Map<string, string>,
 ): ThemePaletteGroup {
   return {
     id,
     title,
-    description,
     colors: names
       .map((name) => createColorFromDeclaration(name, vars.get(name), vars))
       .filter((color): color is ThemePaletteColor => Boolean(color)),

@@ -7,6 +7,7 @@ import { useMemo } from 'react'
 import type { HTMLProps, ReactNode } from 'react'
 import { clsx } from 'clsx'
 import Space from '../../space/Space'
+import React from 'react'
 
 export type SkeletonCircleRows = string | number
 export type SkeletonCircleChildren = string | (() => ReactNode) | ReactNode

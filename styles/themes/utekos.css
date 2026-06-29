@@ -1,111 +1,271 @@
 [data-theme="utekos"][data-color-mode="light"] {
   color-scheme: light;
 
-  --radius: 0.625rem;
+  /* Semantic design tokens — background */
+  --token-color-background-page-background: var(--color-parchment-50);
+  --token-color-background-neutral: var(--color-cloud-dancer);
+  --token-color-background-neutral-subtle: var(--color-parchment-100);
+  --token-color-background-action: var(--color-maritime-blue);
+  --token-color-background-action-hover: var(--color-maritime-700);
+  --token-color-background-action-pressed: var(--color-maritime-800);
+  --token-color-background-action-disabled: var(--color-maritime-100);
+  --token-color-background-selected-subtle: var(--color-maritime-100);
+  --token-color-background-warning-subtle: var(--color-iced-apricot);
+  --token-color-background-warning: var(--color-amber-400);
+  --token-color-background-positive-subtle: var(--color-teal-100);
+  --token-color-background-positive: var(--color-teal-600);
+  --token-color-background-info-subtle: var(--color-primary-blue-scale-100);
+  --token-color-background-info: var(--color-primary-blue-scale-500);
+  --token-color-background-error-subtle: oklch(0.96 0.025 25);
+  --token-color-background-error: oklch(0.55 0.18 25);
+  --token-color-background-inverse: var(--color-havdyp-950);
 
-  --background: var(--color-cloud-dancer);
-  --foreground: var(--color-maritime-blue);
+  /* Semantic design tokens — text */
+  --token-color-text-neutral: var(--color-havdyp-950);
+  --token-color-text-neutral-alternative: color-mix(
+    in oklab,
+    var(--color-havdyp-950) 72%,
+    transparent
+  );
+  --token-color-text-neutral-inverse: var(--color-cloud-dancer);
+  --token-color-text-action: var(--color-maritime-blue);
+  --token-color-text-action-hover: var(--color-maritime-700);
+  --token-color-text-action-pressed: var(--color-maritime-800);
+  --token-color-text-action-disabled: var(--color-maritime-300);
+  --token-color-text-action-inverse: var(--color-cloud-dancer);
+  --token-color-text-warning: var(--color-amber-900);
+  --token-color-text-positive: var(--color-teal-900);
+  --token-color-text-info: var(--color-primary-blue-scale-800);
+  --token-color-text-error: oklch(0.43 0.17 25);
 
-  --card: oklch(0.985 0.006 88);
-  --card-foreground: var(--color-maritime-blue);
+  /* Semantic design tokens — icon */
+  --token-color-icon-neutral: var(--token-color-text-neutral);
+  --token-color-icon-neutral-alternative: var(--token-color-text-neutral-alternative);
+  --token-color-icon-action: var(--token-color-text-action);
+  --token-color-icon-action-hover: var(--token-color-text-action-hover);
+  --token-color-icon-action-disabled: var(--token-color-text-action-disabled);
+  --token-color-icon-warning: var(--color-amber-700);
+  --token-color-icon-positive: var(--color-teal-700);
+  --token-color-icon-info: var(--color-primary-blue-scale-700);
+  --token-color-icon-error: var(--token-color-text-error);
 
-  --popover: var(--card);
-  --popover-foreground: var(--card-foreground);
+  /* Semantic design tokens — stroke */
+  --token-color-stroke-neutral: color-mix(in oklab, var(--color-havdyp-950) 18%, transparent);
+  --token-color-stroke-neutral-subtle: color-mix(
+    in oklab,
+    var(--color-havdyp-950) 10%,
+    transparent
+  );
+  --token-color-stroke-action: var(--color-maritime-blue);
+  --token-color-stroke-action-hover: var(--color-maritime-700);
+  --token-color-stroke-action-pressed: var(--color-maritime-800);
+  --token-color-stroke-action-focus: var(--color-primary-blue-scale-500);
+  --token-color-stroke-action-disabled: var(--color-maritime-200);
+  --token-color-stroke-selected: var(--color-maritime-blue);
+  --token-color-stroke-warning: var(--color-amber-500);
+  --token-color-stroke-positive: var(--color-teal-600);
+  --token-color-stroke-info: var(--color-primary-blue-scale-500);
+  --token-color-stroke-error: oklch(0.55 0.18 25);
 
-  --primary: var(--color-maritime-blue);
-  --primary-foreground: var(--color-cloud-dancer);
+  /* Semantic design tokens — decorative */
+  --token-color-decorative-first-base: var(--color-teal-600);
+  --token-color-decorative-first-bold-static: var(--color-maritime-blue);
+  --token-color-decorative-second-base: var(--color-amber-400);
+  --token-color-decorative-third-base: var(--color-iced-apricot);
 
-  --secondary: oklch(0.91 0.018 88);
-  --secondary-foreground: var(--color-maritime-blue);
+  /* Radius tokens */
+  --token-radius-xs: 0.25rem;
+  --token-radius-sm: 0.375rem;
+  --token-radius-md: 0.625rem;
+  --token-radius-lg: 0.875rem;
+  --token-radius-xl: 1.25rem;
+  --token-radius-full: 999px;
 
-  --muted: oklch(0.92 0.009 88);
-  --muted-foreground: oklch(0.47 0.018 195);
-
-  --accent: var(--color-iced-apricot);
-  --accent-foreground: var(--color-maritime-blue);
-
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-
-  --border: oklch(0.93 0.006 88);
-  --input: oklch(0.88 0.01 88);
-  --ring: var(--color-maritime-blue);
-
-  --header-nav-active: oklch(0.92 0.012 88);
-  --header-nav-active-foreground: var(--color-maritime-blue);
-
+  /* App compatibility layer */
+  --background: var(--token-color-background-page-background);
+  --foreground: var(--token-color-text-neutral);
+  --card: var(--token-color-background-neutral);
+  --card-foreground: var(--token-color-text-neutral);
+  --popover: var(--token-color-background-neutral);
+  --popover-foreground: var(--token-color-text-neutral);
+  --primary: var(--token-color-background-action);
+  --primary-foreground: var(--token-color-text-action-inverse);
+  --secondary: var(--token-color-background-neutral-subtle);
+  --secondary-foreground: var(--token-color-text-neutral);
+  --muted: var(--token-color-background-neutral-subtle);
+  --muted-foreground: var(--token-color-text-neutral-alternative);
+  --accent: var(--token-color-background-selected-subtle);
+  --accent-foreground: var(--token-color-text-neutral);
+  --destructive: var(--token-color-background-error);
+  --destructive-foreground: var(--token-color-text-neutral-inverse);
+  --border: var(--token-color-stroke-neutral-subtle);
+  --input: var(--token-color-stroke-neutral);
+  --ring: var(--token-color-stroke-action-focus);
+  --header-nav-active: var(--token-color-background-action);
+  --header-nav-active-foreground: var(--token-color-text-action-inverse);
   --chart-1: var(--color-maritime-blue);
-  --chart-2: var(--color-fjellbla);
-  --chart-3: var(--color-iced-apricot);
-  --chart-4: oklch(0.65 0.12 63);
-  --chart-5: oklch(0.55 0.18 27);
-
-  --sidebar: var(--background);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
+  --chart-2: var(--color-teal-600);
+  --chart-3: var(--color-amber-400);
+  --chart-4: var(--color-fjellbla);
+  --chart-5: var(--color-iced-apricot);
+  --sidebar: var(--token-color-background-neutral);
+  --sidebar-foreground: var(--token-color-text-neutral);
+  --sidebar-primary: var(--token-color-background-action);
+  --sidebar-primary-foreground: var(--token-color-text-action-inverse);
+  --sidebar-accent: var(--token-color-background-neutral-subtle);
+  --sidebar-accent-foreground: var(--token-color-text-neutral);
+  --sidebar-border: var(--token-color-stroke-neutral-subtle);
+  --sidebar-ring: var(--token-color-stroke-action-focus);
 }
 
 [data-theme="utekos"][data-color-mode="dark"] {
   color-scheme: dark;
 
-  --radius: 0.625rem;
+  /* Semantic design tokens — background */
+  --token-color-background-page-background: var(--color-havdyp-950);
+  --token-color-background-neutral: var(--color-havdyp-900);
+  --token-color-background-neutral-subtle: var(--color-havdyp-800);
+  --token-color-background-action: var(--color-maritime-secondary-400);
+  --token-color-background-action-hover: var(--color-maritime-secondary-300);
+  --token-color-background-action-pressed: var(--color-maritime-secondary-500);
+  --token-color-background-action-disabled: color-mix(
+    in oklab,
+    var(--color-cloud-dancer) 18%,
+    transparent
+  );
+  --token-color-background-selected-subtle: color-mix(
+    in oklab,
+    var(--color-maritime-secondary-400) 18%,
+    transparent
+  );
+  --token-color-background-warning-subtle: color-mix(
+    in oklab,
+    var(--color-amber-400) 18%,
+    var(--color-havdyp-900)
+  );
+  --token-color-background-warning: var(--color-amber-400);
+  --token-color-background-positive-subtle: color-mix(
+    in oklab,
+    var(--color-teal-400) 18%,
+    var(--color-havdyp-900)
+  );
+  --token-color-background-positive: var(--color-teal-400);
+  --token-color-background-info-subtle: color-mix(
+    in oklab,
+    var(--color-primary-blue-scale-300) 18%,
+    var(--color-havdyp-900)
+  );
+  --token-color-background-info: var(--color-primary-blue-scale-300);
+  --token-color-background-error-subtle: color-mix(
+    in oklab,
+    oklch(0.68 0.18 25) 18%,
+    var(--color-havdyp-900)
+  );
+  --token-color-background-error: oklch(0.68 0.18 25);
+  --token-color-background-inverse: var(--color-cloud-dancer);
 
-  --background: var(--color-maritime-blue);
-  --foreground: var(--color-cloud-dancer);
+  /* Semantic design tokens — text */
+  --token-color-text-neutral: var(--color-cloud-dancer);
+  --token-color-text-neutral-alternative: color-mix(
+    in oklab,
+    var(--color-cloud-dancer) 72%,
+    transparent
+  );
+  --token-color-text-neutral-inverse: var(--color-havdyp-950);
+  --token-color-text-action: var(--color-maritime-secondary-300);
+  --token-color-text-action-hover: var(--color-maritime-secondary-200);
+  --token-color-text-action-pressed: var(--color-maritime-secondary-400);
+  --token-color-text-action-disabled: color-mix(
+    in oklab,
+    var(--color-cloud-dancer) 38%,
+    transparent
+  );
+  --token-color-text-action-inverse: var(--color-havdyp-950);
+  --token-color-text-warning: var(--color-amber-300);
+  --token-color-text-positive: var(--color-teal-300);
+  --token-color-text-info: var(--color-primary-blue-scale-300);
+  --token-color-text-error: oklch(0.78 0.15 25);
 
-  --card: oklch(0.34 0.038 195);
-  --card-foreground: var(--color-cloud-dancer);
+  /* Semantic design tokens — icon */
+  --token-color-icon-neutral: var(--token-color-text-neutral);
+  --token-color-icon-neutral-alternative: var(--token-color-text-neutral-alternative);
+  --token-color-icon-action: var(--token-color-text-action);
+  --token-color-icon-action-hover: var(--token-color-text-action-hover);
+  --token-color-icon-action-disabled: var(--token-color-text-action-disabled);
+  --token-color-icon-warning: var(--color-amber-300);
+  --token-color-icon-positive: var(--color-teal-300);
+  --token-color-icon-info: var(--color-primary-blue-scale-300);
+  --token-color-icon-error: var(--token-color-text-error);
 
-  --popover: var(--card);
-  --popover-foreground: var(--card-foreground);
+  /* Semantic design tokens — stroke */
+  --token-color-stroke-neutral: color-mix(in oklab, var(--color-cloud-dancer) 20%, transparent);
+  --token-color-stroke-neutral-subtle: color-mix(
+    in oklab,
+    var(--color-cloud-dancer) 12%,
+    transparent
+  );
+  --token-color-stroke-action: var(--color-maritime-secondary-300);
+  --token-color-stroke-action-hover: var(--color-maritime-secondary-200);
+  --token-color-stroke-action-pressed: var(--color-maritime-secondary-400);
+  --token-color-stroke-action-focus: var(--color-primary-blue-scale-300);
+  --token-color-stroke-action-disabled: color-mix(
+    in oklab,
+    var(--color-cloud-dancer) 28%,
+    transparent
+  );
+  --token-color-stroke-selected: var(--color-maritime-secondary-300);
+  --token-color-stroke-warning: var(--color-amber-300);
+  --token-color-stroke-positive: var(--color-teal-300);
+  --token-color-stroke-info: var(--color-primary-blue-scale-300);
+  --token-color-stroke-error: oklch(0.78 0.15 25);
 
-  --primary: var(--color-cloud-dancer);
-  --primary-foreground: var(--color-maritime-blue);
+  /* Semantic design tokens — decorative */
+  --token-color-decorative-first-base: var(--color-teal-300);
+  --token-color-decorative-first-bold-static: var(--color-maritime-secondary-700);
+  --token-color-decorative-second-base: var(--color-amber-300);
+  --token-color-decorative-third-base: var(--color-iced-apricot);
 
-  --secondary: oklch(0.38 0.035 195);
-  --secondary-foreground: var(--color-cloud-dancer);
+  /* Radius tokens */
+  --token-radius-xs: 0.25rem;
+  --token-radius-sm: 0.375rem;
+  --token-radius-md: 0.625rem;
+  --token-radius-lg: 0.875rem;
+  --token-radius-xl: 1.25rem;
+  --token-radius-full: 999px;
 
-  --muted: oklch(0.32 0.032 195);
-  --muted-foreground: oklch(0.78 0.012 88);
-
-  --accent: var(--color-iced-apricot);
-  --accent-foreground: var(--color-maritime-blue);
-
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-
-  --border: rgb(255 255 255 / 30%);
-  --input: rgb(255 255 255 / 20%);
-  --ring: var(--color-iced-apricot);
-
-  --header-nav-active: oklch(0.28 0.038 195);
-  --header-nav-active-foreground: var(--color-cloud-dancer);
-
-  --chart-1: var(--color-cloud-dancer);
-  --chart-2: var(--color-iced-apricot);
-  --chart-3: var(--color-fjellbla);
-  --chart-4: oklch(0.72 0.1 63);
-  --chart-5: oklch(0.62 0.16 27);
-
-  --sidebar: var(--background);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
-}
-
-.button {
-  color: --alpha(var(--color-iced-apricot) / 50%);
-}
-
-.my-element {
-  margin: --spacing(4);
+  /* App compatibility layer */
+  --background: var(--token-color-background-page-background);
+  --foreground: var(--token-color-text-neutral);
+  --card: var(--token-color-background-neutral);
+  --card-foreground: var(--token-color-text-neutral);
+  --popover: var(--token-color-background-neutral);
+  --popover-foreground: var(--token-color-text-neutral);
+  --primary: var(--token-color-background-action);
+  --primary-foreground: var(--token-color-text-action-inverse);
+  --secondary: var(--token-color-background-neutral-subtle);
+  --secondary-foreground: var(--token-color-text-neutral);
+  --muted: var(--token-color-background-neutral-subtle);
+  --muted-foreground: var(--token-color-text-neutral-alternative);
+  --accent: var(--token-color-background-selected-subtle);
+  --accent-foreground: var(--token-color-text-neutral);
+  --destructive: var(--token-color-background-error);
+  --destructive-foreground: var(--token-color-text-neutral-inverse);
+  --border: var(--token-color-stroke-neutral-subtle);
+  --input: var(--token-color-stroke-neutral);
+  --ring: var(--token-color-stroke-action-focus);
+  --header-nav-active: var(--token-color-background-action);
+  --header-nav-active-foreground: var(--token-color-text-action-inverse);
+  --chart-1: var(--color-maritime-secondary-300);
+  --chart-2: var(--color-teal-300);
+  --chart-3: var(--color-amber-300);
+  --chart-4: var(--color-primary-blue-scale-300);
+  --chart-5: var(--color-iced-apricot);
+  --sidebar: var(--token-color-background-neutral);
+  --sidebar-foreground: var(--token-color-text-neutral);
+  --sidebar-primary: var(--token-color-background-action);
+  --sidebar-primary-foreground: var(--token-color-text-action-inverse);
+  --sidebar-accent: var(--token-color-background-neutral-subtle);
+  --sidebar-accent-foreground: var(--token-color-text-neutral);
+  --sidebar-border: var(--token-color-stroke-neutral-subtle);
+  --sidebar-ring: var(--token-color-stroke-action-focus);
 }

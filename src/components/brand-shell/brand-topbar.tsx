@@ -8,12 +8,12 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function BrandTopbar() {
   return (
-    <header className="border-border bg-background/95 supports-backdrop-filter:bg-background/75 sticky top-0 z-40 flex h-20 shrink-0 items-center justify-between gap-6 border-b px-6 backdrop-blur lg:px-8">
+    <header className="brand-topbar">
       <div className="flex min-w-0 items-center">
-        <SidebarTrigger className="-ml-1" />
-        <Link href="/" className="ml-3 block h-6 w-24 shrink-0 overflow-hidden lg:hidden">
+        <SidebarTrigger className="brand-topbar-menu -ml-1" />
+        <Link href="/" className="brand-topbar-logo" aria-label="Utekos Brand">
           <Image
-            src="/UtekosWordmarDark.svg"
+            src="/wordmark/UtekosWordmarDark.svg"
             alt="Utekos Brand"
             width={1280}
             height={311}
@@ -21,7 +21,7 @@ export function BrandTopbar() {
             className="h-full w-auto object-contain dark:hidden"
           />
           <Image
-            src="/WordmarkWhite.svg"
+            src="/wordmark/WordmarkWhite.svg"
             alt="Utekos Brand"
             width={1280}
             height={311}
