@@ -1,0 +1,53 @@
+/**
+ * Web HelpButton Component
+ *
+ */
+
+import { useContext } from 'react'
+import type { ReactElement, ReactNode } from 'react'
+import Context from '../../shared/Context'
+import Dialog from '../dialog/Dialog'
+import HelpButtonInstance from './HelpButtonInstance'
+import type { ButtonProps } from '../button/Button'
+import { extendPropsWithContext } from '../../shared/component-helper'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+const defaultProps: Partial<HelpButtonProps> = {
+  variant: 'secondary',
+  iconPosition: 'left',
+}
+
+export type HelpButtonProps = {
+  render?: (children: ReactNode, props: ButtonProps) => ReactElement
+} & ButtonProps
+
+export default function HelpButton(localProps: HelpButtonProps) {
+  const context = useContext(Context)
+  const props = extendPropsWithContext(localProps, defaultProps)
+
+  const { children, render, ...params } = props
+
+  if (params.size === 'small') {
+    params.bounding = true
+  }
+
+  if (params.icon === null) {
+    params.icon = 'question'
+  }
+
+  if (children) {
+    if (!params.title) {
+      params.title = context.getTranslation(props).HelpButton.title
+    }
+
+    if (typeof render === 'function') {
+      return render(children, params)
+    }
+
+    return <Dialog triggerProps={params}>{children}</Dialog>
+  }
+
+  return <HelpButtonInstance {...params} />
+}
+
+withComponentMarkers(HelpButton, { _supportsSpacingProps: true })

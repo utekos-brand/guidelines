@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "../../node_modules/tw-animate-css/dist/tw-animate.css";
+@import "../../node_modules/shadcn/dist/tailwind.css";
+@import "../../styles/tokens/palette.css";
+@import "../../styles/tokens/semantic-map.css";
+@import "../../styles/themes/index.css";
+@import "../../styles/base.css";
+
+@custom-variant dark (&:is(.dark *));

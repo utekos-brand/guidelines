@@ -1,0 +1,35 @@
+{
+  "html": "<button class=\"inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 sm:px-6 sm:py-3 sm:text-base\">\n  Click me\n</button>",
+  "description": "A modern style button component with dark mode support and responsive design",
+  "utilities": [
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "rounded-md",
+    "text-sm",
+    "font-medium",
+    "transition-colors",
+    "focus-visible:outline-none",
+    "focus-visible:ring-1",
+    "focus-visible:ring-ring",
+    "disabled:pointer-events-none",
+    "disabled:opacity-50",
+    "bg-primary",
+    "text-primary-foreground",
+    "shadow",
+    "hover:bg-primary/90",
+    "px-4",
+    "py-2",
+    "dark:bg-blue-600",
+    "dark:hover:bg-blue-700",
+    "sm:px-6",
+    "sm:py-3",
+    "sm:text-base"
+  ],
+  "customizations": [
+    "Change button text",
+    "Adjust padding with px-* py-* classes",
+    "Modify colors using bg-* and text-* utilities",
+    "Add icons using flex and space-x-* utilities"
+  ]
+}

@@ -1,0 +1,414 @@
+/*
+ * Tabs component
+ *
+ */
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-tabs {
+  --tablist-border-color--default: var(
+    --token-color-stroke-neutral-subtle
+  );
+  --tab-title-font-color: var(--token-color-text-neutral-alternative);
+  --tab-title-font-weight: var(--font-weight-regular);
+  --tab-title-font-size: var(--font-size-basis);
+  --tab-title-background--hover: var(
+    --token-color-background-action-hover-subtle
+  );
+  --tab-title-color--hover: var(--token-color-text-action-hover);
+  --tab-title-border--hover: var(--token-color-stroke-action-hover);
+  --tab-title-background--disabled: inherit;
+  --tab-title-color--disabled: var(--token-color-text-action-disabled);
+  --tab-title-border--active: var(--token-color-stroke-action-pressed);
+  --tab-title-color--active: var(--token-color-text-action-pressed);
+  --tab-title-border--selected: var(--token-color-stroke-selected);
+  --tab-title-color--selected: var(--token-color-text-selected);
+  --tab-title-font-weight--selected: var(--font-weight-medium);
+
+  &__tabs {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    padding-bottom: 0;
+
+    &__tablist {
+      display: flex;
+      flex: 0 1 auto;
+
+      &:focus-visible {
+        @include utilities.focusRing('always');
+        border-radius: var(--token-radius-md);
+      }
+
+      @include utilities.scrollX(auto);
+      @include utilities.hideScrollbar();
+      // scroll-snap-type: x mandatory; // gives not the wanted extra UX yet
+    }
+
+    &--left &__tablist {
+      justify-content: flex-start;
+    }
+    &--right &__tablist {
+      flex: 1;
+      justify-content: flex-end;
+    }
+    &--center &__tablist {
+      flex: 1;
+      justify-content: center;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+    }
+
+    &--no-border {
+      &::before {
+        content: none;
+      }
+    }
+
+    &--breakout {
+      &::before {
+        left: -100vw;
+        width: 100vw;
+      }
+    }
+
+    &:not(.dnb-section) {
+      &::before {
+        background-color: var(--tablist-border-color--default);
+        box-shadow: 100vw 0 0 0 var(--tablist-border-color--default);
+      }
+    }
+  }
+
+  &__scroll-nav-button {
+    position: absolute;
+    z-index: 2;
+
+    right: -2px;
+    &:first-of-type {
+      left: -2px;
+      right: auto;
+    }
+
+    display: none; // use "none" to remove it from markup by default
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 600ms ease-out;
+
+    &--visible {
+      display: flex; // needs to be "flex" in order to make the transition work
+      pointer-events: initial;
+      opacity: 1;
+    }
+
+    &--hide {
+      pointer-events: none;
+      opacity: 0 !important;
+    }
+  }
+
+  &--at-edge &__scroll-nav-button {
+    &:first-of-type {
+      border-radius: 0 50% 50% 0;
+    }
+
+    &:last-of-type {
+      border-radius: 50% 0 0 50%;
+    }
+  }
+
+  &--at-edge &__tabs__tablist:focus-visible {
+    border-radius: 0;
+  }
+
+  // Tab Button
+  &__button,
+  .dnb-core-style &__button {
+    position: relative;
+    z-index: 1;
+
+    &:has(.dnb-badge) {
+      margin-right: 1.5rem;
+    }
+
+    user-select: none;
+
+    /* stylelint-disable-next-line */
+    -webkit-user-select: none; // Safari / Touch fix
+
+    margin: 0;
+    padding: 0 0.125rem; /* 1/16*4 */
+
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+
+    cursor: pointer;
+    outline: none;
+    border: none;
+
+    font-size: var(--font-size-basis);
+    line-height: var(--line-height-basis);
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    // make the transition smooth, when going from :focus-visible not no focus
+    transition: margin 400ms ease-out;
+
+    // should be same as .lead small
+    &__title {
+      font-weight: var(--tab-title-font-weight);
+      font-size: var(--tab-title-font-size);
+      text-align: center;
+
+      display: block;
+      color: var(--tab-title-font-color);
+      padding: 0.5rem 0 0.25rem;
+
+      .dnb-icon {
+        font-size: var(--font-size-small); // has to be 16px
+
+        // vertical alignment
+        transform: translateY(-0.125rem);
+      }
+    }
+
+    // hover
+    @include utilities.hover() {
+      background-color: var(--tab-title-background--hover);
+
+      .dnb-tabs__button__title {
+        color: var(--tab-title-color--hover);
+      }
+
+      &::after {
+        height: 2px;
+        border-radius: var(--token-radius-sm);
+        background-color: var(--tab-title-border--hover);
+      }
+    }
+
+    @include utilities.dummySpacing();
+
+    & .dnb-dummy {
+      margin-top: 0.25rem;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+    }
+
+    // disabled
+    &[disabled] {
+      background-color: var(--tab-title-background--disabled);
+    }
+    &[disabled] &__title {
+      color: var(--tab-title-color--disabled);
+    }
+
+    // To make sure we have the wider width on every item
+    // Have to be same as &:not([disabled]).selected
+    span[hidden] {
+      font-weight: var(--tab-title-font-weight--selected);
+    }
+
+    /* stylelint-disable no-descending-specificity */
+
+    // active (pressed)
+    &:not([disabled]):active {
+      background-color: var(
+        --token-color-background-action-pressed-subtle
+      );
+
+      &::after {
+        height: 2px;
+        border-radius: var(--token-radius-sm);
+        background-color: var(--tab-title-border--active);
+      }
+    }
+
+    html:not([data-whatintent='touch']) &:hover:not([disabled]):active {
+      background-color: var(
+        --token-color-background-action-pressed-subtle
+      );
+
+      &::after {
+        background-color: var(--tab-title-border--active);
+      }
+    }
+
+    &:not([disabled]):active &__title {
+      color: var(--tab-title-color--active);
+    }
+
+    // selected
+    &:not([disabled]).selected {
+      &::after {
+        height: 2px;
+        border-radius: var(--token-radius-sm);
+        background-color: var(--tab-title-border--selected);
+      }
+
+      @include utilities.hover() {
+        background-color: var(
+          --token-color-background-action-hover-subtle
+        );
+
+        &::after {
+          background-color: var(--token-color-stroke-action-hover);
+        }
+
+        &:active {
+          background-color: var(
+            --token-color-background-action-pressed-subtle
+          );
+
+          &::after {
+            background-color: var(--token-color-stroke-action-pressed);
+          }
+        }
+      }
+    }
+
+    &:not([disabled]).selected &__title {
+      color: var(--tab-title-color--selected);
+      font-weight: var(--tab-title-font-weight--selected);
+    }
+
+    &:not([disabled]).selected:active &__title {
+      color: var(--token-color-text-action-pressed);
+    }
+
+    &:not(:hover):focus-visible {
+      // Focus ring
+      &::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+
+        top: 0.5rem;
+        left: -0.375rem;
+        bottom: 0.5rem;
+        right: -0.375rem;
+
+        height: inherit;
+        border-radius: var(--token-radius-xl);
+        background-color: var(
+          --token-color-background-action-focus-subtle
+        );
+
+        @include utilities.focusRing();
+      }
+
+      overflow: visible;
+    }
+    &:not([disabled]):focus-visible &__title,
+    &:not([disabled]).selected:focus-visible &__title {
+      color: var(--token-color-text-action-focus);
+    }
+  }
+
+  &__button__snap {
+    display: flex;
+
+    padding: 0 1rem 0 1.5rem;
+
+    @include utilities.allBelow(small) {
+      padding: 0 1rem;
+    }
+
+    &:first-of-type {
+      padding-left: 0;
+    }
+    &:last-of-type {
+      padding-right: 0.5rem;
+    }
+
+    will-change: padding;
+    transition: padding 1s var(--easing-default);
+  }
+
+  &__button__snap:has(.dnb-badge) {
+    margin-right: -0.5rem;
+  }
+
+  html[data-whatinput='keyboard'] &__button__snap {
+    &:first-of-type.focus {
+      // add space so the focus ring is visible within our overflow
+      .dnb-tabs__button:focus-visible {
+        margin-left: 0.5rem;
+      }
+    }
+
+    &:last-of-type.focus {
+      // add space so the focus ring is visible within our overflow
+      .dnb-tabs__button:focus-visible {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  &__cached {
+    opacity: 1;
+    transition: opacity 1s var(--easing-default);
+  }
+  &__cached--hidden {
+    opacity: 0;
+    visibility: hidden;
+
+    height: 0 !important;
+    overflow: hidden;
+
+    // Ensure the content is always hidden when "keepInDOM" is set
+    * {
+      height: 0 !important;
+    }
+  }
+
+  // Make focus ring when keyboard is used to navigate
+  &__content:focus-visible {
+    position: relative;
+
+    // Use "before" (instead of after) in order to not collide with Section styles
+    &::before {
+      content: '';
+      position: absolute;
+
+      // Above a Section
+      z-index: calc(var(--section-z-index) + 1);
+      pointer-events: none;
+
+      inset: -0.5rem;
+      top: 0.125rem;
+
+      max-width: 100vw;
+
+      border-radius: var(--token-radius-md);
+
+      @include utilities.focusRing('always');
+    }
+  }
+
+  &__button__title > .dnb-badge {
+    position: absolute;
+    top: auto;
+    margin-left: 0.25rem;
+  }
+}

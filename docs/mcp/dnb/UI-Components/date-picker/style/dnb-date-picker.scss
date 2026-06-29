@@ -1,0 +1,646 @@
+/*
+* DatePicker component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-date-picker {
+  --date-picker-input-height: 2rem;
+  --date-picker-day-width: 2rem;
+  --date-picker-day-horizontal-spacing: 0.25rem;
+
+  display: inline-flex;
+  align-items: center;
+  column-gap: 1rem;
+
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-basis);
+
+  &__inner {
+    display: inline-flex;
+    flex-direction: column;
+
+    // if no label is provided, then make sure we have some text to align the button
+    line-height: var(--date-picker-input-height);
+  }
+
+  &__row {
+    display: inline-flex;
+  }
+
+  &__shell {
+    position: relative;
+    top: 0;
+
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  &__input__wrapper {
+    display: inline-flex;
+    white-space: nowrap;
+    height: inherit;
+  }
+
+  &__container {
+    // Supports backwards compatibility with Nucleus and scenarios,
+    // where both unscoped and scoped styles are imported together (both position and top).
+    position: relative;
+    top: auto;
+
+    table {
+      position: relative;
+      z-index: 1; // to make sure we show the focus ring over the header line on top
+
+      margin: 0;
+
+      &.dnb-no-focus:focus {
+        @include utilities.focusRing();
+      }
+
+      th {
+        font-size: var(--font-size-medium);
+      }
+    }
+    &:not(#{&}--show-footer) .dnb-date-picker__calendar::after {
+      content: none;
+    }
+  }
+
+  // stylelint-disable-next-line
+  &__input,
+  .dnb-input__input#{&}__input,
+  .dnb-core-style &__input {
+    --input-padding--small: 0.05rem;
+    --input-padding--medium: 0.05rem;
+    --input-padding--large: 0.05rem;
+
+    padding: 0 0.0625rem;
+
+    // Chrome fix
+    @include utilities.isChrome() {
+      margin: 0 -4px;
+    }
+
+    // Safari Mobile fix
+    @include utilities.isSafariMobile() {
+      &:not(*:root) {
+        margin: 0;
+      }
+    }
+
+    // Safari Desktop fix
+    @include utilities.isSafariDesktop() {
+      &:not(*:root) {
+        margin-right: -10px;
+      }
+    }
+
+    &--label-alignment-right {
+      flex-flow: row-reverse;
+      width: fit-content;
+    }
+  }
+
+  .dnb-segmented-field__section#{&}__input,
+  .dnb-segmented-field__section.dnb-input__input#{&}__input {
+    margin-right: 0;
+    text-indent: 0;
+
+    &:last-of-type {
+      width: auto;
+    }
+  }
+
+  .dnb-input__input#{&}__input:first-of-type,
+  &__input:first-of-type {
+    margin-left: 0.2rem;
+  }
+  .dnb-segmented-field__fieldset:last-of-type &__input:last-of-type {
+    --input-padding--small: 0.25rem;
+    --input-padding--medium: 0.333rem;
+    --input-padding--large: 0.5rem;
+
+    margin-right: 2rem; // space for the button
+  }
+  &--small
+    .dnb-segmented-field__fieldset:last-of-type
+    &__input:last-of-type {
+    margin-right: 1.5rem; // space for the button
+  }
+  &--medium
+    .dnb-segmented-field__fieldset:last-of-type
+    &__input:last-of-type {
+    margin-right: 2.5rem; // space for the button
+  }
+  &--large
+    .dnb-segmented-field__fieldset:last-of-type
+    &__input:last-of-type {
+    margin-right: 3rem; // space for the button
+  }
+  &--medium
+    .dnb-segmented-field__fieldset:first-of-type
+    .dnb-input__input#{&}__input:first-of-type,
+  &--large
+    .dnb-segmented-field__fieldset:first-of-type
+    .dnb-input__input#{&}__input:first-of-type {
+    margin-left: 0.5rem;
+  }
+
+  .dnb-input__shell {
+    display: none;
+  }
+  &--show-input .dnb-input__shell {
+    display: flex;
+  }
+  &:not(#{&}--show-input) .dnb-input__status--error .dnb-input__shell {
+    box-shadow: none;
+  }
+  .dnb-input__submit-button button:focus ~ &__input__wrapper {
+    display: block;
+  }
+  &:not(#{&}--show-input) .dnb-input__submit-element,
+  .dnb-input__submit-element > & .dnb-input__submit-element {
+    margin-left: 0;
+  }
+
+  &__views {
+    display: flex;
+    flex-wrap: wrap;
+    user-select: none;
+
+    // Wrap already on "medium", because "small" is too narrow in range mode
+    @include utilities.allBelow(medium) {
+      flex-direction: column;
+    }
+
+    .dnb-date-picker--inline & {
+      gap: 1.5rem;
+    }
+  }
+
+  &__calendar {
+    position: relative;
+    padding: 1rem;
+
+    .dnb-date-picker--inline & {
+      padding: 0;
+    }
+
+    // border
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: calc(100% - 2rem);
+      height: 1px;
+      background-color: var(--token-color-stroke-neutral-subtle);
+    }
+  }
+
+  &__header {
+    --gap: 0.25rem;
+
+    min-height: 2.5rem;
+    line-height: var(--line-height-basis);
+    user-select: text;
+
+    flex-flow: row wrap;
+    justify-content: space-between;
+    gap: var(--gap);
+
+    // border
+    &::after {
+      background-color: var(--token-color-stroke-neutral-subtle);
+    }
+
+    &--only-month-label {
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    &__row {
+      min-width: 60%;
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      justify-content: space-between;
+
+      &--year {
+        min-width: calc(40% - var(--gap));
+      }
+    }
+
+    &__title {
+      text-transform: capitalize;
+      text-align: center;
+
+      font-size: var(--font-size-basis);
+      font-weight: var(--font-weight-medium);
+      color: var(--token-color-text-neutral);
+    }
+  }
+
+  &__addon,
+  &__header {
+    position: relative;
+
+    display: flex;
+    padding-bottom: 1rem;
+
+    // border
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--token-color-stroke-neutral-subtle);
+    }
+  }
+
+  &__addon {
+    display: flex;
+    contain: inline-size;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+
+    &::after {
+      left: 1rem;
+      width: calc(100% - 2rem);
+    }
+  }
+
+  &__footer {
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+  &__labels {
+    &__day {
+      padding-top: 1.5rem;
+      padding-bottom: 0.5rem;
+
+      text-transform: capitalize;
+      font-weight: var(--font-weight-medium);
+      color: var(--token-color-text-neutral);
+    }
+  }
+
+  &__labels,
+  &__days {
+    min-width: 18rem;
+    max-width: 18rem;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__day,
+  &__labels__day {
+    display: flex;
+    flex-basis: calc(1 / 7 * 100%);
+    justify-content: center;
+    text-align: center;
+  }
+
+  &__day {
+    position: relative;
+
+    width: var(--date-picker-day-width); // medium size
+    height: var(--date-picker-day-width); // medium size
+    margin: var(--date-picker-day-horizontal-spacing) 0;
+
+    .dnb-button {
+      position: absolute;
+      top: 0;
+      width: var(--date-picker-day-width); // medium size
+      height: var(--date-picker-day-width); // medium size
+      white-space: nowrap;
+
+      box-shadow: none;
+      &__bounding {
+        border-radius: 0;
+        transform: scale(1.28);
+      }
+
+      // reset vertical alignment
+      &__text {
+        transform: translateY(0);
+      }
+    }
+
+    &--selectable:hover {
+      z-index: 2;
+    }
+
+    &--start-date .dnb-button,
+    &--end-date .dnb-button {
+      z-index: 1;
+    }
+
+    &--start-date,
+    &--end-date {
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: calc(var(--date-picker-day-width) / 2);
+        height: 100%;
+      }
+    }
+    &--start-date::after {
+      left: auto;
+      right: 0;
+    }
+    &--end-date::after {
+      left: 0;
+      right: auto;
+    }
+    &--start-date#{&}--end-date::after {
+      content: none;
+    }
+
+    &--today .dnb-button {
+      font-weight: var(--font-weight-medium);
+
+      &::after {
+        content: '';
+
+        position: absolute;
+        bottom: 0.1875rem;
+        height: 0.2188em;
+        width: 0.2188em;
+        pointer-events: none;
+
+        border-radius: 50%;
+        background-color: currentcolor;
+      }
+    }
+
+    &--preview .dnb-button,
+    &--inactive .dnb-button,
+    &--within-selection:not(#{&}--start-date):not(#{&}--end-date)
+      .dnb-button:not(:hover):not(:focus-visible) {
+      background-color: transparent;
+    }
+
+    &--preview:not(#{&}--inactive):not(#{&}--start-date):not(
+        #{&}--end-date
+      ),
+    &--within-selection:not(#{&}--inactive):not(#{&}--start-date):not(
+        #{&}--end-date
+      ) {
+      // They are treating the highlighted date range in Figma as a hover state, that is why --token-color-background-action-hover-subtle is used here (Same as in Figma)
+      background-color: var(--token-color-background-action-hover-subtle);
+    }
+
+    &--start-date:not(#{&}--inactive),
+    &--end-date:not(#{&}--inactive) {
+      &::after {
+        // They are treating the highlighted date range in Figma as a hover state, that is why --token-color-background-action-hover-subtle is used here (Same as in Figma)
+        background-color: var(
+          --token-color-background-action-hover-subtle
+        );
+      }
+
+      .dnb-button {
+        color: var(--token-color-text-neutral-inverse);
+        background-color: var(--token-color-background-action);
+      }
+    }
+    &--start-date:not(#{&}--inactive):not(#{&}--preview),
+    &--end-date:not(#{&}--inactive):not(#{&}--preview) {
+      .dnb-button {
+        &:hover {
+          box-shadow: none;
+        }
+      }
+    }
+
+    // Hover states for checked date buttons
+    html:not([data-whatintent='touch'])
+      &--within-selection:not(#{&}--start-date):not(#{&}--end-date)
+      .dnb-button:hover:not([disabled]),
+    html:not([data-whatintent='touch'])
+      &--start-date#{&}--within-selection
+      .dnb-button:hover:not([disabled]),
+    html:not([data-whatintent='touch'])
+      &--end-date#{&}--within-selection
+      .dnb-button:hover:not([disabled]) {
+      color: var(--token-color-text-action);
+      background-color: var(--token-color-background-neutral);
+
+      @include utilities.fakeBorder(
+        var(--token-color-stroke-action-pressed),
+        0.125rem
+      );
+    }
+
+    // Active states for selected date buttons
+    html:not([data-whatintent='touch'])
+      &--within-selection:not(#{&}--start-date):not(#{&}--end-date)
+      .dnb-button:active:not([disabled]),
+    html:not([data-whatintent='touch'])
+      &--start-date#{&}--within-selection
+      .dnb-button:active:not([disabled]),
+    html:not([data-whatintent='touch'])
+      &--end-date#{&}--within-selection
+      .dnb-button:active:not([disabled]) {
+      color: var(--token-color-text-action-pressed);
+      background-color: var(--token-color-background-action-hover-subtle);
+      box-shadow: none;
+      border: transparent;
+    }
+
+    html:not([data-whatintent='touch'])
+      &--start-date:not(#{&}--end-date)#{&}--within-selection
+      .dnb-button:active:not([disabled]) {
+      border-radius: 50% 0 0 50%;
+    }
+
+    html:not([data-whatintent='touch'])
+      &--end-date:not(#{&}--start-date)#{&}--within-selection
+      .dnb-button:active:not([disabled]) {
+      border-radius: 0 50% 50% 0;
+    }
+
+    &--disabled .dnb-button {
+      text-decoration: line-through;
+    }
+
+    &--inactive .dnb-button {
+      color: var(--token-color-text-neutral-alternative);
+    }
+
+    &--inactive .dnb-button,
+    &--disabled .dnb-button {
+      &[disabled] {
+        box-shadow: none;
+      }
+    }
+
+    // Focus state for keyboard navigation (hover visual + focus outline)
+    &--selectable .dnb-button:focus-visible:not([disabled]) {
+      z-index: 2;
+      color: var(--token-color-text-action-focus);
+      background-color: var(--token-color-background-action-focus-subtle);
+
+      @include utilities.fakeBorder(
+        var(--token-color-stroke-action-focus),
+        var(--focus-ring-width)
+      );
+    }
+
+    html:not([data-whatintent='touch']) &--inactive .dnb-button[disabled] {
+      cursor: default;
+    }
+  }
+
+  &__header__nav {
+    .dnb-button:not(:hover):not(:focus-visible) {
+      box-shadow: none;
+    }
+    .dnb-button:hover:not(:active):not(:focus-visible) {
+      background-color: var(--token-color-background-neutral);
+    }
+  }
+
+  .rtl {
+    direction: rtl;
+
+    .dnb-date-picker__prev::before {
+      transform: scaleX(-1);
+    }
+
+    .dnb-date-picker__next::before {
+      transform: scaleX(-1);
+    }
+  }
+
+  &__inner > .dnb-form-status {
+    order: 2;
+    margin-top: 0.5rem;
+  }
+
+  &--vertical {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  > .dnb-form-label {
+    line-height: var(--line-height-basis);
+    margin-right: 0;
+  }
+  @include utilities.formLabelWrap();
+
+  // make full width
+  &--stretch {
+    display: flex;
+    flex-grow: 1;
+  }
+  &--stretch & {
+    &__inner,
+    &__shell {
+      width: 100%;
+    }
+  }
+
+  &:not(&--vertical)[class*='__status'] {
+    align-items: flex-start;
+    > .dnb-form-label {
+      // vertical align the current font
+      margin-top: 0.25rem;
+    }
+  }
+
+  // stylelint-disable-next-line no-descending-specificity
+  &:not(.dnb-date-picker--show-input)
+    .dnb-input__submit-button
+    .dnb-button {
+    border-radius: 50%;
+  }
+
+  .dnb-responsive-component & {
+    @include utilities.allBelow(small) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      margin-bottom: 0.5rem;
+
+      > .dnb-form-label {
+        margin-bottom: 0.5rem;
+      }
+      &__helper {
+        display: none;
+      }
+    }
+  }
+
+  .dnb-input__submit-button .dnb-button.dnb-skeleton {
+    visibility: hidden;
+  }
+
+  &__fieldset,
+  .dnb-core-style &__fieldset {
+    @include utilities.fieldsetReset();
+  }
+
+  &__portal {
+    // make variables available inside the portal
+    --date-picker-input-height: 2rem;
+    --date-picker-day-width: 2rem;
+    --date-picker-day-horizontal-spacing: 0.25rem;
+
+    // Over modal, but below tooltip
+    --popover-z-index: calc(var(--modal-z-index) + 10);
+
+    line-height: var(--date-picker-input-height);
+
+    .dnb-popover {
+      --popover-border-radius: var(--token-radius-md);
+
+      @include utilities.sharpDropShadow();
+    }
+  }
+
+  &--open .dnb-button--input-button.dnb-button--selected {
+    --button-color-bg--default: var(--button-color-bg--active);
+    --button-color-icon--default: var(--button-color-icon--active);
+    --button-input-separator-color--default: var(
+      --button-input-separator-color--active
+    );
+  }
+}
+
+@keyframes date-picker-slide-down {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes date-picker-slide-up {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

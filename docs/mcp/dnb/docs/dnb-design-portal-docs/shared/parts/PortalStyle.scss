@@ -1,0 +1,124 @@
+@use '@dnb/eufemia/src/style/core/utilities.scss' as utilities;
+@use './PortalStyle.mixins.scss' as PortalMixins;
+
+// Ensure body fills the viewport so the background color covers the full screen
+[skip-isolation] body {
+  min-height: 100dvh;
+}
+
+[skip-isolation] body,
+[skip-isolation] body #root {
+  height: 100%;
+}
+
+@include utilities.allAbove(small) {
+  html {
+    height: 100%;
+  }
+}
+
+[skip-isolation] #portal-noscript {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5000;
+
+  padding: 1.25rem;
+  text-align: center;
+
+  // Design tokens can not be used outside of Theme Provider
+  color: #000;
+  background-color: #fff;
+}
+
+.dnb-live-preview {
+  display: flow-root;
+}
+
+.dnb-live-preview p.dnb-p {
+  &:not([class*='dnb-space__bottom']) {
+    margin-bottom: 0;
+  }
+}
+
+/*
+Make sure we cut the tab and section parts on the left side
+so it's not visible "over" the sidebar.
+*/
+.dnb-app-content {
+  overflow: hidden;
+}
+
+main > .dnb-global-status {
+  transform: translateY(-2rem);
+}
+
+html[show-dev-grid] .dev-grid > .dnb-h--xx-large {
+  position: relative;
+  z-index: 2;
+}
+
+html[show-dev-grid] .dev-grid {
+  @include PortalMixins.gridStyle();
+
+  --grid-rgb: 220 220 220;
+
+  /* stylelint-disable no-descending-specificity */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  p > a,
+  p > code,
+  p > small {
+    background-color: rgb(255 255 122 / 35%);
+
+    :only-child {
+      background-color: rgb(0 200 200 / 25%);
+    }
+  }
+  /* stylelint-enable */
+}
+
+/* used in the designers guide */
+.lh-12 {
+  line-height: calc(var(--line-height-basis) - 0.75rem); /* 0.75rem */
+}
+
+.lh-16 {
+  line-height: calc(var(--line-height-basis) - 0.5rem); /* 1rem */
+}
+
+.lh-20 {
+  line-height: calc(var(--line-height-basis) - 0.25rem); /* 1.25rem */
+}
+
+.lh-24 {
+  line-height: var(--line-height-basis); /* 1rem */
+}
+
+.lh-28 {
+  line-height: calc(var(--line-height-basis) + 0.25rem); /* 1.75rem */
+}
+
+.lh-32 {
+  line-height: calc(var(--line-height-basis) + 0.5rem); /* 2rem */
+}
+
+.dnb-page-background {
+  // Ensure themed body has a token color for page backgrounds
+  background-color: var(--token-color-background-neutral);
+}
+
+// Make the home => pages animation
+.home-background ul {
+  view-transition-name: home;
+}
+
+#portal-sidebar-menu {
+  view-transition-name: home;
+}

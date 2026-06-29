@@ -1,0 +1,519 @@
+[data-theme="dnb"] {
+  --radius: 0.75rem;
+
+  /* DNB Light - complete Eufemia color token palette */
+
+  /* Background */
+  --dnb-light-token-color-background-action: #007272;
+  --dnb-light-token-color-background-action-alternative: #8e8e93;
+  --dnb-light-token-color-background-action-alternative-hover-subtle: #ebebeb;
+  --dnb-light-token-color-background-action-disabled: #cccccc;
+  --dnb-light-token-color-background-action-disabled-ondark: #48484a;
+  --dnb-light-token-color-background-action-focus: #276ace;
+  --dnb-light-token-color-background-action-focus-subtle: #f2f2f5;
+  --dnb-light-token-color-background-action-hover: #007272;
+  --dnb-light-token-color-background-action-hover-inverse: #a5e1d2;
+  --dnb-light-token-color-background-action-hover-ondark: #a5e1d2;
+  --dnb-light-token-color-background-action-hover-subtle: #d8f3ec;
+  --dnb-light-token-color-background-action-hover-subtle-inverse: #023939;
+  --dnb-light-token-color-background-action-hover-subtle-ondark: #08454d;
+  --dnb-light-token-color-background-action-inverse: #a5e1d2;
+  --dnb-light-token-color-background-action-ondark: #a5e1d2;
+  --dnb-light-token-color-background-action-pressed: #14555a;
+  --dnb-light-token-color-background-action-pressed-ondark: #5cbdad;
+  --dnb-light-token-color-background-action-pressed-subtle: #bce8dc;
+  --dnb-light-token-color-background-action-pressed-subtle-inverse: #14555a;
+  --dnb-light-token-color-background-action-pressed-subtle-ondark: #14555a;
+  --dnb-light-token-color-background-error: #d52525;
+  --dnb-light-token-color-background-error-subtle: #fceeee;
+  --dnb-light-token-color-background-info: #007272;
+  --dnb-light-token-color-background-info-subtle: #f2f4ec;
+  --dnb-light-token-color-background-marketing: #333333;
+  --dnb-light-token-color-background-marketing-subtle: #f2f2f5;
+  --dnb-light-token-color-background-neutral: #ffffff;
+  --dnb-light-token-color-background-neutral-alternative: #f2f2f5;
+  --dnb-light-token-color-background-neutral-base: #ebebeb;
+  --dnb-light-token-color-background-neutral-bold: #cccccc;
+  --dnb-light-token-color-background-neutral-static: #ffffff;
+  --dnb-light-token-color-background-neutral-subtle: #f8f8f8;
+  --dnb-light-token-color-background-page-background: #ffffff;
+  --dnb-light-token-color-background-positive: #007b5e;
+  --dnb-light-token-color-background-positive-subtle: #ebf4f2;
+  --dnb-light-token-color-background-selected: #08454d;
+  --dnb-light-token-color-background-selected-ondark: #d8f3ec;
+  --dnb-light-token-color-background-selected-subtle: #e4eed7;
+  --dnb-light-token-color-background-selected-subtle-ondark: #0d4637;
+  --dnb-light-token-color-background-warning: #fdbb31;
+  --dnb-light-token-color-background-warning-subtle: #fbf6ec;
+
+  /* Text */
+  --dnb-light-token-color-text-action: #007272;
+  --dnb-light-token-color-text-action-alternative-ondark: #ffffff;
+  --dnb-light-token-color-text-action-disabled: #cccccc;
+  --dnb-light-token-color-text-action-disabled-ondark: #8e8e93;
+  --dnb-light-token-color-text-action-focus: #276ace;
+  --dnb-light-token-color-text-action-hover: #007272;
+  --dnb-light-token-color-text-action-hover-inverse: #a5e1d2;
+  --dnb-light-token-color-text-action-hover-ondark: #a5e1d2;
+  --dnb-light-token-color-text-action-inverse: #a5e1d2;
+  --dnb-light-token-color-text-action-ondark: #a5e1d2;
+  --dnb-light-token-color-text-action-pressed: #14555a;
+  --dnb-light-token-color-text-action-pressed-inverse: #5cbdad;
+  --dnb-light-token-color-text-action-pressed-ondark: #5cbdad;
+  --dnb-light-token-color-text-error: #d52525;
+  --dnb-light-token-color-text-error-inverse: #ff5400;
+  --dnb-light-token-color-text-neutral: #333333;
+  --dnb-light-token-color-text-neutral-alternative: #737373;
+  --dnb-light-token-color-text-neutral-alternative-inverse: #cccccc;
+  --dnb-light-token-color-text-neutral-inverse: #ffffff;
+  --dnb-light-token-color-text-neutral-ondark: #ffffff;
+  --dnb-light-token-color-text-neutral-onlight: #333333;
+  --dnb-light-token-color-text-neutral-subtle: #cccccc;
+  --dnb-light-token-color-text-neutral-subtle-ondark: #cccccc;
+  --dnb-light-token-color-text-positive: #007b5e;
+  --dnb-light-token-color-text-positive-inverse: #28b482;
+  --dnb-light-token-color-text-selected: #08454d;
+  --dnb-light-token-color-text-warning: #805b0e;
+  --dnb-light-token-color-text-warning-inverse: #fdbb31;
+
+  /* Icon */
+  --dnb-light-token-color-icon-action: #007272;
+  --dnb-light-token-color-icon-action-alternative-ondark: #ffffff;
+  --dnb-light-token-color-icon-action-disabled: #cccccc;
+  --dnb-light-token-color-icon-action-disabled-ondark: #8e8e93;
+  --dnb-light-token-color-icon-action-focus: #276ace;
+  --dnb-light-token-color-icon-action-hover: #007272;
+  --dnb-light-token-color-icon-action-hover-inverse: #a5e1d2;
+  --dnb-light-token-color-icon-action-hover-ondark: #a5e1d2;
+  --dnb-light-token-color-icon-action-inverse: #a5e1d2;
+  --dnb-light-token-color-icon-action-ondark: #a5e1d2;
+  --dnb-light-token-color-icon-action-pressed: #14555a;
+  --dnb-light-token-color-icon-action-pressed-inverse: #5cbdad;
+  --dnb-light-token-color-icon-action-pressed-ondark: #5cbdad;
+  --dnb-light-token-color-icon-error: #d52525;
+  --dnb-light-token-color-icon-error-subtle: #fceeee;
+  --dnb-light-token-color-icon-info: #007272;
+  --dnb-light-token-color-icon-info-subtle: #f2f4ec;
+  --dnb-light-token-color-icon-marketing: #333333;
+  --dnb-light-token-color-icon-marketing-subtle: #f2f2f5;
+  --dnb-light-token-color-icon-neutral: #333333;
+  --dnb-light-token-color-icon-neutral-alternative: #737373;
+  --dnb-light-token-color-icon-neutral-inverse: #ffffff;
+  --dnb-light-token-color-icon-neutral-ondark: #ffffff;
+  --dnb-light-token-color-icon-neutral-static: #333333;
+  --dnb-light-token-color-icon-positive: #007b5e;
+  --dnb-light-token-color-icon-positive-subtle: #ebf4f2;
+  --dnb-light-token-color-icon-selected: #08454d;
+  --dnb-light-token-color-icon-selected-ondark: #d8f3ec;
+  --dnb-light-token-color-icon-warning: #fdbb31;
+  --dnb-light-token-color-icon-warning-subtle: #fbf6ec;
+
+  /* Stroke */
+  --dnb-light-token-color-stroke-action: #007272;
+  --dnb-light-token-color-stroke-action-alternative: #8e8e93;
+  --dnb-light-token-color-stroke-action-alternative-ondark: #cccccc;
+  --dnb-light-token-color-stroke-action-disabled: #b1b1b5;
+  --dnb-light-token-color-stroke-action-disabled-ondark: #636366;
+  --dnb-light-token-color-stroke-action-focus: #276ace;
+  --dnb-light-token-color-stroke-action-focus-subtle: #ffffff;
+  --dnb-light-token-color-stroke-action-hover: #007272;
+  --dnb-light-token-color-stroke-action-hover-inverse: #a5e1d2;
+  --dnb-light-token-color-stroke-action-hover-ondark: #a5e1d2;
+  --dnb-light-token-color-stroke-action-inverse: #a5e1d2;
+  --dnb-light-token-color-stroke-action-ondark: #a5e1d2;
+  --dnb-light-token-color-stroke-action-pressed: #14555a;
+  --dnb-light-token-color-stroke-action-pressed-inverse: #5cbdad;
+  --dnb-light-token-color-stroke-action-pressed-ondark: #5cbdad;
+  --dnb-light-token-color-stroke-error: #d52525;
+  --dnb-light-token-color-stroke-info: #007272;
+  --dnb-light-token-color-stroke-marketing: #333333;
+  --dnb-light-token-color-stroke-neutral: #333333;
+  --dnb-light-token-color-stroke-neutral-alternative: #f2f2f5;
+  --dnb-light-token-color-stroke-neutral-bold: #cccccc;
+  --dnb-light-token-color-stroke-neutral-ondark: #ffffff;
+  --dnb-light-token-color-stroke-neutral-subtle: #ebebeb;
+  --dnb-light-token-color-stroke-positive: #007b5e;
+  --dnb-light-token-color-stroke-selected: #08454d;
+  --dnb-light-token-color-stroke-selected-ondark: #d8f3ec;
+  --dnb-light-token-color-stroke-warning: #fdbb31;
+
+  /* Decorative */
+  --dnb-light-token-color-decorative-first-base: #4a948d;
+  --dnb-light-token-color-decorative-first-base-static: #4a948d;
+  --dnb-light-token-color-decorative-first-bold: #14555a;
+  --dnb-light-token-color-decorative-first-bold-static: #14555a;
+  --dnb-light-token-color-decorative-first-intense: #00343e;
+  --dnb-light-token-color-decorative-first-intense-static: #00343e;
+  --dnb-light-token-color-decorative-first-muted: #d8f3ec;
+  --dnb-light-token-color-decorative-first-muted-static: #d8f3ec;
+  --dnb-light-token-color-decorative-first-subtle: #a5e1d2;
+  --dnb-light-token-color-decorative-first-subtle-static: #a5e1d2;
+  --dnb-light-token-color-decorative-second-base: #47d197;
+  --dnb-light-token-color-decorative-second-base-static: #47d197;
+  --dnb-light-token-color-decorative-second-bold: #007b5e;
+  --dnb-light-token-color-decorative-second-bold-static: #007b5e;
+  --dnb-light-token-color-decorative-second-intense: #0d4637;
+  --dnb-light-token-color-decorative-second-intense-static: #0d4637;
+  --dnb-light-token-color-decorative-second-muted: #dcf3e8;
+  --dnb-light-token-color-decorative-second-muted-static: #dcf3e8;
+  --dnb-light-token-color-decorative-second-subtle: #b9e7ce;
+  --dnb-light-token-color-decorative-second-subtle-static: #b9e7ce;
+  --dnb-light-token-color-decorative-third-base: #80ba77;
+  --dnb-light-token-color-decorative-third-base-static: #80ba77;
+  --dnb-light-token-color-decorative-third-bold: #5d7650;
+  --dnb-light-token-color-decorative-third-bold-static: #5d7650;
+  --dnb-light-token-color-decorative-third-intense: #3b4736;
+  --dnb-light-token-color-decorative-third-intense-static: #3b4736;
+  --dnb-light-token-color-decorative-third-muted: #f2f4ec;
+  --dnb-light-token-color-decorative-third-muted-static: #f2f4ec;
+  --dnb-light-token-color-decorative-third-subtle: #bce5ac;
+  --dnb-light-token-color-decorative-third-subtle-static: #bce5ac;
+
+  /* Component */
+  --dnb-light-token-color-component-button-background-action: #007272;
+  --dnb-light-token-color-component-button-background-action-destructive: #d52525;
+  --dnb-light-token-color-component-button-background-action-destructive-hover: #d52525;
+  --dnb-light-token-color-component-button-background-action-destructive-hover-subtle: #fceeee;
+  --dnb-light-token-color-component-button-background-action-destructive-pressed: #b21e1e;
+  --dnb-light-token-color-component-button-background-action-destructive-pressed-subtle: #fcdddd;
+  --dnb-light-token-color-component-button-background-action-hover: #007272;
+  --dnb-light-token-color-component-button-icon-action: #007272;
+  --dnb-light-token-color-component-button-icon-action-destructive: #d52525;
+  --dnb-light-token-color-component-button-icon-action-destructive-hover: #d52525;
+  --dnb-light-token-color-component-button-icon-action-destructive-pressed: #b21e1e;
+  --dnb-light-token-color-component-button-icon-action-disabled: #ffffff;
+  --dnb-light-token-color-component-button-icon-action-hover: #007272;
+  --dnb-light-token-color-component-button-icon-neutral: #ffffff;
+  --dnb-light-token-color-component-button-icon-neutral-destructive: #ffffff;
+  --dnb-light-token-color-component-button-icon-neutral-ondark: #023939;
+  --dnb-light-token-color-component-button-stroke-action: #007272;
+  --dnb-light-token-color-component-button-stroke-action-destructive: #d52525;
+  --dnb-light-token-color-component-button-stroke-action-destructive-hover: #d52525;
+  --dnb-light-token-color-component-button-stroke-action-destructive-pressed: #b21e1e;
+  --dnb-light-token-color-component-button-stroke-action-hover: #007272;
+  --dnb-light-token-color-component-button-stroke-selected: rgba(20 85 90 / 40%);
+  --dnb-light-token-color-component-button-text-action: #007272;
+  --dnb-light-token-color-component-button-text-action-destructive: #d52525;
+  --dnb-light-token-color-component-button-text-action-destructive-hover: #d52525;
+  --dnb-light-token-color-component-button-text-action-destructive-pressed: #b21e1e;
+  --dnb-light-token-color-component-button-text-action-disabled: #ffffff;
+  --dnb-light-token-color-component-button-text-action-hover: #007272;
+  --dnb-light-token-color-component-button-text-action-hover-inverse: #a5e1d2;
+  --dnb-light-token-color-component-button-text-action-hover-ondark: #a5e1d2;
+  --dnb-light-token-color-component-button-text-action-inverse: #a5e1d2;
+  --dnb-light-token-color-component-button-text-action-ondark: #a5e1d2;
+  --dnb-light-token-color-component-button-text-neutral: #ffffff;
+  --dnb-light-token-color-component-button-text-neutral-destructive: #ffffff;
+  --dnb-light-token-color-component-button-text-neutral-inverse: #023939;
+  --dnb-light-token-color-component-button-text-neutral-ondark: #023939;
+  --dnb-light-token-color-component-dimmer-background: rgba(0 0 0 / 30%);
+  --dnb-light-token-color-component-progressbar-neutral-onsubtle: #cccccc;
+  --dnb-light-token-color-component-switch-action-disabled-ondark: #333333;
+  --dnb-light-token-color-component-tooltip-background-neutral: #333333;
+
+  /* DNB Dark - complete Eufemia color token palette */
+
+  /* Background */
+  --dnb-dark-token-color-background-action: #a5e1d2;
+  --dnb-dark-token-color-background-action-alternative: #737373;
+  --dnb-dark-token-color-background-action-alternative-hover-subtle: #48484a;
+  --dnb-dark-token-color-background-action-disabled: #48484a;
+  --dnb-dark-token-color-background-action-disabled-ondark: #48484a;
+  --dnb-dark-token-color-background-action-focus: #276ace;
+  --dnb-dark-token-color-background-action-focus-subtle: #f2f2f5;
+  --dnb-dark-token-color-background-action-hover: #a5e1d2;
+  --dnb-dark-token-color-background-action-hover-inverse: #007272;
+  --dnb-dark-token-color-background-action-hover-ondark: #a5e1d2;
+  --dnb-dark-token-color-background-action-hover-subtle: #023939;
+  --dnb-dark-token-color-background-action-hover-subtle-inverse: #d8f3ec;
+  --dnb-dark-token-color-background-action-hover-subtle-ondark: #08454d;
+  --dnb-dark-token-color-background-action-inverse: #007272;
+  --dnb-dark-token-color-background-action-ondark: #a5e1d2;
+  --dnb-dark-token-color-background-action-pressed: #5cbdad;
+  --dnb-dark-token-color-background-action-pressed-ondark: #5cbdad;
+  --dnb-dark-token-color-background-action-pressed-subtle: #14555a;
+  --dnb-dark-token-color-background-action-pressed-subtle-inverse: #bce8dc;
+  --dnb-dark-token-color-background-action-pressed-subtle-ondark: #14555a;
+  --dnb-dark-token-color-background-error: #d52525;
+  --dnb-dark-token-color-background-error-subtle: #401a1a;
+  --dnb-dark-token-color-background-info: #a5e1d2;
+  --dnb-dark-token-color-background-info-subtle: #1c342d;
+  --dnb-dark-token-color-background-marketing: #f8f8f8;
+  --dnb-dark-token-color-background-marketing-subtle: #48484a;
+  --dnb-dark-token-color-background-neutral: #1c1c1e;
+  --dnb-dark-token-color-background-neutral-alternative: #333333;
+  --dnb-dark-token-color-background-neutral-base: #333333;
+  --dnb-dark-token-color-background-neutral-bold: #48484a;
+  --dnb-dark-token-color-background-neutral-static: #ffffff;
+  --dnb-dark-token-color-background-neutral-subtle: #2c2c2e;
+  --dnb-dark-token-color-background-page-background: #000000;
+  --dnb-dark-token-color-background-positive: #47d197;
+  --dnb-dark-token-color-background-positive-subtle: #1c342d;
+  --dnb-dark-token-color-background-selected: #e4eed7;
+  --dnb-dark-token-color-background-selected-ondark: #d8f3ec;
+  --dnb-dark-token-color-background-selected-subtle: #0d4637;
+  --dnb-dark-token-color-background-selected-subtle-ondark: #0d4637;
+  --dnb-dark-token-color-background-warning: #fdbb31;
+  --dnb-dark-token-color-background-warning-subtle: #3d2e0f;
+
+  /* Text */
+  --dnb-dark-token-color-text-action: #a5e1d2;
+  --dnb-dark-token-color-text-action-alternative-ondark: #ffffff;
+  --dnb-dark-token-color-text-action-disabled: #636366;
+  --dnb-dark-token-color-text-action-disabled-ondark: #8e8e93;
+  --dnb-dark-token-color-text-action-focus: #276ace;
+  --dnb-dark-token-color-text-action-hover: #a5e1d2;
+  --dnb-dark-token-color-text-action-hover-inverse: #007272;
+  --dnb-dark-token-color-text-action-hover-ondark: #a5e1d2;
+  --dnb-dark-token-color-text-action-inverse: #007272;
+  --dnb-dark-token-color-text-action-ondark: #a5e1d2;
+  --dnb-dark-token-color-text-action-pressed: #5cbdad;
+  --dnb-dark-token-color-text-action-pressed-inverse: #14555a;
+  --dnb-dark-token-color-text-action-pressed-ondark: #5cbdad;
+  --dnb-dark-token-color-text-error: #ff4646;
+  --dnb-dark-token-color-text-error-inverse: #d52525;
+  --dnb-dark-token-color-text-neutral: #ffffff;
+  --dnb-dark-token-color-text-neutral-alternative: #8e8e93;
+  --dnb-dark-token-color-text-neutral-alternative-inverse: #636366;
+  --dnb-dark-token-color-text-neutral-inverse: #333333;
+  --dnb-dark-token-color-text-neutral-ondark: #ffffff;
+  --dnb-dark-token-color-text-neutral-onlight: #333333;
+  --dnb-dark-token-color-text-neutral-subtle: #636366;
+  --dnb-dark-token-color-text-neutral-subtle-ondark: #cccccc;
+  --dnb-dark-token-color-text-positive: #28b482;
+  --dnb-dark-token-color-text-positive-inverse: #007b5e;
+  --dnb-dark-token-color-text-selected: #e4eed7;
+  --dnb-dark-token-color-text-warning: #fdbb31;
+  --dnb-dark-token-color-text-warning-inverse: #805b0e;
+
+  /* Icon */
+  --dnb-dark-token-color-icon-action: #a5e1d2;
+  --dnb-dark-token-color-icon-action-alternative-ondark: #ffffff;
+  --dnb-dark-token-color-icon-action-disabled: #636366;
+  --dnb-dark-token-color-icon-action-disabled-ondark: #8e8e93;
+  --dnb-dark-token-color-icon-action-focus: #276ace;
+  --dnb-dark-token-color-icon-action-hover: #a5e1d2;
+  --dnb-dark-token-color-icon-action-hover-inverse: #007272;
+  --dnb-dark-token-color-icon-action-hover-ondark: #a5e1d2;
+  --dnb-dark-token-color-icon-action-inverse: #007272;
+  --dnb-dark-token-color-icon-action-ondark: #a5e1d2;
+  --dnb-dark-token-color-icon-action-pressed: #5cbdad;
+  --dnb-dark-token-color-icon-action-pressed-inverse: #14555a;
+  --dnb-dark-token-color-icon-action-pressed-ondark: #5cbdad;
+  --dnb-dark-token-color-icon-error: #ff4646;
+  --dnb-dark-token-color-icon-error-subtle: #401a1a;
+  --dnb-dark-token-color-icon-info: #a5e1d2;
+  --dnb-dark-token-color-icon-info-subtle: #1c342d;
+  --dnb-dark-token-color-icon-marketing: #f8f8f8;
+  --dnb-dark-token-color-icon-marketing-subtle: #48484a;
+  --dnb-dark-token-color-icon-neutral: #ffffff;
+  --dnb-dark-token-color-icon-neutral-alternative: #8e8e93;
+  --dnb-dark-token-color-icon-neutral-inverse: #333333;
+  --dnb-dark-token-color-icon-neutral-ondark: #ffffff;
+  --dnb-dark-token-color-icon-neutral-static: #333333;
+  --dnb-dark-token-color-icon-positive: #47d197;
+  --dnb-dark-token-color-icon-positive-subtle: #1c342d;
+  --dnb-dark-token-color-icon-selected: #d8f3ec;
+  --dnb-dark-token-color-icon-selected-ondark: #d8f3ec;
+  --dnb-dark-token-color-icon-warning: #fdbb31;
+  --dnb-dark-token-color-icon-warning-subtle: #3d2e0f;
+
+  /* Stroke */
+  --dnb-dark-token-color-stroke-action: #a5e1d2;
+  --dnb-dark-token-color-stroke-action-alternative: #cccccc;
+  --dnb-dark-token-color-stroke-action-alternative-ondark: #cccccc;
+  --dnb-dark-token-color-stroke-action-disabled: #636366;
+  --dnb-dark-token-color-stroke-action-disabled-ondark: #636366;
+  --dnb-dark-token-color-stroke-action-focus: #276ace;
+  --dnb-dark-token-color-stroke-action-focus-subtle: #000000;
+  --dnb-dark-token-color-stroke-action-hover: #a5e1d2;
+  --dnb-dark-token-color-stroke-action-hover-inverse: #007272;
+  --dnb-dark-token-color-stroke-action-hover-ondark: #a5e1d2;
+  --dnb-dark-token-color-stroke-action-inverse: #007272;
+  --dnb-dark-token-color-stroke-action-ondark: #a5e1d2;
+  --dnb-dark-token-color-stroke-action-pressed: #5cbdad;
+  --dnb-dark-token-color-stroke-action-pressed-inverse: #14555a;
+  --dnb-dark-token-color-stroke-action-pressed-ondark: #5cbdad;
+  --dnb-dark-token-color-stroke-error: #ff4646;
+  --dnb-dark-token-color-stroke-info: #a5e1d2;
+  --dnb-dark-token-color-stroke-marketing: #f2f2f5;
+  --dnb-dark-token-color-stroke-neutral: #cccccc;
+  --dnb-dark-token-color-stroke-neutral-alternative: #333333;
+  --dnb-dark-token-color-stroke-neutral-bold: #48484a;
+  --dnb-dark-token-color-stroke-neutral-ondark: #ffffff;
+  --dnb-dark-token-color-stroke-neutral-subtle: #48484a;
+  --dnb-dark-token-color-stroke-positive: #47d197;
+  --dnb-dark-token-color-stroke-selected: #e4eed7;
+  --dnb-dark-token-color-stroke-selected-ondark: #d8f3ec;
+  --dnb-dark-token-color-stroke-warning: #fdbb31;
+
+  /* Decorative */
+  --dnb-dark-token-color-decorative-first-base: #4a948d;
+  --dnb-dark-token-color-decorative-first-base-static: #4a948d;
+  --dnb-dark-token-color-decorative-first-bold: #a5e1d2;
+  --dnb-dark-token-color-decorative-first-bold-static: #14555a;
+  --dnb-dark-token-color-decorative-first-intense: #d8f3ec;
+  --dnb-dark-token-color-decorative-first-intense-static: #00343e;
+  --dnb-dark-token-color-decorative-first-muted: #023939;
+  --dnb-dark-token-color-decorative-first-muted-static: #d8f3ec;
+  --dnb-dark-token-color-decorative-first-subtle: #14555a;
+  --dnb-dark-token-color-decorative-first-subtle-static: #a5e1d2;
+  --dnb-dark-token-color-decorative-second-base: #47d197;
+  --dnb-dark-token-color-decorative-second-base-static: #47d197;
+  --dnb-dark-token-color-decorative-second-bold: #b9e7ce;
+  --dnb-dark-token-color-decorative-second-bold-static: #007b5e;
+  --dnb-dark-token-color-decorative-second-intense: #dcf3e8;
+  --dnb-dark-token-color-decorative-second-intense-static: #0d4637;
+  --dnb-dark-token-color-decorative-second-muted: #0d4637;
+  --dnb-dark-token-color-decorative-second-muted-static: #dcf3e8;
+  --dnb-dark-token-color-decorative-second-subtle: #007b5e;
+  --dnb-dark-token-color-decorative-second-subtle-static: #b9e7ce;
+  --dnb-dark-token-color-decorative-third-base: #80ba77;
+  --dnb-dark-token-color-decorative-third-base-static: #80ba77;
+  --dnb-dark-token-color-decorative-third-bold: #bce5ac;
+  --dnb-dark-token-color-decorative-third-bold-static: #5d7650;
+  --dnb-dark-token-color-decorative-third-intense: #f2f4ec;
+  --dnb-dark-token-color-decorative-third-intense-static: #3b4736;
+  --dnb-dark-token-color-decorative-third-muted: #3b4736;
+  --dnb-dark-token-color-decorative-third-muted-static: #f2f4ec;
+  --dnb-dark-token-color-decorative-third-subtle: #5d7650;
+  --dnb-dark-token-color-decorative-third-subtle-static: #bce5ac;
+
+  /* Component */
+  --dnb-dark-token-color-component-button-background-action: #a5e1d2;
+  --dnb-dark-token-color-component-button-background-action-destructive: #d52525;
+  --dnb-dark-token-color-component-button-background-action-destructive-hover: #d52525;
+  --dnb-dark-token-color-component-button-background-action-destructive-hover-subtle: #401a1a;
+  --dnb-dark-token-color-component-button-background-action-destructive-pressed: #ed4c4c;
+  --dnb-dark-token-color-component-button-background-action-destructive-pressed-subtle: #541515;
+  --dnb-dark-token-color-component-button-background-action-hover: #a5e1d2;
+  --dnb-dark-token-color-component-button-icon-action: #a5e1d2;
+  --dnb-dark-token-color-component-button-icon-action-destructive: #ff5400;
+  --dnb-dark-token-color-component-button-icon-action-destructive-hover: #ff5400;
+  --dnb-dark-token-color-component-button-icon-action-destructive-pressed: #ff7633;
+  --dnb-dark-token-color-component-button-icon-action-disabled: #737373;
+  --dnb-dark-token-color-component-button-icon-action-hover: #a5e1d2;
+  --dnb-dark-token-color-component-button-icon-neutral: #023939;
+  --dnb-dark-token-color-component-button-icon-neutral-destructive: #ffffff;
+  --dnb-dark-token-color-component-button-icon-neutral-ondark: #023939;
+  --dnb-dark-token-color-component-button-stroke-action: #a5e1d2;
+  --dnb-dark-token-color-component-button-stroke-action-destructive: #ff5400;
+  --dnb-dark-token-color-component-button-stroke-action-destructive-hover: #ff5400;
+  --dnb-dark-token-color-component-button-stroke-action-destructive-pressed: #ff7633;
+  --dnb-dark-token-color-component-button-stroke-action-hover: #a5e1d2;
+  --dnb-dark-token-color-component-button-stroke-selected: rgba(165 225 210 / 40%);
+  --dnb-dark-token-color-component-button-text-action: #a5e1d2;
+  --dnb-dark-token-color-component-button-text-action-destructive: #ff5400;
+  --dnb-dark-token-color-component-button-text-action-destructive-hover: #ff5400;
+  --dnb-dark-token-color-component-button-text-action-destructive-pressed: #ff7633;
+  --dnb-dark-token-color-component-button-text-action-disabled: #737373;
+  --dnb-dark-token-color-component-button-text-action-hover: #a5e1d2;
+  --dnb-dark-token-color-component-button-text-action-hover-inverse: #007272;
+  --dnb-dark-token-color-component-button-text-action-hover-ondark: #007272;
+  --dnb-dark-token-color-component-button-text-action-inverse: #007272;
+  --dnb-dark-token-color-component-button-text-action-ondark: #007272;
+  --dnb-dark-token-color-component-button-text-neutral: #023939;
+  --dnb-dark-token-color-component-button-text-neutral-destructive: #ffffff;
+  --dnb-dark-token-color-component-button-text-neutral-inverse: #ffffff;
+  --dnb-dark-token-color-component-button-text-neutral-ondark: #023939;
+  --dnb-dark-token-color-component-dimmer-background: rgba(51 51 51 / 60%);
+  --dnb-dark-token-color-component-progressbar-neutral-onsubtle: #48484a;
+  --dnb-dark-token-color-component-switch-action-disabled-ondark: #333333;
+  --dnb-dark-token-color-component-tooltip-background-neutral: #ebebeb;
+}
+
+[data-theme="dnb"][data-color-mode="light"] {
+  color-scheme: light;
+
+  --background: var(--dnb-light-token-color-background-page-background);
+  --foreground: var(--dnb-light-token-color-text-neutral);
+  --card: var(--dnb-light-token-color-background-neutral-subtle);
+  --card-foreground: var(--dnb-light-token-color-text-neutral);
+  --popover: var(--dnb-light-token-color-background-neutral);
+  --popover-foreground: var(--dnb-light-token-color-text-neutral);
+
+  --primary: var(--dnb-light-token-color-background-action);
+  --primary-foreground: var(--dnb-light-token-color-component-button-text-neutral);
+
+  --secondary: var(--dnb-light-token-color-background-neutral-alternative);
+  --secondary-foreground: var(--dnb-light-token-color-text-neutral);
+
+  --muted: var(--dnb-light-token-color-background-neutral-subtle);
+  --muted-foreground: var(--dnb-light-token-color-text-neutral-alternative);
+
+  --accent: var(--dnb-light-token-color-background-action-hover-subtle);
+  --accent-foreground: var(--dnb-light-token-color-text-action);
+
+  --destructive: var(--dnb-light-token-color-background-error);
+  --destructive-foreground: var(--dnb-light-token-color-component-button-text-neutral-destructive);
+
+  --border: var(--dnb-light-token-color-stroke-neutral-subtle);
+  --input: var(--dnb-light-token-color-stroke-neutral-bold);
+  --ring: var(--dnb-light-token-color-stroke-action-focus);
+
+  --header-nav-active: var(--dnb-light-token-color-background-action-hover-subtle);
+  --header-nav-active-foreground: var(--dnb-light-token-color-text-action);
+
+  --chart-1: var(--dnb-light-token-color-decorative-first-bold);
+  --chart-2: var(--dnb-light-token-color-decorative-second-bold);
+  --chart-3: var(--dnb-light-token-color-decorative-third-bold);
+  --chart-4: var(--dnb-light-token-color-background-warning);
+  --chart-5: var(--dnb-light-token-color-text-error);
+
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+[data-theme="dnb"][data-color-mode="dark"] {
+  color-scheme: dark;
+
+  --background: var(--dnb-dark-token-color-background-page-background);
+  --foreground: var(--dnb-dark-token-color-text-neutral);
+  --card: var(--dnb-dark-token-color-background-neutral-subtle);
+  --card-foreground: var(--dnb-dark-token-color-text-neutral);
+  --popover: var(--dnb-dark-token-color-background-neutral);
+  --popover-foreground: var(--dnb-dark-token-color-text-neutral);
+
+  --primary: var(--dnb-dark-token-color-background-action);
+  --primary-foreground: var(--dnb-dark-token-color-component-button-text-neutral);
+
+  --secondary: var(--dnb-dark-token-color-background-neutral-alternative);
+  --secondary-foreground: var(--dnb-dark-token-color-text-neutral);
+
+  --muted: var(--dnb-dark-token-color-background-neutral-subtle);
+  --muted-foreground: var(--dnb-dark-token-color-text-neutral-alternative);
+
+  --accent: var(--dnb-dark-token-color-background-action-hover-subtle);
+  --accent-foreground: var(--dnb-dark-token-color-text-action);
+
+  --destructive: var(--dnb-dark-token-color-background-error);
+  --destructive-foreground: var(--dnb-dark-token-color-component-button-text-neutral-destructive);
+
+  --border: var(--dnb-dark-token-color-stroke-neutral-subtle);
+  --input: var(--dnb-dark-token-color-stroke-neutral-bold);
+  --ring: var(--dnb-dark-token-color-stroke-action-focus);
+
+  --header-nav-active: var(--dnb-dark-token-color-background-action-hover-subtle);
+  --header-nav-active-foreground: var(--dnb-dark-token-color-text-action);
+
+  --chart-1: var(--dnb-dark-token-color-decorative-first-bold);
+  --chart-2: var(--dnb-dark-token-color-decorative-second-bold);
+  --chart-3: var(--dnb-dark-token-color-decorative-third-bold);
+  --chart-4: var(--dnb-dark-token-color-background-warning);
+  --chart-5: var(--dnb-dark-token-color-text-error);
+
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}

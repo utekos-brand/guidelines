@@ -1,0 +1,21 @@
+{
+  "rootFontSize": 16,
+  "fixedDigits": 4,
+  "autoRemovePrefixZero": true,
+  "ingoresViaCommand": [],
+  "addMark": false,
+  "hover": "onlyMark",
+  "ingores": [],
+  "languages": [
+    "css",
+    "scss",
+    "sass",
+    "javascriptreact",
+    "typescriptreact",
+    "javascript",
+    "typescript"
+  ],
+  "spacingProperties": ["margin", "padding", "top", "bottom", "left", "right", "inset"],
+  "currentLine": "show",
+  "calcMethodName": "calc"
+}

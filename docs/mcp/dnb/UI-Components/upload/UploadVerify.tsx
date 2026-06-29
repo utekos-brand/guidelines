@@ -1,0 +1,196 @@
+import { formatNumber } from '../number-format/NumberUtils'
+import type {
+  UploadFile,
+  UploadContextValue,
+  UploadAcceptedFiles,
+  UploadAcceptedFileTypesWithFileMaxSize,
+  UploadFileNative,
+} from './types'
+
+export const BYTES_IN_A_MEGA_BYTE = 1048576
+
+export function verifyFiles(
+  files: Array<UploadFile | UploadFileNative>,
+  context: Pick<
+    UploadContextValue,
+    | 'errorUnsupportedFile'
+    | 'errorLargeFile'
+    | 'acceptedFileTypes'
+    | 'fileMaxSize'
+  >
+) {
+  const {
+    fileMaxSize,
+    acceptedFileTypes,
+    errorLargeFile,
+    errorUnsupportedFile,
+  } = context
+
+  const getFileType = (
+    file: File,
+    listOfAcceptedFilesTypes: UploadAcceptedFiles
+  ) => {
+    return hasPreferredMimeType(listOfAcceptedFilesTypes, file)
+      ? file.type
+      : getFileTypeFromExtension(file) || file.type
+  }
+
+  const handleSize = (file: File) => {
+    const validateFileSize = (
+      fileSize: number,
+      maxFileSize: number | false
+    ) => {
+      if (
+        maxFileSize &&
+        // Converts from b (binary) to MB (decimal)
+        fileSize / BYTES_IN_A_MEGA_BYTE > maxFileSize
+      ) {
+        return String(errorLargeFile).replace(
+          '%size',
+          formatNumber(maxFileSize).toString()
+        )
+      }
+      return null
+    }
+
+    if (
+      isArrayOfStrings(acceptedFileTypes) ||
+      acceptedFileTypes.length === 0 ||
+      !acceptedFileTypes
+    ) {
+      return validateFileSize(file.size, fileMaxSize)
+    } else if (isArrayOfObjects(acceptedFileTypes)) {
+      const fileType = getFileType(
+        file,
+        getAcceptedFileTypesAsListOfStrings(acceptedFileTypes)
+      )
+
+      const acceptedFileTypeObj = (
+        acceptedFileTypes as UploadAcceptedFileTypesWithFileMaxSize
+      ).find((item) => {
+        return item?.fileType?.toLowerCase() === fileType?.toLowerCase()
+      })
+
+      return validateFileSize(
+        file.size,
+        acceptedFileTypeObj?.fileMaxSize !== undefined
+          ? acceptedFileTypeObj.fileMaxSize
+          : fileMaxSize
+      )
+    }
+    return null
+  }
+
+  const handleType = (file: File) => {
+    if (acceptedFileTypes.length === 0) {
+      return false
+    }
+
+    const listOfAcceptedFilesTypes =
+      getAcceptedFileTypesAsListOfStrings(acceptedFileTypes)
+    const fileType = getFileType(file, listOfAcceptedFilesTypes)
+    const foundType = extendWithAbbreviation(
+      listOfAcceptedFilesTypes
+    ).some((type) => {
+      /**
+       * "file.type" can be e.g. "image/png"
+       */
+      return fileType?.toLowerCase()?.includes(type.toLowerCase())
+    })
+    return !foundType ? errorUnsupportedFile : null
+  }
+
+  const cleanedFiles = files.map((item) => {
+    const { file } = item
+
+    const errorMessage = handleSize(file) || handleType(file)
+
+    if (errorMessage) {
+      item.errorMessage = errorMessage
+    }
+
+    return item
+  })
+
+  return cleanedFiles
+}
+
+export function getFileTypeFromExtension(file: File) {
+  if (!file || !file.name) {
+    return null
+  }
+  return (
+    (file.name.includes('.') && file.name.replace(/.*\.([^.]+)$/, '$1')) ||
+    null
+  )
+}
+
+export function getAcceptedFileTypes(
+  acceptedFileTypes:
+    | UploadAcceptedFiles
+    | UploadAcceptedFileTypesWithFileMaxSize
+) {
+  return extendWithAbbreviation(
+    getAcceptedFileTypesAsListOfStrings(acceptedFileTypes)
+  )
+    .map((type) => (type.includes('/') ? type : `.${type}`))
+    .join(',')
+}
+
+export function hasPreferredMimeType(
+  acceptedFileTypes: UploadAcceptedFiles,
+  file: File
+) {
+  return (
+    file.type.split('/')[1] &&
+    (!acceptedFileTypes?.length ||
+      acceptedFileTypes?.some(
+        (type) => type.toLowerCase() === file.type.toLowerCase()
+      ))
+  )
+}
+
+function getAcceptedFileTypesAsListOfStrings(
+  acceptedFileTypes:
+    | UploadAcceptedFiles
+    | UploadAcceptedFileTypesWithFileMaxSize
+) {
+  return isArrayOfStrings(acceptedFileTypes)
+    ? (acceptedFileTypes as UploadAcceptedFiles)
+    : (acceptedFileTypes as UploadAcceptedFileTypesWithFileMaxSize).map(
+        (obj) => obj.fileType
+      )
+}
+
+export function isArrayOfStrings(arr) {
+  return (
+    Array.isArray(arr) &&
+    arr.length > 0 &&
+    arr.every((i) => typeof i === 'string')
+  )
+}
+
+export function isArrayOfObjects(arr) {
+  return (
+    Array.isArray(arr) &&
+    arr.length > 0 &&
+    arr.every((i) => typeof i === 'object')
+  )
+}
+
+export function extendWithAbbreviation(
+  acceptedFileTypes: UploadAcceptedFiles,
+  abbreviations = { jpg: 'jpeg' }
+) {
+  const list = [...acceptedFileTypes]
+  const listSet = new Set(list)
+
+  Object.entries(abbreviations).forEach(([type, abbr]) => {
+    if (listSet.has(type) && !listSet.has(abbr)) {
+      list.push(abbr)
+      listSet.add(abbr)
+    }
+  })
+
+  return list
+}

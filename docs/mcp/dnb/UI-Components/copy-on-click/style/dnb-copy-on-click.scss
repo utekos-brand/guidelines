@@ -1,0 +1,11 @@
+/*
+* CopyOnClick component
+*
+*/
+
+.dnb-copy-on-click {
+  &--cursor,
+  &--cursor * {
+    cursor: copy;
+  }
+}

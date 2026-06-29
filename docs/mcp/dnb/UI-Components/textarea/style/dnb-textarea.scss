@@ -1,0 +1,339 @@
+/*
+* Textarea component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+@mixin textareaStyleCommon() {
+  cursor: auto;
+  border: none;
+  margin: 0;
+  padding: 0;
+
+  outline: none;
+
+  font-size: var(--font-size-basis);
+  line-height: var(--line-height-basis);
+}
+
+.dnb-textarea {
+  --textarea-color-background: var(--token-color-background-neutral);
+  --textarea-color-text: var(--token-color-text-neutral);
+  --textarea-color-placeholder: var(
+    --token-color-text-neutral-alternative
+  );
+  --textarea-color-border: var(--token-color-stroke-action);
+  --textarea-border-radius: var(--token-radius-sm);
+  --textarea-border-width: var(--textarea-border-width--default);
+  --textarea-border-width--default: 0.0625rem;
+  --textarea-border-width--hover: 0.125rem;
+  --textarea-rows: 2; // using variable so it can be dynamically changed by react component
+  --textarea-size--small: 0.25rem;
+  --textarea-size--medium: 0.5rem;
+  --textarea-size--large: 0.75rem;
+
+  display: inline-flex;
+
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-basis);
+
+  &__inner {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  &__shell {
+    display: inline-flex;
+    position: relative;
+
+    // because of inheritance, we set the font-size and line-height here as well
+    font-size: var(--font-size-basis);
+
+    &::after {
+      --grip-color: var(--textarea-color-text);
+      --grip-size: 1rem;
+      --grip-line-1: 2px;
+      --grip-line-1-stroke: 0.7px;
+      --grip-line-2: 3.7px;
+      --grip-line-2-stroke: 0.8px;
+      --grip-line-3: 5.7px;
+      --grip-line-3-stroke: 0.7px;
+
+      pointer-events: none;
+
+      content: '';
+      position: absolute;
+      z-index: 2;
+
+      bottom: 0;
+      right: 0;
+
+      width: var(--grip-size);
+      height: var(--grip-size);
+
+      background: linear-gradient(
+        -45deg,
+        transparent var(--grip-line-1),
+        var(--grip-color) var(--grip-line-1),
+        var(--grip-color)
+          calc(var(--grip-line-1) + var(--grip-line-1-stroke)),
+        transparent calc(var(--grip-line-1) + var(--grip-line-1-stroke)),
+        transparent var(--grip-line-2),
+        var(--grip-color) var(--grip-line-2),
+        var(--grip-color)
+          calc(var(--grip-line-2) + var(--grip-line-2-stroke)),
+        transparent calc(var(--grip-line-2) + var(--grip-line-2-stroke)),
+        transparent var(--grip-line-3),
+        var(--grip-color) var(--grip-line-3),
+        var(--grip-color)
+          calc(var(--grip-line-3) + var(--grip-line-3-stroke)),
+        transparent calc(var(--grip-line-3) + var(--grip-line-3-stroke))
+      );
+      background-color: var(--textarea-color-background);
+    }
+  }
+
+  &__autoresize &__shell::after {
+    content: none;
+  }
+
+  &__state {
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--textarea-size-vertical) * -1);
+    left: calc(var(--textarea-size-horizontal) * -1);
+    bottom: calc(var(--textarea-size-vertical) * -1);
+
+    // use vertical to align the grabber to be centered on the corner
+    right: calc(var(--textarea-size-vertical) * -1);
+
+    background-color: var(--textarea-color-background);
+
+    @include utilities.fakeBorder(
+      var(--textarea-color-border),
+      var(--textarea-border-width, var(--textarea-border-width--default)),
+      var(--textarea-border-inset, inset)
+    );
+
+    border-radius: var(--textarea-border-radius);
+  }
+
+  &__row {
+    display: inline-flex;
+
+    margin: var(--textarea-size-vertical) var(--textarea-size-vertical)
+      var(--textarea-size-vertical) var(--textarea-size-horizontal);
+  }
+
+  &__suffix.dnb-suffix {
+    padding-left: 1rem;
+  }
+
+  &__textarea {
+    position: relative;
+    z-index: 2;
+
+    // To prevent textarea element from going outside of boundaries on smaller screens
+    width: 100%;
+
+    color: var(--textarea-color-text);
+    background-color: var(--textarea-color-background);
+
+    @include textareaStyleCommon();
+
+    @include utilities.scrollY(auto);
+
+    @include utilities.isFirefox() {
+      overflow-x: clip !important;
+    }
+  }
+
+  &__placeholder {
+    pointer-events: none;
+
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+
+    overflow: hidden;
+    width: 100%; // to get overflow working properly
+    height: 100%; // to get overflow working properly
+
+    // Required for line-clamp
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+
+    // Limit the text block to two lines
+    -webkit-line-clamp: var(--textarea-rows, 2);
+
+    @include textareaStyleCommon();
+
+    color: var(--textarea-color-placeholder);
+    background-color: transparent;
+  }
+
+  &__textarea,
+  &__placeholder {
+    text-align: left;
+  }
+
+  // Some browsers change the background color so users can see the difference between "autofill" and "user input".
+  // However; the background color change does look not good because of the padding we have.
+  &__textarea:autofill {
+    box-shadow: 0 0 0 10em
+      var(
+        --textarea-color-background,
+        var(--token-color-background-neutral)
+      )
+      inset;
+  }
+
+  &__align--right &__textarea,
+  &__align--right &__placeholder {
+    text-align: right;
+  }
+
+  &,
+  &__size--small {
+    --textarea-size-vertical: var(--textarea-size--small);
+    --textarea-size-horizontal: 1rem;
+  }
+  &__size--medium {
+    --textarea-size-vertical: var(--textarea-size--medium);
+    --textarea-size-horizontal: 1rem;
+  }
+  &__size--large {
+    --textarea-size-vertical: var(--textarea-size--large);
+    --textarea-size-horizontal: 1rem;
+  }
+
+  &__autoresize &__textarea {
+    resize: none;
+  }
+
+  &--disabled {
+    --textarea-color-background: var(
+      --token-color-background-neutral-subtle
+    );
+    --textarea-color-text: var(--token-color-text-neutral-alternative);
+    --textarea-color-placeholder: var(--token-color-text-action-disabled);
+    --textarea-color-border: var(--token-color-stroke-action-disabled);
+  }
+
+  // disabled
+  &--disabled &__textarea,
+  &__textarea[disabled] {
+    user-select: none; // Safari / Touch fix
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+
+  &__inner > .dnb-form-status {
+    order: 2;
+    margin-top: 0.5rem;
+  }
+
+  &:not(#{&}--vertical) .dnb-form-label {
+    margin-top: var(--textarea-size-vertical);
+  }
+
+  &--vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &:not(&--vertical)[class*='__status'] {
+    align-items: flex-start;
+
+    > .dnb-form-label {
+      // vertical align the current font
+      margin-top: 0.25rem;
+    }
+  }
+
+  @include utilities.formLabelWrap();
+
+  // make full width
+  &--stretch {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  &--stretch & {
+    &__inner {
+      flex-grow: 1;
+    }
+
+    &__shell,
+    &__inner,
+    &__textarea {
+      width: 100%;
+    }
+  }
+
+  &--stretch .dnb-form-label + &__inner {
+    width: auto;
+  }
+  &--vertical#{&}--stretch &__inner {
+    width: 100%;
+  }
+
+  &--keep-placeholder#{&}--focus &__placeholder {
+    display: block;
+  }
+
+  .dnb-responsive-component & {
+    @include utilities.allBelow(small) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      margin-bottom: 0.5rem;
+
+      > .dnb-form-label {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  html[data-visual-test] &__textarea {
+    caret-color: var(--token-color-background-neutral);
+  }
+
+  &.dnb-skeleton &__inner {
+    border-radius: var(--textarea-border-radius);
+  }
+
+  &.dnb-skeleton &__state,
+  &.dnb-skeleton &__textarea {
+    visibility: hidden;
+  }
+
+  // hover and focus
+  &__textarea:not([disabled]):not(#{&}--disabled):hover ~ &__state,
+  &__textarea:not([disabled]):not(#{&}--disabled):focus ~ &__state {
+    --textarea-border-width: var(--textarea-border-width--hover);
+    --textarea-border-inset: ;
+  }
+
+  //  focus
+  &__textarea:not([disabled]):not(#{&}--disabled):focus ~ &__state {
+    --textarea-color-border: var(--token-color-stroke-action-pressed);
+  }
+
+  //  hover
+  &__textarea:not([disabled]):not(#{&}--disabled):hover ~ &__state {
+    --textarea-color-border: var(--token-color-stroke-action-hover);
+  }
+
+  // with statusState = "error"
+  &__status--error
+    &__textarea:not([disabled]):not(#{&}--disabled)
+    ~ &__state {
+    --textarea-color-border: var(--token-color-stroke-error);
+  }
+}

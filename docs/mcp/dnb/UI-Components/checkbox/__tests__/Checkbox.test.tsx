@@ -1,0 +1,513 @@
+/**
+ * Checkbox Test
+ *
+ */
+
+import { useRef, useState } from 'react'
+import type { RefObject } from 'react'
+import {
+  render,
+  screen,
+  cleanup,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { axeComponent, loadScss } from '../../../core/test-utils/testSetup'
+import type { CheckboxProps } from '../Checkbox'
+import Checkbox from '../Checkbox'
+import { Provider } from '../../../shared'
+
+const props: CheckboxProps = {
+  label: 'checkbox',
+}
+
+describe('Checkbox component', () => {
+  it('has correct state after "change" trigger', () => {
+    const { rerender } = render(<Checkbox {...props} />)
+
+    // default checked value has to be false
+    expect(
+      (screen.getByRole('checkbox') as HTMLInputElement).checked
+    ).toBe(false)
+
+    screen.getByRole('checkbox').click()
+    expect(
+      (screen.getByRole('checkbox') as HTMLInputElement).checked
+    ).toBe(true)
+
+    screen.getByRole('checkbox').click()
+    expect(
+      (screen.getByRole('checkbox') as HTMLInputElement).checked
+    ).toBe(false)
+
+    // also check if getDerivedStateFromProps sets the state as expected
+    rerender(<Checkbox {...props} checked={true} />)
+
+    expect(
+      (screen.getByRole('checkbox') as HTMLInputElement).checked
+    ).toBe(true)
+
+    const value = 'new value'
+    rerender(<Checkbox {...props} checked={true} value={value} />)
+    expect((screen.getByRole('checkbox') as HTMLInputElement).value).toBe(
+      value
+    )
+  })
+
+  it('should return "checked" and "event" from onChange event', async () => {
+    const onChange = vi.fn()
+    render(<Checkbox onChange={onChange} value="foo" />)
+
+    const checkbox = document.querySelector('input')
+    await userEvent.click(checkbox)
+
+    expect(onChange).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        checked: true,
+        event: expect.objectContaining({
+          target: expect.objectContaining({ value: 'foo' }),
+        }),
+      })
+    )
+  })
+
+  it('calls focus with preventScroll when clicking', async () => {
+    render(<Checkbox {...props} />)
+
+    const checkbox = screen.getByRole('checkbox') as HTMLInputElement
+    const focusSpy = vi.spyOn(checkbox, 'focus')
+
+    await userEvent.click(checkbox)
+
+    // Wait for the focus to be called (it happens after state update)
+    await waitFor(() => {
+      expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true })
+    })
+
+    focusSpy.mockRestore()
+  })
+
+  it('should not change the state when calling preventDefault on the onClick event when default value is true', async () => {
+    const onClick = vi.fn((event) => {
+      event.preventDefault()
+    })
+    const onChange = vi.fn()
+
+    render(
+      <Checkbox checked={false} onClick={onClick} onChange={onChange} />
+    )
+
+    const checkbox = document.querySelector('input')
+    expect(checkbox.checked).toBe(false)
+
+    await userEvent.click(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        target: expect.objectContaining({
+          checked: false,
+        }),
+      })
+    )
+
+    await userEvent.click(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        target: expect.objectContaining({
+          checked: false,
+        }),
+      })
+    )
+
+    userEvent.type(checkbox, '{Space}')
+
+    expect(checkbox.checked).toBe(false)
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        target: expect.objectContaining({
+          checked: false,
+        }),
+      })
+    )
+
+    userEvent.type(checkbox, '{Space}')
+
+    expect(checkbox.checked).toBe(false)
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        target: expect.objectContaining({
+          checked: false,
+        }),
+      })
+    )
+
+    expect(onChange).toHaveBeenCalledTimes(0)
+  })
+
+  it('should not change the state when calling preventDefault on the onClick event', async () => {
+    const onClick = vi.fn((event) => {
+      event.preventDefault()
+    })
+    const onChange = vi.fn()
+
+    render(<Checkbox onClick={onClick} onChange={onChange} />)
+
+    const checkbox = document.querySelector('input')
+    expect(checkbox.checked).toBe(false)
+
+    await userEvent.click(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        target: expect.objectContaining({
+          checked: false,
+        }),
+      })
+    )
+
+    await userEvent.click(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        target: expect.objectContaining({
+          checked: false,
+        }),
+      })
+    )
+
+    expect(onChange).toHaveBeenCalledTimes(0)
+  })
+
+  it('should not change the state when readOnly is true', async () => {
+    render(<Checkbox readOnly />)
+
+    const checkbox = document.querySelector('input')
+    expect(checkbox.checked).toBe(false)
+
+    await userEvent.click(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+
+    await userEvent.click(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+
+    fireEvent.change(checkbox, { target: { checked: true } })
+
+    // We can't prevent the change when using fireEvent.change
+    expect(checkbox.checked).toBe(true)
+  })
+
+  it('should not visually flip when custom preventDefault is called in onClick', async () => {
+    const onChange = vi.fn()
+
+    const Controlled = () => {
+      const [checked, setChecked] = useState(false)
+
+      return (
+        <Checkbox
+          checked={checked}
+          onChange={({ checked }) => {
+            onChange(checked)
+            setChecked(checked)
+          }}
+          onClick={({ preventDefault }) => {
+            preventDefault()
+          }}
+        />
+      )
+    }
+
+    render(<Controlled />)
+
+    const input = document.querySelector('input')
+
+    await userEvent.click(input)
+    expect(input.checked).toBe(false)
+    expect(onChange).not.toHaveBeenCalled()
+
+    await userEvent.click(input)
+    expect(input.checked).toBe(false)
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('should allow normal toggling when custom preventDefault is not called in onClick', async () => {
+    const onChange = vi.fn()
+
+    const Controlled = () => {
+      const [checked, setChecked] = useState(false)
+
+      return (
+        <Checkbox
+          checked={checked}
+          onChange={({ checked }) => {
+            onChange(checked)
+            setChecked(checked)
+          }}
+          onClick={() => {
+            // onClick present but not calling preventDefault
+          }}
+        />
+      )
+    }
+
+    render(<Controlled />)
+
+    const input = document.querySelector('input')
+
+    await userEvent.click(input)
+    expect(input.checked).toBe(true)
+    expect(onChange).toHaveBeenCalledWith(true)
+  })
+
+  it('has "onChange" event which will trigger on a input change', () => {
+    const myEvent = vi.fn()
+    render(<Checkbox onChange={myEvent} checked={false} />)
+    screen.getByRole('checkbox').click()
+
+    expect(myEvent.mock.calls.length).toBe(1)
+    expect(myEvent.mock.calls[0][0]).toHaveProperty('checked')
+    expect(myEvent.mock.calls[0][0].checked).toBe(true)
+  })
+
+  describe('controlled vs uncontrolled', () => {
+    const ControlledVsUncontrolled = () => {
+      const [checked, setChecked] = useState(true)
+      const [random, setRandom] = useState(null)
+
+      return (
+        <>
+          <Checkbox
+            checked={checked}
+            onChange={({ checked }) => setChecked(checked)}
+          />
+          <button id="set-state" onClick={() => setChecked(true)} />
+          <button
+            id="reset-undefined"
+            onClick={() => setChecked(undefined)}
+          />
+          <button id="reset-null" onClick={() => setChecked(null)} />
+          <button id="rerender" onClick={() => setRandom(Math.random())} />
+          <code>{JSON.stringify({ checked, random })}</code>
+        </>
+      )
+    }
+
+    it('handles re-render + default state', () => {
+      render(<ControlledVsUncontrolled />)
+
+      fireEvent.click(document.querySelector('button#set-state'))
+      expect(document.querySelector('input').checked).toBe(true)
+      cleanup()
+    })
+
+    it('changes to false', () => {
+      render(<ControlledVsUncontrolled />)
+
+      fireEvent.click(document.querySelector('input'))
+      expect(document.querySelector('input').checked).toBe(false)
+      cleanup()
+    })
+
+    it('handles set it to true', () => {
+      render(<ControlledVsUncontrolled />)
+
+      fireEvent.click(document.querySelector('button#set-state'))
+      expect(document.querySelector('input').checked).toBe(true)
+      cleanup()
+    })
+    it('handles reset it with undefined to false', () => {
+      render(<ControlledVsUncontrolled />)
+
+      fireEvent.click(document.querySelector('button#reset-undefined'))
+
+      expect(document.querySelector('input').checked).toBe(false)
+
+      cleanup()
+    })
+    it('handles set to true + reset it with null to false', () => {
+      render(<ControlledVsUncontrolled />)
+
+      fireEvent.click(document.querySelector('button#set-state'))
+      fireEvent.click(document.querySelector('button#reset-null'))
+
+      expect(document.querySelector('input').checked).toBe(false)
+
+      cleanup()
+    })
+
+    it('handles re-render + still false', async () => {
+      render(<ControlledVsUncontrolled />)
+
+      userEvent.click(document.querySelector('button#rerender'))
+
+      waitFor(() => {
+        expect(document.querySelector('input').checked).toBe(false)
+      })
+
+      cleanup()
+    })
+  })
+
+  it('has a disabled attribute, once we set disabled to true', () => {
+    render(<Checkbox disabled={true} />)
+
+    expect(
+      (screen.getByRole('checkbox') as HTMLInputElement).disabled
+    ).toBe(true)
+  })
+
+  it('should support spacing props', () => {
+    render(<Checkbox top="2rem" />)
+
+    const element = document.querySelector('.dnb-checkbox')
+
+    expect(element).toHaveClass(
+      'dnb-checkbox dnb-form-component dnb-space__top--large',
+      { exact: true }
+    )
+  })
+
+  it('should inherit formElement vertical label', () => {
+    render(
+      <Provider
+        formElement={{ labelDirection: 'vertical', disabled: true }}
+      >
+        <Checkbox label="Label" />
+      </Provider>
+    )
+
+    const element = document.querySelector('.dnb-checkbox')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+    const inputElement = document.querySelector('.dnb-checkbox input')
+    const inputAttributes = Array.from(inputElement.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(inputAttributes).toEqual([
+      'id',
+      'class',
+      'disabled',
+      'aria-disabled',
+      'type',
+      'value',
+      'name',
+    ])
+    expect(element).toHaveClass(
+      'dnb-checkbox dnb-form-component dnb-checkbox--label-position-right',
+      { exact: true }
+    )
+    expect(inputElement).toHaveClass('dnb-checkbox__input', {
+      exact: true,
+    })
+  })
+
+  it('should validate with ARIA rules', async () => {
+    const Comp = render(<Checkbox {...props} />)
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+
+  it('gets valid ref element', () => {
+    let ref: RefObject<HTMLInputElement>
+
+    function MockComponent() {
+      ref = useRef<HTMLInputElement | null>(null)
+      return <Checkbox id="unique" ref={ref} />
+    }
+
+    render(<MockComponent />)
+
+    expect(ref.current.getAttribute('id')).toBe('unique')
+    expect(ref.current.classList).toContain('dnb-checkbox__input')
+    expect(ref.current.tagName).toBe('INPUT')
+  })
+
+  it('gets valid element when ref is function', () => {
+    const ref: RefObject<HTMLInputElement | null> = { current: null }
+
+    const refFn = (elem: HTMLInputElement) => {
+      ref.current = elem
+    }
+
+    render(<Checkbox id="unique" ref={refFn} />)
+
+    expect(ref.current.getAttribute('id')).toBe('unique')
+    expect(ref.current.classList).toContain('dnb-checkbox__input')
+    expect(ref.current.tagName).toBe('INPUT')
+  })
+
+  it('should use span element if defined', () => {
+    render(<Checkbox element="span" />)
+    expect(document.querySelector('.dnb-checkbox__input').tagName).toBe(
+      'SPAN'
+    )
+    expect(
+      document.querySelector('.dnb-checkbox__input').getAttribute('type')
+    ).toBe('checkbox')
+  })
+  describe('Indeterminate state', () => {
+    it('renders indeterminate state', () => {
+      render(<Checkbox indeterminate />)
+
+      expect(
+        document.querySelector('.dnb-checkbox__indeterminate')
+      ).toBeInTheDocument()
+    })
+
+    it('changes to no longer indeterminate when clicking indeterminate state', () => {
+      const mockOnChange = vi.fn()
+      render(<Checkbox indeterminate onChange={mockOnChange} />)
+
+      screen.getByRole('checkbox').click()
+
+      expect(mockOnChange).toHaveBeenCalledWith(
+        expect.not.objectContaining({ indeterminate: true })
+      )
+
+      expect(screen.getByRole('checkbox')).not.toHaveClass(
+        '.dnb-checkbox__indeterminate'
+      )
+    })
+
+    it('sets the input indeterminate when setting indeterminate true', () => {
+      render(<Checkbox indeterminate />)
+
+      expect(
+        (screen.getByRole('checkbox') as HTMLInputElement).indeterminate
+      ).toBe(true)
+    })
+
+    it('sets the input indeterminate to false when clicking an indeterminate checkbox', () => {
+      render(<Checkbox indeterminate />)
+
+      screen.getByRole('checkbox').click()
+
+      expect(
+        (screen.getByRole('checkbox') as HTMLInputElement).indeterminate
+      ).toBe(false)
+    })
+  })
+})
+
+describe('Checkbox scss', () => {
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

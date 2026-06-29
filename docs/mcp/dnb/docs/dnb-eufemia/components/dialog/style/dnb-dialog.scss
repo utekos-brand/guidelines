@@ -1,0 +1,306 @@
+/*
+ * Dialog component
+ *
+ */
+
+@use '../../../style/core/utilities.scss' as utilities;
+@use '../../modal/style/modal-mixins.scss' as modal-mixins;
+
+.dnb-dialog {
+  // we do this because SCSS fails by using min(100vw, 50rem) = "Incompatible units: 'rem' and 'vw'"
+  --dialog-min-width: 320px; // use px, so larger font-size don't enlarge the min, has to be under 20rem, because of spacing and later mobile fullscreen
+  --dialog-avg-width: 60vw; // content defines the size
+  --dialog-max-width: 49rem; // because of our default width --layout-large
+  --dialog-confirm-max-width: 40rem;
+  --dialog-spacing: 2rem; // should reflect --spacing-large
+  --dialog-spacing-minus: -2rem; // should reflect --spacing-large
+  --dialog-radius: var(--token-radius-md);
+  --dialog-padding: calc(var(--dialog-spacing) * 1.75);
+  --dialog-icon-positioning: -50%;
+  --dialog-background-color: var(--token-color-background-neutral);
+  --dialog-stroke-color: var(--token-color-stroke-neutral-subtle);
+
+  position: relative;
+
+  max-height: 100vh;
+  overflow: hidden;
+
+  user-select: text; // Safari / Touch fix
+  border: none;
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+
+  border-radius: var(--dialog-radius);
+  background-color: var(--dialog-background-color);
+
+  @include utilities.fakeBorder(
+    $color: var(--dialog-stroke-color),
+    $extendShadow: var(--shadow-default)
+  );
+
+  & > .dnb-scroll-view {
+    height: 100%; // ensure a Dropdown opens with the full height
+    max-height: 90vh; // make it scrollable
+  }
+
+  &__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-height: 100%;
+  }
+
+  &--information {
+    width: var(--dialog-avg-width);
+    min-width: var(--dialog-min-width);
+    max-width: var(--dialog-max-width);
+  }
+
+  &--confirmation {
+    max-width: var(--dialog-confirm-max-width);
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  &--auto-fullscreen {
+    @include utilities.allBelow(small) {
+      @include modal-mixins.modalFullscreen();
+      margin: auto 0;
+    }
+  }
+
+  &--fullscreen {
+    @include modal-mixins.modalFullscreen();
+    margin: auto 0;
+  }
+  &--spacing#{&}--information &__content {
+    padding-bottom: calc(var(--dialog-spacing) * 2);
+  }
+
+  &--spacing#{&}--information &__inner {
+    padding-left: var(--dialog-padding); // 3.5rem (56px)
+    padding-right: var(--dialog-padding); // 3.5rem (56px)
+
+    @include utilities.allBelow(large) {
+      padding-left: calc(var(--dialog-spacing)); // 2rem (32px)
+      padding-right: calc(var(--dialog-spacing)); // 2rem (32px)
+    }
+
+    @include utilities.allBelow(small) {
+      padding-left: calc(var(--dialog-spacing) / 2); // 1rem (16px)
+      padding-right: calc(var(--dialog-spacing) / 2); // 1rem (16px)
+    }
+  }
+
+  &--spacing#{&}--information &__navigation.dnb-section {
+    margin-top: calc(var(--dialog-spacing)); // 2rem (32px)
+    margin-bottom: calc(var(--dialog-spacing) / 2); // 1rem (16px)
+
+    @include utilities.allBelow(medium) {
+      margin-top: calc(var(--dialog-spacing) / 2); // 1rem (16px)
+    }
+  }
+
+  &--spacing#{&}--confirmation &__inner {
+    padding: calc(var(--dialog-spacing)); // 2rem (32px)
+  }
+
+  &__align--centered &__inner {
+    align-items: center;
+    justify-content: center;
+  }
+  &__align--centered &__title,
+  &__align--centered#{&}--confirmation &__content {
+    text-align: center;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__actions {
+    padding-top: 1.5rem;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    column-gap: 1rem;
+    width: 100%;
+  }
+
+  &--information &__actions {
+    justify-content: left;
+  }
+
+  &__align--center &__content {
+    align-items: center;
+    text-align: center;
+  }
+
+  &__align--right &__content {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  &__title ~ &__content {
+    padding-top: calc(var(--dialog-spacing) / 2);
+  }
+
+  &__title {
+    @include utilities.allBelow(medium) {
+      font-size: var(--font-size-large) !important;
+      line-height: var(--line-height-large) !important;
+    }
+
+    @include utilities.allBelow(small) {
+      font-size: var(--font-size-medium) !important;
+      line-height: var(--line-height-lead) !important;
+    }
+  }
+
+  &--information &__title {
+    margin-bottom: 1rem !important;
+  }
+
+  &--confirmation &__title {
+    margin-bottom: 0.5rem !important;
+  }
+
+  &__navigation.dnb-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    --background-color: var(--dialog-background-color);
+  }
+
+  @include modal-mixins.modalStickyNav();
+
+  // Remove default margins from navigation to avoid extra spacing when no title
+  &--spacing &__navigation.dnb-section {
+    margin: 0;
+  }
+
+  // Only add spacing between navigation and title when title exists
+  &--spacing &__navigation.dnb-section + &__title {
+    margin-top: 1.5rem;
+  }
+
+  // Dialog-specific shadow height override
+  & &__navigation--sticky {
+    &::before {
+      left: calc(-1 * var(--dialog-padding));
+      right: calc(-1 * var(--dialog-padding));
+      box-shadow: var(--shadow-default-x) var(--shadow-default-y) 8px 0
+        var(--shadow-default-color);
+
+      @include utilities.allBelow(large) {
+        left: calc(-1 * var(--dialog-spacing));
+        right: calc(-1 * var(--dialog-spacing));
+      }
+
+      @include utilities.allBelow(small) {
+        left: calc(-1 * var(--dialog-spacing) / 2);
+        right: calc(-1 * var(--dialog-spacing) / 2);
+      }
+    }
+  }
+
+  // Animation in
+  animation: show-modal var(--modal-animation-duration) ease-out;
+
+  // Animation out
+  &--hide {
+    animation: hide-modal 220ms ease-in-out forwards;
+  }
+
+  @include utilities.reducedMotion() {
+    animation-duration: 0.01ms !important;
+  }
+
+  &--no-animation {
+    animation-duration: 0ms !important;
+  }
+
+  @include utilities.allBelow(small) {
+    &--no-animation-on-mobile {
+      animation-delay: 0ms !important;
+      animation-duration: 0ms !important;
+    }
+  }
+
+  &__body {
+    padding-bottom: calc(var(--dialog-spacing) * 2);
+    margin-bottom: calc(var(--dialog-spacing-minus) * 2);
+  }
+
+  &__header {
+    &::after {
+      top: -500%;
+      height: 600%;
+    }
+  }
+
+  &__header [class*='dnb-h--'],
+  &__header .dnb-modal__title {
+    padding: 0;
+
+    &:not([class*='__top']) {
+      margin-top: 0;
+    }
+
+    &:not([class*='__bottom']) {
+      margin-bottom: 0;
+    }
+  }
+
+  &--spacing &__header {
+    .dnb-tabs {
+      margin-top: 3.5rem;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    // Modify the border prop from the icon component
+    &__primary.dnb-icon--border {
+      --icon-border-positioning--default: var(--dialog-icon-positioning);
+      color: var(--dialog-icon-color);
+
+      svg {
+        z-index: 1;
+        position: relative;
+      }
+
+      &::after {
+        border: none;
+        background-color: var(--dialog-icon-background);
+      }
+    }
+
+    &__primary#{&}--warning {
+      --dialog-icon-color: var(--token-color-icon-error);
+      --dialog-icon-background: var(--token-color-background-error-subtle);
+    }
+    &__primary#{&}--information {
+      --dialog-icon-color: var(--token-color-decorative-first-bold);
+      --dialog-icon-background: var(--token-color-decorative-first-muted);
+    }
+  }
+
+  &__icon ~ &__header {
+    margin-top: 1.5rem;
+  }
+
+  // Fix for iOS on iPhone
+  // Because Safari includes the navigation bar on the height
+  @include utilities.isSafariMobile() {
+    @media screen and (max-height: 40em) {
+      .dnb-scroll-view {
+        max-height: 82vh;
+      }
+    }
+  }
+}

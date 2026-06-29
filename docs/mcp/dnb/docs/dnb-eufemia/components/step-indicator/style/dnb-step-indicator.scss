@@ -1,0 +1,155 @@
+/*
+ * StepIndicator component
+ *
+ */
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-step-indicator {
+  --step-indicator-trigger-background: var(
+    --token-color-background-neutral-subtle
+  );
+  --step-indicator-trigger-content-background: var(
+    --token-color-background-neutral
+  );
+  --step-indicator-check-bg: var(--token-color-background-selected-subtle);
+  --step-indicator-check-color: var(--token-color-icon-positive);
+  --step-indicator-current-border: var(--token-color-stroke-neutral);
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  &__list {
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+  }
+
+  &__trigger {
+    // Is needed to make ensure the button stays on top during height animation
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  &__trigger__button {
+    --button-height: 1.5rem;
+    .dnb-button__text {
+      margin: 0;
+      transform: none;
+    }
+    .dnb-button__icon {
+      --button-icon-margin-top: 0.25rem;
+    }
+  }
+
+  &__item {
+    &__wrapper {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      position: relative;
+
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0.25rem;
+        left: 0.71875rem;
+
+        width: 0.0625rem;
+        height: 100%;
+
+        background-color: var(--token-color-stroke-neutral-subtle);
+      }
+    }
+
+    &__bullet {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      z-index: 0;
+      border-radius: 50%;
+
+      &--check,
+      &--empty,
+      &--current {
+        background-color: var(--step-indicator-check-bg);
+        border-width: 0.0625rem;
+        border-style: solid;
+        border-color: transparent;
+      }
+
+      &--check {
+        font-size: 0.875rem;
+        color: var(--step-indicator-check-color);
+        border-color: var(--step-indicator-check-color);
+      }
+
+      &--empty {
+        color: var(--token-color-icon-neutral);
+        background-color: var(--token-color-background-neutral);
+        border-color: var(--token-color-stroke-neutral-bold);
+      }
+
+      &--current {
+        border-width: 0.1875rem;
+        border-color: var(--step-indicator-current-border);
+      }
+      &.dnb-skeleton {
+        border-width: 0.0625rem;
+        border-color: var(--token-color-stroke-neutral-bold);
+      }
+    }
+
+    &-content {
+      display: flex;
+
+      &__number {
+        font-size: var(--font-size-basis);
+        white-space: nowrap;
+        margin-right: 0.5rem;
+      }
+
+      &__wrapper {
+        font-size: var(--font-size-basis);
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    &__icon {
+      opacity: 1;
+      transition: opacity 400ms ease-in-out;
+
+      @include utilities.reducedMotion() {
+        transition-duration: 0.01ms;
+      }
+
+      &--hidden {
+        opacity: 0;
+        transition-timing-function: ease-out;
+      }
+    }
+
+    &:last-child &__wrapper {
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  &__button {
+    white-space: normal;
+    text-align: left;
+    align-self: flex-start;
+
+    &.dnb-anchor {
+      padding: 0;
+      line-height: inherit;
+    }
+  }
+}

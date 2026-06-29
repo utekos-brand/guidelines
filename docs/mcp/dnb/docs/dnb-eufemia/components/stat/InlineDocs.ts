@@ -1,0 +1,19 @@
+import type { PropertiesTableProps } from '../../shared/types'
+
+export const InlineProperties: PropertiesTableProps = {
+  children: {
+    doc: 'Inline layout container for content elements, typically `Stat.Trend` and `Stat.Info`.',
+    type: ['React.ReactNode'],
+    status: 'optional',
+  },
+  skeleton: {
+    doc: 'Applies skeleton state to the inline container.',
+    type: 'boolean',
+    status: 'optional',
+  },
+  '[Flex.Horizontal](/uilib/layout/flex/container/properties)': {
+    doc: 'Supports all additional `Flex.Horizontal` properties.',
+    type: 'Various',
+    status: 'optional',
+  },
+}

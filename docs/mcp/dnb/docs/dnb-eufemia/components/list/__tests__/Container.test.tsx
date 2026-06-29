@@ -1,0 +1,312 @@
+import { render } from '@testing-library/react'
+import { axeComponent } from '../../../core/test-utils/testSetup'
+import type { ListContainerProps } from '../Container'
+import Container from '../Container'
+import ItemContent from '../ItemContent'
+import Provider from '../../../shared/Provider'
+
+describe('List Container', () => {
+  it('renders with props as an object', () => {
+    const props: ListContainerProps = {}
+
+    render(<Container {...props}>Content</Container>)
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element).toBeInTheDocument()
+    expect(element.classList).toContain('dnb-list')
+    expect(element.classList).toContain('dnb-list__container')
+  })
+
+  it('renders as ul element for list semantics', () => {
+    render(<Container>Content</Container>)
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element.tagName).toBe('UL')
+  })
+
+  it('merges custom className', () => {
+    render(
+      <Container className="custom-class">
+        <span>Child</span>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element.classList).toContain('dnb-list')
+    expect(element.classList).toContain('dnb-list__container')
+    expect(element.classList).toContain('custom-class')
+  })
+
+  it('renders container content', () => {
+    const text = 'List container content'
+
+    render(<Container>{text}</Container>)
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element.textContent).toContain(text)
+  })
+
+  it('adds the variant modifier when requested', () => {
+    render(<Container variant="basic">Content</Container>)
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element.classList).toContain('dnb-list--variant-basic')
+  })
+
+  it('adds separated modifier class when separated is true', () => {
+    render(<Container separated>Content</Container>)
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element.classList).toContain('dnb-list--separated')
+  })
+
+  it('does not add separated class when separated is false or omitted', () => {
+    render(<Container>Content</Container>)
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element.classList).not.toContain('dnb-list--separated')
+  })
+
+  it('renders valid list structure with ul containing li items', () => {
+    render(
+      <Container>
+        <ItemContent>Item 1</ItemContent>
+        <ItemContent>Item 2</ItemContent>
+      </Container>
+    )
+
+    const list = document.querySelector('.dnb-list')
+    const items = document.querySelectorAll('.dnb-list__item')
+
+    expect(list.tagName).toBe('UL')
+    expect(items.length).toBe(2)
+    items.forEach((item) => {
+      expect(item.tagName).toBe('LI')
+    })
+  })
+
+  it('keeps intrinsic li children as direct descendants of ul', () => {
+    render(
+      <Container separated>
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </Container>
+    )
+
+    const list = document.querySelector('.dnb-list')
+    const children = Array.from(list.children)
+
+    expect(children).toHaveLength(2)
+    expect(children[0].tagName).toBe('LI')
+    expect(children[0]).toHaveClass('dnb-space__top--zero')
+    expect(children[1].tagName).toBe('LI')
+    expect(children[1]).toHaveClass('dnb-space__top--small')
+    expect(list.querySelector(':scope > div')).toBeNull()
+  })
+
+  it('propagates skeleton to child items via context', () => {
+    render(
+      <Container skeleton>
+        <ItemContent>Item 1</ItemContent>
+        <ItemContent>Item 2</ItemContent>
+      </Container>
+    )
+
+    const items = document.querySelectorAll('.dnb-list__item')
+
+    items.forEach((item) => {
+      expect(item.classList).toContain('dnb-skeleton')
+      expect(item.classList).toContain('dnb-skeleton--font')
+    })
+  })
+
+  it('allows individual items to override skeleton from container', () => {
+    render(
+      <Container skeleton>
+        <ItemContent>Skeleton item</ItemContent>
+        <ItemContent skeleton={false}>Not skeleton</ItemContent>
+      </Container>
+    )
+
+    const items = document.querySelectorAll('.dnb-list__item')
+
+    expect(items[0].classList).toContain('dnb-skeleton')
+    expect(items[1].classList).not.toContain('dnb-skeleton')
+  })
+
+  it('defaults separated to false when not provided', () => {
+    render(
+      <Container>
+        <ItemContent>Item</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list__container')
+
+    expect(element.classList).not.toContain('dnb-list--separated')
+  })
+
+  it('inherits skeleton from SharedContext Provider', () => {
+    render(
+      <Provider skeleton>
+        <Container>
+          <ItemContent>Item</ItemContent>
+        </Container>
+      </Provider>
+    )
+
+    const item = document.querySelector('.dnb-list__item')
+
+    expect(item.classList).toContain('dnb-skeleton')
+  })
+
+  it('allows local skeleton prop to override SharedContext', () => {
+    render(
+      <Provider skeleton>
+        <Container skeleton={false}>
+          <ItemContent>Item</ItemContent>
+        </Container>
+      </Provider>
+    )
+
+    const item = document.querySelector('.dnb-list__item')
+
+    expect(item.classList).not.toContain('dnb-skeleton')
+  })
+
+  it('propagates disabled to child items via context', () => {
+    render(
+      <Container disabled>
+        <ItemContent>Item</ItemContent>
+      </Container>
+    )
+
+    const item = document.querySelector('.dnb-list__item')
+
+    expect(item.classList).toContain('dnb-list__item--disabled')
+  })
+
+  it('allows individual items to override disabled from container', () => {
+    render(
+      <Container disabled>
+        <ItemContent disabled={false}>Item</ItemContent>
+      </Container>
+    )
+
+    const item = document.querySelector('.dnb-list__item')
+
+    expect(item.classList).not.toContain('dnb-list__item--disabled')
+  })
+
+  it('has no axe violations', async () => {
+    const { container } = render(
+      <Container>
+        <ItemContent>Item one</ItemContent>
+        <ItemContent>Item two</ItemContent>
+      </Container>
+    )
+
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it('supports aria-label on the ul element', () => {
+    render(
+      <Container aria-label="Navigation items">
+        <ItemContent>Item one</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element).toHaveAttribute('aria-label', 'Navigation items')
+  })
+
+  it('supports aria-labelledby on the ul element', () => {
+    render(
+      <>
+        <h2 id="list-heading">My list</h2>
+        <Container aria-labelledby="list-heading">
+          <ItemContent>Item one</ItemContent>
+        </Container>
+      </>
+    )
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element).toHaveAttribute('aria-labelledby', 'list-heading')
+  })
+
+  it('supports id prop', () => {
+    render(
+      <Container id="my-container">
+        <ItemContent>Item one</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list')
+
+    expect(element.getAttribute('id')).toBe('my-container')
+  })
+
+  it('has no axe violations when aria-label is provided', async () => {
+    const { container } = render(
+      <Container aria-label="Important items">
+        <ItemContent>Item one</ItemContent>
+        <ItemContent>Item two</ItemContent>
+      </Container>
+    )
+
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it('forwards data-* and aria-* attributes to the DOM element', () => {
+    render(
+      <Container
+        data-testid="list-container"
+        data-foo="bar"
+        aria-describedby="desc"
+      >
+        <ItemContent>Item one</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list__container')
+
+    expect(element.getAttribute('data-testid')).toBe('list-container')
+    expect(element.getAttribute('data-foo')).toBe('bar')
+    expect(element.getAttribute('aria-describedby')).toBe('desc')
+  })
+
+  it('does not forward component-specific props to the DOM', () => {
+    render(
+      <Container variant="basic" separated skeleton disabled>
+        <ItemContent>Item one</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list__container')
+
+    expect(element.getAttribute('variant')).toBeNull()
+    expect(element.getAttribute('separated')).toBeNull()
+    expect(element.getAttribute('skeleton')).toBeNull()
+  })
+
+  it('does not use flex-wrap to prevent accordion gap issues', () => {
+    render(
+      <Container>
+        <ItemContent>Item one</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list__container')
+
+    expect(element.classList).not.toContain('dnb-flex-container--wrap')
+  })
+})

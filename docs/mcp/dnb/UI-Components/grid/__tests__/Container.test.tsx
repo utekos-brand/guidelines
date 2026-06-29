@@ -1,0 +1,199 @@
+import type { RefObject } from 'react'
+import { render } from '@testing-library/react'
+import '../../../core/vitest/mockMatchMediaSetup'
+import Grid from '../Grid'
+import { axeComponent } from '../../../core/test-utils/testSetup'
+
+describe('Grid.Container', () => {
+  it('should forward HTML attributes', () => {
+    render(
+      <Grid.Container aria-label="Aria Label">
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    const element = document.querySelector('.dnb-grid-container')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toContain('aria-label')
+    expect(element.getAttribute('aria-label')).toBe('Aria Label')
+  })
+
+  it('should support spacing props', () => {
+    const { rerender } = render(
+      <Grid.Container top="large">
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+    const element = document.querySelector('.dnb-grid-container ')
+
+    expect(element.classList).toContain('dnb-space__top--large')
+
+    rerender(
+      <Grid.Container top="x-large">
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    expect(element.classList).toContain('dnb-space__top--x-large')
+  })
+
+  it('should set columnGap and rowGap', () => {
+    const { rerender } = render(
+      <Grid.Container columnGap rowGap>
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    const element = document.querySelector('.dnb-grid-container')
+
+    expect(element.className).toContain(
+      'dnb-grid-container--column-gap-small'
+    )
+    expect(element.className).toContain(
+      'dnb-grid-container--row-gap-small'
+    )
+
+    rerender(
+      <Grid.Container columnGap="medium" rowGap="medium">
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    expect(element.className).toContain(
+      'dnb-grid-container--column-gap-medium'
+    )
+    expect(element.className).toContain(
+      'dnb-grid-container--row-gap-medium'
+    )
+
+    rerender(
+      <Grid.Container columnGap="large" rowGap="large">
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    expect(element.className).toContain(
+      'dnb-grid-container--column-gap-large'
+    )
+    expect(element.className).toContain(
+      'dnb-grid-container--row-gap-large'
+    )
+  })
+
+  it('should contain given classes', () => {
+    render(
+      <Grid.Container className="custom-class">
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    const element = document.querySelector('.dnb-grid-container')
+
+    expect(element).toHaveClass(
+      'dnb-space dnb-grid-container custom-class',
+      { exact: true }
+    )
+  })
+
+  it('should render children', () => {
+    render(
+      <Grid.Container>
+        <Grid.Item>Item 1</Grid.Item>
+        <Grid.Item>Item 2</Grid.Item>
+        <Grid.Item>Item 3</Grid.Item>
+      </Grid.Container>
+    )
+
+    const element = document.querySelector('.dnb-grid-container')
+    const children = element.children
+    const childrenTextContents = Array.from(children).map((child) =>
+      child.textContent.replace(/[\u200C]/g, '')
+    )
+
+    expect(children.length).toEqual(3)
+    expect(childrenTextContents).toEqual(['Item 1', 'Item 2', 'Item 3'])
+  })
+
+  it('should set given columns', () => {
+    const { rerender } = render(
+      <Grid.Container columns={10}>
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    const element = document.querySelector(
+      '.dnb-grid-container'
+    ) as HTMLElement
+
+    expect(element.style.getPropertyValue('--small-columns')).toBe('10')
+    expect(element.style.getPropertyValue('--medium-columns')).toBe('10')
+    expect(element.style.getPropertyValue('--large-columns')).toBe('10')
+
+    rerender(
+      <Grid.Container
+        columns={{
+          small: 4,
+          medium: 6,
+          large: 12,
+        }}
+      >
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    expect(element.style.getPropertyValue('--small-columns')).toBe('4')
+    expect(element.style.getPropertyValue('--medium-columns')).toBe('6')
+    expect(element.style.getPropertyValue('--large-columns')).toBe('12')
+  })
+
+  it('should set element', () => {
+    render(<Grid.Container element="section">content</Grid.Container>)
+
+    const element = document.querySelector('.dnb-grid-container')
+
+    expect(element.tagName).toBe('SECTION')
+  })
+
+  it('should forward ref', () => {
+    const ref: RefObject<HTMLElement | null> = { current: null }
+
+    render(
+      <Grid.Container ref={ref}>
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    const element = document.querySelector('.dnb-grid-container')
+    expect(ref.current).toBe(element)
+  })
+
+  it('should forward ref as a function', () => {
+    let refElement: HTMLElement | null = null
+    const refFn = (elem: HTMLElement) => {
+      refElement = elem
+    }
+
+    render(
+      <Grid.Container ref={refFn}>
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+
+    const element = document.querySelector('.dnb-grid-container')
+    expect(refElement).toBe(element)
+  })
+})
+
+describe('Grid.Container aria', () => {
+  it('should validate', async () => {
+    const Component = render(
+      <Grid.Container>
+        <Grid.Item>Item</Grid.Item>
+      </Grid.Container>
+    )
+    expect(await axeComponent(Component)).toHaveNoViolations()
+  })
+})

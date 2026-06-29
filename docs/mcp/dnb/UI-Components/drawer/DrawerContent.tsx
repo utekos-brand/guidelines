@@ -1,0 +1,142 @@
+/**
+ * Web Drawer Component
+ *
+ */
+
+import { useContext, useEffect } from 'react'
+import type { JSX, ReactElement } from 'react'
+import { clsx } from 'clsx'
+import { findElementInChildren } from '../../shared/component-helper'
+import { getOffsetTop, warn } from '../../shared/helpers'
+import ScrollView from '../../fragments/scroll-view/ScrollView'
+import DrawerHeader from './parts/DrawerHeader'
+import DrawerNavigation from './parts/DrawerNavigation'
+import ModalContext from '../modal/ModalContext'
+import { getContent } from '../modal/helpers'
+import type { DrawerContentProps } from './types'
+import { checkMinMaxWidth } from './helpers'
+import ModalHeaderBar from '../modal/parts/ModalHeaderBar'
+import ModalHeader from '../modal/parts/ModalHeader'
+import { DrawerContentContext } from './parts/DrawerContentContext'
+
+export default function DrawerContent({
+  modalContent = null,
+  navContent = null,
+  headerContent = null,
+  alignContent = 'left',
+  containerPlacement = 'right',
+  preventCoreStyle = false,
+  className = null,
+  spacing = true,
+  fullscreen = 'auto',
+  noAnimation = false,
+  noAnimationOnMobile = false,
+  minWidth: minWidthProp = null,
+  maxWidth: maxWidthProp = null,
+  scrollbarGutter,
+  ...rest
+}: DrawerContentProps): JSX.Element {
+  const context = useContext(ModalContext)
+  const { minWidth, maxWidth } = checkMinMaxWidth(
+    minWidthProp,
+    maxWidthProp
+  )
+  const content =
+    modalContent ||
+    getContent(
+      typeof rest.children === 'function'
+        ? Object.freeze({ ...rest, close: context?.close })
+        : rest
+    )
+
+  const innerParams = {
+    className: clsx(
+      'dnb-drawer',
+      !preventCoreStyle && 'dnb-core-style',
+      spacing && 'dnb-drawer--spacing',
+      alignContent && `dnb-drawer__align--${alignContent}`,
+      fullscreen === true
+        ? `dnb-drawer--fullscreen`
+        : fullscreen === 'auto' && `dnb-drawer--auto-fullscreen`,
+      context?.hide && `dnb-drawer--hide`,
+      noAnimation && `dnb-drawer--no-animation`,
+      noAnimationOnMobile && `dnb-drawer--no-animation-on-mobile`,
+
+      `dnb-drawer--${containerPlacement || 'right'}`,
+      className
+    ),
+    style: (minWidth || maxWidth) && { minWidth, maxWidth },
+    onClick: context?.preventClick,
+    onTouchStart: context?.preventClick,
+    onKeyDown: context?.onKeyDownHandler,
+    ...rest,
+  }
+
+  /**
+   * Update CSS --header-height with spacing to top of page
+   */
+  useEffect(() => {
+    try {
+      const height = getOffsetTop(context?.contentRef.current) / 16
+      context?.contentRef.current.style.setProperty(
+        '--header-height',
+        `${height}rem`
+      )
+    } catch (e) {
+      warn('DrawerContent: Failed to calculate header height:', e)
+    }
+  }, [content, context?.scrollRef, context?.contentRef])
+
+  const navigationElement = findElementInChildren(
+    content,
+    (cur: ReactElement) =>
+      cur.type === DrawerNavigation || cur.type === ModalHeaderBar
+  )
+  const headerElement = findElementInChildren(
+    content,
+    (cur: ReactElement) =>
+      cur.type === DrawerHeader || cur.type === ModalHeader
+  )
+
+  return (
+    <ScrollView
+      {...innerParams}
+      ref={context?.scrollRef}
+      scrollbarGutter={
+        scrollbarGutter === false
+          ? undefined
+          : scrollbarGutter === 'stable' || spacing !== false
+            ? 'stable'
+            : undefined
+      }
+    >
+      {navigationElement ? (
+        navigationElement
+      ) : (
+        <DrawerNavigation>{navContent}</DrawerNavigation>
+      )}
+
+      {headerElement ? (
+        headerElement
+      ) : (
+        <DrawerHeader title={context?.title}>{headerContent}</DrawerHeader>
+      )}
+      <div
+        tabIndex={-1}
+        className="dnb-drawer__inner dnb-no-focus"
+        ref={context?.contentRef}
+      >
+        <div
+          id={context?.contentId + '-content'}
+          className="dnb-drawer__content"
+        >
+          <DrawerContentContext
+            value={{ navigationElement, headerElement }}
+          >
+            {content}
+          </DrawerContentContext>
+        </div>
+      </div>
+    </ScrollView>
+  )
+}

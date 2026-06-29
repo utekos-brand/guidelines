@@ -1,0 +1,37 @@
+---
+showTabs: true
+---
+
+import PropertiesTable from 'dnb-design-system-portal/src/shared/parts/PropertiesTable'
+import { SectionProperties } from '@dnb/eufemia/src/components/section/SectionDocs'
+
+## Properties
+
+<PropertiesTable props={SectionProperties} />
+
+## Variants
+
+| Variant       | Description                                                                                      |
+| ------------- | ------------------------------------------------------------------------------------------------ |
+| `information` | Neutral, informational.                                                                          |
+| `error`       | Indicates an erroneous state.                                                                    |
+| `warning`     | Draws attention to a potential problem that may or may not require an action on the user's part. |
+| `success`     | Indicates a successful state.                                                                    |
+
+## Styles
+
+You can easily [customize the color](/uilib/components/section).
+
+| Style               | Description                                                                                         |
+| ------------------- | --------------------------------------------------------------------------------------------------- |
+| `white`             | uses `--color-white`.                                                                               |
+| `divider`           | uses `--color-white` as background with a border-line on top and bottom.                            |
+| `transparent`       | CSS transparent. Used in situations where a Section is of interest, but without a color as a basis. |
+| ~~`mint-green-12`~~ | _(default)_ uses `--color-mint-green-12`.                                                           |
+| ~~`mint-green`~~    | uses `--color-mint-green`.                                                                          |
+| ~~`lavender`~~      | uses `--color-lavender`.                                                                            |
+| ~~`sand-yellow`~~   | uses `--color-sand-yellow`.                                                                         |
+| ~~`pistachio`~~     | uses `--color-pistachio`.                                                                           |
+| ~~`black-3`~~       | uses `--color-black-3`.                                                                             |
+| ~~`emerald-green`~~ | uses `--color-emerald-green`.                                                                       |
+| ~~`fire-red`~~      | uses `--color-fire-red`. Is used by [GlobalStatus](/uilib/components/global-status)                 |

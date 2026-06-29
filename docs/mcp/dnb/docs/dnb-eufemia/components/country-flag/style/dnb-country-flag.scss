@@ -1,0 +1,57 @@
+/*
+* CountryFlag component
+*
+*/
+
+.dnb-icon:has(.dnb-country-flag) {
+  display: inline-flex;
+  justify-content: center;
+}
+
+.dnb-country-flag {
+  display: inline-flex;
+  align-items: center;
+
+  &__size {
+    &--auto {
+      --size: 1em;
+    }
+    &--xx-small {
+      --size: 0.5rem;
+    }
+    &--x-small {
+      --size: 0.75rem;
+    }
+    &--small {
+      --size: 1rem;
+    }
+    &--medium {
+      --size: 1.5rem;
+    }
+    &--large {
+      --size: 2rem;
+    }
+    &--x-large {
+      --size: 2.5rem;
+    }
+  }
+
+  p &,
+  h1 &,
+  h2 &,
+  h3 &,
+  h4 & {
+    vertical-align: sub;
+  }
+
+  &__flag {
+    border-radius: 50%;
+
+    width: var(--size);
+    height: var(--size);
+  }
+
+  &__shape--square &__flag {
+    border-radius: unset;
+  }
+}

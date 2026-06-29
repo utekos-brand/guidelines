@@ -1,0 +1,237 @@
+/**
+ * GlobalStatus Test
+ *
+ */
+
+import { axeComponent, loadScss } from '../../../core/test-utils/testSetup'
+import type { GlobalErrorAllProps } from '../GlobalError'
+import GlobalError from '../GlobalError'
+import Heading from '../../heading/Heading'
+import { render } from '@testing-library/react'
+import { Provider } from '../../../shared'
+
+const statusCode = '404'
+const title = 'title'
+const text = 'text'
+
+const props: GlobalErrorAllProps = {
+  statusCode,
+  text,
+  title,
+}
+
+describe('GlobalError', () => {
+  it('has default text for 404', () => {
+    render(<GlobalError statusCode="404" />)
+
+    expect(
+      document.querySelector('.dnb-global-error__inner__content')
+        .textContent
+    ).toMatchInlineSnapshot(
+      `"Vi finner ikke siden du leter etter …Sikker på at du har skrevet riktig adresse? Eller har vi rotet med lenkene?Feilmeldings-kode: 404"`
+    )
+  })
+
+  it('has default text for 500', () => {
+    render(<GlobalError statusCode="500" />)
+
+    expect(
+      document.querySelector('.dnb-global-error__inner__content')
+        .textContent
+    ).toMatchInlineSnapshot(
+      `"Beklager, her skjedde det noe feil!Tjenesten fungerer ikke slik den skal for øyeblikket, men prøv igjen senere.Feilmeldings-kode: 500"`
+    )
+  })
+
+  it('has default text for 404 in en-GB', () => {
+    render(<GlobalError statusCode="404" locale="en-GB" />)
+
+    expect(
+      document.querySelector('.dnb-global-error__inner__content')
+        .textContent
+    ).toMatchInlineSnapshot(
+      `"We can't find the page you're looking for …Are you sure you have entered the correct address? Or have we messed with the links?Error code: 404"`
+    )
+  })
+
+  it('has default text for 500 in en-GB', () => {
+    render(
+      <Provider locale="en-GB">
+        <GlobalError statusCode="500" />
+      </Provider>
+    )
+
+    expect(
+      document.querySelector('.dnb-global-error__inner__content')
+        .textContent
+    ).toMatchInlineSnapshot(
+      `"Sorry, a technical error occurred!The service is not working properly at the moment. Try again later.Error code: 500"`
+    )
+  })
+
+  it('should not render error code text when statusCode is empty', () => {
+    render(<GlobalError {...props} statusCode="" />)
+
+    expect(
+      document.querySelector('.dnb-global-error__status')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should not render error code text when statusCode is null', () => {
+    render(<GlobalError {...props} statusCode={null} />)
+
+    expect(
+      document.querySelector('.dnb-global-error__status')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should have title and text props as defined in the prop', () => {
+    render(<GlobalError {...props} />)
+
+    expect(
+      document.querySelector(
+        '.dnb-global-error__inner__content .dnb-heading'
+      ).textContent
+    ).toBe('title')
+    expect(
+      document.querySelector('.dnb-global-error__inner__content .dnb-p')
+        .textContent
+    ).toBe('text')
+  })
+
+  it('should render title as h1 by default', () => {
+    render(<GlobalError {...props} />)
+
+    const heading = document.querySelector(
+      '.dnb-global-error__inner__content .dnb-heading'
+    )
+    expect(heading.tagName).toBe('H1')
+  })
+
+  it('should respect Heading.Level context for its title', () => {
+    render(
+      <Heading.Level reset={1}>
+        <Heading>Page Title</Heading>
+        <GlobalError {...props} />
+      </Heading.Level>
+    )
+
+    const headings = document.querySelectorAll('.dnb-heading')
+    expect(headings[0].tagName).toBe('H1')
+    expect(headings[0].textContent).toBe('Page Title')
+    expect(headings[1].tagName).toBe('H2')
+    expect(headings[1].textContent).toBe('title')
+  })
+
+  it('should render text strings without interpreting HTML', () => {
+    const htmlText = '<strong>Injected</strong>'
+    render(<GlobalError {...props} text={htmlText} />)
+
+    const textElement = document.querySelector(
+      '.dnb-global-error__inner__content .dnb-p'
+    ) as HTMLElement
+
+    expect(textElement).not.toBeNull()
+    expect(textElement.textContent).toBe(htmlText)
+    expect(textElement.querySelector('strong')).not.toBeInTheDocument()
+  })
+
+  it('should render status code', () => {
+    render(<GlobalError {...props} />)
+
+    const elem = document.querySelector('.dnb-global-error__status')
+    expect(elem.textContent).toMatchInlineSnapshot(
+      `"Feilmeldings-kode: 404"`
+    )
+  })
+
+  it('should set custom error message code', () => {
+    render(
+      <GlobalError {...props} errorMessageCode="My text: %statusCode" />
+    )
+
+    const elem = document.querySelector('.dnb-global-error__status')
+    expect(elem.textContent).toMatchInlineSnapshot(`"My text: 404"`)
+  })
+
+  it('should remove error message code when set to empty', () => {
+    render(<GlobalError {...props} errorMessageCode="" />)
+
+    expect(
+      document.querySelector('.dnb-global-error__status')
+    ).not.toBeInTheDocument()
+  })
+
+  it('inherits skeleton prop from provider', () => {
+    const skeletonClassName = 'dnb-skeleton'
+
+    render(
+      <Provider skeleton>
+        <GlobalError {...props} />
+      </Provider>
+    )
+
+    expect(document.querySelector('.dnb-p').className).toMatch(
+      skeletonClassName
+    )
+  })
+
+  it('should support spacing props', () => {
+    render(<GlobalError {...props} top="2rem" />)
+
+    const element = document.querySelector('.dnb-global-error')
+
+    expect(element).toHaveClass(
+      'dnb-space',
+      'dnb-skeleton__root',
+      'dnb-global-error',
+      'dnb-global-error--404',
+      'dnb-space__top--large'
+    )
+    expect(element.classList).toHaveLength(5)
+  })
+
+  it('should add additional html props to main element', () => {
+    render(<GlobalError {...props} aria-label="Label" />)
+
+    const element = document.querySelector('.dnb-global-error')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class', 'aria-label', 'lang'])
+  })
+
+  it('should show links when provided', () => {
+    render(
+      <GlobalError
+        {...props}
+        links={[
+          { text: 'Anchor 1', url: 'http://' },
+          { text: 'Anchor 2', url: 'http://' },
+        ]}
+      />
+    )
+
+    const elem = document.querySelector('.dnb-global-error__links')
+
+    expect(elem).toBeInTheDocument()
+    expect(elem.previousSibling.textContent).toMatchInlineSnapshot(
+      `"Her er noen lenker som kanskje kan hjelpe:"`
+    )
+    expect(elem.textContent).toMatchInlineSnapshot(`"Anchor 1Anchor 2"`)
+    expect(elem.querySelectorAll('a.dnb-anchor')).toHaveLength(2)
+  })
+
+  it('should validate with ARIA rules', async () => {
+    const Comp = render(<GlobalError {...props} />)
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+})
+
+describe('GlobalError scss', () => {
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

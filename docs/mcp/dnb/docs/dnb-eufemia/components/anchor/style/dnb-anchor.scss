@@ -1,0 +1,82 @@
+/*
+ * Anchor
+ *
+ */
+
+@use './anchor-mixins.scss' as anchor-mixins;
+
+button.dnb-anchor {
+  cursor: pointer;
+
+  // to get the button to 32px
+  line-height: calc(var(--line-height-basis) + 0.125rem); // 26px
+
+  border: none;
+  background: none; // because we have "appearance: button" in reset.scss // and use prefix to make sure webkit does  a good job
+  appearance: none; // and use prefix to make sure webkit does  a good job
+}
+
+@include anchor-mixins.notNoStyle() {
+  &.dnb-anchor {
+    --anchor-underline-thickness: 0.0938rem;
+    @include anchor-mixins.anchorStyle();
+
+    &__launch-icon.dnb-icon.dnb-icon--default {
+      font-size: 1em;
+      svg path {
+        stroke-width: 1.2;
+      }
+    }
+
+    &.dnb-anchor--surface-dark {
+      @include anchor-mixins.useAnchorDarkSurfaceStyle();
+    }
+
+    &.dnb-anchor--disabled,
+    &[aria-disabled='true'],
+    &[disabled] {
+      --anchor-color: var(--token-color-text-action-disabled);
+      --anchor-icon-color: var(--token-color-icon-action-disabled);
+    }
+  }
+}
+
+.dnb-anchor--hover {
+  @include anchor-mixins.anchorHoverStyle();
+}
+
+.dnb-anchor--active {
+  @include anchor-mixins.anchorActiveStyle();
+}
+
+.dnb-anchor--focus {
+  @include anchor-mixins.anchorFocusStyle();
+}
+
+.dnb-anchor--no-underline {
+  @include anchor-mixins.resetUnderlineStyle();
+}
+
+.dnb-anchor--no-radius {
+  @include anchor-mixins.resetBorderRadius();
+}
+
+.dnb-anchor--no-animation {
+  @include anchor-mixins.resetAnimationStyle();
+}
+
+// make sure we style an Anchor like a button
+a.dnb-button {
+  // reset the anchor style
+  @include anchor-mixins.resetAnimationStyle();
+}
+
+// because of the underline, we hide anchors
+.dnb-skeleton > .dnb-anchor,
+.dnb-anchor.dnb-skeleton {
+  text-decoration: none;
+
+  .dnb-icon {
+    filter: grayscale(100%) opacity(0.3);
+  }
+}

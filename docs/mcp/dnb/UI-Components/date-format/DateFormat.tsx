@@ -1,0 +1,439 @@
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import type { ReactNode } from 'react'
+import type { InternalLocale } from '../../shared/Context'
+import SharedContext from '../../shared/Context'
+import { convertStringToDate } from '../date-picker/DatePickerCalc'
+import {
+  formatDate,
+  getRelativeTime,
+  getRelativeTimeNextUpdateMs,
+  parseDuration,
+  formatDuration,
+  isValidDuration,
+  getDateTimeSeparator,
+} from './DateFormatUtils'
+import { format } from 'date-fns'
+import type { SpacingProps } from '../../shared/types'
+import { clsx } from 'clsx'
+import { useSpacing } from '../space/SpacingUtils'
+import type { SkeletonShow } from '../Skeleton'
+import Tooltip from '../Tooltip'
+import {
+  createSkeletonClass,
+  skeletonDOMAttributes,
+} from '../skeleton/SkeletonHelper'
+import { useTranslation } from '../../shared'
+import { convertJsxToString } from '../../shared/component-helper'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+type DateFormatProps = SpacingProps & {
+  value?: Date | string | number
+  children?: ReactNode
+  locale?: InternalLocale
+  dateStyle?: Intl.DateTimeFormatOptions['dateStyle']
+  timeStyle?: Intl.DateTimeFormatOptions['timeStyle']
+  dateTimeSeparator?: string
+  /**
+   * When `true`, the year is hidden if the date is in the current year, for any `dateStyle` (e.g. "4. feb." instead of "4. feb. 2025"). Defaults to `false`.
+   */
+  hideCurrentYear?: boolean
+  /**
+   * When `true`, the year is always hidden from the formatted date, for any `dateStyle`. Defaults to `false`.
+   */
+  hideYear?: boolean
+  relativeTimeStyle?: Intl.DateTimeFormatOptions['dateStyle']
+  relativeTime?: boolean
+  relativeTimeReference?: () => Date
+  skeleton?: SkeletonShow
+  className?: string
+  id?: string
+  title?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
+  'aria-describedby'?: string
+}
+
+function DateFormat(props: DateFormatProps) {
+  const context = useContext(SharedContext)
+  const { invalidDate } = useTranslation().DateFormat
+
+  const {
+    value,
+    children,
+    locale: localeProp,
+    dateStyle = 'long',
+    timeStyle,
+    dateTimeSeparator,
+    hideCurrentYear = false,
+    hideYear = false,
+    relativeTimeStyle,
+    skeleton,
+    relativeTime = false,
+    relativeTimeReference,
+  } = props
+
+  const locale = localeProp || context.locale
+  const ref = useRef<HTMLTimeElement>(undefined)
+
+  const date = useMemo(() => {
+    // Always call getDate to maintain expected console.log behavior
+    return getDate({ value, children })
+  }, [value, children])
+
+  const durationValue = useMemo(() => {
+    const durationString = String(value || children)
+
+    if (!durationString || !isValidDuration(durationString)) {
+      return undefined // stop here
+    }
+
+    return parseDuration(durationString)
+  }, [value, children])
+
+  const getDuration = useCallback(
+    (dateStyle: Intl.DateTimeFormatOptions['dateStyle']) => {
+      if (durationValue === undefined) {
+        return undefined // stop here
+      }
+
+      return formatDuration(
+        durationValue,
+        locale,
+        dateStyle,
+        String(value || children)
+      )
+    },
+    [children, durationValue, locale, value]
+  )
+  const durationFormatted = useMemo(() => {
+    return getDuration(dateStyle)
+  }, [dateStyle, getDuration])
+  const durationFormattedFull = useMemo(() => {
+    return getDuration('full')
+  }, [getDuration])
+
+  const attributes = useSpacing(props, {
+    className: clsx(
+      'dnb-date-format',
+      createSkeletonClass('font', skeleton, context)
+    ),
+    lang: locale, // Makes sure that screen readers are reading the date correctly in the system language.
+  })
+  skeletonDOMAttributes(attributes, skeleton, context)
+
+  const getAbsoluteDateTime = useCallback(
+    (style = 'yyyy-MM-dd') => {
+      if (!date || isNaN(date.getTime())) {
+        return undefined // stop here
+      }
+
+      return format(date, style)
+    },
+    [date]
+  )
+
+  const getAbsoluteDateFormatted = useCallback(
+    ({
+      options = {
+        dateStyle,
+        ...(timeStyle ? { timeStyle } : {}),
+      },
+      hideYear: hideYearOverride,
+      hideCurrentYear: hideCurrentYearOverride,
+    }: {
+      options?: Intl.DateTimeFormatOptions
+      hideYear?: boolean
+      hideCurrentYear?: boolean
+    } = {}) => {
+      if (!date || isNaN(date.getTime())) {
+        return undefined // stop here
+      }
+
+      // Get the original input value to detect UTC dates
+      // Convert children to string if needed, otherwise use value
+      const originalValue =
+        value !== undefined
+          ? value
+          : children !== undefined
+            ? convertJsxToString(children)
+            : date
+
+      // When timeStyle is provided, format date and time separately and join with separator
+      // Uses custom dateTimeSeparator if provided, otherwise uses locale-aware separator
+      if (options?.timeStyle) {
+        const formattedDate = formatDate(originalValue, {
+          locale,
+          options: { dateStyle: options.dateStyle },
+          hideCurrentYear:
+            hideCurrentYearOverride !== undefined
+              ? hideCurrentYearOverride
+              : hideCurrentYear,
+          hideYear:
+            hideYearOverride !== undefined ? hideYearOverride : hideYear,
+        })
+        const formattedTime = formatDate(originalValue, {
+          locale,
+          options: { timeStyle: options.timeStyle },
+        })
+
+        // Use custom separator if provided, otherwise use locale-aware separator
+        const separator =
+          dateTimeSeparator !== undefined
+            ? dateTimeSeparator
+            : getDateTimeSeparator(
+                locale,
+                options.dateStyle,
+                options.timeStyle
+              )
+
+        return `${formattedDate}${separator}${formattedTime}`
+      }
+
+      return formatDate(originalValue, {
+        locale,
+        options,
+        hideCurrentYear:
+          hideCurrentYearOverride !== undefined
+            ? hideCurrentYearOverride
+            : hideCurrentYear,
+        hideYear:
+          hideYearOverride !== undefined ? hideYearOverride : hideYear,
+      })
+    },
+    [
+      date,
+      locale,
+      dateStyle,
+      timeStyle,
+      dateTimeSeparator,
+      hideCurrentYear,
+      hideYear,
+      value,
+      children,
+    ]
+  )
+
+  // Auto-updating relative time with minimal CPU: schedule updates only when the label changes next
+  const [label, setLabel] = useState(() => {
+    return relativeTime && date
+      ? getRelativeTime(
+          date,
+          locale,
+          undefined,
+          relativeTimeStyle || dateStyle,
+          relativeTimeReference
+        )
+      : undefined
+  })
+
+  useEffect(() => {
+    if (!relativeTime || !date) {
+      return undefined
+    }
+
+    let timeoutId: NodeJS.Timeout
+
+    const scheduleNextUpdate = () => {
+      const delay = getRelativeTimeNextUpdateMs(
+        date,
+        relativeTimeReference
+      )
+      timeoutId = setTimeout(() => {
+        const next = getRelativeTime(
+          date,
+          locale,
+          undefined,
+          relativeTimeStyle || dateStyle,
+          relativeTimeReference
+        )
+        setLabel((prev) => (prev !== next ? next : prev))
+        scheduleNextUpdate()
+      }, delay)
+    }
+
+    setLabel(
+      getRelativeTime(
+        date,
+        locale,
+        undefined,
+        relativeTimeStyle || dateStyle,
+        relativeTimeReference
+      )
+    )
+    scheduleNextUpdate()
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [
+    date,
+    locale,
+    relativeTime,
+    dateStyle,
+    relativeTimeStyle,
+    relativeTimeReference,
+  ])
+
+  // Check if we have a valid date (not invalid Date object)
+  const hasValidDate = date && !isNaN(date.getTime())
+
+  // Tooltip always shows the full date format
+  const tooltipContent = useMemo(() => {
+    if (!hasValidDate) {
+      return undefined
+    }
+
+    return getAbsoluteDateFormatted({
+      options: {
+        dateStyle: 'full',
+        ...(timeStyle ? { timeStyle } : {}),
+      },
+      hideYear: false,
+      hideCurrentYear: false,
+    })
+  }, [hasValidDate, getAbsoluteDateFormatted, timeStyle])
+
+  // Always handle duration strings first if they exist
+  if (durationValue !== undefined) {
+    const originalDurationString = String(value || children)
+    const hasAriaLabel = durationFormattedFull !== durationFormatted
+    const showTooltip = durationFormattedFull !== durationFormatted
+
+    return (
+      <>
+        <time
+          {...attributes}
+          dateTime={originalDurationString}
+          aria-label={hasAriaLabel ? durationFormattedFull : undefined}
+          ref={showTooltip ? ref : undefined}
+        >
+          <span aria-hidden={hasAriaLabel}>{durationFormatted}</span>
+        </time>
+        {showTooltip && (
+          <Tooltip
+            targetElement={ref}
+            tooltip={durationFormattedFull}
+            triggerOffset={8}
+          />
+        )}
+      </>
+    )
+  }
+
+  // Handle invalid dates
+  if (!hasValidDate) {
+    return (
+      <span className="dnb-date-format">
+        {invalidDate.replace(
+          '{value}',
+          getInvalidValue({ value, children })
+        )}
+      </span>
+    )
+  }
+
+  // Handle relative time mode - always show tooltip (relative time differs from absolute)
+  if (relativeTime) {
+    const relativeTooltip = getAbsoluteDateFormatted({
+      options: {
+        dateStyle: 'full',
+        timeStyle: timeStyle || 'short',
+      },
+      hideYear: false,
+      hideCurrentYear: false,
+    })
+
+    return (
+      <>
+        <time
+          dateTime={getAbsoluteDateTime('yyyy-MM-dd HH:mm:ss')}
+          {...attributes}
+          ref={ref}
+        >
+          {label}
+        </time>
+        <Tooltip
+          targetElement={ref}
+          tooltip={relativeTooltip}
+          triggerOffset={8}
+        />
+      </>
+    )
+  }
+
+  // Default date rendering - only show tooltip if content differs
+  const displayedContent = getAbsoluteDateFormatted()
+  const showTooltip = tooltipContent && tooltipContent !== displayedContent
+
+  return (
+    <>
+      <time
+        dateTime={getAbsoluteDateTime()}
+        {...attributes}
+        ref={showTooltip ? ref : undefined}
+      >
+        {displayedContent}
+      </time>
+      {showTooltip && (
+        <Tooltip
+          targetElement={ref}
+          tooltip={tooltipContent}
+          triggerOffset={8}
+        />
+      )}
+    </>
+  )
+}
+
+function getDate({
+  value,
+  children,
+}: Pick<DateFormatProps, 'value' | 'children'>) {
+  if (value) {
+    // Check if it's a duration string first to avoid unnecessary date conversion
+    if (typeof value === 'string' && isValidDuration(value)) {
+      return undefined // stop here // Return undefined for duration strings to avoid date conversion
+    }
+    if (typeof value === 'string') {
+      return convertStringToDate(value)
+    }
+    if (value instanceof Date) {
+      return value
+    }
+    // For numbers, convert to string first
+    return convertStringToDate(String(value))
+  }
+
+  const childrenValue = convertJsxToString(children)
+  // Check if it's a duration string first to avoid unnecessary date conversion
+  if (childrenValue && isValidDuration(childrenValue)) {
+    return undefined // stop here // Return undefined for duration strings to avoid date conversion
+  }
+  return convertStringToDate(childrenValue)
+}
+
+function getInvalidValue({
+  value,
+  children,
+}: Pick<DateFormatProps, 'value' | 'children'>): string {
+  if (value instanceof Date) {
+    return value.toString()
+  }
+
+  if (children !== undefined && value === undefined) {
+    return String(children)
+  }
+
+  return String(value)
+}
+
+export default DateFormat
+
+withComponentMarkers(DateFormat, { _supportsSpacingProps: true })

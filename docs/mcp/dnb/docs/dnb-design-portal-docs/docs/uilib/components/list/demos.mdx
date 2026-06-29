@@ -1,0 +1,141 @@
+---
+showTabs: true
+---
+
+import * as Examples from './Examples'
+
+## Demos
+
+### Rows with cells like Start, Center, End, Title
+
+This example demonstrates different cell layouts and their placement.
+
+<Examples.RowsWithSlots />
+
+### Navigable item
+
+<Examples.NavigableItem />
+
+### Navigable item with href
+
+Use the `href` property on `List.Item.Action` to render a native link. Use `target` and `rel` for external links (e.g. `target="_blank"` with `rel="noopener noreferrer"`).
+
+<Examples.NavigableItemWithHref />
+
+### Navigable item with custom element
+
+Use the `element` prop to render a custom link component such as React Router's `Link`. Pass the route via the `to` prop directly on `List.Item.Action` — the entire row will be clickable.
+
+<Examples.NavigableItemWithCustomElement />
+
+### With anchor
+
+List items containing [Anchor](/uilib/components/anchor) links.
+
+<Examples.WithAnchor />
+
+### Accordion
+
+Expandable list items using `List.Item.Accordion` with optional `icon` and `title` properties and `List.Item.Accordion.Content` for the expandable section. Use the `open` property to set the initial open state.
+
+<Examples.Accordion />
+
+### With Badge
+
+Use [Badge](/uilib/components/badge) in `List.Cell.End` to show status or counts.
+
+<Examples.WithBadge />
+
+### Footer with buttons
+
+Use `List.Cell.Footer` to place actions such as [Button](/uilib/components/button) in the list row.
+
+<Examples.FooterWithButtons />
+
+### Responsive Grid Layout
+
+Using [Grid.Container](/uilib/layout/grid/container) with [Grid.Item](/uilib/layout/grid/item) for a 12-column responsive grid.
+
+<Examples.GridColumns />
+
+### Separated lists
+
+Use the `separated` property on `List.Container` to add row gap between list items.
+
+<Examples.SeparatedLists />
+
+### Dynamic list
+
+<Examples.SimpleRows />
+
+### With DateFormat
+
+Use [DateFormat](/uilib/components/date-format) in `List.Cell.Start` to show dates in the list row.
+
+<Examples.WithDateFormat />
+
+### With Subline
+
+Use `List.Cell.Title.Subline` to add supporting text below the title. The `variant="description"` option uses smaller text for secondary information.
+
+<Examples.ListSubline />
+
+### With form elements
+
+Use [Field.Selection](/uilib/extensions/forms/base-fields/Selection/) and [Field.ArraySelection](/uilib/extensions/forms/base-fields/ArraySelection/) render prop children to compose list rows and `selected` state.
+
+Place them inside `List.Cell.Start` to align them to the left side of the list row.
+
+<Examples.WithFormElements />
+
+### With avatar
+
+Use [Avatar](/uilib/components/avatar) in `List.Cell.Start` as the left content.
+
+<Examples.WithAvatar />
+
+### Selected state
+
+Provide the `selected` property on `List.Item.Basic` for selectable rows. When a **checkbox** or **radio** is nested inside the row, this also enables the full-row hit area behavior.
+
+<Examples.SelectedState />
+
+### With custom background color
+
+<Examples.BackgroundColor />
+
+### Pending state
+
+Use the `pending` property on `List.Item.Basic` or `List.Item.Action` to show a skeleton overlay. Click and keyboard are disabled while pending.
+
+<Examples.PendingState />
+
+### Progress indicator
+
+A single list item with a circular progress indicator in `List.Cell.Start`.
+
+<Examples.ProgressIndicatorRow />
+
+### Skeleton
+
+Use the `skeleton` property on `List.Item.Basic`, `List.Item.Action` or `List.Item.Accordion` to show a skeleton overlay while content is loading.
+
+<Examples.SkeletonState />
+
+### Inside a Card
+
+Use `List.Card` to wrap a list inside a [Card](/uilib/components/card) with built-in styling. Add `List.ScrollView` for a scrollable area with a `maxVisibleListItems` property.
+
+<Examples.InsideCard />
+
+#### Inside a Card without ScrollView
+
+`List.Card` also works without `List.ScrollView`. Side borders and redundant top/bottom borders on the first and last items are automatically removed.
+
+<Examples.InsideCardWithoutScrollView />
+
+#### With ShowMoreButton and visibleCount
+
+Use `List.ShowMoreButton` to add a "Show more" / "Show less" toggle outside the list. Link it to `List.Container` by giving both the same `id`. Set `visibleCount` on the container to limit how many items are visible when collapsed.
+
+<Examples.WithShowMoreButton />

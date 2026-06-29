@@ -1,0 +1,110 @@
+@use './table-mixins.scss' as table-mixins;
+
+/*
+* Table component
+*
+*/
+
+.dnb-table__container {
+  position: relative;
+
+  background-color: var(--token-color-background-neutral);
+
+  @include table-mixins.tableOutline() {
+    z-index: 3; // over sticky-header
+    border: var(--table-outline);
+  }
+
+  &,
+  &::after {
+    border-radius: var(--table-outline-radius);
+  }
+
+  &,
+  &__body,
+  &__head,
+  &__foot {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__body {
+    .dnb-table {
+      &:not([class*='space__bottom']) {
+        margin-bottom: 0;
+      }
+
+      &__size--large .dnb-table__th {
+        padding-top: 1.5rem;
+      }
+
+      position: relative; // because of bottom border
+      @include table-mixins.tableOutline() {
+        border-bottom: var(--table-border);
+      }
+
+      /* stylelint-disable */
+      & tbody:first-child,
+      & > :not(thead) + tbody {
+        .dnb-table__tr:first-of-type .dnb-table__th::after,
+        .dnb-table__tr:first-of-type .dnb-table__td::after {
+          border-top: none;
+        }
+      }
+      /* stylelint-enable */
+    }
+  }
+
+  &__head {
+    padding: 2rem 1rem 0;
+
+    &--empty {
+      padding: 0;
+      min-height: 1.5rem;
+    }
+
+    .dnb-spacing & .dnb-h--large:not([class*='space__top']) {
+      margin: 0;
+    }
+  }
+  &__foot {
+    padding: 1rem;
+    padding-bottom: 1.25rem; // because of 8px scrollbar
+
+    &--empty {
+      padding: 0;
+      min-height: 1rem;
+    }
+  }
+
+  .dnb-table__scroll-view {
+    // Clip the native Scrollbar as per defined by UX.
+    // We can't use "overflow: clip" here, because we want overflow to be auto/scroll.
+    clip-path: inset(
+      0 round 0 0 var(--table-outline-radius) var(--table-outline-radius)
+    );
+  }
+
+  // Ensure our outline on bottom is not overlaying the scrollbar on webkit
+  // We also need to escape the "selector" because it's not supported by "node-sass".
+  @supports (-webkit-appearance: none) and
+    (not (-moz-appearance: meterbar)) {
+    &::after {
+      bottom: calc(var(--table-outline-width) * -1);
+    }
+
+    &:has(#{&}__foot--empty)::after {
+      bottom: 0;
+    }
+  }
+
+  // When placed inside a Modal/Drawer, let the parent scroll-bar do its job.
+  .dnb-modal__content & .dnb-table__scroll-view {
+    overflow: visible;
+  }
+
+  // When used in a Card
+  .dnb-card & {
+    width: 100%;
+  }
+}

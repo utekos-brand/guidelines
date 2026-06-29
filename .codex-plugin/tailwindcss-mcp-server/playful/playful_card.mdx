@@ -1,0 +1,47 @@
+```tsx
+<div class="rounded-lg bg-card text-card-foreground shadow-sm p-6 border-2 border-purple-200 bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 dark:border-purple-700 sm:p-8">
+  <div class="flex flex-col space-y-1.5 pb-6">
+    <h3 class="text-2xl font-semibold leading-none tracking-tight">
+      Card Title
+    </h3>
+    <p class="text-sm text-muted-foreground">Card description goes here</p>
+  </div>
+  <div class="space-y-4">
+    <p>This is the card content area. You can add any content here.</p>
+  </div>
+  <div class="flex items-center pt-6">
+    <button class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2">
+      Action
+    </button>
+  </div>
+</div>
+```
+
+```json title="playful_card.json"
+{
+  "description": "A playful style card component with dark mode support and responsive design",
+  "utilities": [
+    "rounded-lg",
+    "border",
+    "bg-card",
+    "text-card-foreground",
+    "shadow-sm",
+    "p-6",
+    "border-2",
+    "border-purple-200",
+    "bg-gradient-to-br",
+    "from-purple-50",
+    "to-pink-50",
+    "dark:from-purple-900/20",
+    "dark:to-pink-900/20",
+    "dark:border-purple-700",
+    "sm:p-8"
+  ],
+  "customizations": [
+    "Customize card padding",
+    "Adjust border radius with rounded-* classes",
+    "Modify shadow with shadow-* utilities",
+    "Change background colors and text colors"
+  ]
+}
+```

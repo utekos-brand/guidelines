@@ -1,0 +1,206 @@
+import { useCallback, useEffect, useRef } from 'react'
+import { warn } from '../../shared/component-helper'
+
+export type UseTableHighlightOptions = {
+  /**
+   * Whether column highlighting is enabled.
+   * Default: `true`
+   */
+  enabled?: boolean
+}
+
+function isHighlighted(cell: Element): boolean {
+  return (
+    cell.classList.contains('dnb-table__td--highlight') ||
+    cell.classList.contains('dnb-table__th--highlight')
+  )
+}
+
+function applyHighlight(table: HTMLTableElement) {
+  const highlightedColumns = new Set<number>()
+  const thElements = table.querySelectorAll(
+    'thead th.dnb-table__th--highlight'
+  )
+
+  for (const th of Array.from(thElements)) {
+    highlightedColumns.add((th as HTMLTableCellElement).cellIndex)
+  }
+
+  // Warn about highlighted cells missing an aria-label.
+  // Skip cells whose highlight was inherited from a parent Tr or will
+  // be propagated from a column Th — only the Tr/Th needs the label.
+  const allHighlighted = table.querySelectorAll(
+    '.dnb-table__th--highlight, .dnb-table__td--highlight'
+  )
+  for (const cell of Array.from(allHighlighted)) {
+    if (
+      cell.getAttribute('aria-label') ||
+      cell.getAttribute('aria-labelledby')
+    ) {
+      continue
+    }
+
+    const row = cell.closest('tr')
+    const rowHasLabel =
+      row &&
+      (row.getAttribute('aria-label') ||
+        row.getAttribute('aria-labelledby'))
+
+    // Cell inside a highlighted Tr — the row provides the label
+    if (rowHasLabel) {
+      continue
+    }
+
+    // Td in a column with a highlighted Th — the Th provides the label
+    if (
+      cell.tagName === 'TD' &&
+      highlightedColumns.has((cell as HTMLTableCellElement).cellIndex)
+    ) {
+      continue
+    }
+
+    const tag = cell.tagName === 'TH' ? 'Th' : 'Td'
+    warn(
+      `Table.${tag}: a highlighted cell should have an \`aria-label\` or \`aria-labelledby\` attribute to describe the highlight for screen readers.`
+    )
+  }
+
+  const applied: { cell: HTMLTableCellElement; classes: string[] }[] = []
+
+  // First pass: propagate column highlights from Th to Td
+  for (let r = 0; r < table.rows.length; r++) {
+    const row = table.rows[r]
+
+    for (let c = 0; c < row.cells.length; c++) {
+      const cell = row.cells[c]
+
+      if (
+        cell.tagName === 'TD' &&
+        highlightedColumns.has(c) &&
+        !cell.classList.contains('dnb-table__td--highlight')
+      ) {
+        cell.classList.add('dnb-table__td--highlight')
+        applied.push({ cell, classes: ['dnb-table__td--highlight'] })
+      }
+    }
+  }
+
+  // Second pass: handle borders between highlighted and non-highlighted cells
+  for (let r = 0; r < table.rows.length; r++) {
+    const row = table.rows[r]
+    const prevRow = r > 0 ? table.rows[r - 1] : null
+
+    for (let c = 0; c < row.cells.length; c++) {
+      const cell = row.cells[c]
+      const cellIsHighlighted = isHighlighted(cell)
+
+      // Highlighted cell next to highlighted cell — use highlight border color
+      if (cellIsHighlighted) {
+        const prevCell = prevRow?.cells[c]
+        if (prevCell && isHighlighted(prevCell)) {
+          cell.classList.add('dnb-table__td--highlight-border')
+          applied.push({
+            cell,
+            classes: ['dnb-table__td--highlight-border'],
+          })
+        }
+
+        continue // stop here — highlighted cells get transparent borders via CSS
+      }
+
+      // Non-highlighted cell — mark touching borders as transparent
+      const classes: string[] = []
+
+      const leftCell = row.cells[c - 1]
+      if (leftCell && isHighlighted(leftCell)) {
+        classes.push('dnb-table--highlight-neighbor-left')
+      }
+
+      const rightCell = row.cells[c + 1]
+      if (rightCell && isHighlighted(rightCell)) {
+        classes.push('dnb-table--highlight-neighbor-right')
+      }
+
+      const topCell = prevRow?.cells[c]
+      if (topCell && isHighlighted(topCell)) {
+        classes.push('dnb-table--highlight-neighbor-top')
+      }
+
+      if (classes.length > 0) {
+        cell.classList.add(...classes)
+        applied.push({ cell, classes })
+      }
+    }
+  }
+
+  return () => {
+    for (const { cell, classes } of applied) {
+      cell.classList.remove(...classes)
+    }
+  }
+}
+
+/**
+ * A hook that highlights entire columns when their `Th` has `highlight`,
+ * and adds borders between vertically adjacent highlighted cells.
+ *
+ * @example
+ * ```tsx
+ * import { useTableHighlight } from '@dnb/eufemia/components/table'
+ *
+ * function MyTable() {
+ *   const highlightRef = useTableHighlight()
+ *
+ *   return (
+ *     <Table ref={highlightRef} outline border>
+ *       <thead>
+ *         <Tr>
+ *           <Th highlight>Column A</Th>
+ *           <Th>Column B</Th>
+ *         </Tr>
+ *       </thead>
+ *       <tbody>
+ *         <Tr>
+ *           <Td>Row 1</Td>
+ *           <Td>Row 1</Td>
+ *         </Tr>
+ *       </tbody>
+ *     </Table>
+ *   )
+ * }
+ * ```
+ */
+export function useTableHighlight({
+  enabled = true,
+}: UseTableHighlightOptions = {}) {
+  const ref = useRef<HTMLElement>(null)
+
+  const getTable = useCallback((): HTMLTableElement | null => {
+    const el = ref.current
+    if (!el) {
+      return null // stop here
+    }
+
+    if (el.tagName === 'TABLE') {
+      return el as HTMLTableElement
+    }
+
+    return el.querySelector<HTMLTableElement>('table')
+  }, [])
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !enabled) {
+      return undefined // stop here
+    }
+
+    const table = getTable()
+    if (!table) {
+      return undefined // stop here
+    }
+
+    return applyHighlight(table)
+  })
+
+  return ref
+}

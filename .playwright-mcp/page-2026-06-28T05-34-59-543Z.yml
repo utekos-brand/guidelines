@@ -1,0 +1,165 @@
+- generic [active] [ref=e1]:
+  - region "Notifications, bottom (alt+T)"
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=e3]:
+    - banner [ref=e6]:
+      - link "Go to the front page" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img "Vy" [ref=e8]
+      - list [ref=e20]:
+        - listitem [ref=e21]:
+          - link "Identitet" [ref=e22] [cursor=pointer]:
+            - /url: /identitet
+        - listitem [ref=e23]:
+          - link "Spor" [ref=e24] [cursor=pointer]:
+            - /url: /spor
+        - listitem [ref=e25]:
+          - link "Resources" [ref=e26] [cursor=pointer]:
+            - /url: /ressurser
+        - button "Search" [ref=e27] [cursor=pointer]:
+          - img [ref=e28]
+          - text: Search
+        - button "Appearance" [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+          - paragraph [ref=e34]: Appearance
+    - generic [ref=e35]:
+      - navigation [ref=e37]:
+        - generic [ref=e39]:
+          - listitem [ref=e40]:
+            - link "Merkevaren Vy" [ref=e41] [cursor=pointer]:
+              - /url: /identitet/merkevaren-vy
+              - generic [ref=e42]: Merkevaren Vy
+          - listitem [ref=e43]:
+            - link "Logo" [ref=e44] [cursor=pointer]:
+              - /url: /identitet/logoen-var
+              - generic [ref=e45]: Logo
+          - listitem [ref=e46]:
+            - link "Farger" [ref=e47] [cursor=pointer]:
+              - /url: /identitet/farger
+              - generic [ref=e48]: Farger
+          - listitem [ref=e49]:
+            - link "Typografi" [ref=e50] [cursor=pointer]:
+              - /url: /identitet/typografi
+              - generic [ref=e51]: Typografi
+          - listitem [ref=e52]:
+            - link "Fotografi" [ref=e53] [cursor=pointer]:
+              - /url: /identitet/fotografi
+              - generic [ref=e54]: Fotografi
+          - listitem [ref=e55]:
+            - link "Illustrasjoner" [ref=e56] [cursor=pointer]:
+              - /url: /identitet/illustrasjoner
+              - generic [ref=e57]: Illustrasjoner
+          - listitem [ref=e58]:
+            - link "Ikoner" [ref=e59] [cursor=pointer]:
+              - /url: /identitet/ikoner
+              - generic [ref=e60]: Ikoner
+          - listitem [ref=e61]:
+            - link "Grafisk element" [ref=e62] [cursor=pointer]:
+              - /url: /identitet/grafisk-element
+              - generic [ref=e63]: Grafisk element
+          - listitem [ref=e64]:
+            - link "Identiteten i bruk" [ref=e65] [cursor=pointer]:
+              - /url: /identitet/identiteten-i-bruk
+              - generic [ref=e66]: Identiteten i bruk
+          - listitem [ref=e67]:
+            - link "Språkprofil" [ref=e68] [cursor=pointer]:
+              - /url: /identitet/sprakprofil
+              - generic [ref=e69]: Språkprofil
+          - separator [ref=e70]
+          - listitem [ref=e71]:
+            - link "Kjøretøy" [ref=e72] [cursor=pointer]:
+              - /url: /identitet/kjoretoy
+              - generic [ref=e73]: Kjøretøy
+          - listitem [ref=e74]:
+            - link "Skilting" [ref=e75] [cursor=pointer]:
+              - /url: /identitet/skilting
+              - generic [ref=e76]: Skilting
+          - listitem [ref=e77]:
+            - link "Interiør" [ref=e78] [cursor=pointer]:
+              - /url: /identitet/interior
+              - generic [ref=e79]: Interiør
+          - listitem [ref=e80]:
+            - link "CargoNet" [ref=e81] [cursor=pointer]:
+              - /url: /identitet/cargonet
+              - generic [ref=e82]: CargoNet
+      - main [ref=e83]:
+        - generic [ref=e86]:
+          - main [ref=e87]:
+            - generic [ref=e89]:
+              - img "Tre Vy-kollegaer foran en buss" [ref=e92]
+              - generic [ref=e94]:
+                - paragraph
+            - heading "Merkevaren Vy" [level=1] [ref=e99]
+            - generic [ref=e100]:
+              - heading "Vi er i bevegelse" [level=2] [ref=e104]
+              - generic [ref=e105]:
+                - paragraph [ref=e106]: Hver dag sørger vi for at hundretusener av mennesker kan reise så miljøvennlig og enkelt som mulig. Det er kjernen i det vi gjør, og grunnen til at Vy finnes.
+                - paragraph [ref=e107]: Samtidig endrer verden seg raskt. Folk bor tettere, køutfordringer og utslipp øker, og ny teknologi og digitalisering skaper nye muligheter. Konkurransen er tøff, og Vy har fra første dag vært et konkurranseutsatt selskap som kjemper om kundenes tillit hver eneste dag.
+                - paragraph [ref=e108]: "Til deg som skal bruke denne designmanualen: Følg retningslinjene nøye, men våg å utfordre oss til å tenke nytt for å utvikle enda bedre løsninger. Markedsføring og merkevarebygging er avgjørende for at Vy skal lykkes med å få enda flere til å reise miljøvennlig."
+                - paragraph [ref=e109]:
+                  - strong [ref=e110]: Dagfrid Hestnes
+                  - text: Leder design og profil, Marked
+                - link "dagfrid.hestnes@vy.no" [ref=e112] [cursor=pointer]:
+                  - /url: mailto:dagfrid.hestnes@vy.no
+                  - img [ref=e113]
+                  - text: dagfrid.hestnes@vy.no
+                  - img [ref=e116]
+            - generic [ref=e119]:
+              - img "Voksen med barn i fanget om bord på toget" [ref=e122]
+              - generic [ref=e124]:
+                - paragraph
+            - generic [ref=e125]:
+              - heading "Navnet ser fremover" [level=2] [ref=e129]
+              - generic [ref=e130]:
+                - paragraph [ref=e131]: Skal vi som samfunn gjøre miljø og reise til to ord som hører sammen, må vi tenke nytt og annerledes. Vi må ha vyer. Navnet Vy er nordisk og betyr utsyn, oversyn, utsikt eller bilde av.
+                - paragraph [ref=e132]: Å ha vyer betyr for oss å ha som mål å tilby den beste reisen. Vi vet at for våre kunder så er høy kvalitet og punktlighet på hver eneste daglige tog- og bussreise alltid første prioritet.
+                - paragraph [ref=e133]: Navnet Vy inneholder et løfte om at vi skal gjøre alt vi kan for at kundenes reise med oss skal bli enda litt bedre.
+            - generic [ref=e135]:
+              - img "Utsikt over fjellandskap fra Bergensbanen" [ref=e138]
+              - generic [ref=e140]:
+                - paragraph
+            - generic [ref=e141]:
+              - heading "Designet viser bevegelse" [level=2] [ref=e145]
+              - generic [ref=e146]:
+                - paragraph [ref=e147]: Bevegelse er kjernen i virksomheten til Vy. Bevegelse er både historien og fremtiden. Ny teknologi gjør det mulig å tilby stadig mer fleksible løsninger, slik at flere kan reise sømløst fra dør til dør.
+                - paragraph [ref=e148]: Bevegelse er også kjernen i designkonseptet til Vy. Det kommer til syne i logoen, som med sine uavbrutte linjer viser at Vy vil tilby en mest mulig sømløs reiseopplevelse. Og i de grønne hovedfargene, som viser at Vy beveger seg mot en mer bærekraftig fremtid.
+                - paragraph [ref=e149]: "Konseptet bevegelse skal også vise at Vy tilbyr mer enn transport fra A til B. Merkevaren Vy skal fortelle historier som skaper følelser og beveger. Om hjemkomstklemmer og farvelkyss, naturopplevelser og urbane gleder. Og ikke minst: Om møtene mellom mennesker på reise gjennom livet."
+                - paragraph [ref=e150]: Bevegelse er også beskrivende for selskapet og arbeidsplassen Vy. Konseptet skal bidra til å lage intern kommunikasjon som øker stoltheten over at vi er ett lag som arbeider og beveger oss mot felles og viktige mål.
+            - generic [ref=e152]:
+              - img "Visittkort og forside med Vy logo og grafisk element" [ref=e155]
+              - generic [ref=e157]:
+                - paragraph
+            - generic [ref=e159]:
+              - img "Vy-appen på en smarttelefon" [ref=e162]
+              - generic [ref=e164]:
+                - paragraph
+            - generic [ref=e166]:
+              - paragraph
+              - paragraph
+          - navigation [ref=e168]:
+            - paragraph [ref=e169]: On this page
+            - list
+    - contentinfo [ref=e171]:
+      - link "Go to the front page" [ref=e173] [cursor=pointer]:
+        - /url: /
+        - img [ref=e174]
+      - generic [ref=e186]:
+        - generic [ref=e187]:
+          - paragraph [ref=e188]: Identitet og merkevare
+          - link "mail" [ref=e189] [cursor=pointer]:
+            - /url: "mailto:"
+            - img [ref=e190]
+            - text: mail
+        - generic [ref=e192]:
+          - paragraph [ref=e193]: Spor
+          - link "GitHub" [ref=e194] [cursor=pointer]:
+            - /url: https://github.com/nsbno/spor
+            - img [ref=e195]
+            - text: GitHub
+          - link "Figma" [ref=e197] [cursor=pointer]:
+            - /url: https://www.figma.com/@vy_spor
+            - img [ref=e198]
+            - text: Figma
+          - link "Slack" [ref=e200] [cursor=pointer]:
+            - /url: https://nsb-utvikling.slack.com/archives/CM9H2N39U

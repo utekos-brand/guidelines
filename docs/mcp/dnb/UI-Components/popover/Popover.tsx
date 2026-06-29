@@ -1,0 +1,822 @@
+/**
+ * Web Popover Component
+ */
+
+import {
+  createElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import type {
+  ComponentType,
+  HTMLAttributes,
+  KeyboardEvent as ReactKeyboardEvent,
+  KeyboardEventHandler as ReactKeyboardEventHandler,
+  MouseEvent as ReactMouseEvent,
+  ReactNode,
+  RefCallback,
+  RefObject,
+} from 'react'
+import { clsx } from 'clsx'
+import PopoverCloseButton from './internal/PopoverCloseButton'
+import useId from '../../shared/helpers/useId'
+import useTranslation from '../../shared/useTranslation'
+import {
+  combineDescribedBy,
+  convertJsxToString,
+  warn,
+} from '../../shared/component-helper'
+import getRefElement from '../../shared/internal/getRefElement'
+import PopoverPortal from './PopoverPortal'
+import PopoverContainer from './PopoverContainer'
+import type {
+  PopoverProps,
+  PopoverTriggerRenderProps,
+  PopoverContentRenderProps,
+  PopoverRenderable,
+  PopoverTriggerAttributes,
+  PopoverResolvedTargetElement,
+  PopoverTargetElementObject,
+} from './types'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+export type * from './types'
+
+export default function Popover(props: PopoverProps) {
+  const {
+    children,
+    content,
+    trigger,
+    triggerProps: triggerPropsProp,
+    triggerAttributes: triggerAttributesProp,
+    triggerClassName,
+    title,
+    placement = 'bottom',
+    open: controlledOpenProp,
+    openInitially: openInitiallyProp = false,
+    onOpenChange,
+    focusOnOpen = true,
+    focusOnOpenElement,
+    onFocusComplete,
+    restoreFocus = true,
+    preventClose = false,
+    hideCloseButton = false,
+    closeButtonProps,
+    contentClassName,
+    className,
+    baseClassName,
+    disableFocusTrap = false,
+    hideOutline = false,
+    noInnerSpace = false,
+    noMaxWidth = false,
+    keepInDOM = false,
+    triggerOffset,
+    targetElement: externalTargetElement,
+    targetSelector,
+    targetRefreshKey,
+    portalRootClass,
+    showDelay: showDelayProp,
+    hideDelay: hideDelayProp,
+    contentRef: externalContentRef,
+    alignOnTarget = 'center',
+    horizontalOffset,
+    autoAlignMode = 'initial',
+    autoAlignViewportThreshold,
+    arrowPosition = 'center',
+    arrowPositionSelector,
+    hideArrow = false,
+    skipPortal = false,
+    noAnimation = false,
+    fixedPosition = false,
+    arrowEdgeOffset,
+    id: idProp,
+    omitDescribedBy,
+    ...restAttributes
+  } = props
+
+  const triggerAttributes = triggerPropsProp || triggerAttributesProp
+
+  const baseClassNames = useMemo(() => {
+    const names = ['dnb-popover']
+    if (baseClassName && baseClassName !== 'dnb-popover') {
+      names.push(baseClassName)
+    }
+    return names
+  }, [baseClassName])
+  const tr = useTranslation().Popover
+
+  const { isOpen, setOpenState } = usePopoverOpenState({
+    open: controlledOpenProp,
+    openInitially: openInitiallyProp,
+    onOpenChange,
+  })
+
+  const triggerRef = useRef<HTMLElement | null>(null)
+  const tooltipRef = useRef<HTMLSpanElement | null>(null)
+  const contentWrapperRef = useRef<HTMLSpanElement | null>(null)
+  const previousTargetElementRef =
+    useRef<PopoverResolvedTargetElement | null>(null)
+  const focusRestoreAnimationRef = useRef<number | null>(null)
+  const touchStartTargetRef = useRef<EventTarget | null>(null)
+  const touchMovedRef = useRef(false)
+
+  const tooltipId = useId(idProp)
+  const descriptionId = `${tooltipId}-description`
+
+  const showDelay = showDelayProp ?? 0
+  const hideDelay = hideDelayProp ?? 0
+
+  const hasExplicitTargetElement = Object.hasOwn(props, 'targetElement')
+
+  const shouldRenderTrigger =
+    !hasExplicitTargetElement && typeof targetSelector !== 'string'
+
+  const getCurrentTriggerElement = useCallback(() => {
+    if (shouldRenderTrigger) {
+      return triggerRef.current
+    }
+    if (isPopoverTargetElementObject(externalTargetElement)) {
+      return (
+        resolveTargetNode(externalTargetElement.verticalRef) ||
+        resolveTargetNode(externalTargetElement.horizontalRef)
+      )
+    }
+    if (externalTargetElement) {
+      return resolveTargetNode(externalTargetElement)
+    }
+    if (
+      typeof targetSelector === 'string' &&
+      typeof document !== 'undefined'
+    ) {
+      return document.querySelector(targetSelector) as HTMLElement
+    }
+    return null
+  }, [externalTargetElement, shouldRenderTrigger, targetSelector])
+
+  const [targetElement, setTargetElement] =
+    useState<PopoverResolvedTargetElement>(null)
+
+  const resolveTargetElementForContainer = useCallback(() => {
+    if (isPopoverTargetElementObject(externalTargetElement)) {
+      const horizontalRef = resolveTargetNode(
+        externalTargetElement.horizontalRef
+      )
+      const verticalRef = resolveTargetNode(
+        externalTargetElement.verticalRef
+      )
+
+      return {
+        horizontalRef,
+        verticalRef,
+      }
+    }
+
+    if (externalTargetElement) {
+      return resolveTargetNode(externalTargetElement)
+    }
+
+    if (
+      typeof targetSelector === 'string' &&
+      typeof document !== 'undefined'
+    ) {
+      return document.querySelector(targetSelector) as HTMLElement
+    }
+
+    if (shouldRenderTrigger) {
+      return triggerRef.current
+    }
+
+    return null
+  }, [externalTargetElement, shouldRenderTrigger, targetSelector])
+
+  useEffect(() => {
+    const resolved = resolveTargetElementForContainer()
+    const hadPreviousTarget = previousTargetElementRef.current !== null
+    const hadValidPreviousTarget =
+      hadPreviousTarget &&
+      (previousTargetElementRef.current instanceof HTMLElement ||
+        (typeof previousTargetElementRef.current === 'object' &&
+          previousTargetElementRef.current !== null &&
+          ('horizontalRef' in previousTargetElementRef.current ||
+            'verticalRef' in previousTargetElementRef.current)))
+
+    previousTargetElementRef.current = resolved
+    setTargetElement(resolved)
+
+    // Close if target becomes null after being set (not if it was initially null)
+    if (!resolved && isOpen && hadValidPreviousTarget) {
+      setOpenState(false)
+    }
+  }, [resolveTargetElementForContainer, isOpen, setOpenState])
+
+  const resolveFocusTarget = useCallback(() => {
+    if (!focusOnOpenElement) {
+      return null
+    }
+
+    return typeof focusOnOpenElement === 'function'
+      ? focusOnOpenElement()
+      : focusOnOpenElement
+  }, [focusOnOpenElement])
+
+  const focusTrigger = useCallback(() => {
+    if (!restoreFocus) {
+      return undefined
+    }
+    const element = getCurrentTriggerElement()
+    if (!element || typeof element.focus !== 'function') {
+      return undefined
+    }
+
+    if (focusRestoreAnimationRef.current !== null) {
+      cancelAnimationFrame(focusRestoreAnimationRef.current)
+    }
+
+    focusRestoreAnimationRef.current = requestAnimationFrame(() => {
+      element.focus({ preventScroll: true })
+      focusRestoreAnimationRef.current = null
+    })
+  }, [getCurrentTriggerElement, restoreFocus])
+
+  useEffect(() => {
+    return () => {
+      if (focusRestoreAnimationRef.current !== null) {
+        cancelAnimationFrame(focusRestoreAnimationRef.current)
+      }
+    }
+  }, [])
+
+  const close = useCallback(() => {
+    if (preventClose) {
+      return undefined // stop here
+    }
+    setOpenState(false)
+    focusTrigger()
+  }, [focusTrigger, setOpenState, preventClose])
+
+  const openPopover = useCallback(() => {
+    setOpenState(true)
+  }, [setOpenState])
+
+  const toggle = useCallback(
+    (next?: boolean) => {
+      const value = typeof next === 'boolean' ? next : !isOpen
+      if (value) {
+        openPopover()
+      } else {
+        close()
+      }
+    },
+    [close, isOpen, openPopover]
+  )
+
+  const runTriggerClick = useCallback(
+    (event?: MouseEvent | ReactMouseEvent<HTMLElement>) => {
+      if (event && 'preventDefault' in event) {
+        event.preventDefault()
+      }
+      toggle()
+    },
+    [toggle]
+  )
+
+  useEffect(() => {
+    if (!focusOnOpen || !isOpen) {
+      return undefined // stop here
+    }
+
+    const timers: Array<ReturnType<typeof setTimeout>> = []
+
+    const focusContent = () => {
+      const focusTarget =
+        resolveFocusTarget() ||
+        contentWrapperRef.current ||
+        tooltipRef.current?.querySelector('.dnb-popover__content')
+
+      if (!(focusTarget instanceof HTMLElement)) {
+        return false
+      }
+
+      focusTarget.focus({ preventScroll: true })
+
+      timers.push(
+        setTimeout(() => {
+          // Only re-focus if focus hasn't moved to another element inside the popover
+          if (!tooltipRef.current?.contains(document.activeElement)) {
+            focusTarget?.focus({ preventScroll: true })
+          }
+          onFocusComplete?.()
+        }, 10) // Ensure focus happens after any potential rendering
+      )
+
+      return true
+    }
+
+    const scheduleFocusAttempt = (delay: number, retries: number) => {
+      timers.push(
+        setTimeout(() => {
+          if (!focusContent() && retries > 0) {
+            scheduleFocusAttempt(delay, retries - 1)
+          }
+        }, delay)
+      )
+    }
+
+    if (!focusContent()) {
+      scheduleFocusAttempt(10, 3) // Wait until the Popover is rendered
+    }
+
+    return () => timers.forEach(clearTimeout)
+  }, [focusOnOpen, isOpen, resolveFocusTarget, onFocusComplete])
+
+  const handleDocumentInteraction = useCallback(
+    (
+      event: MouseEvent | TouchEvent | KeyboardEvent,
+      overrideTarget?: EventTarget | null
+    ) => {
+      if (preventClose) {
+        return undefined // stop here
+      }
+      const target = overrideTarget ?? event.target
+      if (!(target instanceof Node)) {
+        return undefined // stop here
+      }
+
+      // Ignore keyboard events targeting the body element, as this
+      // indicates focus was temporarily lost during a React re-render
+      // rather than a deliberate user interaction outside the popover.
+      if (event instanceof KeyboardEvent && target === document.body) {
+        return undefined // stop here
+      }
+
+      const insideContent =
+        !!tooltipRef.current && tooltipRef.current.contains(target)
+      const triggerElement = getCurrentTriggerElement()
+      const insideTrigger =
+        !!triggerElement &&
+        typeof triggerElement.contains === 'function' &&
+        triggerElement.contains(target as Node)
+
+      // Also check horizontalRef when targetElement has both refs,
+      // so clicks on sibling elements (e.g. DatePicker inputs) stay inside the trigger area
+      const horizontalElement = isPopoverTargetElementObject(
+        externalTargetElement
+      )
+        ? resolveTargetNode(externalTargetElement.horizontalRef)
+        : null
+      const insideHorizontal =
+        !!horizontalElement && horizontalElement.contains(target as Node)
+
+      if (!insideContent && !insideTrigger && !insideHorizontal) {
+        toggle(false)
+      }
+    },
+    [preventClose, getCurrentTriggerElement, toggle, externalTargetElement]
+  )
+
+  const handleDocumentTouchStart = useCallback((event: TouchEvent) => {
+    touchMovedRef.current = false
+    touchStartTargetRef.current = event.target
+  }, [])
+
+  const handleDocumentTouchMove = useCallback(() => {
+    touchMovedRef.current = true
+  }, [])
+
+  const handleDocumentTouchEnd = useCallback(
+    (event: TouchEvent) => {
+      const target = touchStartTargetRef.current
+      const moved = touchMovedRef.current
+      touchMovedRef.current = false
+      touchStartTargetRef.current = null
+
+      if (moved) {
+        return undefined // stop here
+      }
+
+      handleDocumentInteraction(event, target)
+    },
+    [handleDocumentInteraction]
+  )
+
+  const handleDocumentKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.defaultPrevented || preventClose) {
+        return undefined // stop here
+      }
+      if (event.key === 'Escape') {
+        // Check both event.target and document.activeElement to handle different event propagation scenarios
+        const target = (event.target ||
+          document.activeElement) as HTMLElement
+        const triggerElement = getCurrentTriggerElement()
+        const insideTrigger =
+          typeof triggerElement?.contains === 'function' &&
+          triggerElement.contains(target)
+        const insideContent = tooltipRef.current?.contains(target)
+
+        if (insideContent || insideTrigger) {
+          event.preventDefault()
+          event.stopPropagation() // Prevent Modal/Dialog/Drawer handlers from running
+          event.stopImmediatePropagation?.() // Prevent Modal/Dialog/Drawer handlers from running
+          toggle(false)
+        }
+      }
+    },
+    [preventClose, getCurrentTriggerElement, toggle]
+  )
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined // stop here
+    }
+
+    document.documentElement.addEventListener(
+      'mousedown',
+      handleDocumentInteraction
+    )
+    document.documentElement.addEventListener(
+      'touchstart',
+      handleDocumentTouchStart,
+      { passive: true }
+    )
+    document.documentElement.addEventListener(
+      'touchmove',
+      handleDocumentTouchMove,
+      { passive: true }
+    )
+    document.documentElement.addEventListener(
+      'touchend',
+      handleDocumentTouchEnd,
+      { passive: true }
+    )
+    document.documentElement.addEventListener(
+      'keyup',
+      handleDocumentInteraction
+    )
+    // Use capture phase (true) to ensure we handle Escape before Modal/Dialog handlers
+    document.addEventListener('keydown', handleDocumentKeyDown, true)
+
+    return () => {
+      document.documentElement.removeEventListener(
+        'mousedown',
+        handleDocumentInteraction
+      )
+      document.documentElement.removeEventListener(
+        'touchstart',
+        handleDocumentTouchStart
+      )
+      document.documentElement.removeEventListener(
+        'touchmove',
+        handleDocumentTouchMove
+      )
+      document.documentElement.removeEventListener(
+        'touchend',
+        handleDocumentTouchEnd
+      )
+      document.documentElement.removeEventListener(
+        'keyup',
+        handleDocumentInteraction
+      )
+      document.removeEventListener('keydown', handleDocumentKeyDown, true)
+    }
+  }, [
+    handleDocumentInteraction,
+    handleDocumentKeyDown,
+    handleDocumentTouchEnd,
+    handleDocumentTouchMove,
+    handleDocumentTouchStart,
+    isOpen,
+  ])
+
+  const handleTriggerKeyDown = useCallback(
+    (
+      event: ReactKeyboardEvent<HTMLElement>,
+      userHandler?: ReactKeyboardEventHandler<HTMLElement>
+    ) => {
+      userHandler?.(event)
+      if (event.defaultPrevented) {
+        return undefined // stop here
+      }
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault()
+        toggle()
+      }
+    },
+    [toggle]
+  )
+
+  const mergedTriggerAttributes: PopoverTriggerAttributes =
+    triggerAttributes || {}
+  const {
+    onClick: triggerOnClick,
+    onKeyDown: triggerOnKeyDown,
+    className: triggerAttrClassName,
+    ref: triggerAttrRef,
+    role: triggerAttrRole,
+    tabIndex: triggerAttrTabIndex,
+    title: triggerAttrTitle,
+    ['aria-describedby']: triggerAttrDescribedBy,
+    ...restTriggerAttrs
+  } = mergedTriggerAttributes
+
+  const assignTriggerRef = useCallback(
+    (node: HTMLElement | null) => {
+      triggerRef.current = node
+      if (!triggerAttrRef) {
+        return undefined
+      }
+      if (typeof triggerAttrRef === 'function') {
+        triggerAttrRef(node)
+      } else if ('current' in triggerAttrRef) {
+        const mutableTriggerAttrRef =
+          triggerAttrRef as RefObject<HTMLElement | null>
+        mutableTriggerAttrRef.current = node
+      }
+    },
+    [triggerAttrRef]
+  )
+
+  const statefulTitle = isOpen ? tr.closeTriggerTitle : tr.openTriggerTitle
+
+  const triggerDomProps: HTMLAttributes<HTMLElement> & {
+    ref: RefCallback<HTMLElement>
+  } = {
+    ...restTriggerAttrs,
+    ref: assignTriggerRef,
+    className: clsx(
+      'dnb-popover__trigger',
+      triggerAttrClassName,
+      triggerClassName
+    ),
+    title: triggerAttrTitle || statefulTitle,
+    role: triggerAttrRole || 'button',
+    tabIndex:
+      typeof triggerAttrTabIndex === 'number' ? triggerAttrTabIndex : 0,
+    'aria-controls': tooltipId,
+    'aria-expanded': isOpen,
+    'aria-describedby': mergeDescribedBy(
+      triggerAttrDescribedBy,
+      descriptionId
+    ),
+    onClick: (event) => {
+      triggerOnClick?.(event)
+      if (event.defaultPrevented) {
+        return undefined
+      }
+      runTriggerClick(event)
+    },
+    onKeyDown: (event) => handleTriggerKeyDown(event, triggerOnKeyDown),
+  }
+
+  const triggerRenderProps = {
+    ...triggerDomProps,
+  } as PopoverTriggerRenderProps
+
+  Object.defineProperties(triggerRenderProps, {
+    active: { value: isOpen, enumerable: false },
+    open: { value: openPopover, enumerable: false },
+    close: { value: close, enumerable: false },
+    toggle: { value: toggle, enumerable: false },
+  })
+
+  let triggerMarkup: ReactNode = null
+  if (shouldRenderTrigger) {
+    if (isRenderer(trigger)) {
+      triggerMarkup = trigger(triggerRenderProps)
+    } else if (isValidElement<Record<string, unknown>>(trigger)) {
+      triggerMarkup = createElement(trigger.type as ComponentType<any>, {
+        ...trigger.props,
+        ...triggerDomProps,
+      })
+    } else if (trigger) {
+      warn(
+        'Popover: `trigger` must be a valid React element or render function when not using targetElement/targetSelector.'
+      )
+    } else {
+      warn(
+        'Popover: please provide a `trigger` prop or point to an existing element using `targetElement` / `targetSelector`.'
+      )
+    }
+  }
+
+  const hasInternalTrigger = shouldRenderTrigger && Boolean(triggerMarkup)
+
+  const contentContext = useMemo<PopoverContentRenderProps>(
+    () => ({
+      active: isOpen,
+      open: openPopover,
+      close,
+      toggle,
+      id: tooltipId,
+    }),
+    [close, isOpen, openPopover, toggle, tooltipId]
+  )
+
+  const userContent = useMemo(() => {
+    const source = typeof content !== 'undefined' ? content : children
+    if (isRenderer(source)) {
+      return source(contentContext)
+    }
+    return source
+  }, [children, content, contentContext])
+
+  const closeButton = !hideCloseButton && (
+    <PopoverCloseButton
+      variant={closeButtonProps?.variant ?? 'tertiary'}
+      icon={closeButtonProps?.icon ?? 'close'}
+      {...closeButtonProps}
+      className={clsx('dnb-popover__close', closeButtonProps?.className)}
+      title={
+        convertJsxToString(closeButtonProps?.title) || tr.closeButtonTitle
+      }
+      onClick={(event) => {
+        closeButtonProps?.onClick?.(event as any)
+        if (event?.defaultPrevented) {
+          return undefined
+        }
+        toggle(false)
+      }}
+    />
+  )
+
+  const popoverClassName = clsx(
+    baseClassNames,
+    !hideOutline && baseClassNames.map((name) => `${name}--show-outline`),
+    noInnerSpace &&
+      baseClassNames.map((name) => `${name}--no-inner-space`),
+    noMaxWidth && baseClassNames.map((name) => `${name}--no-max-width`),
+    className
+  )
+
+  const popoverAttributes: HTMLAttributes<HTMLElement> = {
+    ...(restAttributes as HTMLAttributes<HTMLElement>),
+    className: popoverClassName,
+  }
+
+  const contentRef = externalContentRef || tooltipRef
+
+  const overlayContent = (
+    <>
+      {!disableFocusTrap && (
+        <button className="dnb-sr-only" type="button" onFocus={close}>
+          {tr.focusTrapTitle}
+        </button>
+      )}
+
+      <span
+        className={clsx(
+          'dnb-popover__content',
+          'dnb-no-focus',
+          contentClassName
+        )}
+        id={tooltipId}
+        tabIndex={-1}
+        ref={contentWrapperRef}
+      >
+        {title && (
+          <span className="dnb-popover__title">
+            <strong className="dnb-h--basis">{title}</strong>
+          </span>
+        )}
+        <span className="dnb-popover__body">{userContent}</span>
+      </span>
+
+      {closeButton}
+
+      {!disableFocusTrap && (
+        <button className="dnb-sr-only" type="button" onFocus={close}>
+          {tr.focusTrapTitle}
+        </button>
+      )}
+    </>
+  )
+
+  if (targetElement === null) {
+    return triggerMarkup
+  }
+
+  const PopoverElement = skipPortal ? PopoverContainer : PopoverPortal
+
+  return (
+    <>
+      {triggerMarkup}
+      {hasInternalTrigger && (
+        <span
+          className="dnb-sr-only"
+          aria-hidden="true"
+          id={descriptionId}
+        >
+          {statefulTitle}
+        </span>
+      )}
+
+      <PopoverElement
+        baseClassNames={baseClassNames}
+        active={isOpen}
+        showDelay={showDelay}
+        attributes={popoverAttributes}
+        targetElement={targetElement}
+        hideDelay={hideDelay}
+        keepInDOM={keepInDOM}
+        autoAlignMode={autoAlignMode}
+        autoAlignViewportThreshold={autoAlignViewportThreshold}
+        noAnimation={noAnimation}
+        arrowPosition={arrowPosition}
+        placement={placement}
+        alignOnTarget={alignOnTarget}
+        horizontalOffset={horizontalOffset}
+        arrowPositionSelector={arrowPositionSelector}
+        fixedPosition={fixedPosition}
+        skipPortal={skipPortal}
+        {...(!skipPortal && { portalRootClass })}
+        contentRef={contentRef}
+        triggerOffset={triggerOffset}
+        hideArrow={hideArrow}
+        arrowEdgeOffset={arrowEdgeOffset}
+        targetRefreshKey={targetRefreshKey}
+      >
+        {overlayContent}
+      </PopoverElement>
+    </>
+  )
+}
+
+type UsePopoverOpenStateProps = {
+  open?: boolean
+  openInitially?: boolean
+  onOpenChange?: (open: boolean) => void
+}
+
+function usePopoverOpenState({
+  open,
+  openInitially,
+  onOpenChange,
+}: UsePopoverOpenStateProps) {
+  const isControlled = typeof open === 'boolean'
+  const [internalOpen, setInternalOpen] = useState(() => {
+    if (typeof openInitially === 'boolean') {
+      return openInitially
+    }
+    return false
+  })
+
+  const isOpen = isControlled ? (open as boolean) : internalOpen
+
+  const setOpenState = useCallback(
+    (next: boolean) => {
+      if (!isControlled) {
+        setInternalOpen(next)
+      }
+      onOpenChange?.(next)
+    },
+    [isControlled, onOpenChange]
+  )
+
+  return { isOpen, setOpenState }
+}
+
+function isRenderer<T>(
+  value: PopoverRenderable<T>
+): value is (context: T) => ReactNode {
+  return typeof value === 'function'
+}
+
+function mergeDescribedBy(
+  existing: string | undefined,
+  next: string
+): string | undefined {
+  return combineDescribedBy({ 'aria-describedby': existing }, next)
+}
+
+function isPopoverTargetElementObject(
+  target: PopoverProps['targetElement']
+): target is PopoverTargetElementObject {
+  return (
+    Boolean(target) &&
+    typeof target === 'object' &&
+    !('getBoundingClientRect' in target) &&
+    ('verticalRef' in target || 'horizontalRef' in target)
+  )
+}
+
+function resolveTargetNode(
+  target?: PopoverProps['targetElement']
+): HTMLElement | null {
+  if (!target || isPopoverTargetElementObject(target)) {
+    return null
+  }
+  if (target instanceof HTMLElement) {
+    return target
+  }
+  if (typeof target === 'object' && 'current' in target) {
+    return getRefElement(target as RefObject<HTMLElement>)
+  }
+  return null
+}
+
+export { default as getRefElement } from '../../shared/internal/getRefElement'
+
+withComponentMarkers(Popover, { _supportsSpacingProps: true })

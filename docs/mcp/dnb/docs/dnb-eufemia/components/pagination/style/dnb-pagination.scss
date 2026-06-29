@@ -1,0 +1,176 @@
+/*
+ * Pagination component
+ *
+ */
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-pagination {
+  display: flex;
+  flex-direction: column-reverse; // because of screen readers
+
+  &__bar,
+  &__loadbar,
+  &__bar__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__page,
+  &__loadbar {
+    min-height: 6rem;
+  }
+
+  &__bar {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &--left &__bar {
+    justify-content: flex-start;
+  }
+
+  &--center &__bar {
+    justify-content: center;
+
+    @include utilities.allBelow(small) {
+      justify-content: flex-start;
+    }
+  }
+
+  &--right &__bar {
+    justify-content: flex-end;
+  }
+
+  &__bar__wrapper {
+    display: flex;
+    flex-flow: column wrap;
+    row-gap: 0.5rem;
+  }
+
+  &--layout-horizontal &__bar__wrapper {
+    @include utilities.allAbove(large) {
+      flex-flow: row-reverse wrap;
+      justify-content: space-between;
+      flex: 1;
+    }
+  }
+
+  &--center &__bar__wrapper {
+    align-items: center;
+  }
+
+  &--right &__bar__wrapper {
+    align-items: flex-end;
+  }
+
+  &__bar__inner {
+    gap: 0.5rem;
+  }
+
+  &__bar__inner:has(.dnb-anchor) {
+    gap: 0.75rem;
+
+    .dnb-anchor,
+    .dnb-pagination__button--current {
+      margin-inline: -0.25rem;
+      padding-inline: 0.25rem;
+    }
+
+    .dnb-pagination__button--current {
+      color: var(--token-color-text-neutral);
+      text-decoration: none;
+    }
+  }
+
+  &__button {
+    max-width: 3.5rem;
+    &.dnb-button--secondary {
+      --button-color-border--hover: var(--token-color-stroke-action-hover);
+      --button-color-border--active: transparent;
+      --button-color-text--default: var(--token-color-text-action);
+      --button-color-text--hover: var(--token-color-text-action-hover);
+      --button-color-text--active: var(--token-color-text-action-pressed);
+    }
+    &.dnb-button--primary {
+      --button-color-bg--default: var(--token-color-background-selected);
+      --button-color-bg--hover: var(
+        --token-color-background-action-hover-subtle
+      );
+      --button-color-border--hover: var(--token-color-stroke-action-hover);
+      --button-color-text--default: var(--token-color-text-action-inverse);
+      --button-color-text--hover: var(--token-color-text-action-hover);
+    }
+  }
+
+  &__button--large-number {
+    max-width: unset;
+  }
+
+  &__loadbar {
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__indicator {
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: inherit;
+
+    &__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: show-page 300ms ease-out forwards;
+    }
+  }
+
+  &__dots {
+    color: var(--token-color-icon-neutral-alternative);
+    align-self: flex-end;
+  }
+
+  // used by the infinity scroller
+  &__marker {
+    pointer-events: none;
+    position: relative; // because of the marker
+
+    height: 1px;
+    width: 1px;
+    margin: -1px 0 0 -1px;
+    overflow: hidden;
+
+    td,
+    &__inner {
+      padding: 0 !important; // because if it is used in table
+
+      width: 1px;
+      height: 1px;
+
+      opacity: 0;
+    }
+  }
+
+  &__bar__skip {
+    display: flex;
+    column-gap: 1.5rem;
+  }
+}
+
+@keyframes show-page {
+  from {
+    transform: translate3d(0, -8px, 0);
+    opacity: 0.1;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}

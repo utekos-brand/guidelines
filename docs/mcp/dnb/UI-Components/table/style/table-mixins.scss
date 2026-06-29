@@ -1,0 +1,26 @@
+@mixin tableBorderHelper($offset) {
+  content: '';
+  position: absolute;
+  inset: 0;
+  right: $offset;
+  z-index: 1;
+
+  pointer-events: none;
+}
+
+@mixin tableBorder {
+  &::after {
+    @include tableBorderHelper(-0.0625rem);
+    @content;
+  }
+  &:last-child::after {
+    right: 0;
+  }
+}
+
+@mixin tableOutline {
+  &::after {
+    @include tableBorderHelper(0);
+    @content;
+  }
+}

@@ -1,0 +1,63 @@
+/*
+* Button theme
+*
+*/
+
+.dnb-button {
+  &--primary,
+  &--secondary,
+  &--tertiary {
+    --button-color-icon--disabled: var(--color-black-55);
+    --button-color-text--disabled: var(--color-black-55);
+  }
+
+  &--primary {
+    // Background
+    --button-color-bg--default: var(--color-emerald-green);
+    --button-color-bg--hover: var(--color-sea-green);
+    --button-color-bg--active: var(--color-sea-green);
+    --button-color-bg--disabled: var(--color-black-8);
+
+    // Border
+    --button-color-border--hover: var(--color-sea-green);
+    --button-color-border--disabled: var(--color-black-55);
+
+    // Icon
+    --button-color-icon--hover: var(--color-white);
+    --button-color-icon--active: var(--color-white);
+
+    // Text
+    --button-color-text--hover: var(--color-white);
+    --button-color-text--active: var(--color-white);
+  }
+
+  &--secondary {
+    // Background
+    --button-color-bg--active: var(--color-pistachio);
+    --button-color-bg--disabled: var(--color-white);
+
+    // Border
+    --button-color-border--default: var(--color-emerald-green);
+    --button-color-border--disabled: var(--color-black-55);
+
+    // Icon
+    --button-color-icon--default: var(--color-emerald-green);
+    --button-color-icon--active: var(--color-emerald-green);
+
+    // Text
+    --button-color-text--default: var(--color-emerald-green);
+    --button-color-text--active: var(--color-emerald-green);
+  }
+
+  &--tertiary {
+    // Icon
+    --button-color-icon--default: var(--color-emerald-green);
+    --button-color-icon--hover: var(--color-emerald-green);
+    --button-color-icon--active: var(--color-emerald-green);
+
+    // Text
+    --button-color-text--default: var(--color-emerald-green);
+    --button-color-text--hover: var(--color-emerald-green);
+    --button-color-text--active: var(--color-emerald-green);
+  }
+}

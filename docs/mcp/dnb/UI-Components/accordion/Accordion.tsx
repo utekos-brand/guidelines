@@ -1,0 +1,569 @@
+/**
+ * Web Accordion Component
+ *
+ */
+
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import type {
+  HTMLProps,
+  KeyboardEvent,
+  MouseEvent,
+  ReactNode,
+  RefObject,
+  SyntheticEvent,
+} from 'react'
+
+import { clsx } from 'clsx'
+import {
+  findElementInChildren,
+  extendPropsWithContext,
+  validateDOMAttributes,
+  dispatchCustomElementEvent,
+} from '../../shared/component-helper'
+import { useSpacing } from '../space/SpacingUtils'
+import useId from '../../shared/helpers/useId'
+
+import type { ButtonIconPosition } from '../Button'
+import type { HeadingLevel } from '../Heading'
+import type { IconIcon, IconSize } from '../Icon'
+import type { SkeletonShow } from '../Skeleton'
+import type { SpacingProps } from '../../shared/types'
+
+import AccordionGroup from './AccordionGroup'
+import AccordionHeader from './AccordionHeader'
+import AccordionContent from './AccordionContent'
+import AccordionContext from './AccordionContext'
+import AccordionProviderContext from './AccordionProviderContext'
+import type { AccordionTertiaryProps } from './AccordionTertiary'
+import AccordionTertiary from './AccordionTertiary'
+import Context from '../../shared/Context'
+
+import { AccordionStore, Store, rememberWarning } from './AccordionStore'
+import { accordionDefaultProps, type AccordionGroupProps } from './types'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+export type { AccordionGroupProps, AccordionInstance } from './types'
+export { accordionDefaultProps } from './types'
+
+export type AccordionVariant =
+  | 'plain'
+  | 'default'
+  | 'outlined'
+  | 'filled'
+  | 'tertiary'
+
+export type AccordionHeading = boolean | ReactNode
+
+export type AccordionIcon =
+  | IconIcon
+  | {
+      closed?: IconIcon
+      /**
+       * Use `true` or `false` to control the expanded/collapsed state of the accordion.
+       */
+      expanded?: IconIcon
+    }
+
+export type AccordionIconPosition = ButtonIconPosition
+
+export type AccordionProps = Omit<
+  HTMLProps<HTMLElement>,
+  'ref' | 'onChange' | 'title'
+> &
+  SpacingProps & {
+    /**
+     * A title as a string or React element. It will be used as the button text.
+     */
+    title?: ReactNode
+    description?: ReactNode
+    /**
+     * Use `true` or `false` to control the expanded/collapsed state of the accordion.
+     */
+    expanded?: boolean
+    /**
+     * If set to `true`, the open and close animation will be omitted.
+     */
+    noAnimation?: boolean
+    /**
+     * If set to `true` the accordion will be expanded during SSR. Can be potentially useful for SEO, although it will disturb client hydration, where React expects the same state. But that's mainly a technical aspect to consider.
+     */
+    expandedSsr?: boolean
+    /**
+     * If set to `true` the content will be present, even when the accordion is not expanded. Can be useful for assistive technology or SEO.
+     */
+    keepInDOM?: boolean
+    /**
+     * If set to `true` the accordion component will not re-render its content – can be useful for components you don't have control of storing the temporary state during an interaction.
+     */
+    preventRerender?: boolean
+    /**
+     * Use this property together with `preventRerender` – and if it is set to `true`, the accordion component will re-render if the children are a new React element and do not match the previous one anymore.
+     */
+    preventRerenderConditional?: boolean
+    /**
+     * If set to `true`, it will remember a changed state initiated by the user. It requires a unique `id`. It will store the state in the local storage.
+     */
+    rememberState?: boolean
+    /**
+     * Send along a custom `React.Ref` for `.dnb-accordion__content`.
+     */
+    contentRef?: RefObject<HTMLElement | null>
+    /**
+     * If set to `true`, the saved (remembered) state will be removed and the initial component state will be used and set.
+     */
+    flushRememberedState?: boolean
+    /**
+     * If set to `true`, a group of accordions will be wrapped into a sidebar-looking menu for medium and larger screens.
+     */
+    singleContainer?: boolean
+    /**
+     * Defines the used styling. `outlined`, `filled`, `plain` (no styling), `default`, or `tertiary` (renders a tertiary button). Defaults to `outlined`.
+     */
+    variant?: AccordionVariant
+    /**
+     * Will add a React element on the left side of the `title`, inside `AccordionHeaderContainer`.
+     */
+    leftComponent?: ReactNode
+    /**
+     * If set to `true`, the accordion button will be disabled (dimmed).
+     */
+    disabled?: boolean
+    /**
+     * If set to `true`, an overlaying skeleton with animation will be shown.
+     */
+    skeleton?: SkeletonShow
+    /**
+     * A unique `id` that will be used on the button element. If you use `rememberState`, an id is required.
+     */
+    id?: string
+    group?: string
+    /**
+     * Gives you the option to replace the used `button` element. Provide a React element, including a string (HTML element). Defaults to a `div` with all the needed accessibility features included.
+     */
+    element?: ReactNode
+    /**
+     * If set to `true`, level 2 (h2) will be used. You can provide your own HTML heading (`h3`), or provide a `headingLevel` property.
+     */
+    heading?: AccordionHeading
+    /**
+     * If `heading` is set to `true`, you can provide a numeric value to define a different heading level. Defaults to `2`.
+     */
+    headingLevel?: HeadingLevel
+    /**
+     * Will replace the `chevron` icon. The icon will still rotate (by CSS). You can use an object to use two different icons, one for the closed state and one for the expanded state `{ closed, expanded }`.
+     */
+    icon?: AccordionIcon
+    /**
+     * Will set the placement of the icon. Defaults to `left`.
+     */
+    iconPosition?: AccordionIconPosition
+    /**
+     * Define a different icon size. Defaults to `medium` (1.5rem).
+     */
+    iconSize?: IconSize
+    className?: string
+    children?: ReactNode
+    /**
+     * Will be called by user click interaction. Returns an object with a boolean state `expanded` inside `{ expanded, event }`.
+     */
+    onChange?: (event: AccordionChangeEvent) => void
+  }
+
+export type AccordionChangeEvent = {
+  expanded: boolean
+  event: SyntheticEvent
+}
+
+function Accordion({
+  variant = 'outlined',
+  ...restOfProps
+}: AccordionProps) {
+  if (variant === 'tertiary') {
+    return (
+      <AccordionTertiary
+        {...(restOfProps as unknown as AccordionTertiaryProps)}
+      />
+    )
+  }
+
+  return <AccordionDefault variant={variant} {...restOfProps} />
+}
+
+function AccordionDefault({
+  variant = 'outlined',
+  iconSize = 'medium',
+  ...restOfProps
+}: AccordionProps) {
+  const props = { variant, iconSize, ...restOfProps }
+
+  const context = useContext(AccordionProviderContext)
+
+  const group = props.group || context?.group
+  const id = useId(props.id)
+
+  const store = useMemo(
+    () => new Store({ id: props.id, group }),
+    [props.id, group]
+  )
+
+  // States ordered last here to make sure that the getInitialExpandedState have access to the store
+  const [previousExpanded, setPreviousExpanded] = useState(props.expanded)
+  const [expanded, setExpanded] = useState<boolean>(
+    getInitialExpandedState()
+  )
+  const hasAddedCallbackRef = useRef<boolean>(false)
+
+  // replacement for getDerivedStateFromProps
+  if (props.expanded !== previousExpanded) {
+    setExpanded(props.expanded !== undefined ? props.expanded : false)
+    setPreviousExpanded(props.expanded)
+  }
+
+  const thisInstance = {
+    _id: id,
+    context,
+    handleDisabledClick,
+    callOnChange,
+    callOnChangeHandler,
+    close,
+    setExpandedState,
+    state: { expanded, group },
+    props,
+    store,
+  }
+
+  // Constructor
+  useEffect(() => {
+    if (group && typeof window !== 'undefined') {
+      window['__dnbAccordion'] = window['__dnbAccordion'] || {}
+      window['__dnbAccordion'][group] =
+        window['__dnbAccordion'][group] || new AccordionStore(group)
+
+      window['__dnbAccordion'][group].addInstance(thisInstance)
+    }
+
+    if (context && typeof context?.onInit === 'function') {
+      context.onInit(thisInstance)
+    }
+
+    return () => {
+      if (group && typeof window !== 'undefined') {
+        window?.['__dnbAccordion'][group]?.removeInstance(thisInstance)
+      }
+    }
+  }, [])
+
+  // Sync expanded state from context
+  useEffect(() => {
+    if (context.flushRememberedState) {
+      store.flush()
+      setExpanded(props.expanded)
+    }
+
+    if (context?.expandedId && context.expandedId === props.id) {
+      setExpanded(true)
+    }
+  }, [
+    context.flushRememberedState,
+    context.expandedId,
+    props.expanded,
+    props.id,
+    store,
+  ])
+
+  // Add callback for closing all accordions inside a group if collapseAllHandleRef is defined
+  if (context?.collapseAllHandleRef && !hasAddedCallbackRef.current) {
+    context?.collapseAccordionCallbacks?.current.push(close)
+    hasAddedCallbackRef.current = true
+  }
+
+  // Gets the initial expanded sate, to prevent the opening and closing of Accordion
+  // That happens when if we put this logic in a useEffect that runs after the initial expanded state is set
+  // Since useEffect runs after every render
+  function getInitialExpandedState() {
+    if (props.expandedSsr || context?.expandedSsr) {
+      return typeof window === 'undefined'
+    }
+
+    if (props.rememberState || context.rememberState) {
+      const storedExpanded = store.getState()
+
+      if (props.expanded && storedExpanded === false) {
+        return false
+      }
+
+      if (storedExpanded) {
+        return true
+      }
+    }
+
+    return props.expanded !== undefined
+      ? props.expanded
+      : context?.expanded !== undefined
+        ? context.expanded
+        : false
+  }
+
+  function setExpandedState(expanded: boolean) {
+    setExpanded(expanded)
+  }
+
+  function close() {
+    changeOpened(false)
+  }
+
+  function changeOpened(expanded: boolean) {
+    setExpanded(expanded)
+
+    // check if an event exists, because, then it's a user click
+    if (props.rememberState || context.rememberState) {
+      store.saveState(expanded)
+    }
+  }
+
+  function handleDisabledClick(e: MouseEvent<HTMLElement>) {
+    e.preventDefault()
+    return false
+  }
+
+  type AccordionInternalChangeParams = {
+    id: string
+    group: string
+    expanded: boolean
+    event: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>
+  }
+
+  function callOnChangeHandler(params: AccordionInternalChangeParams) {
+    callOnChange(params)
+    if (context?.onChange) {
+      context?.onChange(params)
+    }
+    if (group && typeof window !== 'undefined') {
+      window?.['__dnbAccordion'][group]?.onChange(params)
+    }
+  }
+
+  function callOnChange(params: AccordionInternalChangeParams) {
+    const { expanded, event } = params
+
+    changeOpened(expanded)
+
+    dispatchCustomElementEvent(thisInstance, 'onChange', {
+      expanded,
+      event,
+    })
+  }
+
+  const globalContext = useContext(Context)
+  const nestedContext = useContext(AccordionContext)
+
+  // use only the props from context, who are available here anyway
+  let expandedState = expanded
+
+  const extendedProps = extendPropsWithContext(
+    props,
+    accordionDefaultProps,
+    context, // group context
+    nestedContext as Record<string, unknown>, // internal context
+    { skeleton: globalContext?.skeleton },
+    globalContext.Accordion, // global context
+    globalContext.translation['Accordion']
+  )
+
+  if (expandedState === undefined && globalContext.Accordion) {
+    if (globalContext.Accordion.expanded) {
+      expandedState = extendedProps.expanded
+    }
+  }
+
+  const {
+    variant: extendedVariant,
+    className,
+    keepInDOM,
+    preventRerender,
+    preventRerenderConditional,
+    singleContainer,
+    rememberState,
+    disabled,
+    skeleton,
+    noAnimation,
+    expandedSsr: _expandedSsr,
+    children,
+
+    id: _id,
+    group: _group,
+    // expanded: _expanded,
+
+    title,
+    description,
+    leftComponent,
+    icon,
+    iconPosition,
+    iconSize: _iconSize,
+    onChange,
+
+    contentRef,
+
+    ...restOfExtendedProps
+  } = extendedProps
+
+  const mainParams = useSpacing(extendedProps, {
+    id,
+    className: clsx(
+      'dnb-accordion',
+      expandedState && 'dnb-accordion--expanded',
+      extendedVariant && `dnb-accordion__variant--${extendedVariant}`,
+      keepInDOM && 'dnb-accordion--prerender',
+      className
+    ),
+  }) as HTMLProps<HTMLDivElement>
+
+  if (disabled) {
+    mainParams.onClick = handleDisabledClick
+  }
+
+  // to remove spacing props
+  validateDOMAttributes(props, restOfExtendedProps)
+
+  const extendedPropsForContext = extendPropsWithContext(
+    props,
+    accordionDefaultProps,
+    { expanded, group },
+    context
+  )
+
+  const accordionContext = {
+    ...extendedPropsForContext,
+    id,
+    expanded: expandedState,
+    keepInDOM: keepInDOM,
+    preventRerender: preventRerender,
+    preventRerenderConditional: preventRerenderConditional,
+    singleContainer: singleContainer,
+    rememberState: rememberState,
+    disabled: disabled,
+    skeleton: skeleton,
+    noAnimation: noAnimation,
+    callOnChange: callOnChangeHandler,
+  }
+
+  return (
+    <AccordionContext value={accordionContext}>
+      <div {...mainParams}>
+        {findElementInChildren(
+          children,
+          (cur) => cur.type === AccordionHeader
+        ) ? null : (
+          <AccordionHeader />
+        )}
+        {findElementInChildren(
+          children,
+          (cur) => cur.type === AccordionContent
+        ) ? (
+          children
+        ) : (
+          <AccordionContent>{children}</AccordionContent>
+        )}
+      </div>
+    </AccordionContext>
+  )
+}
+
+const Group = ({
+  expandBehavior = 'single',
+  ...props
+}: AccordionGroupProps) => {
+  if (props.rememberState && !props.id) {
+    rememberWarning('accordion group')
+  }
+
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  const instanceIDs = useRef<string[]>([])
+
+  const fallbackGroup = useId()
+
+  const group = props?.id
+    ? props.id
+    : !props.group
+      ? '#' + fallbackGroup
+      : undefined
+
+  const store = useMemo(() => new Store({ group }), [group])
+
+  // Set stored expandedId on mount
+  useEffect(() => {
+    const storedData = store.getData()
+    const currentIDs = instanceIDs?.current
+
+    if (!storedData?.id) {
+      return
+    }
+
+    if (currentIDs.includes(storedData?.id)) {
+      return
+    }
+
+    // 1. get the fallback id
+    const fallbackId = currentIDs[0]
+
+    if (!fallbackId) {
+      return
+    }
+
+    // 2. set the fallback ids
+    setExpandedId(fallbackId)
+  }, [store])
+
+  // Store and reset fallback id
+  useEffect(() => {
+    if (!expandedId) {
+      return
+    }
+
+    // 3. save the fallback id
+    store.saveState(true, expandedId)
+
+    // 4. and reset the fallback id
+    setExpandedId(null)
+  }, [expandedId, store])
+
+  function onInit(instance) {
+    if (
+      instance.props.id &&
+      !instanceIDs.current.includes(instance.props.id)
+    ) {
+      instanceIDs.current.push(instance.props.id)
+    }
+  }
+
+  return (
+    <AccordionGroup
+      onInit={onInit}
+      {...props}
+      group={group}
+      expandBehavior={expandBehavior}
+      expandedId={expandedId || props.expandedId}
+    />
+  )
+}
+
+Accordion.Provider = AccordionGroup
+Accordion.Header = AccordionHeader
+Accordion.Content = AccordionContent
+
+Accordion.Group = Group
+
+Group.Store = (group: string, id: string = null) => {
+  return new Store({ group, id })
+}
+
+Accordion.Store = (id: string) => {
+  return new Store({ id })
+}
+
+withComponentMarkers(Accordion, {
+  _supportsSpacingProps: true,
+})
+
+export default Accordion

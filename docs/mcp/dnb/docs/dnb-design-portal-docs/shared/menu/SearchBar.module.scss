@@ -1,0 +1,38 @@
+@use '@dnb/eufemia/src/style/core/utilities.scss' as utilities;
+
+.autocompleteStyle {
+  :global {
+    margin-right: 1rem;
+
+    @include utilities.allBelow(small) {
+      margin-right: 0.5rem;
+    }
+
+    .dnb-autocomplete__shell {
+      &,
+      input {
+        width: 40vw;
+
+        @include utilities.allBelow(small) {
+          width: 50vw;
+        }
+      }
+    }
+  }
+}
+
+.portalClassStyle {
+  z-index: 6000;
+}
+
+.drawerClassStyle {
+  :global {
+    .search-logo {
+      min-width: 4rem;
+      height: 1rem;
+      margin: 1rem;
+
+      filter: grayscale(1);
+    }
+  }
+}

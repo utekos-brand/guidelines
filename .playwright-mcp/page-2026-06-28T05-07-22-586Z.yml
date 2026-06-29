@@ -1,0 +1,13 @@
+- generic [active] [ref=e1]:
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - button "Toggle Sidebar" [ref=e5]:
+        - img
+        - generic [ref=e6]: Toggle Sidebar
+      - separator [ref=e7]
+      - paragraph [ref=e9]: Utekos Brand
+    - heading "Utekos Brand" [level=1] [ref=e12]
+    - generic [ref=e13]: Utekos Brand Guidelines
+  - button "Open Next.js Dev Tools" [ref=e19] [cursor=pointer]:
+    - img [ref=e20]
+  - alert [ref=e23]

@@ -1,0 +1,155 @@
+/**
+ * Web DatePicker Component
+ *
+ */
+
+import { useCallback, useContext } from 'react'
+import type { HTMLProps, MouseEvent } from 'react'
+import Button from '../button/Button'
+import DatePickerContext from './DatePickerContext'
+import { convertStringToDate } from './DatePickerCalc'
+import { useTranslation } from '../../shared'
+import type { DatePickerDates } from './hooks/useDates'
+
+type DatePickerFooterEvent = MouseEvent<HTMLButtonElement> &
+  DatePickerDates & {
+    event: MouseEvent<HTMLButtonElement>
+  }
+
+type DatePickerFooterProps = Omit<
+  HTMLProps<HTMLElement>,
+  'onSubmit' | 'onCancel' | 'onReset'
+> & {
+  isRange: boolean
+  onSubmit?: (event: DatePickerFooterEvent) => void
+  onCancel?: (event: DatePickerFooterEvent) => void
+  onReset?: (event: DatePickerFooterEvent) => void
+  submitButtonText?: string
+  cancelButtonText?: string
+  resetButtonText?: string
+}
+
+function DatePickerFooter({
+  isRange,
+  submitButtonText,
+  cancelButtonText,
+  resetButtonText,
+  onSubmit,
+  onCancel,
+  onReset,
+}: DatePickerFooterProps) {
+  const {
+    updateDates,
+    previousDateProps,
+    startDate,
+    endDate,
+    submittedDates,
+    setSubmittedDates,
+    dateFormat,
+    props: contextProps,
+  } = useContext(DatePickerContext)
+
+  const { showResetButton, showCancelButton, showSubmitButton } =
+    contextProps
+
+  const {
+    submitButtonText: submitButtonTextTranslation,
+    cancelButtonText: cancelButtonTextTranslation,
+    resetButtonText: resetButtonTextTranslation,
+  } = useTranslation().DatePicker
+
+  const onSubmitHandler = useCallback(
+    (args: DatePickerFooterEvent) => {
+      onSubmit?.(args)
+      setSubmittedDates({ startDate, endDate })
+    },
+    [onSubmit, startDate, endDate, setSubmittedDates]
+  )
+
+  const onCancelHandler = useCallback(
+    (args: DatePickerFooterEvent) => {
+      updateDates(submittedDates, (dates) => {
+        onCancel?.({ ...args, ...dates })
+      })
+    },
+    [updateDates, onCancel, submittedDates]
+  )
+
+  const onResetHandler = useCallback(
+    (args: DatePickerFooterEvent) => {
+      const startDate = previousDateProps.startDate
+        ? convertStringToDate(previousDateProps.startDate, {
+            dateFormat,
+          })
+        : previousDateProps.date
+          ? convertStringToDate(previousDateProps.date, {
+              dateFormat,
+            })
+          : undefined
+
+      const endDate = previousDateProps.endDate
+        ? convertStringToDate(previousDateProps.endDate, {
+            dateFormat,
+          })
+        : startDate
+      updateDates(
+        {
+          startDate,
+          endDate,
+        },
+        (dates) => {
+          onReset?.({ ...args, ...dates })
+        }
+      )
+    },
+    [dateFormat, updateDates, previousDateProps, onReset]
+  )
+
+  if (
+    !isRange &&
+    !showSubmitButton &&
+    !showCancelButton &&
+    !showResetButton
+  ) {
+    return null
+  }
+
+  return (
+    <div className="dnb-date-picker__footer">
+      {((isRange || showSubmitButton) && (
+        <Button
+          text={submitButtonText || submitButtonTextTranslation}
+          onClick={onSubmitHandler}
+          data-testid="submit"
+        />
+      )) || <span />}
+
+      <span>
+        {(showResetButton && (
+          <Button
+            text={resetButtonText || resetButtonTextTranslation}
+            icon="reset"
+            iconPosition="left"
+            variant="tertiary"
+            onClick={onResetHandler}
+            data-testid="reset"
+            right="1rem"
+          />
+        )) || <span />}
+
+        {((isRange || showCancelButton) && (
+          <Button
+            text={cancelButtonText || cancelButtonTextTranslation}
+            icon="close"
+            iconPosition="left"
+            variant="tertiary"
+            onClick={onCancelHandler}
+            data-testid="cancel"
+          />
+        )) || <span />}
+      </span>
+    </div>
+  )
+}
+
+export default DatePickerFooter

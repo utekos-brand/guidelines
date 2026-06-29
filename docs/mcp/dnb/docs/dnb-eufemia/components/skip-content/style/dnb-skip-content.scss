@@ -1,0 +1,33 @@
+/*
+* SkipContent component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-skip-content {
+  &--visible {
+    display: flex;
+  }
+
+  .dnb-button {
+    margin: 1rem 0;
+  }
+
+  &__focus:focus {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: #{var(--focus-ring-width)};
+
+      @include utilities.focusRing();
+    }
+  }
+
+  // Only show the return, when it was focused before
+  &__return:not(#{&}__return--active) button.dnb-sr-only {
+    display: none;
+  }
+}

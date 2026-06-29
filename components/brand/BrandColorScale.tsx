@@ -1,11 +1,11 @@
-import { BrandColorCopySwatch } from '@/components/brand/BrandColorCopySwatch'
-import type { BrandColorToken } from '@/lib/brand/color-tokens'
-import { contrastGrade } from '@/lib/brand/color-tokens'
+import { BrandColorCopySwatch } from "@/components/brand/BrandColorCopySwatch";
+import type { BrandColorToken } from "@/lib/brand/color-tokens";
+import { contrastGrade } from "@/lib/brand/color-tokens";
 
 type BrandColorScaleProps = {
-  tokens: BrandColorToken[]
-  onCompare: (token: BrandColorToken) => void
-}
+  tokens: BrandColorToken[];
+  onCompare: (token: BrandColorToken) => void;
+};
 
 export function BrandColorScale({ tokens, onCompare }: BrandColorScaleProps) {
   return (
@@ -13,7 +13,7 @@ export function BrandColorScale({ tokens, onCompare }: BrandColorScaleProps) {
       {tokens.map((token) => (
         <article
           key={token.id}
-          className="grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] overflow-hidden border border-border bg-panel"
+          className="border-border bg-panel grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] overflow-hidden border"
         >
           <BrandColorCopySwatch
             color={token.hex ?? token.resolvedValue}
@@ -24,23 +24,21 @@ export function BrandColorScale({ tokens, onCompare }: BrandColorScaleProps) {
             onCompare={() => onCompare(token)}
           />
           <div className="min-w-0 px-3 py-2">
-            <h4 className="truncate text-sm font-semibold text-foreground">
-              {token.label}
-            </h4>
-            <p className="mt-1 font-mono text-xs text-muted">{token.hex ?? token.value}</p>
-            <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-[0.72rem] text-muted">
+            <h4 className="text-foreground truncate text-sm font-semibold">{token.label}</h4>
+            <p className="text-muted-foreground mt-1 font-mono text-xs">
+              {token.hex ?? token.value}
+            </p>
+            <dl className="text-muted-foreground mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-[0.72rem]">
               <dt>WCAG</dt>
-              <dd className="text-right text-foreground">
+              <dd className="text-foreground text-right">
                 {contrastGrade(token.wcagContrastVsBackground)}
               </dd>
               <dt>Pantone</dt>
-              <dd className="truncate text-right text-foreground">
-                {token.pantone ?? '-'}
-              </dd>
+              <dd className="text-foreground truncate text-right">{token.pantone ?? "-"}</dd>
             </dl>
           </div>
         </article>
       ))}
     </div>
-  )
+  );
 }

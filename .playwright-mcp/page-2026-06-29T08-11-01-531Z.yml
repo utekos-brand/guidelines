@@ -1,0 +1,166 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "Utekos Brand" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - img "Utekos Brand" [ref=e11]
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: Grunnlag
+          - list [ref=e16]:
+            - listitem [ref=e17]:
+              - link "Merkevaren Utekos" [ref=e18] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e19]: Merkevaren Utekos
+            - listitem [ref=e20]:
+              - link "Logo" [ref=e21] [cursor=pointer]:
+                - /url: /logo
+                - generic [ref=e22]: Logo
+        - generic [ref=e23]:
+          - generic [ref=e24]: Visuell identitet
+          - list [ref=e26]:
+            - listitem [ref=e27]:
+              - link "Farger" [ref=e28] [cursor=pointer]:
+                - /url: /farger
+                - generic [ref=e29]: Farger
+            - listitem [ref=e30]:
+              - link "Themes" [ref=e31] [cursor=pointer]:
+                - /url: /themes
+                - generic [ref=e32]: Themes
+              - generic: Lab
+            - listitem [ref=e33]:
+              - link "Typografi" [ref=e34] [cursor=pointer]:
+                - /url: /typografi
+                - generic [ref=e35]: Typografi
+            - listitem [ref=e36]:
+              - link "Fotografi" [ref=e37] [cursor=pointer]:
+                - /url: /fotografi
+                - generic [ref=e38]: Fotografi
+            - listitem [ref=e39]:
+              - link "Illustrasjoner" [ref=e40] [cursor=pointer]:
+                - /url: /illustrasjoner
+                - generic [ref=e41]: Illustrasjoner
+            - listitem [ref=e42]:
+              - link "Ikoner" [ref=e43] [cursor=pointer]:
+                - /url: /ikoner
+                - generic [ref=e44]: Ikoner
+            - listitem [ref=e45]:
+              - link "Grafisk element" [ref=e46] [cursor=pointer]:
+                - /url: /grafisk-element
+                - generic [ref=e47]: Grafisk element
+        - separator [ref=e48]
+        - generic [ref=e49]:
+          - generic [ref=e50]: Anvendelse
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - link "Identiteten i bruk" [ref=e54] [cursor=pointer]:
+                - /url: /identiteten-i-bruk
+                - generic [ref=e55]: Identiteten i bruk
+    - main [ref=e56]:
+      - generic [ref=e57]:
+        - button "Toggle Sidebar" [ref=e59]:
+          - img
+          - generic [ref=e60]: Toggle Sidebar
+        - navigation "Hovednavigasjon" [ref=e61]:
+          - list [ref=e62]:
+            - listitem [ref=e63]:
+              - link "Identitet" [ref=e64] [cursor=pointer]:
+                - /url: /identitet
+            - listitem [ref=e65]:
+              - link "Ressurser" [ref=e66] [cursor=pointer]:
+                - /url: /ressurser
+            - listitem [ref=e67]:
+              - button "Søk" [ref=e68]:
+                - img [ref=e69]
+                - text: Søk
+            - listitem [ref=e72]:
+              - button "Utseende" [ref=e73]:
+                - img [ref=e74]
+                - text: Utseende
+      - article [ref=e80]:
+        - heading "Lenke til seksjonen" [level=1] [ref=e81]:
+          - link "Lenke til seksjonen" [ref=e82] [cursor=pointer]:
+            - /url: "#themes"
+            - text: Themes
+        - paragraph [ref=e83]: Hver theme-retning dokumenteres separat. Denne siden er bare en indeks; farger, shades, tones og semantiske mappinger vises på undersidene.
+        - generic [ref=e84]:
+          - link "Utekos theme styles/tokens/palette.css + color-tokens.json + PLAN.md 272 dokumenterte fargeverdier Maritime Blue oklch(0.2948 0.0419 195.12) Cloud Dancer oklch(0.9493 0.007 88.64) Iced Apricot oklch(0.86 0.09 63) Fjellbla oklch(0.45 0.055 225) Havdyp 950 oklch(0.1142 0.0511 290.62) Havdyp 900 oklch(0.16 0.048 285) Havdyp 800 oklch(0.22 0.044 280) Parchment 50 oklch(0.9649 0.005 78.3)" [ref=e85] [cursor=pointer]:
+            - /url: /themes/utekos
+            - generic [ref=e86]:
+              - generic [ref=e87]: Utekos theme
+              - generic [ref=e88]: styles/tokens/palette.css + color-tokens.json + PLAN.md
+              - generic [ref=e89]: 272 dokumenterte fargeverdier
+            - generic [ref=e90]:
+              - generic "Maritime Blue oklch(0.2948 0.0419 195.12)" [ref=e91]
+              - generic "Cloud Dancer oklch(0.9493 0.007 88.64)" [ref=e92]
+              - generic "Iced Apricot oklch(0.86 0.09 63)" [ref=e93]
+              - generic "Fjellbla oklch(0.45 0.055 225)" [ref=e94]
+              - generic "Havdyp 950 oklch(0.1142 0.0511 290.62)" [ref=e95]
+              - generic "Havdyp 900 oklch(0.16 0.048 285)" [ref=e96]
+              - generic "Havdyp 800 oklch(0.22 0.044 280)" [ref=e97]
+              - generic "Parchment 50 oklch(0.9649 0.005 78.3)" [ref=e98]
+          - link "Havdyp theme styles/themes/havdyp.css + styles/tokens/palette.css 87 dokumenterte fargeverdier Havdyp 950 oklch(0.1142 0.0511 290.62) Havdyp 900 oklch(0.16 0.048 285) Havdyp 800 oklch(0.22 0.044 280) Cloud Dancer oklch(0.9493 0.007 88.64) Parchment 50 oklch(0.9649 0.005 78.3) Parchment 100 oklch(0.9306 0.01 93.57) Iced Apricot oklch(0.86 0.09 63) Fjellbla oklch(0.45 0.055 225)" [ref=e99] [cursor=pointer]:
+            - /url: /themes/havdyp
+            - generic [ref=e100]:
+              - generic [ref=e101]: Havdyp theme
+              - generic [ref=e102]: styles/themes/havdyp.css + styles/tokens/palette.css
+              - generic [ref=e103]: 87 dokumenterte fargeverdier
+            - generic [ref=e104]:
+              - generic "Havdyp 950 oklch(0.1142 0.0511 290.62)" [ref=e105]
+              - generic "Havdyp 900 oklch(0.16 0.048 285)" [ref=e106]
+              - generic "Havdyp 800 oklch(0.22 0.044 280)" [ref=e107]
+              - generic "Cloud Dancer oklch(0.9493 0.007 88.64)" [ref=e108]
+              - generic "Parchment 50 oklch(0.9649 0.005 78.3)" [ref=e109]
+              - generic "Parchment 100 oklch(0.9306 0.01 93.57)" [ref=e110]
+              - generic "Iced Apricot oklch(0.86 0.09 63)" [ref=e111]
+              - generic "Fjellbla oklch(0.45 0.055 225)" [ref=e112]
+          - 'link "DNB theme Eufemia tokens + styles/themes/dnb.css 473 dokumenterte fargeverdier Light background Action #007272 Light background Page Background #ffffff Light text Neutral #333333 Light background Warning #fdbb31 Light background Error #d52525 Light decorative First Base #4a948d Light decorative Second Base #47d197 Light decorative Third Base #80ba77" [ref=e113] [cursor=pointer]':
+            - /url: /themes/dnb
+            - generic [ref=e114]:
+              - generic [ref=e115]: DNB theme
+              - generic [ref=e116]: Eufemia tokens + styles/themes/dnb.css
+              - generic [ref=e117]: 473 dokumenterte fargeverdier
+            - generic [ref=e118]:
+              - 'generic "Light background Action #007272" [ref=e119]'
+              - 'generic "Light background Page Background #ffffff" [ref=e120]'
+              - 'generic "Light text Neutral #333333" [ref=e121]'
+              - 'generic "Light background Warning #fdbb31" [ref=e122]'
+              - 'generic "Light background Error #d52525" [ref=e123]'
+              - 'generic "Light decorative First Base #4a948d" [ref=e124]'
+              - 'generic "Light decorative Second Base #47d197" [ref=e125]'
+              - 'generic "Light decorative Third Base #80ba77" [ref=e126]'
+          - 'link "Vy theme Spor MCP snapshot + styles/themes/vy.css 173 dokumenterte fargeverdier Green 700 #00685e Green 200 #b2dfd7 Green 1100 #001211 Grey 800 #2b2b2c White #ffffff Blue 800 #003a70 Yellow 400 #f1c400 Orange 500 #df8200" [ref=e127] [cursor=pointer]':
+            - /url: /themes/vy
+            - generic [ref=e128]:
+              - generic [ref=e129]: Vy theme
+              - generic [ref=e130]: Spor MCP snapshot + styles/themes/vy.css
+              - generic [ref=e131]: 173 dokumenterte fargeverdier
+            - generic [ref=e132]:
+              - 'generic "Green 700 #00685e" [ref=e133]'
+              - 'generic "Green 200 #b2dfd7" [ref=e134]'
+              - 'generic "Green 1100 #001211" [ref=e135]'
+              - 'generic "Grey 800 #2b2b2c" [ref=e136]'
+              - 'generic "White #ffffff" [ref=e137]'
+              - 'generic "Blue 800 #003a70" [ref=e138]'
+              - 'generic "Yellow 400 #f1c400" [ref=e139]'
+              - 'generic "Orange 500 #df8200" [ref=e140]'
+          - link "Custom palettes PLAN.md 47 dokumenterte fargeverdier Maritime 50 oklch(0.97 0.008 279.42) Maritime 100 oklch(0.92 0.015 279.42) Maritime 200 oklch(0.84 0.025 279.42) Maritime 300 oklch(0.74 0.032 279.42) Maritime 400 oklch(0.64 0.036 279.42) Maritime 500 oklch(0.54 0.036 279.42) Maritime 600 oklch(0.44 0.036 279.42) Maritime 700 oklch(0.35 0.036 279.42)" [ref=e141] [cursor=pointer]:
+            - /url: /themes/custom
+            - generic [ref=e142]:
+              - generic [ref=e143]: Custom palettes
+              - generic [ref=e144]: PLAN.md
+              - generic [ref=e145]: 47 dokumenterte fargeverdier
+            - generic [ref=e146]:
+              - generic "Maritime 50 oklch(0.97 0.008 279.42)" [ref=e147]
+              - generic "Maritime 100 oklch(0.92 0.015 279.42)" [ref=e148]
+              - generic "Maritime 200 oklch(0.84 0.025 279.42)" [ref=e149]
+              - generic "Maritime 300 oklch(0.74 0.032 279.42)" [ref=e150]
+              - generic "Maritime 400 oklch(0.64 0.036 279.42)" [ref=e151]
+              - generic "Maritime 500 oklch(0.54 0.036 279.42)" [ref=e152]
+              - generic "Maritime 600 oklch(0.44 0.036 279.42)" [ref=e153]
+              - generic "Maritime 700 oklch(0.35 0.036 279.42)" [ref=e154]
+  - button "Open Next.js Dev Tools" [ref=e160] [cursor=pointer]:
+    - img [ref=e161]
+  - alert [ref=e164]

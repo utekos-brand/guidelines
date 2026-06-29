@@ -1,0 +1,78 @@
+import { useContext } from 'react'
+/**
+ * Web HelpButton Component
+ *
+ */
+
+import { clsx } from 'clsx'
+import {
+  convertJsxToString,
+  extendPropsWithContext,
+} from '../../shared/component-helper'
+import Context from '../../shared/Context'
+import { useSpacing } from '../space/SpacingUtils'
+import type { ButtonProps } from '../button/Button'
+import Button from '../button/Button'
+
+const defaultProps: Partial<ButtonProps> = {
+  variant: 'secondary',
+  iconPosition: 'left',
+}
+
+export default function HelpButtonInstance(localProps: ButtonProps) {
+  const context = useContext(Context)
+
+  // use only the props from context, who are available here anyway
+  const props = extendPropsWithContext(
+    localProps,
+    defaultProps,
+    context.HelpButton
+  )
+
+  const { size, icon, onClick, className, ...rest } = props
+
+  const params = useSpacing(props, {
+    className: clsx('dnb-help-button', className),
+    size,
+    icon,
+    ...rest,
+  })
+
+  const isPotentialHelpButton =
+    !params.text || params.variant === 'tertiary'
+
+  if (isPotentialHelpButton && !params.icon && params.icon !== false) {
+    params.icon = 'question'
+  }
+
+  const isHelpButton =
+    isPotentialHelpButton &&
+    ['question', 'information'].includes(String(params.icon))
+
+  if (isHelpButton) {
+    if (!params['aria-roledescription']) {
+      params['aria-roledescription'] =
+        context.getTranslation(props).HelpButton.ariaRole
+    }
+  }
+
+  if (!params.text && typeof params['aria-label'] === 'undefined') {
+    let ariaLabel = convertJsxToString(props.title || props.children)
+    if (!ariaLabel) {
+      ariaLabel = context.getTranslation(props).HelpButton.title
+    }
+    params['aria-label'] = ariaLabel
+  }
+
+  if (icon === 'information' && !size) {
+    params.iconSize = 'medium'
+  }
+  if (params.title && !params.tooltip && params.tooltip !== false) {
+    params.tooltip = params.title
+  }
+  if (params.tooltip) {
+    params.title = null
+  }
+
+  return <Button onClick={onClick} {...params} />
+}

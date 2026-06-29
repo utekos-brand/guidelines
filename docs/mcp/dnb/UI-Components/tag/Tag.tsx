@@ -1,0 +1,221 @@
+import { useContext } from 'react'
+import type { HTMLProps, MouseEvent, ReactNode } from 'react'
+import { clsx } from 'clsx'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+// Components
+import IconPrimary from '../icon-primary/IconPrimary'
+import type { IconIcon } from '../icon/Icon'
+import type { ButtonProps, ButtonOnClick } from '../button/Button'
+import Button from '../button/Button'
+
+// Shared
+import Context from '../../shared/Context'
+import type { SpacingProps } from '../../shared/types'
+import type { SkeletonShow } from '../skeleton/Skeleton'
+import {
+  warn,
+  extendPropsWithContext,
+} from '../../shared/component-helper'
+
+// Internal
+import TagGroup from './TagGroup'
+import { TagGroupContext } from './TagContext'
+import { useSpacing } from '../space/SpacingUtils'
+
+export type TagProps = {
+  /**
+   * The content of the tag can be a string or a React Element.
+   */
+  text?: string | ReactNode
+
+  /**
+   * To be included in the tag. Primary Icons can be set as a string (e.g. `icon="chevron_right"`), other icons should be set as React elements. Note, we recommend not to use icons with clickable tags.
+   */
+  icon?: IconIcon
+
+  /**
+   * If a label is given, typically inside a table or dl (definition list), then you can disable Tag.Group as a dependent of Tag. Use `true` to omit the `Tag group required:` warning.
+   */
+  hasLabel?: boolean
+
+  /**
+   * Possible values are `default`, `clickable`, `addable`, or `removable`. Defaults to `default`.
+   */
+  variant?: 'default' | 'clickable' | 'addable' | 'removable'
+
+  /**
+   * Custom `className` for the component root.
+   */
+  className?: string
+
+  /**
+   * If set to `true`, an overlaying skeleton with animation will be shown.
+   */
+  skeleton?: SkeletonShow
+
+  /**
+   * The content of the tag can be a string or a React Element.
+   */
+  children?: string | ReactNode // ReactNode allows multiple elements, strings, numbers, fragments, portals...
+
+  /**
+   * Will be called on a click event. Returns the native event.
+   */
+  onClick?: (args: { event: MouseEvent<HTMLButtonElement> }) => void
+
+  /**
+   * Set to `true` to omit triggering an event when the user releases the `Delete` or `Backspace` keys. Defaults to `false`.
+   */
+  omitOnKeyUpDeleteEvent?: boolean
+
+  /**
+   * Internal property
+   * Has translation in context
+   */
+  removeIconTitle?: string
+
+  /**
+   * Internal property
+   * Has translation in context
+   */
+  addIconTitle?: string
+}
+
+const defaultProps: Partial<TagProps> = {
+  omitOnKeyUpDeleteEvent: false,
+}
+
+const Tag = (
+  localProps: TagProps &
+    SpacingProps &
+    Omit<HTMLProps<HTMLElement>, 'onClick'>
+) => {
+  // Every component should have a context
+  const context = useContext(Context)
+  const tagGroupContext = useContext(TagGroupContext)
+
+  // Extract additional props from global context
+  const allProps = extendPropsWithContext(
+    localProps,
+    defaultProps,
+    context?.translation?.Tag,
+    context?.Tag,
+    tagGroupContext
+  )
+
+  const {
+    className,
+    skeleton,
+    children,
+    text,
+    hasLabel,
+    variant = 'default',
+    onClick,
+    omitOnKeyUpDeleteEvent,
+    icon,
+    removeIconTitle, // has a translation in context
+    addIconTitle, // has a translation in context
+    ...props
+  } = allProps
+
+  const content = text || children
+
+  const usedVariant =
+    onClick && variant === 'default' ? 'clickable' : variant
+
+  const addIcon = usedVariant === 'removable' || variant === 'addable'
+  const isInteractive = usedVariant !== 'default'
+  const tagProps = useSpacing(props, {
+    className: clsx(
+      'dnb-tag',
+      className,
+      isInteractive && 'dnb-tag--interactive',
+      `dnb-tag--${usedVariant}`
+    ),
+  })
+  const additionalButtonParams: Pick<ButtonProps, 'element' | 'type'> = {}
+
+  const isDeleteKeyboardEvent = (keyboardEvent) => {
+    return (
+      keyboardEvent.key === 'Backspace' || keyboardEvent.key === 'Delete'
+    )
+  }
+
+  const handleDeleteKeyUp = (event) => {
+    if (isDeleteKeyboardEvent(event) && onClick) {
+      onClick(event)
+    }
+  }
+
+  if (!isInteractive) {
+    additionalButtonParams.element = 'span'
+    additionalButtonParams.type = ''
+  }
+
+  if (!tagGroupContext && !hasLabel) {
+    warn(
+      `Tag group required: A Tag requires a Tag.Group with label description as a parent component. This is to ensure correct semantics and accessibility.`
+    )
+  }
+
+  return (
+    <Button
+      variant="unstyled"
+      size="small"
+      icon={
+        addIcon
+          ? getIcon(variant === 'addable' ? addIconTitle : removeIconTitle)
+          : icon
+      }
+      iconPosition={addIcon ? 'right' : 'left'}
+      {...tagProps}
+      onClick={onClick as ButtonOnClick}
+      text={content}
+      skeleton={skeleton}
+      onKeyUp={
+        variant === 'removable' && !omitOnKeyUpDeleteEvent
+          ? (e) => handleDeleteKeyUp(e)
+          : undefined
+      }
+      {...additionalButtonParams}
+      {...(props as Record<string, unknown>)}
+    />
+  )
+}
+
+const getIcon = (title: string) => (
+  <IconPrimary
+    title={title}
+    inheritColor={false}
+    icon={
+      <svg
+        width="16"
+        height="16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 8a8 8 0 1 1 16 0A8 8 0 1 1 0 8Z"
+          className="dnb-icon-close-circle-path"
+        />
+        <path
+          d="m5.5 10.5 5-5m0 5-5-5"
+          className="dnb-icon-close-cross-path"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    }
+  />
+)
+
+Tag.Group = TagGroup
+
+withComponentMarkers(Tag, {
+  _formElement: true,
+  _supportsSpacingProps: true,
+})
+
+export default Tag

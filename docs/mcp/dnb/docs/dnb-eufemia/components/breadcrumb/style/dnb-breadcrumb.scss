@@ -1,0 +1,213 @@
+/*
+* Breadcrumb component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+@mixin collapse-button {
+  margin: 1rem;
+}
+
+.dnb-breadcrumb {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+
+  &__bar {
+    display: flex;
+  }
+
+  &--variant-collapse &__bar {
+    background-color: var(--token-color-background-neutral);
+    color: var(--token-color-text-neutral);
+  }
+
+  &--variant-responsive &__bar {
+    @include utilities.allBelow(small) {
+      background-color: var(--token-color-background-neutral);
+      color: var(--token-color-text-neutral);
+    }
+  }
+
+  &--variant-single &__bar .dnb-button {
+    color: var(--token-color-text-neutral);
+
+    .dnb-button__icon {
+      color: var(--token-color-icon-neutral);
+    }
+
+    .dnb-button__text {
+      text-decoration: none;
+    }
+  }
+
+  &__list {
+    display: flex;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    flex-flow: row wrap;
+    align-items: center;
+    row-gap: 1rem; // For when breaking into new lines (Anchor variant)
+    column-gap: 0.5rem;
+
+    color: var(--token-color-text-neutral);
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+
+    &__span {
+      display: flex;
+      align-items: center;
+      line-height: var(--line-height-basis);
+
+      // To match the other tertiary buttons
+      &__icon {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .dnb-anchor {
+      line-height: 1.5rem;
+      padding: 0;
+
+      // To make the click area bigger
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        transform: scale(1.25, 2);
+        border: 0.5rem solid transparent;
+      }
+    }
+
+    // Home icon spacing
+    &:first-child .dnb-anchor {
+      border-left: none;
+
+      // The Sbanken theme uses a non-breaking space as icon separator which
+      // gets underlined. Reset to zero-width separator to avoid the underline.
+      --anchor-icon-separator: '\2060';
+
+      // Reset the click area pseudo-element for icon anchors
+      &::after {
+        transform: none;
+        border: none;
+      }
+
+      .dnb-icon svg {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  &__collapse {
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--token-color-background-page-background);
+
+    &:has(.dnb-height-animation--is-visible) {
+      border-top: 0.0625rem solid var(--token-color-stroke-neutral-subtle);
+      border-bottom: 0.0625rem solid
+        var(--token-color-stroke-neutral-subtle);
+    }
+  }
+
+  &--variant-responsive &__collapse {
+    @include utilities.allAbove(small) {
+      border: none;
+    }
+  }
+
+  &--variant-collapse &__collapse {
+    width: 100%;
+  }
+
+  &--variant-collapse .dnb-accordion {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+
+    .dnb-accordion__tertiary-button {
+      @include collapse-button();
+    }
+
+    .dnb-accordion__tertiary-content {
+      width: 100%;
+    }
+  }
+
+  &__multiple {
+    display: flex;
+    flex-direction: column;
+
+    transition: height 400ms var(--easing-default);
+
+    @include utilities.reducedMotion() {
+      transition-duration: 0.01ms;
+    }
+  }
+
+  &__multiple &__item {
+    transition: transform 400ms var(--easing-default)
+      calc(var(--delay) * 50ms);
+    transform: translateX(-1rem);
+
+    @include utilities.reducedMotion() {
+      transition-duration: 0.01ms;
+    }
+  }
+
+  &__collapse &__item {
+    padding: 0;
+
+    &:not(:first-child) {
+      margin-left: 1.5rem;
+
+      .dnb-breadcrumb__item__span__icon {
+        display: none;
+      }
+    }
+  }
+
+  &__multiple.dnb-height-animation--parallax &__item {
+    transform: translateX(0);
+  }
+
+  &--variant-responsive &__bar &__multiple {
+    @include utilities.allBelow(small) {
+      display: none;
+    }
+  }
+
+  &--variant-responsive &__toggle {
+    @include utilities.allAbove(small) {
+      display: none;
+    }
+
+    @include utilities.allBelow(small) {
+      @include collapse-button();
+    }
+  }
+
+  &__collapse &__list {
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 1.5rem;
+
+    margin: 0;
+
+    padding: 1rem 1rem 2rem;
+  }
+}

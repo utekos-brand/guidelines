@@ -1,0 +1,600 @@
+import type { RefObject } from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import type { TagProps } from '../Tag'
+import Tag from '../Tag'
+import nbNO from '../../../shared/locales/nb-NO'
+import { axeComponent, loadScss } from '../../../core/test-utils/testSetup'
+import { Provider } from '../../../shared'
+import type { TagGroupProps } from '../TagGroup'
+
+const nb = nbNO['nb-NO'].Tag
+
+describe('Tag Group', () => {
+  it('renders with props as an object', () => {
+    const props: TagGroupProps = { label: 'label' }
+
+    render(<Tag.Group {...props} />)
+    expect(document.querySelector('.dnb-tag__group')).toBeInTheDocument()
+  })
+
+  it('supports inline styling', () => {
+    render(<Tag.Group label="tags" style={{ color: 'red' }} />)
+
+    expect(
+      document.querySelector('.dnb-tag__group').getAttribute('style')
+    ).toBe('color: red;')
+  })
+
+  it('renders without children', () => {
+    render(<Tag.Group label="tags" />)
+
+    expect(document.querySelector('.dnb-tag__group')).toBeInTheDocument()
+    expect(document.querySelector('.dnb-tag')).not.toBeInTheDocument()
+  })
+
+  it('renders the label as string', () => {
+    const label = 'tags'
+    render(<Tag.Group label={label} />)
+    expect(screen.queryByText(label)).toBeInTheDocument()
+  })
+
+  it('renders the label as react node', () => {
+    const label = <span data-testid="react-node">ReactNode</span>
+    render(<Tag.Group label={label} />)
+
+    expect(screen.queryByTestId('react-node')).toBeInTheDocument()
+  })
+
+  it('renders a tag group with multiple tag elements by children', () => {
+    render(
+      <Tag.Group label="animals">
+        <Tag text="Cat" />
+        <Tag text="Horse" />
+        <Tag text="Dog" />
+        <Tag text="Cow" />
+      </Tag.Group>
+    )
+
+    expect(document.querySelectorAll('.dnb-tag')).toHaveLength(4)
+  })
+
+  it('renders a tag group with className if className is provided', () => {
+    const customClassName = 'custom-class'
+
+    render(
+      <Tag.Group label="aria" className={customClassName}>
+        ClassName
+      </Tag.Group>
+    )
+    expect(document.getElementsByClassName(customClassName)).toHaveLength(
+      1
+    )
+  })
+
+  it('renders a tag with skeleton if skeleton is true', () => {
+    const skeletonClassName = 'dnb-skeleton'
+
+    render(
+      <Tag.Group skeleton label="tags">
+        <Tag>skeleton</Tag>
+      </Tag.Group>
+    )
+
+    expect(
+      document.getElementsByClassName(skeletonClassName)
+    ).toHaveLength(1)
+  })
+
+  it('should support spacing props', () => {
+    render(
+      <Tag.Group label="tags" top="2rem">
+        <Tag>Tag</Tag>
+      </Tag.Group>
+    )
+
+    const element = document.querySelector('.dnb-tag__group')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(element).toHaveClass('dnb-tag__group dnb-space__top--large', {
+      exact: true,
+    })
+  })
+})
+
+describe('Tag', () => {
+  it('renders with props as an object', () => {
+    const props: TagProps = {}
+
+    render(
+      <Tag.Group label="tags">
+        <Tag {...props} />
+      </Tag.Group>
+    )
+    expect(document.querySelector('.dnb-tag')).toBeInTheDocument()
+  })
+
+  it('renders without properties', () => {
+    render(
+      <Tag.Group label="tags">
+        <Tag />
+      </Tag.Group>
+    )
+
+    expect(document.querySelector('.dnb-tag')).toBeInTheDocument()
+  })
+
+  it('supports inline styling', () => {
+    render(
+      <Tag.Group label="tags">
+        <Tag text="text" style={{ color: 'red' }} />
+      </Tag.Group>
+    )
+
+    expect(document.querySelector('.dnb-tag').getAttribute('style')).toBe(
+      'color: red;'
+    )
+  })
+
+  it('renders a tag with content by text prop', () => {
+    const text = 'This is a tag'
+
+    render(
+      <Tag.Group label="tags">
+        <Tag text="This is a tag" />
+      </Tag.Group>
+    )
+
+    expect(screen.queryByText(text)).toBeInTheDocument()
+  })
+
+  it('renders a tag with content by children prop', () => {
+    const text = 'This is a tag'
+
+    render(
+      <Tag.Group label="tags">
+        <Tag>{text}</Tag>
+      </Tag.Group>
+    )
+
+    expect(screen.queryByText(text)).toBeInTheDocument()
+  })
+
+  it('renders a tag with content if both text and children prop is defined', () => {
+    const text = 'This is a tag'
+
+    render(
+      <Tag.Group label="tags">
+        <Tag text={text}>{text}</Tag>
+      </Tag.Group>
+    )
+
+    expect(screen.queryByText(text)).toBeInTheDocument()
+  })
+
+  it('renders a tag with skeleton if skeleton is true', () => {
+    const skeletonClassName = 'dnb-skeleton'
+
+    render(
+      <Tag.Group label="tags">
+        <Tag skeleton>skeleton</Tag>
+      </Tag.Group>
+    )
+
+    expect(
+      document.getElementsByClassName(skeletonClassName)
+    ).toHaveLength(1)
+  })
+
+  it('inherits skeleton prop from provider', () => {
+    const skeletonClassName = 'dnb-skeleton'
+
+    render(
+      <Provider skeleton>
+        <Tag.Group label="tags">
+          <Tag>skeleton</Tag>
+        </Tag.Group>
+      </Provider>
+    )
+
+    expect(
+      document.getElementsByClassName(skeletonClassName)
+    ).toHaveLength(1)
+  })
+
+  it('does not render a clickable Tag as default', () => {
+    const text = 'Tag with text'
+
+    render(
+      <Tag.Group label="tags">
+        <Tag text={text} />
+      </Tag.Group>
+    )
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
+    expect(screen.queryByText(text)).toBeInTheDocument()
+  })
+
+  it('does support icon', () => {
+    render(
+      <Tag.Group label="tags">
+        <Tag text="Tag with icon" icon="bell" />
+      </Tag.Group>
+    )
+
+    expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+  })
+
+  it('should support spacing props', () => {
+    render(
+      <Tag.Group label="tags">
+        <Tag left="2rem">Tag</Tag>
+      </Tag.Group>
+    )
+
+    const element = document.querySelector('.dnb-tag')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(element).toHaveClass(
+      'dnb-button',
+      'dnb-button--unstyled',
+      'dnb-button--has-text',
+      'dnb-tag',
+      'dnb-tag--default',
+      'dnb-space__left--large',
+      'dnb-button--size-small'
+    )
+    expect(element.classList).toHaveLength(7)
+  })
+
+  describe('variant clickable', () => {
+    it('renders a clickable tag with the correct attributes if variant="clickable"', () => {
+      const interactiveClassName = 'dnb-tag--interactive'
+      const clickableClassName = 'dnb-tag--clickable'
+
+      render(
+        <Tag.Group label="tags">
+          <Tag
+            variant="clickable"
+            onClick={() => {
+              console.log('onClick')
+            }}
+          >
+            Clickable
+          </Tag>
+        </Tag.Group>
+      )
+
+      expect(
+        document.getElementsByClassName(clickableClassName)
+      ).toHaveLength(1)
+      expect(
+        document.getElementsByClassName(interactiveClassName)
+      ).toHaveLength(1)
+      expect(screen.queryByRole('button')).toBeInTheDocument()
+    })
+
+    it('fires onClick event if onClick is defined', () => {
+      const onClick = vi.fn()
+      render(
+        <Tag.Group label="tags">
+          <Tag variant="clickable" onClick={onClick}>
+            onClick
+          </Tag>
+        </Tag.Group>
+      )
+
+      fireEvent.click(screen.getByRole('button'))
+      expect(onClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('does support icon', () => {
+      render(
+        <Tag.Group label="tags">
+          <Tag text="Tag with icon" icon="bell" onClick={vi.fn()} />
+        </Tag.Group>
+      )
+
+      expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+    })
+  })
+
+  describe('variant addable', () => {
+    it('renders a clickable tag with the correct attributes if variant="addable"', () => {
+      const interactiveClassName = 'dnb-tag--interactive'
+      const clickableClassName = 'dnb-tag--addable'
+
+      render(
+        <Tag.Group label="tags">
+          <Tag
+            variant="addable"
+            onClick={() => {
+              console.log('onClick')
+            }}
+          >
+            Clickable
+          </Tag>
+        </Tag.Group>
+      )
+
+      expect(
+        document.getElementsByClassName(clickableClassName)
+      ).toHaveLength(1)
+      expect(
+        document.getElementsByClassName(interactiveClassName)
+      ).toHaveLength(1)
+      expect(screen.queryByRole('button')).toBeInTheDocument()
+    })
+
+    it('fires onClick event if onClick is defined', () => {
+      const onClick = vi.fn()
+      render(
+        <Tag.Group label="tags">
+          <Tag variant="addable" onClick={onClick}>
+            onClick
+          </Tag>
+        </Tag.Group>
+      )
+
+      fireEvent.click(screen.getByRole('button'))
+      expect(onClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not support icon if variant="addable"', () => {
+      render(
+        <Tag.Group label="addable">
+          <Tag
+            text="Tag with icon"
+            icon="bell"
+            variant="addable"
+            onClick={vi.fn()}
+          />
+        </Tag.Group>
+      )
+
+      expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+      expect(document.querySelectorAll('.dnb-icon').length).toBe(1)
+    })
+
+    it('renders the delete icon if variant="addable" is provided', () => {
+      render(
+        <Tag.Group label="addable">
+          <Tag text="Addable" variant="addable" onClick={vi.fn()} />
+        </Tag.Group>
+      )
+
+      expect(screen.getByTitle(nb.addIconTitle)).toBeInTheDocument()
+    })
+  })
+
+  describe('variant removable', () => {
+    it('renders a clickable tag with the correct attributes if variant="removable"', () => {
+      const interactiveClassName = 'dnb-tag--interactive'
+      const removableClassName = 'dnb-tag--removable'
+
+      render(
+        <Tag.Group label="tags">
+          <Tag
+            variant="removable"
+            onClick={() => {
+              console.log('onClick')
+            }}
+          >
+            Removable
+          </Tag>
+        </Tag.Group>
+      )
+
+      expect(
+        document.getElementsByClassName(removableClassName)
+      ).toHaveLength(1)
+      expect(
+        document.getElementsByClassName(interactiveClassName)
+      ).toHaveLength(1)
+      expect(screen.queryByRole('button')).toBeInTheDocument()
+    })
+
+    it('fires onClick event if onClick is defined', () => {
+      const onClick = vi.fn()
+      render(
+        <Tag.Group label="tags">
+          <Tag variant="removable" onClick={onClick}>
+            onClick
+          </Tag>
+        </Tag.Group>
+      )
+
+      fireEvent.click(screen.getByRole('button'))
+      expect(onClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not support icon if variant="removable"', () => {
+      render(
+        <Tag.Group label="removable">
+          <Tag
+            text="Tag with icon"
+            icon="bell"
+            variant="removable"
+            onClick={vi.fn()}
+          />
+        </Tag.Group>
+      )
+
+      expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+      expect(document.querySelectorAll('.dnb-icon').length).toBe(1)
+    })
+
+    it('renders the delete icon if variant="removable" is provided', () => {
+      render(
+        <Tag.Group label="removable">
+          <Tag text="Removable" variant="removable" onClick={vi.fn()} />
+        </Tag.Group>
+      )
+
+      expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+      expect(screen.getByTitle(nb.removeIconTitle)).toBeInTheDocument()
+    })
+
+    it('fires onClick event when releasing Backspace or Delete (key up)', () => {
+      const onClick = vi.fn()
+
+      render(
+        <Tag.Group label="tags">
+          <Tag variant="removable" onClick={onClick}>
+            Keyboard
+          </Tag>
+        </Tag.Group>
+      )
+
+      fireEvent.keyUp(screen.getByRole('button'), {
+        key: 'Backspace',
+      })
+
+      fireEvent.keyUp(screen.getByRole('button'), {
+        key: 'Delete',
+      })
+
+      expect(onClick).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  describe('with onClick', () => {
+    it('renders a clickable tag with the correct attributes if onClick is defined', () => {
+      const interactiveClassName = 'dnb-tag--interactive'
+      const clickableClassName = 'dnb-tag--clickable'
+
+      render(
+        <Tag.Group label="tags">
+          <Tag
+            onClick={() => {
+              console.log('onClick')
+            }}
+          >
+            Clickable
+          </Tag>
+        </Tag.Group>
+      )
+
+      expect(
+        document.getElementsByClassName(clickableClassName)
+      ).toHaveLength(1)
+      expect(
+        document.getElementsByClassName(interactiveClassName)
+      ).toHaveLength(1)
+      expect(screen.queryByRole('button')).toBeInTheDocument()
+    })
+
+    it('fires onClick event if onClick is defined', () => {
+      const onClick = vi.fn()
+      render(
+        <Tag.Group label="tags">
+          <Tag onClick={onClick}>onClick</Tag>
+        </Tag.Group>
+      )
+
+      fireEvent.click(screen.getByRole('button'))
+      expect(onClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('does support icon', () => {
+      render(
+        <Tag.Group label="tags">
+          <Tag text="Tag with icon" icon="bell" onClick={vi.fn()} />
+        </Tag.Group>
+      )
+
+      expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+    })
+  })
+
+  it('warns when Tag is used without a Tag.Group as parent component', () => {
+    process.env.NODE_ENV = 'development'
+    global.console.log = vi.fn()
+    render(<Tag text="Tag" />)
+    expect(global.console.log).toHaveBeenCalled()
+  })
+
+  it('will not warn when hasLabel is true', () => {
+    process.env.NODE_ENV = 'development'
+    global.console.log = vi.fn()
+    render(<Tag text="Tag" hasLabel />)
+    expect(global.console.log).not.toHaveBeenCalled()
+  })
+
+  it('renders a tag with className if className is provided', () => {
+    const customClassName = 'custom-class'
+
+    render(
+      <Tag.Group label="tags">
+        <Tag className={customClassName}>ClassName</Tag>
+      </Tag.Group>
+    )
+    expect(document.getElementsByClassName(customClassName)).toHaveLength(
+      1
+    )
+  })
+
+  it('renders a tag with provider', () => {
+    render(
+      <Provider locale="en-GB">
+        <Tag.Group label="tags">
+          <Tag text="With provider" />
+        </Tag.Group>
+      </Provider>
+    )
+
+    expect(document.querySelector('.dnb-button__text')).toBeInTheDocument()
+  })
+
+  it('should forward ref', () => {
+    const ref: RefObject<HTMLElement | null> = { current: null }
+
+    render(
+      <Tag.Group label="tags">
+        <Tag ref={ref} text="Tag" />
+      </Tag.Group>
+    )
+
+    const element = document.querySelector('.dnb-tag')
+    expect(ref.current).toBe(element)
+  })
+
+  it('should forward ref as a function', () => {
+    let refElement: HTMLElement | null = null
+    const refFn = (elem: HTMLElement) => {
+      refElement = elem
+    }
+
+    render(
+      <Tag.Group label="tags">
+        <Tag ref={refFn} text="Tag" />
+      </Tag.Group>
+    )
+
+    const element = document.querySelector('.dnb-tag')
+    expect(refElement).toBe(element)
+  })
+})
+
+describe('Tag aria', () => {
+  it('should validate', async () => {
+    const Component = render(
+      <Tag.Group label="tags">
+        <Tag text="Tag aria" />
+      </Tag.Group>
+    )
+    expect(await axeComponent(Component)).toHaveNoViolations()
+  })
+})
+
+describe('Tag scss', () => {
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

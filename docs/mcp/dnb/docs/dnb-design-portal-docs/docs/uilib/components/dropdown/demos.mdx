@@ -1,0 +1,112 @@
+---
+showTabs: true
+---
+
+import {
+  DropdownFind,
+  DropdownNoValue,
+  DropdownDirections,
+  DropdownIconLeft,
+  DropdownTertiary,
+  DropdownTertiaryRight,
+  DropdownIndependentWidthLeft,
+  DropdownIndependentWidthRight,
+  DropdownDisabled,
+  DropdownDisabledOptions,
+  DropdownSizes,
+  DropdownCustomWidth,
+  DropdownStatusVertical,
+  DropdownListOpened,
+  DropdownDisabledTertiary,
+  DropdownEllipsisOverflow,
+  DropdownCustomizedLook,
+  DropdownGroups,
+  DropdownNoDivider,
+} from 'Docs/uilib/components/dropdown/Examples'
+
+## Demos
+
+### Default dropdown
+
+No `value` is defined, but a `title` is given.
+
+<DropdownNoValue />
+
+### Dropdown with different item content directions
+
+<DropdownDirections />
+
+### Icon on left side
+
+<DropdownIconLeft />
+
+### Dropdown as tertiary variant
+
+<DropdownTertiary />
+<VisibleWhenVisualTest>
+  <DropdownTertiaryRight />
+</VisibleWhenVisualTest>
+
+### Dropdown in different sizes
+
+Four sizes are available: `small`, `default`, `medium` and `large`
+
+<DropdownSizes />
+
+### Custom width
+
+<DropdownCustomWidth />
+
+### Dropdown with status
+
+And vertical label layout.
+
+<DropdownStatusVertical />
+
+### Findable list
+
+With long list to make it scrollable and searchable
+
+<DropdownFind />
+
+### Disabled dropdown
+
+<DropdownDisabled />
+
+Individual options can also be disabled.
+
+<DropdownDisabledOptions />
+
+### Disabled tertiary dropdown
+
+<DropdownDisabledTertiary />
+
+### Customized Dropdown
+
+An example of how you can customize the look of your `Dropdown`
+
+<DropdownCustomizedLook />
+
+### DrawerList opened
+
+Only to visualize and used for visual testing
+
+<DropdownListOpened />
+
+<VisibleWhenVisualTest>
+  <DropdownEllipsisOverflow />
+  <DropdownIndependentWidthLeft />
+  <DropdownIndependentWidthRight />
+</VisibleWhenVisualTest>
+
+### Groups
+
+If an item has a `groupIndex` property, it will use the groups in the `groups` property. Only the first group can be without title, all other groups must have a title.
+
+<DropdownGroups />
+
+## No divider
+
+We can remove the divider between items with the `noDivider` prop. Beware that this can make information dense lists difficult to parse.
+
+<DropdownNoDivider />

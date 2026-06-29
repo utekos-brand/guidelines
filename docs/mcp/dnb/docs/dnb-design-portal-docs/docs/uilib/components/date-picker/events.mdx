@@ -1,0 +1,29 @@
+---
+showTabs: true
+---
+
+import PropertiesTable from 'dnb-design-system-portal/src/shared/parts/PropertiesTable'
+import { DatePickerEvents } from '@dnb/eufemia/src/components/date-picker/DatePickerDocs'
+
+## Events
+
+<PropertiesTable props={DatePickerEvents} />
+
+## Returned Object
+
+The type of native event will depend on the interaction.
+All additional HTML attributes will be returned as well.
+
+```js
+{
+  date: null | 'date as `returnFormat` | `yyyy-MM-dd` ', /* Available if `range` is `false` */
+  startDate: null | 'date as `returnFormat` | `yyyy-MM-dd`', /* Available if `range` is `true` */
+  endDate: null | 'date as `returnFormat` | `yyyy-MM-dd`', /* Available if `range` is `true` */
+  invalidDate: null | 'date as `returnFormat` | `yyyy-MM-dd`', /* Available if `range` is `false` */
+  invalidStartDate: null | 'date as `returnFormat` | ´yyyy-MM-dd`', /* Available if `range` is `true` */
+  invalidEndDate: null | 'date as `returnFormat` | `yyyy-MM-dd`', /* Available if `range` is `true` */
+  daysBetween: number,
+  attributes: { attributes },
+  event: null | { native event }
+}
+```

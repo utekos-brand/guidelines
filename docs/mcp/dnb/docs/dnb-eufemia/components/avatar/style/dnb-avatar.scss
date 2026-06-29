@@ -1,0 +1,195 @@
+/*
+* Avatar component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-avatar {
+  --avatar-text-color: var(--token-color-text-neutral-inverse);
+  --avatar-font-size--small: var(--font-size-x-small);
+  --avatar-font-size--medium: var(--font-size-basis);
+  --avatar-font-size--large: var(--font-size-x-large);
+  --avatar-font-size--x-large: var(--font-size-x-large);
+  --avatar-line-height--small: var(--line-height-x-small);
+  --avatar-line-height--medium: var(--line-height-basis);
+  --avatar-line-height--large: var(--line-height-large);
+  --avatar-line-height--x-large: var(--line-height-large);
+  --avatar-width--small: 1.5rem;
+  --avatar-height--small: 1.5rem;
+  --avatar-width--medium: 2rem;
+  --avatar-height--medium: 2rem;
+  --avatar-width--large: 4rem;
+  --avatar-height--large: 4rem;
+  --avatar-width--x-large: 5rem;
+  --avatar-height--x-large: 5rem;
+  --avatar-icon-size--small: 0.75rem;
+  --avatar-icon-size--medium: 1.25rem;
+  --avatar-icon-size--large: 2.5rem;
+  --avatar-icon-size--x-large: 2.75rem;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  overflow: hidden;
+  user-select: none;
+  white-space: nowrap;
+
+  border-radius: 50%;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  background-color: var(--avatar-background-color);
+  color: var(--avatar-text-color);
+
+  &--primary {
+    --avatar-background-color: var(--token-color-decorative-first-bold);
+  }
+
+  &--secondary {
+    --avatar-background-color: var(--token-color-decorative-first-base);
+  }
+
+  &--tertiary {
+    --avatar-background-color: var(--token-color-decorative-first-subtle);
+    --avatar-text-color: var(--token-color-text-neutral);
+  }
+
+  // Safari needs a correct CSS specificity
+  &,
+  .dnb-core-style & {
+    line-height: var(--line-height-large);
+  }
+
+  &--size-small {
+    width: var(--avatar-width--small);
+    height: var(--avatar-height--small);
+    font-size: var(--avatar-font-size--small);
+
+    // Safari needs a correct CSS specificity
+    &,
+    .dnb-core-style & {
+      line-height: var(--avatar-line-height--small);
+    }
+
+    .dnb-icon--auto {
+      font-size: var(--avatar-icon-size--small);
+    }
+  }
+
+  &--size-medium {
+    width: var(--avatar-width--medium);
+    height: var(--avatar-height--medium);
+    font-size: var(--avatar-font-size--medium);
+
+    // Safari needs a correct CSS specificity
+    &,
+    .dnb-core-style & {
+      line-height: var(--avatar-line-height--medium);
+    }
+    .dnb-icon--auto {
+      font-size: var(--avatar-icon-size--medium);
+    }
+  }
+
+  &--size-large {
+    width: var(--avatar-width--large);
+    height: var(--avatar-height--large);
+    font-size: var(--avatar-font-size--large);
+
+    // Safari needs a correct CSS specificity
+    &,
+    .dnb-core-style & {
+      line-height: var(--avatar-line-height--large);
+    }
+
+    .dnb-icon--auto {
+      font-size: var(--avatar-icon-size--large);
+    }
+  }
+
+  &--size-x-large {
+    width: var(--avatar-width--x-large);
+    height: var(--avatar-height--x-large);
+    font-size: var(--avatar-font-size--x-large);
+
+    // Safari needs a correct CSS specificity
+    &,
+    .dnb-core-style & {
+      line-height: var(--avatar-line-height--x-large);
+    }
+    .dnb-icon--auto {
+      font-size: var(--avatar-icon-size--x-large);
+    }
+  }
+
+  &__group {
+    --avatar-font-size-left--small: var(--font-size-x-small);
+    --avatar-font-size-left--medium: var(--font-size-basis);
+    --avatar-font-size-left--large: var(--font-size-large);
+    --avatar-font-size-left--x-large: var(--font-size-large);
+
+    display: inline-flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+
+    .dnb-avatar {
+      // No stroke token equivalent for this color, Figma sketches use --token-color-icon-neutral-inverse to create the border that separates avatars in a group.
+      @include utilities.fakeBorder(
+        var(--token-color-icon-neutral-inverse),
+        0.125rem
+      );
+
+      &--size-small {
+        margin-left: -0.5rem;
+      }
+
+      &--size-medium {
+        margin-left: -0.75rem;
+      }
+
+      &--size-large {
+        margin-left: -1rem;
+      }
+
+      &--size-x-large {
+        margin-left: -1.5rem;
+      }
+
+      &:nth-of-type(2) {
+        margin-left: 0;
+      }
+    }
+
+    &--elements-left {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--token-color-text-neutral-alternative);
+
+      &--size-small {
+        font-size: var(--avatar-font-size-left--small);
+        margin-left: 0.125rem;
+      }
+
+      &--size-medium {
+        font-size: var(--avatar-font-size-left--medium);
+        margin-left: 0.125rem;
+      }
+
+      &--size-large {
+        font-size: var(--avatar-font-size-left--large);
+        margin-left: 0.25rem;
+      }
+
+      &--size-x-large {
+        font-size: var(--avatar-font-size-left--x-large);
+        margin-left: 0.25rem;
+      }
+    }
+  }
+}

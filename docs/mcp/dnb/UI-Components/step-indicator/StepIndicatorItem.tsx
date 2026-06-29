@@ -1,0 +1,338 @@
+/**
+ * Web StepIndicator Component
+ *
+ */
+
+import { useCallback, useContext, useMemo } from 'react'
+import type { HTMLProps, ReactNode } from 'react'
+
+import { clsx } from 'clsx'
+import {
+  dispatchCustomElementEvent,
+  combineDescribedBy,
+} from '../../shared/component-helper'
+import useId from '../../shared/helpers/useId'
+import type { AnchorAllProps } from '../anchor/Anchor'
+import Anchor from '../anchor/Anchor'
+import type { IconIcon } from '../icon/Icon'
+import Icon from '../icon/Icon'
+import IconPrimary from '../icon/IconPrimary'
+import FormStatus, {
+  WarnIcon,
+  InfoIcon,
+  ErrorIcon,
+} from '../form-status/FormStatus'
+import StepIndicatorContext from './StepIndicatorContext'
+import { stepIndicatorDefaultProps } from './defaults'
+import type { StepIndicatorMouseEvent } from './StepIndicator'
+import Context from '../../shared/Context'
+import { createSkeletonClass } from '../skeleton/SkeletonHelper'
+
+export type StepIndicatorStatusState = 'warning' | 'information' | 'error'
+export type StepIndicatorItemProps = Omit<
+  HTMLProps<HTMLElement>,
+  'title' | 'data' | 'onClick'
+> & {
+  title: string | ReactNode
+  /**
+   * If set to true, this item step will be set as the current selected step. This can be used instead of `currentStep` on the component itself.
+   */
+  isCurrent?: boolean
+  /**
+   * If set to true, this item step will be handled as an inactive step and will not be clickable.
+   * Defaults to `false`
+   */
+  inactive?: boolean
+  /**
+   * If set to true, this item step will not be clickable. Same as `inactive`, but will also add the `aria-disabled="true"` .
+   * Defaults to `false`.
+   */
+  disabled?: boolean
+  /**
+   * Is used to set the status text.
+   */
+  status?: string | ReactNode
+  /**
+   * Used to set the status state to be either `information`, `error` or `warning`.
+   * Defaults to `warning`.
+   */
+  statusState?: StepIndicatorStatusState
+  /**
+   * Will be called once the user clicks on the current or another step. Will be emitted on every click. Returns an object `{ event, item, currentStep }`.
+   */
+  onClick?: ({ event, item, currentStep }: StepIndicatorMouseEvent) => void
+  currentItemNum: number
+}
+
+function StepIndicatorItem({
+  statusState: statusStateDefault = 'warning',
+  inactive: inactiveDefault = false,
+  disabled: disabledDefault = false,
+  ...restOfProps
+}: StepIndicatorItemProps) {
+  const globalContext = useContext(Context)
+
+  const props: StepIndicatorItemProps = useMemo(() => {
+    return {
+      statusState: statusStateDefault,
+      inactive: inactiveDefault,
+      disabled: globalContext?.formElement?.disabled ?? disabledDefault,
+      ...restOfProps,
+    }
+  }, [
+    disabledDefault,
+    inactiveDefault,
+    restOfProps,
+    statusStateDefault,
+    globalContext?.formElement?.disabled,
+  ])
+
+  const context = useContext(StepIndicatorContext)
+
+  const onClickHandler = useCallback(
+    ({ event, item, currentItemNum }) => {
+      const params = {
+        event,
+        item,
+        currentStep: currentItemNum,
+      }
+
+      const onClickItem = dispatchCustomElementEvent(
+        {
+          context,
+          props,
+          onClickHandler,
+        },
+        'onClick',
+        params
+      )
+
+      const onClickGlobal = dispatchCustomElementEvent(
+        context,
+        'onClick',
+        params
+      )
+
+      if (onClickItem === false || onClickGlobal === false) {
+        return // stop here
+      }
+
+      if (context.activeStep !== currentItemNum) {
+        context.setActiveStep(currentItemNum)
+        dispatchCustomElementEvent(context, 'onChange', params)
+      }
+    },
+    [context, props]
+  )
+
+  const {
+    mode,
+    activeStep,
+    countSteps,
+    listOfReachedSteps,
+    hideNumbers = stepIndicatorDefaultProps.hideNumbers,
+    stepTitle,
+    noAnimation,
+    skeleton,
+  } = context
+
+  const {
+    currentItemNum,
+
+    title,
+    isCurrent, // eslint-disable-line
+    inactive,
+    disabled,
+    status,
+    statusState = 'warning',
+
+    onClick, // eslint-disable-line
+  } = props
+
+  const hasPassedAndIsCurrent =
+    mode === 'loose' ||
+    currentItemNum <= activeStep ||
+    listOfReachedSteps.includes(currentItemNum)
+
+  const isNavigatable = mode === 'strict' || mode === 'loose'
+
+  let isInactive =
+    inactive || disabled || (mode === 'strict' && !hasPassedAndIsCurrent)
+
+  const isVisited = currentItemNum < activeStep
+
+  const id = `${useId()}-${currentItemNum}`
+  const ariaLabel = stepTitle
+    ?.replace('%step', String(currentItemNum + 1))
+    .replace('%count', String(countSteps))
+
+  const usedIsCurrent = currentItemNum === activeStep
+
+  const element = <StepItemWrapper>{title}</StepItemWrapper>
+
+  const itemParams: Partial<HTMLProps<HTMLLIElement>> = {}
+  const buttonParams = {
+    status,
+    statusState,
+    // Describe the button by its screen-reader label and, when present,
+    // the step status message (see "textId" on the FormStatus below).
+    'aria-describedby': combineDescribedBy(
+      id,
+      status ? id + '-status' : null
+    ),
+  } as StepItemButtonProps
+
+  if (usedIsCurrent) {
+    itemParams['aria-current'] = 'step'
+  }
+
+  if (disabled) {
+    buttonParams.disabled = true
+  }
+
+  if (isNavigatable && !isInactive) {
+    buttonParams.onClick = (event: never) =>
+      onClickHandler({
+        event,
+        item: props,
+        currentItemNum,
+      })
+  }
+
+  if (!buttonParams.onClick) {
+    buttonParams.onClick = undefined
+    isInactive = true
+  }
+
+  const stateIcons: Record<StepIndicatorStatusState, IconIcon> = {
+    information: InfoIcon,
+    error: ErrorIcon,
+    warning: WarnIcon,
+  }
+
+  return (
+    <li
+      {...itemParams}
+      className={clsx(
+        'dnb-step-indicator__item',
+        usedIsCurrent && 'dnb-step-indicator__item--current',
+        isInactive && 'dnb-step-indicator__item--inactive',
+        isVisited && 'dnb-step-indicator__item--visited',
+        itemParams.className
+      )}
+    >
+      <div
+        className={clsx(
+          'dnb-step-indicator__item__wrapper',
+          !status &&
+            isVisited &&
+            'dnb-step-indicator__item__wrapper--check'
+        )}
+      >
+        <span
+          className={clsx(
+            'dnb-step-indicator__item__bullet',
+            usedIsCurrent
+              ? 'dnb-step-indicator__item__bullet--current'
+              : !status &&
+                  (isVisited
+                    ? 'dnb-step-indicator__item__bullet--check'
+                    : 'dnb-step-indicator__item__bullet--empty'),
+            createSkeletonClass('shape', skeleton)
+          )}
+        >
+          {status && !usedIsCurrent ? (
+            <Icon
+              icon={stateIcons[statusState] || stateIcons.warning}
+              className="dnb-step-indicator__item__icon"
+              size="medium"
+              inheritColor={false}
+            />
+          ) : (
+            <IconPrimary
+              icon="check"
+              className={clsx(
+                'dnb-step-indicator__item__icon',
+                !isVisited && 'dnb-step-indicator__item__icon--hidden'
+              )}
+              size="auto"
+            />
+          )}
+        </span>
+        <div
+          className={clsx(
+            'dnb-step-indicator__item-content',
+            createSkeletonClass('font', skeleton)
+          )}
+        >
+          {!hideNumbers && (
+            <span
+              className="dnb-step-indicator__item-content__number"
+              aria-hidden
+            >
+              {`${currentItemNum + 1}.`}
+            </span>
+          )}
+          <div className="dnb-step-indicator__item-content__wrapper">
+            <StepItemButton {...buttonParams}>{element}</StepItemButton>
+            <FormStatus
+              shellSpace={{ top: '1rem' }}
+              noAnimation={noAnimation}
+              state={status ? statusState : undefined}
+              variant="outlined"
+              className="dnb-step-indicator__item-content__status"
+              textId={id + '-status'} // used for "aria-describedby"
+              text={status}
+            />
+          </div>
+        </div>
+      </div>
+      <span id={id} aria-hidden className="dnb-sr-only">
+        {ariaLabel}
+      </span>
+    </li>
+  )
+}
+
+type StepItemButtonProps = AnchorAllProps &
+  Pick<StepIndicatorItemProps, 'status' | 'statusState'>
+
+export function StepItemButton({
+  children,
+  className,
+  status,
+  statusState = 'warning',
+  ref,
+  ...props
+}: StepItemButtonProps) {
+  const notClickable = !props.onClick
+
+  return (
+    <Anchor
+      element={notClickable ? 'span' : 'button'}
+      type={notClickable ? undefined : 'button'}
+      className={clsx(
+        className,
+        'dnb-step-indicator__button',
+        status &&
+          `dnb-step-indicator__button--has-status dnb-step-indicator__button--${statusState}`
+      )}
+      noStyle={notClickable}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </Anchor>
+  )
+}
+
+type StepItemWrapperProps = HTMLProps<HTMLElement> & {
+  /** Content inside the step button */
+  children?: ReactNode
+}
+
+export function StepItemWrapper({ children }: StepItemWrapperProps) {
+  return <>{children}</>
+}
+
+export default StepIndicatorItem

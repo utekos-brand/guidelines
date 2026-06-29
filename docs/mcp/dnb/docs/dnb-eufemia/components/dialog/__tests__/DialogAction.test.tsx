@@ -1,0 +1,94 @@
+import { render } from '@testing-library/react'
+import Dialog from '../Dialog'
+import Button from '../../button/Button'
+
+describe('Dialog.Action', () => {
+  it('has correct class', () => {
+    const MockComponent = () => {
+      return (
+        <Dialog open>
+          <Dialog.Action>
+            <Button>Button</Button>
+          </Dialog.Action>
+        </Dialog>
+      )
+    }
+
+    render(<MockComponent />)
+
+    expect(
+      document.querySelector('.dnb-dialog__actions')
+    ).toBeInTheDocument()
+  })
+
+  it('supports spacing', () => {
+    const MockComponent = () => {
+      return (
+        <Dialog open>
+          <Dialog.Action top="large">
+            <Button>Button</Button>
+          </Dialog.Action>
+        </Dialog>
+      )
+    }
+
+    render(<MockComponent />)
+
+    const element = document.querySelector('.dnb-dialog__actions')
+
+    expect(element).toHaveClass(
+      'dnb-space dnb-space__top--large dnb-dialog__actions',
+      { exact: true }
+    )
+  })
+
+  it('should contain children content', () => {
+    render(
+      <Dialog open>
+        <Dialog.Action>
+          <Button>Button</Button>
+        </Dialog.Action>
+      </Dialog>
+    )
+
+    const element = document.querySelector('.dnb-dialog__actions')
+
+    expect(element.textContent).toBe('Button')
+  })
+
+  it('should be section element', () => {
+    const MockComponent = () => {
+      return (
+        <Dialog open>
+          <Dialog.Action aria-label="Custom section label">
+            <Button>Button</Button>
+          </Dialog.Action>
+        </Dialog>
+      )
+    }
+
+    render(<MockComponent />)
+
+    const element = document.querySelector('.dnb-dialog__actions')
+
+    expect(element.nodeName).toBe('SECTION')
+  })
+
+  it('should include custom attributes', () => {
+    const MockComponent = () => {
+      return (
+        <Dialog open>
+          <Dialog.Action aria-label="Custom section label">
+            <Button>Button</Button>
+          </Dialog.Action>
+        </Dialog>
+      )
+    }
+
+    render(<MockComponent />)
+
+    const element = document.querySelector('.dnb-dialog__actions')
+
+    expect(element.getAttribute('aria-label')).toBe('Custom section label')
+  })
+})

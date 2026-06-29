@@ -1,0 +1,35 @@
+{
+  "html": "<span class=\"inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200 dark:from-purple-900/30 dark:to-pink-900/30 dark:text-purple-300 dark:border-purple-700\">\n  Badge\n</span>",
+  "description": "playful style badge components with dark mode support",
+  "utilities": [
+    "inline-flex",
+    "items-center",
+    "rounded-full",
+    "px-2.5",
+    "py-0.5",
+    "text-xs",
+    "font-medium",
+    "bg-gradient-to-r",
+    "from-purple-100",
+    "to-pink-100",
+    "text-purple-800",
+    "border",
+    "border-purple-200",
+    "dark:from-purple-900/30",
+    "dark:to-pink-900/30",
+    "dark:text-purple-300",
+    "dark:border-purple-700"
+  ],
+  "customizations": [
+    "Change badge colors using bg-* and text-* utilities",
+    "Adjust size with px-* py-* and text-* utilities",
+    "Add icons before or after text",
+    "Make badges clickable by wrapping in button or anchor tags"
+  ],
+  "_query": {
+    "componentType": "badge",
+    "style": "playful",
+    "darkMode": true,
+    "responsive": false
+  }
+}

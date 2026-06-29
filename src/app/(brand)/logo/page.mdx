@@ -1,0 +1,34 @@
+import Image from "next/image";
+
+# Logoen vår
+
+Logoen er hjertet i Utekos visuelle identitet. Den er formet som et bånd av flere lin­jer i en sam­men­hen­gende beveg­else, og sym­bol­is­er­er at Utekos trans­porter­er deg hele veien, fra der du er til dit du skal. Ved å bruke logoen konsekvent på alle flater skaper vi gjenkjennelse, tydelighet og tillit til merkevaren vår. Logoen skal derfor alltid behandles med respekt og aldri endres eller manipuleres.
+
+<section className="grid gap-6 md:grid-cols-2">
+  <figure className="rounded-md border border-border bg-card p-6">
+    <Image
+      src="/brand/utekos-horizontal-logo.svg"
+      alt="Utekos logo"
+      width={826}
+      height={286}
+      className="h-auto w-full"
+    />
+  </figure>
+
+  <figure className="rounded-md border border-border bg-card p-6">
+    <Image
+      src="/UtekosWordmarDark.svg"
+      alt="Utekos wordmark"
+      width={1280}
+      height={311}
+      className="h-auto w-full dark:hidden"
+    />
+    <Image
+      src="/WordmarkWhite.svg"
+      alt="Utekos wordmark"
+      width={1280}
+      height={311}
+      className="hidden h-auto w-full dark:block"
+    />
+  </figure>
+</section>

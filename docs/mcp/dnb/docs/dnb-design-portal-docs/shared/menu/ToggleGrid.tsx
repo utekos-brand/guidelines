@@ -1,0 +1,57 @@
+/**
+ * ToggleGrid
+ *
+ */
+
+import { useEffect } from 'react'
+import type { HTMLAttributes } from 'react'
+import { Switch } from '@dnb/eufemia/src'
+
+function setGridVisibility(visibility = true) {
+  if (typeof document !== 'undefined') {
+    if (visibility) {
+      document.documentElement.setAttribute('show-dev-grid', 'true')
+    } else {
+      document.documentElement.removeAttribute('show-dev-grid')
+    }
+    window.localStorage.setItem('showGrid', String(visibility ? 1 : 0))
+  }
+}
+
+function isGridVisible() {
+  return Boolean(
+    typeof window !== 'undefined' &&
+    parseFloat(window.localStorage.getItem('showGrid'))
+  )
+}
+
+export function GridActivator() {
+  useEffect(() => {
+    if (isGridVisible()) {
+      setGridVisibility()
+    }
+  }, [])
+
+  return null
+}
+
+export default function ToggleGrid({
+  label = 'Toggle Grid',
+  ...props
+}: HTMLAttributes<HTMLSpanElement> & { label?: string }) {
+  const handleChange = () => {
+    setGridVisibility(!isGridVisible())
+  }
+
+  return (
+    <span {...props}>
+      <Switch
+        id="switch-grid"
+        label={label}
+        checked={isGridVisible()}
+        onChange={handleChange}
+      />
+      <GridActivator />
+    </span>
+  )
+}

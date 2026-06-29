@@ -1,0 +1,31 @@
+{
+  "html": "<div class=\"relative w-full rounded-lg border px-4 py-3 text-sm border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 sm:px-6 sm:py-4\">\n  <div class=\"flex\">\n    <div class=\"flex-shrink-0\">\n      <svg class=\"h-5 w-5 text-blue-400\" fill=\"currentColor\" viewBox=\"0 0 20 20\">\n        <path fill-rule=\"evenodd\" d=\"M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z\" clip-rule=\"evenodd\" />\n      </svg>\n    </div>\n    <div class=\"ml-3\">\n      <h3 class=\"text-sm font-medium text-blue-800\">Alert Title</h3>\n      <div class=\"mt-2 text-sm text-blue-700\">\n        <p>This is an informational alert message. You can customize the content and styling as needed.</p>\n      </div>\n    </div>\n  </div>\n</div>",
+  "description": "A minimal style alert component with dark mode support and responsive design",
+  "utilities": [
+    "relative",
+    "w-full",
+    "rounded-lg",
+    "border",
+    "px-4",
+    "py-3",
+    "text-sm",
+    "border-gray-200",
+    "bg-gray-50",
+    "dark:bg-gray-800",
+    "dark:border-gray-700",
+    "sm:px-6",
+    "sm:py-4"
+  ],
+  "customizations": [
+    "Change alert type",
+    "Replace the icon with appropriate type icons",
+    "Add dismiss button functionality",
+    "Customize border and background colors"
+  ],
+  "_query": {
+    "componentType": "alert",
+    "style": "minimal",
+    "darkMode": true,
+    "responsive": true
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "maritime-blue",
+  "colors": {
+    "50": "#3669ac",
+    "100": "#3464a3",
+    "200": "#2e5992",
+    "300": "#294f81",
+    "400": "#234470",
+    "500": "#1e3a5f",
+    "600": "#193150",
+    "700": "#142741",
+    "800": "#101e31",
+    "900": "#0b1522",
+    "950": "#08101b"
+  },
+  "cssVariables": ":root {\n  --color-maritime-blue-50: #3669ac;\n  --color-maritime-blue-100: #3464a3;\n  --color-maritime-blue-200: #2e5992;\n  --color-maritime-blue-300: #294f81;\n  --color-maritime-blue-400: #234470;\n  --color-maritime-blue-500: #1e3a5f;\n  --color-maritime-blue-600: #193150;\n  --color-maritime-blue-700: #142741;\n  --color-maritime-blue-800: #101e31;\n  --color-maritime-blue-900: #0b1522;\n  --color-maritime-blue-950: #08101b;\n}",
+  "tailwindConfig": "// Add to your tailwind.config.js\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        maritime-blue: {\n          '50': '#3669ac',\n          '100': '#3464a3',\n          '200': '#2e5992',\n          '300': '#294f81',\n          '400': '#234470',\n          '500': '#1e3a5f',\n          '600': '#193150',\n          '700': '#142741',\n          '800': '#101e31',\n          '900': '#0b1522',\n          '950': '#08101b'\n}\n      }\n    }\n  }\n}",
+  "_query": {
+    "baseColor": "#1e3a5f",
+    "name": "maritime-blue",
+    "shades": [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+  },
+  "_agentNote": "Shade 50 is lighter than 500 in real Tailwind palettes — this tool inverts the scale. Verify visually before committing to theme tokens."
+}

@@ -1,0 +1,109 @@
+/*
+* InputMasked component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-input-masked {
+  // Used on iOS when faking the inputMode to be type of number during focus – this fix avoids a flickering
+  input::placeholder {
+    color: inherit;
+  }
+
+  &--hide-controls {
+    &[type='number']::-webkit-outer-spin-button,
+    &[type='number']::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+
+    &[type='number'] {
+      appearance: textfield;
+    }
+  }
+}
+
+.dnb-segmented-field__fieldset {
+  @include utilities.fieldsetReset();
+
+  &--horizontal {
+    display: inline-flex;
+    flex-flow: row wrap;
+    align-items: baseline;
+    gap: 1rem;
+  }
+}
+
+.dnb-segmented-field__group {
+  display: inline-flex;
+
+  > .dnb-segmented-field__section.dnb-input__input:first-child {
+    padding-left: 0.5rem;
+  }
+
+  > .dnb-segmented-field__section.dnb-input__input:nth-last-child(1) {
+    padding-right: 0.5rem;
+  }
+
+  > .dnb-segmented-field__delimiter
+    + .dnb-segmented-field__section.dnb-input__input {
+    padding-left: 0.0625rem;
+  }
+}
+
+.dnb-segmented-field {
+  &:not(.dnb-input--disabled) .dnb-input__shell {
+    cursor: text;
+  }
+
+  &.dnb-input--disabled .dnb-input__shell {
+    cursor: not-allowed;
+  }
+
+  &__delimiter {
+    display: flex;
+    user-select: none;
+
+    padding: 0 0.25rem 0 0;
+    @include utilities.isFirefox() {
+      padding: 0 0.0625rem;
+    }
+  }
+
+  .dnb-segmented-field__section,
+  .dnb-segmented-field__delimiter {
+    color: var(--input-color-placeholder); // placeholder color
+
+    &--highlight {
+      color: var(--input-color-text); // text color
+    }
+  }
+
+  .dnb-segmented-field__section {
+    width: fit-content;
+
+    margin: 0;
+    padding: 0 0.125rem;
+    .dnb-input--medium &,
+    .dnb-input--large & {
+      padding: 0 0.25rem;
+    }
+
+    overflow: hidden;
+    outline: none;
+
+    white-space: nowrap;
+    font-family: var(--font-family-monospace);
+    border: none;
+    background: transparent;
+
+    &:not([aria-disabled='true']) {
+      cursor: text;
+    }
+
+    &[aria-disabled='true'] {
+      cursor: not-allowed;
+    }
+  }
+}

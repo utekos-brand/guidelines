@@ -1,0 +1,18 @@
+{
+  "tailwindClasses": ".component {\n  @apply flex flex-col p-4;\n}",
+  "unsupportedStyles": [
+    "border: 1px solid #e5e7eb",
+    "border-radius: 0.75rem",
+    "background: white",
+    "box-shadow: 0 1px 3px rgba(0,0,0,0.1)"
+  ],
+  "suggestions": [
+    "Some CSS properties don't have direct TailwindCSS equivalents. Consider using arbitrary values like [property:value]"
+  ],
+  "customUtilities": [],
+  "_query": {
+    "css": ".product-card { display: flex; flex-direction: column; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }",
+    "mode": "component"
+  },
+  "_agentNote": "For Utekos ProductCard, prefer semantic tokens: border-border bg-card shadow-sm rounded-xl flex flex-col p-4"
+}

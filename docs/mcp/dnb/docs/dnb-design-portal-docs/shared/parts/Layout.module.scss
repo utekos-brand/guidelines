@@ -1,0 +1,245 @@
+@use 'sass:map';
+
+@use '@dnb/eufemia/src/style/core/utilities.scss' as utilities;
+@use './PortalStyle.mixins.scss' as PortalMixins;
+
+:global {
+  .fullscreen-page {
+    margin: 0;
+    padding-top: 0;
+    border: none;
+  }
+
+  /* for wider screens */
+  .dnb-app-content:not(.fullscreen-page) {
+    .dnb-app-content > div:first-of-type {
+      @include utilities.allAbove(x-large) {
+        max-width: map.get(utilities.$breakpoints, x-large);
+      }
+    }
+  }
+}
+
+.portalStyle {
+  :global {
+    table td em {
+      padding-right: 0.5em;
+    }
+
+    img[align='right'] {
+      padding-left: 1rem;
+    }
+
+    img[align='left'] {
+      padding-right: 1rem;
+    }
+
+    .image-box {
+      @include PortalMixins.gridStyle();
+
+      --grid-rgb: 40 180 130;
+      --grid-opacity: 0;
+      --grid-opacity-bold: 0.25;
+
+      position: relative;
+
+      margin: 1rem 0 3rem 0;
+      padding: 2rem 2rem 0.9375rem 2rem;
+
+      text-align: center;
+
+      background-color: var(--token-color-background-neutral-subtle);
+
+      figcaption {
+        padding-top: 0.938rem; /* 15/16  because of the border */
+
+        font-style: italic;
+
+        border-top: solid 1px var(--token-color-stroke-neutral-subtle);
+      }
+
+      img:not([width]) {
+        width: 100%;
+        margin-bottom: 2rem;
+      }
+
+      /* SVG illustration helper for increasing font-size */
+      &.x-10 img {
+        width: calc(50% + 10rem);
+      }
+
+      &.blank {
+        background-color: transparent;
+      }
+      &.blank::after {
+        background-image: none;
+        border-color: transparent;
+      }
+    }
+
+    .typography-box {
+      @include PortalMixins.gridStyle();
+
+      --grid-rgb: 164 255 255;
+
+      position: relative;
+
+      margin-bottom: 4rem;
+      padding: 2rem 2rem 1.9375rem 2rem;
+
+      h1 {
+        margin-top: 0;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+
+        line-height: var(--line-height-basis);
+        list-style: none;
+      }
+
+      li {
+        margin: 0;
+        padding: 0;
+
+        font-size: var(--font-size-basis);
+        font-family: monospace;
+        line-height: var(--line-height-basis);
+      }
+    }
+
+    :checked + .radio-label {
+      position: relative;
+      z-index: 1;
+      border-color: var(--token-color-stroke-selected);
+    }
+
+    .markdown-body::before {
+      display: table;
+      content: '';
+    }
+    .markdown-body::after {
+      display: table;
+      clear: both;
+      content: '';
+    }
+
+    .contains-task-list {
+      padding-left: 0;
+    }
+    .task-list-item {
+      list-style-type: none;
+    }
+    .task-list-item + .task-list-item {
+      margin-top: 0.5rem;
+    }
+    .task-list-item .dnb-checkbox {
+      margin-right: 0.5rem;
+      margin-bottom: 0.25em;
+    }
+
+    .example-caption {
+      margin-top: 2rem;
+      padding-top: 0.9375rem;
+
+      font-size: var(--font-size-small);
+      font-style: italic;
+      text-align: center;
+
+      border-top: solid 1px #c4c4c4;
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+    }
+    .example-box + .example-caption {
+      margin-top: -2rem;
+    }
+  }
+}
+
+.mainStyle {
+  width: 100%;
+  min-height: 90vh;
+  padding: 0 2rem;
+  :global(.focusmode) & {
+    min-height: auto;
+    padding: 0;
+  }
+
+  @include utilities.allBelow(small) {
+    padding: 0 1rem;
+
+    :global(.focusmode) & {
+      padding: 0;
+    }
+  }
+}
+
+.footerStyle {
+  position: relative;
+  z-index: 2; /* 1 higher than aside */
+
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  border-top: 1px solid var(--token-color-stroke-neutral-subtle);
+
+  &:global(.dnb-section) {
+    display: flex;
+  }
+}
+
+.contentStyle {
+  position: relative;
+
+  /* higher than nav#portal-sidebar-menu */
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  width: 100%;
+  min-height: calc(100vh - 4rem); /* height of StickyMenuBar */
+
+  margin-left: 30vw; /* fallback */
+  margin-left: var(--aside-width);
+
+  padding: 0;
+
+  /* we use padding here, instead of margin, because applyPageFocus is else scrolling the page unwanted height of StickyMenuBar */
+  padding-top: 4rem;
+  :global(.focusmode) & {
+    padding-top: 0;
+  }
+
+  background-color: var(--token-color-background-neutral);
+  box-shadow: inset 1px 0 0 0 var(--token-color-stroke-neutral-subtle);
+
+  /* make sure that Sidebar aside "styled.aside" gets the same max-width */
+  @include utilities.allBelow(medium) {
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
+
+.wrapperStyle {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  justify-content: space-between; /* pos Footer at the bottom */
+
+  @include utilities.allBelow(medium) {
+    display: block;
+  }
+}
+
+.fullscreenStyle,
+.hideSidebarStyle {
+  --aside-width: 0;
+}

@@ -1,0 +1,191 @@
+@use '../../../style/core/utilities.scss' as utilities;
+
+@mixin buttonsInTable {
+  // sortable
+  & > thead > tr > th#{&}--sortable,
+  & &__th#{&}--sortable {
+    .dnb-table__sort-button.dnb-button {
+      --button-color-text--default: var(--table-th-text-color);
+
+      > .dnb-icon {
+        opacity: 0;
+        transition: opacity 200ms var(--easing-default);
+
+        @include utilities.reducedMotion() {
+          transition-duration: 0.01ms;
+        }
+      }
+
+      position: relative;
+      z-index: 1;
+      align-items: flex-end;
+
+      // reset anchor
+      box-shadow: none;
+
+      line-height: inherit;
+
+      margin: 0;
+      padding: 0;
+      padding-right: 0.5rem;
+
+      font-weight: var(--font-weight-medium);
+      text-align: inherit;
+      font-size: inherit;
+
+      .dnb-button__text {
+        margin: 0;
+        font-size: inherit;
+        line-height: inherit;
+      }
+
+      .dnb-button__icon {
+        align-self: flex-end;
+        margin-top: auto;
+        margin-bottom: 0.25rem;
+      }
+
+      .dnb-button__alignment {
+        vertical-align: top;
+      }
+
+      // underline
+      &:not(:focus) .dnb-button__text {
+        text-decoration: underline;
+        text-decoration-color: var(--table-th-text-color);
+        transition: text-decoration-color 250ms ease-in-out;
+      }
+
+      @include utilities.hover() {
+        &:not(:focus) .dnb-icon {
+          opacity: 1;
+        }
+      }
+
+      @include utilities.focus() {
+        &::before {
+          content: '';
+          position: absolute;
+          top: -0.5rem;
+          bottom: -0.5rem;
+          left: -1rem;
+          right: -0.5rem;
+        }
+
+        html[data-visual-test] & .dnb-icon,
+        :not(.dnb-table--active) &:active .dnb-icon {
+          opacity: 1;
+        }
+
+        // show underline
+        html:not([data-visual-test]) & {
+          .dnb-button__text {
+            text-decoration: underline;
+            text-decoration-color: inherit;
+          }
+
+          &:not(:active) .dnb-button__text {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      @include utilities.active() {
+        &::before {
+          content: '';
+          position: absolute;
+          z-index: 1;
+
+          top: -0.5rem;
+          bottom: -0.5rem;
+          left: -1rem;
+          right: -0.5rem;
+
+          height: inherit;
+          border-radius: inherit;
+
+          @include utilities.focusRing('mouse');
+          @include utilities.focusRing('touch');
+
+          --border-color: currentcolor;
+          --border-width: 0.125rem;
+        }
+
+        .dnb-button__text {
+          text-decoration: none;
+        }
+      }
+    }
+
+    &[align='right'] {
+      padding-right: 0.5rem;
+
+      .dnb-table__sort-button.dnb-button {
+        flex-direction: row-reverse;
+
+        &--tertiary.dnb-button--icon-position-right {
+          padding-right: 0.5rem;
+
+          .dnb-button__icon {
+            margin-left: -0.5rem;
+          }
+          .dnb-button__text {
+            padding-right: 0;
+          }
+        }
+      }
+    }
+  }
+
+  // sort-off: column was sorted before but returned to unsorted state
+  & > thead > tr > th#{&}--sort-off,
+  & &__th#{&}--sort-off {
+    .dnb-table__sort-button.dnb-button {
+      @include utilities.hover() {
+        &:not(:focus) .dnb-icon {
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  // active
+  & > thead > tr > th#{&}--active,
+  & &__th#{&}--active {
+    .dnb-table__sort-button.dnb-button {
+      // hide underline
+      &:not(:hover) .dnb-button__text {
+        text-decoration-color: transparent;
+      }
+
+      .dnb-icon {
+        opacity: 1;
+      }
+
+      // and underline on hover
+      @include utilities.hover() {
+        .dnb-button__text {
+          text-decoration-color: var(--token-color-text-action);
+        }
+      }
+
+      @include utilities.focus() {
+        // hide underline
+        .dnb-button__text {
+          text-decoration-color: transparent;
+        }
+      }
+    }
+  }
+
+  & &__th,
+  & > thead > tr > th {
+    .dnb-table__help-button {
+      margin-left: 0.5rem;
+    }
+  }
+
+  & > thead > &--no-wrap &__sort-button {
+    white-space: nowrap;
+  }
+}

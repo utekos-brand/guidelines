@@ -1,0 +1,327 @@
+/**
+ * Icon Test
+ *
+ */
+
+import { useState } from 'react'
+import type { SVGProps } from 'react'
+import { axeComponent, loadScss } from '../../../core/test-utils/testSetup'
+import { render } from '@testing-library/react'
+import type { IconAllProps } from '../Icon'
+import Icon, { prerenderIcon } from '../Icon'
+import { question, star } from './test-files'
+
+const props: IconAllProps = {
+  icon: question,
+  alt: 'question mark',
+  'aria-hidden': null,
+}
+
+describe('Icon component', () => {
+  it('renders with props as an object', () => {
+    const props: IconAllProps = { icon: question }
+
+    render(<Icon {...props} />)
+    expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+  })
+
+  it('has valid width and height prop', () => {
+    const width = '200'
+    const height = '100'
+    render(<Icon {...props} width={width} height={height} />)
+    const elem = document.querySelector('svg')
+    expect(elem).toBeInTheDocument()
+    expect(elem.getAttribute('width')).toBe(width)
+    expect(elem.getAttribute('height')).toBe(height)
+  })
+
+  it('should support inline styling', () => {
+    render(<Icon icon={question} style={{ color: 'red' }} />)
+
+    expect(document.querySelector('.dnb-icon').getAttribute('style')).toBe(
+      'color: red;'
+    )
+  })
+
+  it('should work with medium size', () => {
+    const { rerender } = render(<Icon {...props} size="24" />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--medium'
+    )
+    rerender(<Icon {...props} size={16} />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--default'
+    )
+  })
+
+  it('should return null if icon was given as null', () => {
+    const { asFragment: asFragment1 } = render(<Icon icon={null} />)
+    expect(asFragment1()).toMatchInlineSnapshot(`<DocumentFragment />`)
+
+    const { asFragment: asFragment2 } = render(<Icon icon={undefined} />)
+    expect(asFragment2()).toMatchInlineSnapshot(`<DocumentFragment />`)
+
+    const { asFragment: asFragment3 } = render(<Icon icon={false} />)
+    expect(asFragment3()).toMatchInlineSnapshot(`<DocumentFragment />`)
+
+    const { asFragment: asFragment4 } = render(<Icon icon={''} />)
+    expect(asFragment4()).toMatchInlineSnapshot(`<DocumentFragment />`)
+  })
+
+  it('should have border class', () => {
+    render(<Icon {...props} border={true} />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--border'
+    )
+  })
+
+  it('should inherit color and vice versa when inheritColor is false', () => {
+    const { rerender } = render(<Icon icon={question} />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--inherit-color'
+    )
+
+    rerender(<Icon icon={question} inheritColor={true} />)
+
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--inherit-color'
+    )
+
+    rerender(<Icon icon={question} inheritColor={false} />)
+
+    expect(
+      document.querySelector('span.dnb-icon').classList
+    ).not.toContain('dnb-icon--inherit-color')
+  })
+
+  it('should not be hidden, given aria-hidden={false}', () => {
+    render(<Icon {...props} aria-hidden={false} />)
+    expect(
+      document.querySelector('span.dnb-icon').getAttribute('aria-hidden')
+    ).toBe('false')
+  })
+
+  it('should work with custom size', () => {
+    const { rerender } = render(<Icon {...props} size="100" />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--custom-size'
+    )
+    rerender(<Icon {...props} size={16} />)
+    expect(
+      document.querySelector('span.dnb-icon').classList
+    ).not.toContain('dnb-icon--custom-size')
+  })
+
+  it('should set data-testid property based on the aria-label', () => {
+    render(<Icon icon={question} aria-label="question icon" />)
+    expect(
+      document.querySelector('span.dnb-icon').getAttribute('data-testid')
+    ).toBe('question icon')
+  })
+
+  it('should set data-testid when provided', () => {
+    render(
+      <Icon
+        icon={question}
+        aria-label="question icon"
+        data-testid="custom-data-testid-value"
+      />
+    )
+    expect(
+      document.querySelector('span.dnb-icon').getAttribute('data-testid')
+    ).toBe('custom-data-testid-value')
+  })
+
+  it('should work when icon property is provided a functional component with a hook', () => {
+    const FunctionalComponentWithHookIcon = () => {
+      const [title] = useState('banana')
+
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <title>{title}</title>
+          <path d="M23.625 17.864A3.547 3.547 0 0120.45 23H3.548a3.546 3.546 0 01-3.172-5.136l8.45-14.902a3.548 3.548 0 016.347 0l8.452 14.902z" />
+        </svg>
+      )
+    }
+    render(
+      <Icon icon={FunctionalComponentWithHookIcon} inheritColor={false} />
+    )
+    expect(document.querySelector('svg title').textContent).toBe('banana')
+  })
+
+  it('should not execute hook-based icon elements during size calculation', () => {
+    let renderCalls = 0
+
+    const HookIcon = (props?: Record<string, unknown>) => {
+      renderCalls += 1
+      const [title] = useState('hook-icon')
+
+      return (
+        <svg
+          width={24}
+          height={24}
+          viewBox="0 0 24 24"
+          fill="none"
+          {...props}
+        >
+          <title>{title}</title>
+          <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+        </svg>
+      )
+    }
+
+    render(<Icon icon={<HookIcon />} />)
+
+    expect(renderCalls).toBe(1)
+  })
+
+  it('should detect medium size from React element icon via SVG width when function name is minified', () => {
+    // Simulate a minified icon function (short name without _medium suffix)
+    // that renders a 24px SVG — calcSize should fall back to reading SVG width.
+    // Use uppercase name so React treats it as a component, not an HTML tag.
+    const E = (props?: Record<string, unknown>) => (
+      <svg
+        width={24}
+        height={24}
+        viewBox="0 0 24 24"
+        fill="none"
+        {...props}
+      >
+        <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+      </svg>
+    )
+
+    render(<Icon icon={<E />} />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--medium'
+    )
+  })
+
+  it('should detect default size from React element icon via SVG width when function name is minified', () => {
+    // Simulate a minified icon function rendering a 16px SVG
+    const E = (props?: Record<string, unknown>) => (
+      <svg
+        width={16}
+        height={16}
+        viewBox="0 0 16 16"
+        fill="none"
+        {...props}
+      >
+        <path d="M8 1a7 7 0 100 14A7 7 0 008 1z" />
+      </svg>
+    )
+
+    render(<Icon icon={<E />} />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--default'
+    )
+  })
+
+  it('should detect medium size from a direct function icon with minified name', () => {
+    // Direct function (not wrapped in JSX) with short name — tests the
+    // typeof icon === 'function' branch in calcSize
+    const e = (props?: SVGProps<SVGSVGElement> & { title?: string }) => (
+      <svg
+        width={24}
+        height={24}
+        viewBox="0 0 24 24"
+        fill="none"
+        {...(props as Record<string, unknown>)}
+      >
+        <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+      </svg>
+    )
+
+    render(<Icon icon={e} />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--medium'
+    )
+  })
+
+  it('should validate with ARIA rules', async () => {
+    const Comp = render(<Icon {...props} />)
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+
+  it('should render data:image icon with empty alt when no alt is provided', () => {
+    const dataUri = 'data:image/png;base64,abc123'
+    render(<Icon icon={dataUri} />)
+
+    const img = document.querySelector('img')
+    expect(img).toHaveAttribute('alt', '')
+  })
+
+  it('should render data:image icon with provided alt text', () => {
+    const dataUri = 'data:image/png;base64,abc123'
+    render(<Icon icon={dataUri} alt="Custom alt" />)
+
+    const img = document.querySelector('img')
+    expect(img).toHaveAttribute('alt', 'Custom alt')
+  })
+
+  it('should return stable component reference from prerenderIcon for function icons', () => {
+    const ref1 = prerenderIcon({ icon: question })
+    const ref2 = prerenderIcon({ icon: question })
+
+    expect(ref1).toBe(ref2)
+    expect(ref1).toBe(question)
+  })
+
+  it('should not remount the SVG element on rerender', () => {
+    const { rerender } = render(<Icon icon={question} />)
+
+    const svgBefore = document.querySelector('svg')
+    expect(svgBefore).toBeInTheDocument()
+
+    rerender(<Icon icon={question} />)
+
+    const svgAfter = document.querySelector('svg')
+    expect(svgAfter).toBe(svgBefore)
+  })
+
+  it('should not have filled class by default', () => {
+    render(<Icon icon={question} />)
+    expect(
+      document.querySelector('span.dnb-icon').classList
+    ).not.toContain('dnb-icon--filled')
+  })
+})
+
+describe('Icon with function children', () => {
+  it('should not leak Icon props like skeleton to the SVG element', () => {
+    render(<Icon skeleton>{question}</Icon>)
+    const svg = document.querySelector('svg')
+    expect(svg).toBeInTheDocument()
+    expect(svg.getAttribute('skeleton')).toBeNull()
+  })
+})
+
+describe('Icon fill', () => {
+  it('should have filled class when fill prop is true', () => {
+    render(<Icon icon={star} fill />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--filled'
+    )
+  })
+
+  it('should apply fill for any icon', () => {
+    render(<Icon icon={question} fill />)
+    expect(document.querySelector('span.dnb-icon').classList).toContain(
+      'dnb-icon--filled'
+    )
+  })
+
+  it('should not have filled class when fill prop is not set', () => {
+    render(<Icon icon={star} />)
+    expect(
+      document.querySelector('span.dnb-icon').classList
+    ).not.toContain('dnb-icon--filled')
+  })
+})
+
+describe('Icon scss', () => {
+  const css = loadScss(require.resolve('../style/deps.scss'))
+  it('should match style dependencies css', () => {
+    expect(css).toMatchSnapshot()
+  })
+})

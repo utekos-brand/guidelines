@@ -1,0 +1,1342 @@
+/**
+ * GlobalStatus Test
+ *
+ */
+
+import { useState } from 'react'
+import type { PropsWithChildren, Ref } from 'react'
+import {
+  axeComponent,
+  loadScss,
+  wait,
+} from '../../../core/test-utils/testSetup'
+import type { GlobalStatusProps } from '../GlobalStatus'
+import GlobalStatus from '../GlobalStatus'
+import { GlobalStatusInterceptor } from '../GlobalStatusController'
+import Switch from '../../switch/Switch'
+import Autocomplete from '../../autocomplete/Autocomplete'
+import { fireEvent, render, waitFor } from '@testing-library/react'
+import { Provider } from '../../../shared'
+import { P } from '../../../elements'
+import { Icon } from '../../../components'
+import {
+  initializeTestSetup,
+  simulateAnimationEnd,
+} from '../../height-animation/__tests__/HeightAnimationUtils'
+import { confetti_medium as ConfettiIcon } from '../../../icons'
+import { Form } from '../../../extensions/forms'
+
+const text = 'text'
+const items = [
+  { id: 'id-1', text: 'item #1' },
+  { id: 'id-2', text: 'item #2' },
+]
+const show = true
+const autoScroll = false
+
+const props: GlobalStatusProps = {
+  show,
+  autoScroll,
+  items,
+  text,
+}
+
+// To be able to test the height animation / cached content
+initializeTestSetup()
+
+beforeEach(() => {
+  window.scrollTo = vi.fn()
+})
+
+describe('GlobalStatus component', () => {
+  it('should have a text value as defined in the prop', () => {
+    render(<GlobalStatus {...props} />)
+    expect(
+      document
+        .querySelector('div.dnb-global-status__message')
+        .querySelectorAll('.dnb-p')[0].textContent
+    ).toBe(props.text)
+  })
+
+  it('should have list items as defined in the prop', () => {
+    render(<GlobalStatus {...props} />)
+    expect(document.querySelector('.dnb-ul').textContent).toBe(
+      props.items
+        .map((item) => (typeof item === 'string' ? item : item.text))
+        .join('')
+    )
+  })
+
+  it('title should have role of paragraph', () => {
+    const { rerender } = render(
+      <Provider locale="en-GB">
+        <GlobalStatus {...props} />
+      </Provider>
+    )
+    const element = document.querySelector('.dnb-global-status__title')
+    expect(element.tagName).toContain('DIV')
+    expect(element).toHaveAttribute('role', 'paragraph')
+
+    expect(element.textContent).toContain('An error has occurred')
+    expect(element.textContent).toContain('Close')
+    expect(element).toHaveAttribute('lang', 'en-GB')
+
+    rerender(
+      <Provider locale="nb-NO">
+        <GlobalStatus {...props} />
+      </Provider>
+    )
+
+    expect(element.textContent).toContain('En feil har skjedd')
+    expect(element.textContent).toContain('Lukk')
+    expect(element).toHaveAttribute('lang', 'nb-NO')
+
+    rerender(
+      <Provider locale="nb-NO">
+        <GlobalStatus {...props} title={<P>Custom title</P>} />
+      </Provider>
+    )
+
+    expect(element.textContent).toContain('Custom title')
+    expect(element).not.toHaveAttribute('role', 'paragraph')
+  })
+
+  it('should have correct attributes like "aria-live"', async () => {
+    const { rerender } = render(<GlobalStatus autoScroll={false} />)
+    expect(document.querySelector('[aria-live]')).toBeInTheDocument()
+
+    rerender(<GlobalStatus autoScroll={false} show={true} />)
+
+    expect(
+      document.querySelector('[aria-live="assertive"]')
+    ).toBeInTheDocument()
+
+    rerender(<GlobalStatus autoScroll={false} show={false} />)
+
+    expect(
+      document.querySelector('.dnb-global-status__wrapper')
+    ).toHaveAttribute('aria-live', 'off')
+  })
+
+  it('should have correct content after a controller add', () => {
+    const startupText = 'text'
+    const newText = 'new text'
+
+    render(
+      <>
+        <GlobalStatus
+          autoScroll={false}
+          id="custom-status-update"
+          text={startupText}
+          items={['item#1']}
+        />
+        <GlobalStatus.Add
+          id="custom-status-update"
+          statusId="status-update-1"
+          text="will be overwritten"
+          item={{ text: 'item#2' }}
+          onClose={vi.fn()}
+        />
+        <GlobalStatus.Add
+          id="custom-status-update"
+          statusId="status-update-1"
+          text={newText}
+          item={{ text: 'item#3' }}
+          onClose={vi.fn()}
+        />
+      </>
+    )
+
+    expect(
+      document.querySelector(
+        'div.dnb-global-status__message__content > .dnb-p'
+      ).textContent
+    ).toBe(newText)
+
+    expect(
+      document.querySelector(
+        'div.dnb-global-status__message__content > .dnb-ul'
+      ).textContent
+    ).toBe('item#1item#3')
+
+    expect(
+      document.querySelectorAll(
+        'div.dnb-global-status__message p.dnb-p'
+      )[0].textContent
+    ).toBe(newText)
+  })
+
+  it('should have correct content after a controller update', () => {
+    const startupText = 'text'
+    const startupItems = ['Item1', 'Item2']
+    const newText = 'new text'
+    const newItems = ['Item3', 'Item4']
+
+    render(<GlobalStatus autoScroll={false} id="custom-status-update" />)
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-update"
+        statusId="status-update-1"
+        text={startupText}
+        items={startupItems}
+        onClose={vi.fn()}
+      />
+    )
+
+    const ulItems = document.querySelectorAll('ul.dnb-ul li')
+    expect(ulItems[0].textContent).toBe('Item1')
+    expect(ulItems[1].textContent).toBe('Item2')
+    expect(
+      document.querySelectorAll(
+        'div.dnb-global-status__message p.dnb-p'
+      )[0].textContent
+    ).toBe(startupText)
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-update"
+        statusId="status-update-1"
+        text={newText}
+        items={newItems}
+        onClose={vi.fn()}
+      />
+    )
+
+    const newUlItems = document.querySelectorAll('ul.dnb-ul li')
+    expect(newUlItems[0].textContent).toBe('Item3')
+    expect(newUlItems[1].textContent).toBe('Item4')
+    expect(
+      document.querySelectorAll(
+        'div.dnb-global-status__message p.dnb-p'
+      )[0].textContent
+    ).toBe(newText)
+
+    render(
+      <GlobalStatus.Remove
+        id="custom-status-update"
+        statusId="status-update-1"
+        bufferDelay={0}
+      />
+    )
+
+    expect(
+      document.querySelector('div.dnb-global-status__message')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should have correct content after a controller remove', async () => {
+    const startupText = 'text'
+    const startupItems = ['Item1', 'Item2']
+    const newText = 'new text'
+    const newItems = ['Item3', 'Item4']
+
+    render(<GlobalStatus autoScroll={false} id="custom-status-remove" />)
+
+    expect(document.querySelector('.dnb-global-status').innerHTML).toBe('')
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-remove"
+        statusId="status-remove-1"
+        text={startupText}
+        items={startupItems}
+        onClose={vi.fn()}
+      />
+    )
+
+    const ulItems = document.querySelectorAll('ul.dnb-ul li')
+    expect(ulItems[0].textContent).toBe('Item1')
+    expect(ulItems[1].textContent).toBe('Item2')
+    expect(
+      document.querySelectorAll(
+        'div.dnb-global-status__message p.dnb-p'
+      )[0].textContent
+    ).toBe(startupText)
+    expect(
+      document.querySelector('div.dnb-global-status__message')
+    ).toBeInTheDocument()
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-remove"
+        statusId="status-remove-2"
+        text={newText}
+        items={newItems}
+        onClose={vi.fn()}
+      />
+    )
+
+    const newUlItems = document.querySelectorAll('ul.dnb-ul li')
+    expect(newUlItems[2].textContent).toBe('Item3')
+    expect(newUlItems[3].textContent).toBe('Item4')
+    expect(
+      document.querySelectorAll(
+        'div.dnb-global-status__message p.dnb-p'
+      )[0].textContent
+    ).toBe(newText)
+    expect(
+      document.querySelectorAll('div.dnb-global-status__message p.dnb-p')
+    ).toHaveLength(5)
+
+    render(
+      <GlobalStatus.Remove
+        id="custom-status-remove"
+        statusId="status-remove-1"
+        bufferDelay={0}
+      />
+    )
+
+    const removedUlItems = document.querySelectorAll('ul.dnb-ul li')
+    expect(removedUlItems[0].textContent).toBe('Item3')
+    expect(removedUlItems[1].textContent).toBe('Item4')
+    expect(removedUlItems[2]).toBeFalsy()
+    expect(removedUlItems[3]).toBeFalsy()
+    expect(
+      document.querySelectorAll(
+        'div.dnb-global-status__message p.dnb-p'
+      )[0].textContent
+    ).toBe(newText)
+    expect(
+      document.querySelectorAll('div.dnb-global-status__message p.dnb-p')
+    ).toHaveLength(3)
+
+    render(
+      <GlobalStatus.Remove
+        id="custom-status-remove"
+        statusId="status-remove-2"
+        bufferDelay={0}
+      />
+    )
+
+    expect(
+      document.querySelector('div.dnb-global-status__message')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should handle delayed interactions', async () => {
+    const FormField1 = () => {
+      const [status, setStatus] = useState(null)
+      return (
+        <Switch
+          id="switch-1"
+          status={status}
+          statusNoAnimation={true}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message-1' : null)
+          }}
+        />
+      )
+    }
+
+    const FormField2 = () => {
+      const [status, setStatus] = useState(null)
+      return (
+        <Switch
+          id="switch-2"
+          status={status}
+          statusNoAnimation={true}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message-2' : null)
+          }}
+        />
+      )
+    }
+
+    const FormField3 = () => {
+      const [status, setStatus] = useState(null)
+      return (
+        <Autocomplete
+          id="autocomplete-3"
+          status={status}
+          statusNoAnimation={true}
+          onFocus={() => {
+            setStatus('error-message-3')
+          }}
+          onBlur={() => {
+            setStatus(null)
+          }}
+        />
+      )
+    }
+
+    render(
+      <>
+        <GlobalStatus id="my-form" autoScroll={false} />
+        <Form.Handler globalStatusId="my-form">
+          <FormField1 />
+          <FormField2 />
+          <FormField3 />
+        </Form.Handler>
+      </>
+    )
+
+    const getInput = (selector: string) =>
+      document.querySelector(selector) as HTMLInputElement
+    const clickInput = (selector: string) =>
+      fireEvent.click(getInput(selector))
+    const focusInput = (selector: string) =>
+      fireEvent.focus(getInput(selector))
+    const blurInput = (selector: string) =>
+      fireEvent.blur(getInput(selector))
+    const getFormStatusTexts = () =>
+      Array.from(document.querySelectorAll('.dnb-form-status__text')).map(
+        (element) => element.textContent
+      )
+    const getGlobalStatusTexts = () =>
+      Array.from(
+        document.querySelectorAll('.dnb-global-status__message p')
+      ).map((element) => element.textContent)
+
+    clickInput('input#switch-1')
+    clickInput('input#switch-2')
+    focusInput('input#autocomplete-3')
+
+    await waitFor(() => {
+      expect(getFormStatusTexts()).toEqual([
+        'error-message-1',
+        'error-message-2',
+        'error-message-3',
+      ])
+    })
+
+    await waitFor(() => {
+      expect(getGlobalStatusTexts()).toEqual([
+        'error-message-1',
+        'error-message-2',
+        'error-message-3',
+      ])
+    })
+
+    clickInput('input#switch-1')
+    clickInput('input#switch-2')
+    blurInput('input#autocomplete-3')
+
+    await waitFor(() => {
+      expect(getFormStatusTexts()).toEqual([])
+      expect(getGlobalStatusTexts()).toEqual([])
+    })
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__shell')
+      ).toHaveTextContent('En feil har skjedd')
+    })
+
+    simulateAnimationEnd()
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__shell')
+      ).toBeNull()
+    })
+  })
+
+  it('should scroll to GlobalStatus', async () => {
+    const scrollTo = vi.fn()
+    vi.spyOn(window, 'scrollTo').mockImplementation(scrollTo)
+    const offsetTop = 1000
+
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch"
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'scroll-to-test' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message' : null)
+          }}
+        />
+      )
+    }
+    render(
+      <>
+        <GlobalStatus id="scroll-to-test" />
+        <ToggleStatus />
+      </>
+    )
+
+    Object.defineProperty(
+      document.querySelector('.dnb-global-status__wrapper') as HTMLElement,
+      'scrollIntoView',
+      {
+        configurable: true,
+        value: undefined,
+      }
+    )
+
+    // Open
+    fireEvent.click(document.querySelector('input#switch'))
+
+    await waitFor(() => {
+      expect(scrollTo).toHaveBeenCalledTimes(1)
+    })
+    expect(scrollTo).toHaveBeenCalledWith({
+      behavior: 'smooth',
+      top: 0,
+    })
+
+    vi.spyOn(
+      document.querySelector('.dnb-global-status__wrapper') as HTMLElement,
+      'offsetTop',
+      'get'
+    ).mockImplementation(() => offsetTop)
+
+    // Close
+    fireEvent.click(document.querySelector('input#switch'))
+    await waitFor(() => {
+      expect(scrollTo).toHaveBeenCalledTimes(1)
+    })
+
+    // Open
+    fireEvent.click(document.querySelector('input#switch'))
+    await waitFor(() => {
+      expect(scrollTo).toHaveBeenCalledTimes(2)
+    })
+    expect(scrollTo).toHaveBeenCalledWith({
+      behavior: 'smooth',
+      top: offsetTop,
+    })
+  })
+
+  it('should not scroll when autoScroll is false', async () => {
+    const scrollTo = vi.fn()
+    vi.spyOn(window, 'scrollTo').mockImplementation(scrollTo)
+
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch-no-scroll"
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'no-scroll-test' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message' : null)
+          }}
+        />
+      )
+    }
+
+    render(
+      <>
+        <GlobalStatus id="no-scroll-test" autoScroll={false} />
+        <ToggleStatus />
+      </>
+    )
+
+    fireEvent.click(document.querySelector('input#switch-no-scroll'))
+
+    await refresh()
+
+    expect(scrollTo).not.toHaveBeenCalled()
+  })
+
+  it('should scroll when autoScroll is true (default)', async () => {
+    const scrollTo = vi.fn()
+    vi.spyOn(window, 'scrollTo').mockImplementation(scrollTo)
+
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch-scroll"
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'scroll-test' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message' : null)
+          }}
+        />
+      )
+    }
+
+    render(
+      <>
+        <GlobalStatus id="scroll-test" />
+        <ToggleStatus />
+      </>
+    )
+
+    fireEvent.click(document.querySelector('input#switch-scroll'))
+
+    await refresh()
+
+    await waitFor(() => {
+      expect(scrollTo).toHaveBeenCalled()
+    })
+  })
+
+  it('should close when esc key is pressed', async () => {
+    const onClose = vi.fn()
+    const onHide = vi.fn()
+
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch"
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'esc-test' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message' : null)
+          }}
+        />
+      )
+    }
+    render(
+      <>
+        <GlobalStatus
+          id="esc-test"
+          autoScroll={false}
+          onHide={onHide}
+          onClose={onClose}
+        />
+        <ToggleStatus />
+      </>
+    )
+
+    // Open
+    fireEvent.click(document.querySelector('input#switch'))
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__shell')
+      ).toBeInTheDocument()
+    })
+
+    expect(onClose).toHaveBeenCalledTimes(0)
+
+    // Close with key
+    keydown('Escape')
+
+    await waitFor(() => {
+      expect(onHide).toHaveBeenCalledTimes(1)
+    })
+
+    simulateAnimationEnd(
+      document.querySelector('.dnb-global-status__shell')
+    )
+
+    await waitFor(() => {
+      expect(onClose).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('should close when escape key name is pressed', async () => {
+    const onClose = vi.fn()
+    const onHide = vi.fn()
+
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch-escape-key"
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'escape-name-test' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message' : null)
+          }}
+        />
+      )
+    }
+
+    render(
+      <>
+        <GlobalStatus
+          id="escape-name-test"
+          autoScroll={false}
+          onHide={onHide}
+          onClose={onClose}
+        />
+        <ToggleStatus />
+      </>
+    )
+
+    fireEvent.click(document.querySelector('input#switch-escape-key'))
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__shell')
+      ).toBeInTheDocument()
+    })
+
+    expect(onClose).toHaveBeenCalledTimes(0)
+
+    keydown('Escape')
+
+    await waitFor(() => {
+      expect(onHide).toHaveBeenCalledTimes(1)
+    })
+
+    simulateAnimationEnd(
+      document.querySelector('.dnb-global-status__shell')
+    )
+
+    await waitFor(() => {
+      expect(onClose).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('should have height of auto value', async () => {
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch"
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'height-test' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message' : null)
+          }}
+        />
+      )
+    }
+    render(
+      <>
+        <GlobalStatus id="height-test" />
+        <ToggleStatus />
+      </>
+    )
+
+    fireEvent.click(document.querySelector('input#switch'))
+    await refresh()
+
+    simulateAnimationEnd()
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__shell')
+      ).toHaveAttribute('style', '--duration: 800ms; height: auto;')
+    })
+  })
+
+  it('should be hidden after all messages are removed', async () => {
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch"
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'main-to-be-empty' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? 'error-message' : null)
+          }}
+        />
+      )
+    }
+    render(
+      <>
+        <GlobalStatus id="main-to-be-empty" autoScroll={false} />
+        <ToggleStatus />
+      </>
+    )
+
+    fireEvent.click(document.querySelector('input#switch'))
+    await refresh()
+
+    expect(
+      document.querySelector('.dnb-form-status__text').textContent
+    ).toBe('error-message')
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__content')
+      ).toBeInTheDocument()
+      expect(
+        document.querySelector('.dnb-global-status__message p')
+      ).toHaveTextContent('error-message')
+    })
+
+    fireEvent.click(document.querySelector('input#switch'))
+    await refresh()
+
+    expect(
+      document.querySelector('.dnb-form-status__text')
+    ).not.toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__shell')
+      ).toHaveTextContent('En feil har skjedd')
+    })
+
+    simulateAnimationEnd()
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-global-status__shell')
+      ).toBeNull()
+    })
+  })
+
+  it('should generate itemId form React Element', async () => {
+    const StatusAsComponent = ({
+      children,
+      ref,
+    }: PropsWithChildren<{
+      ref?: Ref<HTMLSpanElement>
+    }>) => <span ref={ref}>{children}</span>
+
+    render(<GlobalStatus autoScroll={false} id="custom-status-element" />)
+
+    const provider = new GlobalStatusInterceptor({
+      id: 'custom-status-element',
+    })
+
+    provider.add({
+      statusId: 'status-1',
+      item: {
+        text: <StatusAsComponent>error-message--a</StatusAsComponent>,
+        statusAnchorLabel: <StatusAsComponent>label--a</StatusAsComponent>,
+        statusAnchorUrl: true,
+      },
+    })
+
+    provider.add({
+      statusId: 'status-2',
+      item: {
+        text: <StatusAsComponent>error-message--b</StatusAsComponent>,
+        statusAnchorLabel: <StatusAsComponent>label--b</StatusAsComponent>,
+        statusAnchorUrl: true,
+      },
+    })
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('div.dnb-global-status__message')
+          .textContent
+      ).toBe(
+        'error-message--aGå til label--aerror-message--bGå til label--b'
+      )
+    })
+  })
+
+  it('should support component given as labels', async () => {
+    const LabelAsComponent = () => {
+      return <span>'my-label'</span>
+    }
+    const StatusAsComponent = () => {
+      return <span>'error-message'</span>
+    }
+
+    const ToggleStatus = () => {
+      const [status, setStatus] = useState(null)
+
+      return (
+        <Switch
+          id="switch"
+          label={<LabelAsComponent />}
+          status={status}
+          statusNoAnimation={true}
+          globalStatus={{ id: 'main-to-be-empty' }}
+          onChange={({ checked }) => {
+            setStatus(checked ? <StatusAsComponent /> : null)
+          }}
+        />
+      )
+    }
+    render(
+      <>
+        <GlobalStatus
+          id="main-to-be-empty"
+          autoScroll={false}
+          statusAnchorText={<span>custom anchor text</span>}
+        />
+        <ToggleStatus />
+      </>
+    )
+
+    fireEvent.click(document.querySelector('input#switch'))
+
+    await waitFor(() => {
+      expect(
+        document.querySelectorAll('.dnb-global-status__message p')[0]
+          .textContent
+      ).toBe("'error-message'")
+      expect(
+        document
+          .querySelectorAll(
+            '.dnb-global-status__message__content ul li'
+          )[0]
+          .querySelector('a.dnb-anchor').textContent
+      ).toBe("custom anchor text 'my-label'")
+    })
+  })
+
+  it('should have a working auto close', async () => {
+    const onOpen = vi.fn()
+    const onClose = vi.fn()
+    const onHide = vi.fn()
+
+    render(
+      <GlobalStatus
+        autoClose={true}
+        autoScroll={false}
+        id="custom-status-autoClose"
+        onOpen={onOpen}
+        onClose={onClose}
+        onHide={onHide}
+      />
+    )
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-autoClose"
+        statusId="status-autoClose-1"
+        text="text only"
+        onClose={vi.fn()}
+      />
+    )
+
+    simulateAnimationEnd()
+
+    await waitFor(() => {
+      expect(onOpen).toHaveBeenCalledTimes(1)
+      expect(
+        document.querySelector('div.dnb-global-status__message')
+      ).toHaveTextContent('text only')
+    })
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-autoClose"
+        statusId="status-autoClose-2"
+        text="text only"
+        items={['foo']}
+        onClose={vi.fn()}
+      />
+    )
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('div.dnb-global-status__message')
+      ).toHaveTextContent('text onlyfoo')
+    })
+
+    render(
+      <GlobalStatus.Remove
+        id="custom-status-autoClose"
+        statusId="status-autoClose-1"
+        bufferDelay={0}
+      />
+    )
+
+    simulateAnimationEnd()
+
+    expect(onClose).toHaveBeenCalledTimes(0)
+
+    render(
+      <GlobalStatus.Remove
+        id="custom-status-autoClose"
+        statusId="status-autoClose-2"
+        bufferDelay={0}
+      />
+    )
+
+    simulateAnimationEnd()
+
+    await waitFor(() => {
+      expect(onClose).toHaveBeenCalledTimes(1)
+      expect(onHide).toHaveBeenCalledTimes(0)
+      expect(
+        document.querySelector('div.dnb-global-status__message')
+      ).not.toBeInTheDocument()
+    })
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-autoClose"
+        statusId="status-autoClose-1"
+        items={['foo']}
+        onClose={vi.fn()}
+        text="text"
+      />
+    )
+
+    fireEvent.click(
+      document.querySelector('button.dnb-global-status__close-button')
+    )
+
+    await waitFor(() => {
+      expect(onHide).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('should take account to the show prop', async () => {
+    const { rerender } = render(
+      <GlobalStatus
+        show={false}
+        autoScroll={false}
+        id="custom-status-show"
+      />
+    )
+
+    expect(
+      document.querySelector('div.dnb-global-status__content')
+    ).not.toBeInTheDocument()
+
+    expect(
+      document.querySelector('div.dnb-global-status__message__content')
+    ).not.toBeInTheDocument()
+
+    rerender(
+      <GlobalStatus
+        show={true}
+        autoScroll={false}
+        id="custom-status-show"
+      />
+    )
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('div.dnb-global-status__content')
+      ).toBeInTheDocument()
+      expect(
+        document.querySelector('div.dnb-global-status__message__content')
+      ).not.toBeInTheDocument()
+    })
+
+    render(
+      <GlobalStatus.Add
+        id="custom-status-show"
+        statusId="status-show-1"
+        text="text only"
+        onClose={vi.fn()}
+      />
+    )
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('div.dnb-global-status__message__content')
+      ).toBeInTheDocument()
+    })
+
+    rerender(
+      <GlobalStatus
+        show="auto"
+        autoScroll={false}
+        id="custom-status-show"
+      />
+    )
+
+    render(
+      <GlobalStatus.Remove
+        id="custom-status-show"
+        statusId="status-show-1"
+      />
+    )
+
+    simulateAnimationEnd()
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('div.dnb-global-status__content')
+      ).not.toBeInTheDocument()
+      expect(
+        document.querySelector('div.dnb-global-status__message__content')
+      ).not.toBeInTheDocument()
+    })
+  })
+
+  it('should display correct state based on prop', () => {
+    const { rerender } = render(<GlobalStatus state="warning" />)
+
+    const element = document.querySelector('.dnb-global-status')
+
+    expect(element.classList).toContain('dnb-global-status--warning')
+
+    rerender(<GlobalStatus state="information" />)
+    expect(element.classList).toContain('dnb-global-status--information')
+
+    rerender(<GlobalStatus state="success" />)
+    expect(element.classList).toContain('dnb-global-status--success')
+
+    rerender(<GlobalStatus state="error" />)
+    expect(element.classList).toContain('dnb-global-status--error')
+
+    rerender(<GlobalStatus state="warning" />)
+    expect(element.classList).toContain('dnb-global-status--warning')
+  })
+
+  it('should support removing icon', () => {
+    render(<GlobalStatus icon={null} show noAnimation hideCloseButton />)
+
+    expect(document.querySelector('.dnb-icon')).not.toBeInTheDocument()
+  })
+
+  it('should support setting icon as Icon', () => {
+    render(
+      <GlobalStatus
+        icon={
+          <Icon icon={ConfettiIcon} data-testid="custom-icon-testid" />
+        }
+        show
+        noAnimation
+        hideCloseButton
+      />
+    )
+
+    expect(document.querySelector('.dnb-icon')).toBeInTheDocument()
+    expect(
+      document.querySelector('span.dnb-icon').getAttribute('data-testid')
+    ).toBe('custom-icon-testid')
+  })
+
+  it('should validate with ARIA rules', async () => {
+    const Comp = render(<GlobalStatus {...props} />)
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+
+  it('should update state class when state prop changes while items remain the same', () => {
+    const fixedItems = [{ id: 'id-1', text: 'item #1' }]
+
+    const { rerender } = render(
+      <GlobalStatus
+        show
+        autoScroll={false}
+        noAnimation
+        state="error"
+        items={fixedItems}
+      />
+    )
+
+    const element = document.querySelector('.dnb-global-status')
+    expect(element).toHaveClass('dnb-global-status--error')
+
+    rerender(
+      <GlobalStatus
+        show
+        autoScroll={false}
+        noAnimation
+        state="information"
+        items={fixedItems}
+      />
+    )
+
+    expect(element).toHaveClass('dnb-global-status--information')
+    expect(element).not.toHaveClass('dnb-global-status--error')
+  })
+
+  it('should use error state from provider when no state prop is given', () => {
+    render(
+      <>
+        <GlobalStatus
+          id="provider-state-test"
+          autoScroll={false}
+          noAnimation
+        />
+        <GlobalStatus.Add
+          id="provider-state-test"
+          statusId="provider-state-1"
+          state="error"
+          text="Error from provider"
+        />
+      </>
+    )
+
+    const element = document.querySelector(
+      '#provider-state-test .dnb-global-status'
+    )
+    const section = document.querySelector(
+      '#provider-state-test .dnb-section'
+    )
+
+    expect(element).toHaveClass('dnb-global-status--error')
+    expect(element).not.toHaveClass('dnb-global-status--undefined')
+    expect(section).toHaveClass('dnb-section--error')
+    expect(section).not.toHaveClass('dnb-section--default')
+  })
+
+  it('should reflect dynamic locale changes from Provider context', () => {
+    const { rerender } = render(
+      <Provider locale="en-GB">
+        <GlobalStatus show autoScroll={false} noAnimation text="Test" />
+      </Provider>
+    )
+
+    const titleElement = document.querySelector(
+      '.dnb-global-status__title'
+    )
+    const closeButton = document.querySelector(
+      '.dnb-global-status__close-button'
+    )
+
+    expect(titleElement.textContent).toContain('An error has occurred')
+    expect(closeButton.textContent).toContain('Close')
+
+    rerender(
+      <Provider locale="nb-NO">
+        <GlobalStatus show autoScroll={false} noAnimation text="Test" />
+      </Provider>
+    )
+
+    expect(titleElement.textContent).toContain('En feil har skjedd')
+    expect(closeButton.textContent).toContain('Lukk')
+  })
+
+  it('should reflect dynamic state prop changes combined with locale changes', () => {
+    const { rerender } = render(
+      <Provider locale="en-GB">
+        <GlobalStatus
+          show
+          autoScroll={false}
+          noAnimation
+          state="error"
+          text="Test"
+        />
+      </Provider>
+    )
+
+    const element = document.querySelector('.dnb-global-status')
+    const titleElement = document.querySelector(
+      '.dnb-global-status__title'
+    )
+    const closeButton = document.querySelector(
+      '.dnb-global-status__close-button'
+    )
+
+    expect(element).toHaveClass('dnb-global-status--error')
+    expect(titleElement.textContent).toContain('An error has occurred')
+    expect(closeButton.textContent).toContain('Close')
+
+    rerender(
+      <Provider locale="nb-NO">
+        <GlobalStatus
+          show
+          autoScroll={false}
+          noAnimation
+          state="information"
+          text="Test"
+        />
+      </Provider>
+    )
+
+    expect(element).toHaveClass('dnb-global-status--information')
+    expect(element).not.toHaveClass('dnb-global-status--error')
+    expect(closeButton.textContent).toContain('Lukk')
+  })
+
+  it('should not become visible when rendered without show prop', () => {
+    render(<GlobalStatus id="auto-show-test" autoScroll={false} />)
+
+    const wrapper = document.getElementById('auto-show-test')
+    expect(wrapper).toHaveAttribute('aria-live', 'off')
+    expect(
+      wrapper.querySelector('.dnb-global-status__content')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should not become visible after a provider update when show is auto', async () => {
+    render(
+      <>
+        <GlobalStatus id="provider-update-test" autoScroll={false} />
+        <GlobalStatus.Add
+          id="provider-update-test"
+          statusId="temp-status"
+          text="temporary"
+        />
+      </>
+    )
+
+    simulateAnimationEnd()
+
+    render(
+      <GlobalStatus.Remove
+        id="provider-update-test"
+        statusId="temp-status"
+      />
+    )
+
+    await waitFor(() => {
+      const wrapper = document.getElementById('provider-update-test')
+      expect(wrapper).toHaveAttribute('aria-live', 'off')
+    })
+  })
+
+  it('should render with error state when show is true but state prop is not explicitly set', () => {
+    render(
+      <GlobalStatus
+        show={true}
+        autoScroll={false}
+        noAnimation={true}
+        id="state-default-test"
+        text="Failure text"
+        title="Custom Title"
+      />
+    )
+
+    const wrapper = document.getElementById('state-default-test')
+    expect(wrapper).toHaveAttribute('aria-live', 'assertive')
+
+    const status = wrapper.querySelector('.dnb-global-status')
+    expect(status).toHaveClass('dnb-global-status--error')
+  })
+})
+
+describe('GlobalStatus scss', () => {
+  it('should render items as first child of message content when no text is provided', () => {
+    render(
+      <GlobalStatus
+        title="Custom Title"
+        items={[
+          {
+            text: 'List item',
+            statusAnchorUrl: '/uilib/components/global-status',
+            statusAnchorLabel: 'eksempel',
+          },
+        ]}
+        show={true}
+        autoScroll={false}
+      />
+    )
+
+    const messageContent = document.querySelector(
+      '.dnb-global-status__message__content'
+    )
+    expect(messageContent).toBeInTheDocument()
+    expect(messageContent.firstElementChild).toHaveClass('dnb-ul')
+  })
+
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+
+  it('should render without errors during SSR', () => {
+    const { renderToString } = require('react-dom/server')
+    expect(() => {
+      renderToString(
+        <GlobalStatus id="ssr-test" text="SSR test message" />
+      )
+    }).not.toThrow()
+  })
+})
+
+const refresh = async () => {
+  await wait(10)
+}
+
+const keydown = (key: string) => {
+  const eventInit = { key }
+
+  document.dispatchEvent(new KeyboardEvent('keydown', eventInit))
+
+  fireEvent.keyDown(
+    document.querySelector('.dnb-global-status__wrapper'),
+    eventInit
+  )
+}

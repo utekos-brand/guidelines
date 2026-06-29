@@ -1,0 +1,346 @@
+import { memo, useCallback, useContext, useEffect, useRef } from 'react'
+import type {
+  AriaAttributes,
+  ElementType,
+  KeyboardEvent,
+  MouseEvent,
+  ReactNode,
+  RefObject,
+} from 'react'
+import { clsx } from 'clsx'
+import type { HelpButtonProps } from './HelpButton'
+import HelpButtonInstance from './HelpButtonInstance'
+import HeightAnimation from '../HeightAnimation'
+import { useSharedState } from '../../shared/helpers/useSharedState'
+import { convertJsxToString } from '../../shared/component-helper'
+import useId from '../../shared/helpers/useId'
+import Section from '../Section'
+import { P } from '../../elements'
+import Flex from '../Flex'
+import CardContext from '../card/CardContext'
+import type { SpacingProps } from '../../shared/types'
+import Dialog from '../Dialog'
+import { question as QuestionIcon, close as CloseIcon } from '../../icons'
+import { transition } from '../icon/IconTransition'
+import IconPrimary from '../icon-primary/IconPrimary'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+const helpButtonIcon = transition({
+  question: QuestionIcon,
+  close: CloseIcon,
+})
+
+export type HelpProps = {
+  title?: ReactNode
+  content?: ReactNode
+  renderAs?: 'inline' | 'dialog'
+  /** Only for the "inline" variant */
+  open?: boolean
+  /** Only for the "inline" variant */
+  breakout?: boolean
+  /** Only for the "inline" variant */
+  outset?: boolean
+  /**
+   * If set to `true`, no open/close animation will be shown when renderAs="dialog". Defaults to `false`.
+   */
+  noAnimation?: boolean
+}
+
+export type HelpButtonInlineProps = HelpButtonProps & {
+  contentId?: string
+  help?: HelpProps
+
+  /**
+   * If set to `true`, the content will get focus when the help content is opened.
+   */
+  focusOnOpen?: boolean
+}
+
+export type HelpButtonInlineSharedStateDataProps = {
+  isOpen: boolean
+  isUserIntent?: boolean
+  buttonRef?: RefObject<HTMLButtonElement>
+  focusOnOpen?: boolean
+}
+
+function HelpButtonInline(props: HelpButtonInlineProps) {
+  const {
+    contentId,
+    size,
+    help,
+    focusOnOpen,
+    className,
+    children,
+    ...rest
+  } = props
+  const controlId = useId(contentId)
+
+  const { data, update } =
+    useSharedState<HelpButtonInlineSharedStateDataProps>(controlId, {
+      isOpen: help?.open ?? false,
+    })
+  const { isOpen, isUserIntent } = data || {}
+  const wasOpenRef = useRef(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const toggleOpen = useCallback(() => {
+    update({
+      isOpen: !isOpen,
+      isUserIntent: !isOpen,
+      buttonRef,
+      focusOnOpen,
+    })
+    wasOpenRef.current = !isOpen
+  }, [focusOnOpen, isOpen, update])
+
+  // Reset the "was open" state when the content is closed without user intent
+  if (isUserIntent === undefined && !isOpen) {
+    wasOpenRef.current = undefined
+  }
+
+  const onClickHandler = useCallback(
+    ({
+      event,
+    }: {
+      event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+    }) => {
+      event.preventDefault() // Because when used inside a FormLabel
+      toggleOpen()
+    },
+    [toggleOpen]
+  )
+
+  const onKeyDownHandler = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
+      if (event.currentTarget === event.target) {
+        switch (event.key) {
+          case 'Escape':
+            if (isOpen) {
+              event.preventDefault()
+              event.stopPropagation() // To make Modal/Dialog/Drawer not close as well
+              window.requestAnimationFrame(() => {
+                toggleOpen()
+              })
+            }
+            break
+        }
+      }
+    },
+    [isOpen, toggleOpen]
+  )
+
+  const titleString = convertJsxToString(help?.title)
+
+  return (
+    <>
+      <HelpButtonInstance
+        bounding
+        size={size ?? 'small'}
+        icon={
+          <IconPrimary
+            icon={helpButtonIcon}
+            transitionState={isOpen ? 'close' : 'question'}
+          />
+        }
+        title={!isOpen && !wasOpenRef.current ? help?.title : undefined}
+        {...rest}
+        id={controlId}
+        className={clsx(
+          'dnb-help-button__inline',
+          isUserIntent !== undefined &&
+            'dnb-help-button__inline--user-intent',
+          className
+        )}
+        selected={isOpen}
+        aria-controls={`${controlId}-content`}
+        aria-expanded={isOpen}
+        aria-label={titleString || undefined}
+        onClick={onClickHandler}
+        onKeyDown={onKeyDownHandler}
+        ref={buttonRef}
+      />
+
+      {!contentId && (
+        <HelpButtonInlineContent
+          contentId={controlId}
+          help={help}
+          focusOnOpen={focusOnOpen}
+        >
+          {children}
+        </HelpButtonInlineContent>
+      )}
+    </>
+  )
+}
+
+export type HelpButtonInlineContentProps = SpacingProps & {
+  contentId: string
+  className?: string
+  element?: ElementType
+  children?: ReactNode
+  help?: HelpProps
+  breakout?: boolean
+  outset?: boolean
+  roundedCorner?: boolean
+  focusOnOpen?: boolean
+}
+
+function HelpButtonInlineContentComponent(
+  props: HelpButtonInlineContentProps
+) {
+  const {
+    contentId,
+    className,
+    element,
+    children,
+    help: helpProp,
+    breakout = true,
+    outset = false,
+    roundedCorner,
+    focusOnOpen: focusOnOpenProp,
+    ...rest
+  } = props
+  const { data, update, extend } =
+    useSharedState<HelpButtonInlineSharedStateDataProps>(contentId)
+  const {
+    isOpen,
+    focusOnOpen = focusOnOpenProp,
+    isUserIntent,
+    buttonRef,
+  } = data || {}
+  const {
+    open,
+    title,
+    content,
+    renderAs,
+    noAnimation,
+    breakout: breakoutProp = true,
+    outset: outsetProp = true,
+  } = helpProp || {}
+
+  const contentRef = useRef<HTMLDivElement>(null)
+  const cardContext = useContext(CardContext)
+  const breakoutFromLayout =
+    Boolean(cardContext) && breakout && breakoutProp
+  const outsetFromLayout = outset && outsetProp
+
+  useEffect(() => {
+    if (isOpen && isUserIntent && focusOnOpen) {
+      window.requestAnimationFrame(() => {
+        contentRef.current?.focus({ preventScroll: true })
+      })
+    }
+  }, [focusOnOpen, isOpen, isUserIntent])
+
+  const onClose = useCallback(() => {
+    update({ isOpen: false, isUserIntent: false })
+  }, [update])
+
+  const onKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
+      if (event.currentTarget === event.target) {
+        switch (event.key) {
+          case 'Enter':
+          case ' ':
+          case 'Escape':
+            event.preventDefault()
+            event.stopPropagation() // To make Modal/Dialog/Drawer not close as well
+            window.requestAnimationFrame(() => {
+              onClose()
+              buttonRef?.current?.focus({
+                preventScroll: true,
+              })
+            })
+            break
+        }
+      }
+    },
+    [buttonRef, onClose]
+  )
+
+  const onAnimationEnd = useCallback(() => {
+    extend({
+      isUserIntent: undefined,
+    } as HelpButtonInlineSharedStateDataProps)
+  }, [extend])
+
+  if (renderAs === 'dialog') {
+    return (
+      <Dialog
+        title={title}
+        omitTriggerButton
+        open={isOpen ?? open}
+        onClose={onClose}
+        noAnimation={noAnimation}
+      >
+        {content}
+        {children}
+      </Dialog>
+    )
+  }
+
+  const focusParams = focusOnOpen
+    ? {
+        'aria-label': convertJsxToString(title) || undefined,
+        className: 'dnb-no-focus',
+        tabIndex: -1,
+        onKeyDown,
+      }
+    : ({
+        'aria-live': 'polite',
+        'aria-atomic': 'true',
+      } as AriaAttributes)
+
+  return (
+    <HeightAnimation
+      element={element}
+      className={clsx('dnb-help-button__content', className)}
+      open={isOpen ?? open ?? false}
+      onAnimationEnd={onAnimationEnd}
+    >
+      <Section
+        id={`${contentId}-content`}
+        {...focusParams}
+        ref={contentRef}
+        outset={outsetFromLayout}
+        breakout={breakoutFromLayout}
+        roundedCorner={roundedCorner ?? !breakoutFromLayout}
+        innerSpace={
+          breakoutFromLayout
+            ? { top: 'small', bottom: 'medium' }
+            : {
+                top: 'small',
+                bottom: 'medium',
+                left: 'medium',
+                right: 'x-small',
+              }
+        }
+        {...rest}
+      >
+        <Flex.Vertical gap="x-small">
+          {title && (
+            <P weight="medium" element="div">
+              {title}
+            </P>
+          )}
+          {content && <P element="div">{content}</P>}
+        </Flex.Vertical>
+        {children}
+      </Section>
+    </HeightAnimation>
+  )
+}
+
+const MemoizedHelpButtonInline = memo(HelpButtonInline)
+export default MemoizedHelpButtonInline
+
+export const HelpButtonInlineContent = memo(
+  HelpButtonInlineContentComponent
+)
+
+withComponentMarkers(MemoizedHelpButtonInline, {
+  _supportsSpacingProps: true,
+})
+withComponentMarkers(HelpButtonInlineContent, {
+  _supportsSpacingProps: true,
+})

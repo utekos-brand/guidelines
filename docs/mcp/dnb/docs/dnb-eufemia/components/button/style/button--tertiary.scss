@@ -1,0 +1,121 @@
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-button {
+  &--tertiary {
+    --button-tertiary-focus-left: -0.5rem;
+    --button-tertiary-focus-right: -0.5rem;
+    --button-tertiary-focus-overflow--icon-top: -0.5rem;
+    --button-tertiary-underline-overflow: 0;
+
+    // Use text-decoration for underline (same technique as Anchor)
+    .dnb-button__text {
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-decoration-thickness: 0.095rem;
+      text-underline-offset: 0.375em;
+      transition: text-decoration-color 250ms ease-in-out;
+    }
+
+    .dnb-skeleton .dnb-button__text {
+      text-decoration: none;
+    }
+
+    @include utilities.focusVisible() {
+      .dnb-button__text {
+        text-decoration: none;
+      }
+    }
+
+    @include utilities.hover() {
+      .dnb-button__text {
+        text-decoration-color: var(
+          --button-color-underline,
+          var(--button-color-underline--default)
+        );
+      }
+    }
+
+    @include utilities.active() {
+      @include utilities.removeFocusRing('keyboard');
+
+      .dnb-button__text {
+        html[data-whatintent='touch'] & {
+          --button-color-underline: var(--button-color-underline--hover);
+          transition: none;
+          text-decoration-color: var(
+            --button-color-underline,
+            var(--button-color-underline--default)
+          );
+        }
+
+        html:not([data-whatintent='touch']) & {
+          text-decoration: none;
+        }
+      }
+    }
+
+    &.dnb-button--has-text {
+      --button-icon-margin-top: calc(
+        (var(--button-height) - var(--button-icon-size)) / 2
+      );
+
+      .dnb-button__icon {
+        align-self: flex-start; // needed to vertically center icon
+      }
+    }
+
+    &.dnb-button--icon-position-top {
+      --button-tertiary-focus-left: var(
+        --button-tertiary-focus-overflow--icon-top
+      );
+      --button-tertiary-focus-right: var(
+        --button-tertiary-focus-overflow--icon-top
+      );
+      flex-direction: column;
+      border-radius: var(--token-radius-md);
+      vertical-align: middle;
+
+      &.dnb-button--has-text {
+        --button-icon-margin-top: 0.5rem;
+        .dnb-button__icon {
+          align-self: center;
+        }
+      }
+
+      .dnb-button__text {
+        margin-top: 0;
+        margin-bottom: 0.25rem;
+        font-size: var(--font-size-x-small);
+      }
+      &.dnb-button--size-large {
+        .dnb-button__text {
+          font-size: var(--font-size-small);
+        }
+      }
+
+      .dnb-button__alignment {
+        order: 3;
+        height: 0;
+      }
+    }
+
+    &.dnb-button--has-icon {
+      &.dnb-button--has-text {
+        &.dnb-button--icon-position-left {
+          --button-tertiary-focus-right: -1rem;
+          --button-tertiary-focus-left: -1rem;
+        }
+
+        &.dnb-button--icon-position-right {
+          --button-tertiary-focus-left: -1rem;
+          --button-tertiary-focus-right: -1rem;
+        }
+      }
+
+      &:not(.dnb-button--has-text) {
+        --button-tertiary-focus-left: 0;
+        --button-tertiary-focus-right: 0;
+      }
+    }
+  }
+}

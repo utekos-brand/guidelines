@@ -1,0 +1,238 @@
+/**
+ * Web DrawerList Portal Component
+ */
+
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { CSSProperties, ReactNode, Ref, RefObject } from 'react'
+import { clsx } from 'clsx'
+import {
+  warn,
+  getClosestScrollViewElement,
+} from '../../shared/component-helper'
+import PortalRoot from '../PortalRoot'
+
+export type DrawerListPortalProps = {
+  id: string
+  children: ReactNode
+  open: boolean
+  ref?: Ref<HTMLSpanElement>
+  rootRef: RefObject<HTMLSpanElement>
+  includeOwnerWidth?: boolean
+  independentWidth?: boolean
+  fixedPosition?: boolean
+  skipPortal?: boolean
+  className?: string
+}
+
+function DrawerListPortal({
+  ref: refProp,
+  id,
+  open,
+  rootRef = { current: undefined },
+  includeOwnerWidth,
+  independentWidth,
+  fixedPosition,
+  skipPortal,
+  className,
+  children,
+}: DrawerListPortalProps) {
+  const [isMounted, setIsMounted] = useState(false)
+  const [, setForceRerender] = useState<number>()
+
+  const localRef = useRef<HTMLSpanElement>(null)
+  const portalRef =
+    refProp && typeof refProp !== 'function' ? refProp : localRef
+
+  const setPosition = useRef<() => void>(undefined)
+  const positionTimeout = useRef<NodeJS.Timeout>(undefined)
+  const customElem = useRef<Element | Window>(undefined)
+  const resizeObserver = useRef<ResizeObserver>(undefined)
+
+  const init = useCallback(() => {
+    setIsMounted(true)
+  }, [])
+
+  const removePositionObserver = useCallback(() => {
+    clearTimeout(positionTimeout.current)
+    if (typeof window !== 'undefined' && setPosition.current) {
+      if (customElem.current) {
+        customElem.current.removeEventListener(
+          'scroll',
+          setPosition.current
+        )
+      }
+      if (resizeObserver.current) {
+        resizeObserver.current.disconnect()
+        resizeObserver.current = null
+      }
+      window.removeEventListener('resize', setPosition.current)
+    }
+    setPosition.current = null
+  }, [])
+
+  useEffect(() => {
+    if (document.readyState === 'complete') {
+      init()
+    } else if (typeof window !== 'undefined') {
+      window.addEventListener('load', init)
+    }
+  }, [init])
+
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('load', init)
+      }
+
+      removePositionObserver()
+    }
+  }, [init, removePositionObserver])
+
+  const makeStyle = useCallback(() => {
+    if (typeof window === 'undefined' || !isMounted) {
+      return undefined // stop here
+    }
+
+    try {
+      const rootElem = rootRef.current
+      if (!rootElem) {
+        return undefined // stop here
+      }
+      const ownerElem = rootElem.parentElement
+
+      // min width as a threshold
+      let width = 64
+
+      // Handle width
+      const ownerWidth = window.getComputedStyle(ownerElem).width
+
+      // fallback for too narrow width - in case there is not width -> e.g. "--is-popup"
+      if (independentWidth || parseFloat(ownerWidth) < 64) {
+        // get min-width from CSS property
+        let minWidth = 0
+        if (portalRef.current) {
+          minWidth =
+            parseFloat(
+              window
+                .getComputedStyle(portalRef.current)
+                .getPropertyValue('--drawer-list-width')
+            ) || 0
+        }
+        width = minWidth * 16
+      }
+
+      // also check if root "has a custom width"
+      const customWidth = rootElem.getBoundingClientRect().width
+      if (!independentWidth && (customWidth || 0) >= 64) {
+        width = customWidth
+      }
+
+      // Handle positions
+      const rect = rootElem.getBoundingClientRect()
+      const scrollY = fixedPosition ? 0 : window.scrollY
+      const scrollX = fixedPosition ? 0 : window.scrollX
+
+      let top = scrollY + rect.top
+      let left = scrollX + rect.left
+      if (includeOwnerWidth) {
+        const ownerRight = ownerElem.getBoundingClientRect().right
+        left = scrollX + ownerRight - width
+      }
+
+      if (width > window.innerWidth) {
+        width = window.innerWidth
+      }
+      if (top < 0) {
+        top = 0
+      }
+      if (left < 0) {
+        left = 0
+      }
+
+      // NB:  before we recalculated the values to REM, but iOS rounds this and we get a wrong total value out of that!
+      const style = {
+        width,
+        '--drawer-list-width': `${width / 16}rem`, // used by the "drawer-list-scale-in" animation
+        top,
+        left,
+      }
+
+      return style
+    } catch (e) {
+      warn('DrawerListPortal: Failed to calculate portal position:', e)
+    }
+
+    return undefined
+  }, [
+    isMounted,
+    rootRef,
+    independentWidth,
+    fixedPosition,
+    includeOwnerWidth,
+    portalRef,
+  ])
+
+  const addPositionObserver = useCallback(() => {
+    if (setPosition.current || typeof window === 'undefined') {
+      return undefined // stop here
+    }
+
+    // debounce
+    setPosition.current = () => {
+      clearTimeout(positionTimeout.current)
+      positionTimeout.current = setTimeout(() => {
+        if (open) {
+          setForceRerender(Date.now())
+        }
+      }, 200)
+    }
+
+    customElem.current =
+      getClosestScrollViewElement(rootRef.current) || window
+    customElem.current.addEventListener('scroll', setPosition.current)
+
+    try {
+      resizeObserver.current = new ResizeObserver(setPosition.current)
+      resizeObserver.current.observe(document.body)
+    } catch (e) {
+      window.addEventListener('resize', setPosition.current)
+    }
+  }, [open, rootRef])
+
+  if (skipPortal) {
+    return children
+  }
+
+  if (typeof window !== 'undefined' && isMounted) {
+    if (open) {
+      addPositionObserver()
+    }
+
+    const style = (open ? makeStyle() : {}) as CSSProperties
+
+    return (
+      <PortalRoot>
+        <span
+          className="dnb-drawer-list__portal"
+          id={`${id}-portal`}
+          ref={portalRef}
+        >
+          <span
+            className={clsx(
+              'dnb-drawer-list__portal__style',
+              fixedPosition && 'dnb-drawer-list__portal__style--fixed',
+              className
+            )}
+            style={style}
+          >
+            {children}
+          </span>
+        </span>
+      </PortalRoot>
+    )
+  }
+
+  return null
+}
+
+export default DrawerListPortal

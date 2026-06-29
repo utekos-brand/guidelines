@@ -1,0 +1,193 @@
+import { createContext, useContext } from 'react'
+import type { HTMLProps, ReactNode } from 'react'
+import { clsx } from 'clsx'
+
+// Components
+import { useSpacing } from '../space/SpacingUtils'
+import type { AvatarSizes, AvatarVariants } from './Avatar'
+
+// Shared
+import {
+  validateDOMAttributes,
+  extendPropsWithContext,
+} from '../../shared/component-helper'
+import Context from '../../shared/Context'
+import type { SpacingProps } from '../../shared/types'
+import type { SkeletonShow } from '../skeleton/Skeleton'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+export type AvatarGroupProps = {
+  /**
+   * Label to describe the avatar group
+   * Default: `null`
+   */
+  label: ReactNode
+
+  /**
+   * Custom className on the component root
+   * Default: `null`
+   */
+  className?: string
+
+  /**
+   * Number of max displayed elements, including the "elements hidden text (+x)".
+   * Default: `4`
+   */
+  maxElements?: number
+
+  /**
+   * The avatars to group.
+   * Default: `null`
+   */
+  children?: ReactNode
+
+  /**
+   * The size of the Avatars, and "elements hidden text (+x)".
+   * Default: `medium`
+   */
+  size?: AvatarSizes
+
+  /**
+   * The variant of the Avatars.
+   * Default: `primary`
+   */
+  variant?: AvatarVariants
+
+  /**
+   * Skeleton should be applied when loading content
+   * Default: `false`
+   */
+  skeleton?: SkeletonShow
+
+  /**
+   * Define a custom background color for the Avatars, instead of a variant. Use a Eufemia color.
+   * Default: `undefined`
+   */
+  backgroundColor?: string
+
+  /**
+   * Define a custom color to complement the backgroundColor for the Avatars. Use a Eufemia color.
+   * Default: `undefined`
+   */
+  color?: string
+} & Omit<HTMLProps<HTMLElement>, 'size' | 'label'>
+
+export type AvatarGroupAllProps = AvatarGroupProps & SpacingProps
+
+const defaultProps: Partial<AvatarGroupAllProps> = {
+  maxElements: 4,
+  size: 'medium',
+  variant: 'primary',
+  skeleton: false,
+}
+
+export const AvatarGroupContext = createContext(null)
+
+export const AvatarGroupItemContext = createContext<{
+  zIndex?: number
+} | null>(null)
+
+const AvatarGroup = (localProps: AvatarGroupAllProps) => {
+  // Every component should have a context
+  const context = useContext(Context)
+  // Extract additional props from global context
+  const {
+    label,
+    className,
+    children: childrenProp,
+    size,
+    maxElements: maxElementsProp,
+    variant,
+    backgroundColor,
+    color,
+    ...props
+  } = extendPropsWithContext(
+    localProps,
+    defaultProps,
+    context?.AvatarGroup,
+    {
+      skeleton: context?.skeleton,
+    }
+  )
+
+  const maxElements =
+    maxElementsProp && maxElementsProp > 0 ? maxElementsProp : 4
+
+  let children = childrenProp
+  let numOfHiddenAvatars = 0
+
+  if (Array.isArray(childrenProp)) {
+    const total = childrenProp.length
+
+    if (total > maxElements) {
+      numOfHiddenAvatars = total - maxElements + 1
+    }
+
+    children = childrenProp
+      .slice(0, total - numOfHiddenAvatars)
+      .map((child, i) => (
+        <AvatarGroupItemContext key={i} value={{ zIndex: total - i }}>
+          {child}
+        </AvatarGroupItemContext>
+      ))
+  }
+
+  const rootProps = useSpacing(props, {
+    className: clsx('dnb-avatar__group', className),
+  })
+
+  // validateDOMAttributes mutates props, so call it after useSpacing
+  const { skeleton, ...attributes } = validateDOMAttributes({}, props)
+
+  return (
+    <AvatarGroupContext
+      value={{ ...props, variant, size, color, backgroundColor }}
+    >
+      <span {...rootProps} {...attributes}>
+        <span className="dnb-sr-only">{label}</span>
+
+        {children}
+
+        {numOfHiddenAvatars ? (
+          <ElementsHidden size={size}>
+            +{numOfHiddenAvatars}
+          </ElementsHidden>
+        ) : null}
+      </span>
+    </AvatarGroupContext>
+  )
+}
+
+export type AvatarElementsHiddenProps = {
+  /**
+   * The avatars to group.
+   * Default: `null`
+   */
+  children?: ReactNode
+
+  /**
+   * The size of the "elements hidden text (+x)".
+   * Default: `medium`
+   */
+  size?: AvatarSizes
+}
+
+function ElementsHidden(props: AvatarElementsHiddenProps) {
+  const { size, children } = props
+  return (
+    <span
+      className={clsx(
+        'dnb-avatar__group--elements-left',
+        `dnb-avatar__group--elements-left--size-${size || 'medium'}`
+      )}
+    >
+      {children}
+    </span>
+  )
+}
+
+withComponentMarkers(AvatarGroup, {
+  _supportsSpacingProps: true,
+})
+
+export default AvatarGroup

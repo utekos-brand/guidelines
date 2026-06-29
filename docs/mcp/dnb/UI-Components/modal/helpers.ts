@@ -1,0 +1,83 @@
+import type { RefObject } from 'react'
+import { warn, processChildren } from '../../shared/component-helper'
+
+export type ModalStackEntry = {
+  _id: string
+  _scrollRef: RefObject<HTMLElement | null>
+  _contentRef: RefObject<HTMLElement | null>
+  _iiLocal?: {
+    activate: (target?: HTMLElement | null) => void
+    revert: () => void
+  }
+}
+
+export function getListOfModalRoots(): ModalStackEntry[] {
+  if (typeof window !== 'undefined') {
+    try {
+      const stack = window.__modalStack || []
+      return stack
+    } catch (e) {
+      warn('Modal: Failed to get modal stack:', e)
+    }
+  }
+
+  return []
+}
+
+export function getModalRoot(index?: number): ModalStackEntry | null {
+  if (typeof window !== 'undefined') {
+    try {
+      const stack = window.__modalStack || []
+      if (index !== null) {
+        if (index === -1 && stack.length) {
+          return stack[stack.length - 1]
+        } else if (index > -1) {
+          return stack[index]
+        }
+      }
+
+      return null
+    } catch (e) {
+      warn('Modal: Failed to get modal root from stack:', e)
+    }
+  }
+
+  return null
+}
+
+export function addToIndex(elem: ModalStackEntry) {
+  if (typeof window !== 'undefined') {
+    try {
+      if (!Array.isArray(window.__modalStack)) {
+        window.__modalStack = []
+      }
+      window.__modalStack.push(elem)
+    } catch (e) {
+      warn('Modal: Failed to add modal to stack:', e)
+    }
+  }
+}
+
+export function removeFromIndex(elem: ModalStackEntry) {
+  if (typeof window !== 'undefined') {
+    try {
+      if (!Array.isArray(window.__modalStack)) {
+        window.__modalStack = []
+      }
+      window.__modalStack = window.__modalStack.filter(
+        (cur) => cur !== elem
+      )
+    } catch (e) {
+      warn('Modal: Failed to remove modal from stack:', e)
+    }
+  }
+}
+
+export function getContent(props) {
+  if (typeof props.modalContent === 'string') {
+    return props.modalContent
+  } else if (typeof props.modalContent === 'function') {
+    return props.modalContent(props)
+  }
+  return processChildren(props)
+}

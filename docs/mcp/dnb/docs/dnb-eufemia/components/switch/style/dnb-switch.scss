@@ -1,0 +1,335 @@
+/*
+* Switch component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-switch {
+  --switch-width--medium: 2.5rem;
+  --switch-height--medium: 1.5rem;
+  --switch-button-size-off--medium: 0.75rem;
+  --switch-button-size-on--medium: 1.125rem;
+  --switch-button-size-off--large: 1rem;
+  --switch-button-size-on--large: 1.625rem;
+  --switch-width--large: 3.25rem;
+  --switch-height--large: 2rem;
+  --switch-border-width--large: 0.125rem;
+
+  display: inline-flex;
+  flex-direction: column;
+
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-basis);
+
+  &__inner {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+
+    font-size: var(--font-size-basis);
+  }
+
+  &__shell {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    user-select: none; // Safari / Touch fix
+  }
+
+  &--large {
+    line-height: var(--switch-height--large);
+  }
+
+  &--large &__shell {
+    height: var(--switch-height--large);
+  }
+
+  &__row {
+    display: inline-flex;
+    align-items: center;
+
+    height: var(--switch-height--medium);
+  }
+
+  &__button {
+    position: absolute;
+    z-index: 4;
+    left: 0;
+
+    border-radius: 50%;
+
+    width: var(--switch-button-size-off--medium);
+    height: var(--switch-button-size-off--medium);
+
+    background-color: var(--token-color-background-action-alternative);
+
+    transition: transform 160ms ease-out 125ms;
+
+    .dnb-switch--large & {
+      width: var(--switch-button-size-off--large);
+      height: var(--switch-button-size-off--large);
+
+      border-width: var(--switch-border-width--large);
+    }
+  }
+
+  /* stylelint-disable no-descending-specificity */
+
+  /*
+    * When switched OFF
+    * aka when the switch is not :checked
+    */
+  &__input:not(:checked) ~ &__button {
+    transform: translateX(0.375rem);
+  }
+
+  /*
+  * When switched ON
+  * aka when the switch is :checked
+  */
+  &__input:checked ~ &__button {
+    width: var(--switch-button-size-on--medium);
+    height: var(--switch-button-size-on--medium);
+
+    background-color: var(--token-color-background-selected-subtle);
+
+    transform: translateX(
+      calc(
+        var(--switch-width--medium) - var(
+            --switch-button-size-on--medium
+          ) -
+          0.1875rem
+      )
+    );
+  }
+
+  &--large &__input:not(:checked) ~ &__button {
+    transform: translateX(0.5rem);
+  }
+
+  &--large &__input:checked ~ &__button {
+    width: var(--switch-button-size-on--large);
+    height: var(--switch-button-size-on--large);
+
+    transform: translateX(
+      calc(
+        var(--switch-width--large) - var(--switch-button-size-on--large) -
+          0.1875rem
+      )
+    );
+  }
+
+  &__background {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    overflow: hidden;
+
+    width: var(--switch-width--medium);
+    height: var(--switch-height--medium);
+
+    background-color: var(--token-color-background-neutral);
+    border: 1px solid var(--token-color-stroke-action-alternative);
+    border-radius: var(--token-radius-xl);
+
+    .dnb-switch--large & {
+      width: var(--switch-width--large);
+      height: var(--switch-height--large);
+    }
+  }
+
+  &__input:checked ~ &__background {
+    background-color: var(--token-color-background-selected);
+    // No matching stroke token exists. The border uses --token-color-background-selected so it blends with the Switch background.
+    border-color: var(--token-color-background-selected);
+  }
+
+  &__input {
+    opacity: 0;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 5;
+
+    display: block;
+
+    // width: 100%;
+    width: var(--switch-width--medium);
+    height: var(--switch-height--medium);
+
+    .dnb-switch--large & {
+      width: var(--switch-width--large);
+      height: var(--switch-height--large);
+    }
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+  }
+
+  &__input:not([disabled]) {
+    cursor: pointer;
+  }
+
+  // Focus border
+  &__input:not([disabled]):focus ~ &__background,
+  &__input:not([disabled]):active ~ &__background {
+    @include utilities.focusRing();
+  }
+
+  // label
+  .dnb-form-label {
+    padding-right: 0.5rem;
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+
+  &__order {
+    display: inline-flex;
+  }
+
+  &__suffix {
+    order: 4;
+  }
+
+  &--label-position-left &__suffix {
+    padding-left: 1rem;
+  }
+
+  &--label-position-left &__order {
+    .dnb-switch__inner {
+      order: 2;
+    }
+
+    .dnb-form-label {
+      order: 1;
+      align-self: center;
+    }
+
+    .dnb-form-status {
+      order: 3;
+      margin-top: 0.5rem;
+    }
+  }
+
+  &--label-position-right &__order {
+    .dnb-switch__inner {
+      order: 1;
+    }
+
+    .dnb-form-label {
+      order: 2;
+      padding-left: 0.5rem;
+    }
+
+    .dnb-form-status {
+      order: 3;
+      margin-top: 0.5rem;
+    }
+  }
+
+  &.dnb-skeleton &__input[disabled] ~ &__background {
+    background-color: var(--skeleton-color);
+    border-color: var(--skeleton-color);
+  }
+
+  /*
+    * On hover state
+    *
+    */
+  &__input:not([disabled]):not(:focus):not(:active):hover ~ &__background {
+    border-color: var(--token-color-stroke-action-hover);
+    background-color: var(--token-color-background-action-hover-subtle);
+  }
+  &__input:not([disabled]):not(:focus):not(:active):hover ~ &__button {
+    background-color: var(--token-color-background-action-hover);
+
+    @include utilities.fakeBorder(
+      var(--token-color-stroke-action-hover),
+      0.0625rem
+    );
+  }
+
+  &__input:checked:not([disabled]):not(:focus):not(:active):hover
+    ~ &__button {
+    box-shadow: none;
+  }
+
+  /*
+    * On active state
+    *
+    */
+  &__input:not([disabled]):active ~ &__background {
+    border-color: var(--token-color-stroke-action-pressed);
+    background-color: var(--token-color-background-action-pressed-subtle);
+  }
+
+  &__input:not([disabled]):active ~ &__button {
+    background-color: var(--token-color-background-action-pressed);
+  }
+
+  /*
+   * On focus state
+   *
+   */
+  &__input:not([disabled]):focus ~ &__background {
+    html[data-whatinput='keyboard'] & {
+      background-color: var(--token-color-background-action-focus-subtle);
+    }
+  }
+  &__input:not([disabled]):focus ~ &__button {
+    html[data-whatinput='keyboard'] & {
+      background-color: var(--token-color-background-action-focus);
+      @include utilities.fakeBorder(
+        var(--token-color-stroke-action-focus),
+        0.0625rem
+      );
+    }
+  }
+
+  &__input:checked:not([disabled]):focus ~ &__button {
+    html[data-whatinput='keyboard'] & {
+      box-shadow: none;
+    }
+  }
+
+  /*
+    * On disabled state
+    *
+    */
+  &:not(.dnb-skeleton) &__input[disabled] ~ &__background {
+    background-color: var(--token-color-background-neutral);
+    border-color: var(--token-color-stroke-action-disabled);
+  }
+  &:not(.dnb-skeleton) &__input[disabled] ~ &__button {
+    background-color: var(--token-color-background-action-disabled);
+  }
+
+  &:not(.dnb-skeleton) &__input[disabled]:checked ~ &__background {
+    background-color: var(--token-color-background-action-disabled);
+    // No matching stroke token exists. The border uses --token-color-background-action-disabled so it blends with the Switch background.
+    border-color: var(--token-color-background-action-disabled);
+  }
+  &:not(.dnb-skeleton) &__input[disabled]:checked ~ &__button {
+    background-color: var(--token-color-background-neutral);
+  }
+
+  /*
+    * On error state
+    *
+    */
+  &__status--error &__input:not([disabled]) ~ &__background {
+    background-color: var(--token-color-background-error-subtle);
+    border-color: var(--token-color-stroke-error);
+  }
+  &__status--error &__input:not([disabled]) ~ &__button {
+    background-color: var(--token-color-background-error);
+  }
+}

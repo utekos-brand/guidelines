@@ -1,0 +1,482 @@
+/**
+ * Textarea Test
+ *
+ */
+
+import { fireEvent, render, waitFor } from '@testing-library/react'
+import { useRef } from 'react'
+import type { RefObject } from 'react'
+import { axeComponent, loadScss } from '../../../core/test-utils/testSetup'
+import type { TextareaProps } from '../Textarea'
+import Textarea from '../Textarea'
+import userEvent from '@testing-library/user-event'
+import { Provider } from '../../../shared'
+import enGB from '../../../shared/locales/en-GB'
+import nbNO from '../../../shared/locales/nb-NO'
+
+const gb = enGB['en-GB']
+const nb = nbNO['nb-NO']
+
+const props: TextareaProps = {
+  id: 'textarea',
+  label: null,
+  status: null, // to make sure we don't get aria-details
+  textareaElement: null,
+  disabled: false,
+}
+
+describe('Textarea component', () => {
+  it('has correct state after "focus" trigger', () => {
+    render(
+      <Textarea {...props} value={null}>
+        {null}
+      </Textarea>
+    )
+    fireEvent.focus(document.querySelector('textarea'))
+
+    expect(document.querySelector('.dnb-textarea').classList).toContain(
+      'dnb-textarea--focus'
+    )
+  })
+
+  it('has correct state after "change" trigger', () => {
+    render(
+      <Textarea {...props} value={null}>
+        {null}
+      </Textarea>
+    )
+    expect(
+      document.querySelector('.dnb-textarea').classList
+    ).not.toContain('dnb-textarea--has-content')
+
+    const value = 'new value'
+
+    fireEvent.change(document.querySelector('textarea'), {
+      target: { value },
+    })
+
+    expect(document.querySelector('.dnb-textarea').classList).toContain(
+      'dnb-textarea--has-content'
+    )
+    expect(document.querySelector('textarea').value).toBe(value)
+  })
+
+  // // make sure getDerivedStateFromProps works
+  it('has correct state after changing "value" prop (set by getDerivedStateFromProps)', () => {
+    const { rerender } = render(
+      <Textarea {...props} value={null}>
+        {null}
+      </Textarea>
+    )
+    const initValue = 'new prop value'
+    const emptyValue = null
+
+    rerender(
+      <Textarea {...props} value={initValue}>
+        {null}
+      </Textarea>
+    )
+    expect(document.querySelector('textarea').value).toBe(initValue)
+
+    rerender(
+      <Textarea {...props} value={emptyValue}>
+        {null}
+      </Textarea>
+    )
+    expect(document.querySelector('textarea').value).toBe('')
+  })
+
+  it('events gets emitted correctly: "onChange" and "onKeyDown"', async () => {
+    const initValue = 'init value'
+    const newValue = 'new value'
+
+    const onChange = vi.fn()
+    const onKeyDown = vi.fn() // additional native event test
+
+    render(
+      <Textarea
+        {...props}
+        value={initValue}
+        onChange={onChange}
+        onKeyDown={onKeyDown} // additional native event test
+      />
+    )
+
+    expect(document.querySelector('textarea').value).toBe(initValue)
+    userEvent.type(document.querySelector('textarea'), newValue)
+    await waitFor(() => {
+      expect(onChange.mock.calls.length).toBe(9)
+      expect(document.querySelector('textarea').value).toBe(
+        initValue + newValue
+      )
+    })
+
+    // additional native event test
+    fireEvent.keyDown(document.querySelector('textarea'), {
+      key: 'Space',
+    })
+    await waitFor(() => {
+      expect(onKeyDown.mock.calls.length).toBe(10)
+      expect(onKeyDown.mock.calls[0][0].rows).toBe(1)
+    })
+  })
+
+  it('supports null as value', () => {
+    render(<Textarea {...props} value={null} />)
+
+    expect(document.querySelector('textarea').value).toBe('')
+  })
+
+  it('has correct state after setting "value" prop using placeholder (set by getDerivedStateFromProps)', () => {
+    const { rerender } = render(<Textarea placeholder="Placeholder" />)
+
+    const newValue = 'new value'
+    const emptyValue = null
+    const zeroValue = '0'
+
+    rerender(<Textarea value={newValue} />)
+    expect(document.querySelector('textarea').value).toBe(newValue)
+
+    rerender(<Textarea value={emptyValue} />)
+    expect(document.querySelector('textarea').value).toBe('')
+
+    rerender(<Textarea value={zeroValue} />)
+    expect(document.querySelector('textarea').value).toBe(
+      String(zeroValue)
+    )
+  })
+
+  it('placeholder prop should accept React Element', () => {
+    const Placeholder = ({ children }) => <span>{children}</span>
+
+    const { rerender } = render(
+      <Textarea placeholder={<Placeholder>Placeholder</Placeholder>} />
+    )
+
+    expect(
+      document.querySelector('textarea').getAttribute('aria-placeholder')
+    ).toContain('Placeholder')
+    expect(
+      document.querySelector('.dnb-textarea__placeholder')
+    ).toHaveTextContent('Placeholder')
+
+    rerender(
+      <Textarea
+        placeholder={<Placeholder>Placeholder-text</Placeholder>}
+      />
+    )
+
+    expect(
+      document.querySelector('textarea').getAttribute('aria-placeholder')
+    ).toContain('Placeholder-text')
+    expect(
+      document.querySelector('.dnb-textarea__placeholder')
+    ).toHaveTextContent('Placeholder-text')
+
+    rerender(
+      <Textarea id="unique" placeholder={undefined} label={undefined} />
+    )
+
+    expect(document.querySelector('textarea')).not.toHaveAttribute(
+      'aria-placeholder'
+    )
+    expect(document.querySelector('.dnb-textarea__placeholder')).toBeNull()
+  })
+
+  it('uses children as the value', () => {
+    render(<Textarea>children</Textarea>)
+    expect(document.querySelector('textarea').value).toBe('children')
+  })
+
+  it('has correct size attribute (chars length) on textarea by using spread props', () => {
+    render(<Textarea {...({ size: 2 } as Record<string, unknown>)} />)
+    expect(document.querySelector('textarea').getAttribute('size')).toBe(
+      '2'
+    )
+  })
+
+  it('has correct attributes on textarea by using spread props', () => {
+    render(<Textarea {...({ wrap: 'hard' } as Record<string, unknown>)} />)
+    expect(document.querySelector('textarea').getAttribute('wrap')).toBe(
+      'hard'
+    )
+  })
+
+  it('has to have a prop value like value', () => {
+    const { rerender } = render(
+      <Textarea {...props} value={null}>
+        {null}
+      </Textarea>
+    )
+    const value = 'new value'
+    rerender(
+      <Textarea {...props} value={value}>
+        {null}
+      </Textarea>
+    )
+    expect(document.querySelector('textarea').value).toBe(value)
+  })
+
+  it('has to have a label value as defined in the prop', () => {
+    render(<Textarea {...props} label="label" />)
+    expect(document.querySelector('label').textContent).toBe('label')
+  })
+
+  it('has to have a status value as defined in the prop', () => {
+    render(<Textarea {...props} status="status" statusState="error" />)
+    expect(
+      document.querySelector('.dnb-form-status__text').textContent
+    ).toBe('status')
+  })
+
+  it('has a disabled attribute, once we set disabled to true', () => {
+    const { rerender } = render(<Textarea />)
+    rerender(<Textarea disabled={true} />)
+    expect(document.querySelector('textarea')).toHaveAttribute('disabled')
+    expect(document.querySelector('.dnb-textarea')).toHaveClass(
+      'dnb-textarea--disabled'
+    )
+  })
+
+  it('should accept props like autoResize via provider', () => {
+    render(
+      <Provider Textarea={{ autoResize: true }}>
+        <Textarea />
+      </Provider>
+    )
+    expect(document.querySelector('.dnb-textarea')).toHaveClass(
+      'dnb-textarea__autoresize'
+    )
+  })
+
+  it('will correctly auto resize if prop autoResize is used', async () => {
+    render(<Textarea rows={1} autoResize={true} autoResizeMaxRows={4} />)
+
+    const elem = document.querySelector('textarea')
+
+    const style = {
+      lineHeight: String(1.5 * 16),
+    } as CSSStyleDeclaration
+
+    vi.spyOn(window, 'getComputedStyle').mockImplementation(() => style)
+
+    vi.spyOn(elem, 'scrollHeight', 'get').mockImplementation(
+      () => 1.5 * 16
+    )
+    await userEvent.type(elem, 'a')
+    expect(elem.style.height).toBe('24px')
+
+    vi.spyOn(elem, 'scrollHeight', 'get').mockImplementation(
+      () => 1.5 * 32
+    )
+    await userEvent.type(elem, 'a')
+    expect(elem.style.height).toBe('48px')
+
+    vi.spyOn(elem, 'scrollHeight', 'get').mockImplementation(
+      () => 1.5 * 2000
+    )
+    await userEvent.type(elem, 'a')
+    expect(elem.style.height).toBe('96px')
+  })
+
+  it('should support spacing props', () => {
+    render(<Textarea top="2rem" />)
+
+    const element = document.querySelector('.dnb-textarea')
+
+    expect(element).toHaveClass(
+      'dnb-textarea dnb-textarea--virgin dnb-form-component dnb-textarea--vertical dnb-space__top--large',
+      { exact: true }
+    )
+  })
+
+  it('should inherit formElement vertical label', () => {
+    render(
+      <Provider formElement={{ labelDirection: 'vertical' }}>
+        <Textarea label="Label" />
+      </Provider>
+    )
+
+    const element = document.querySelector('.dnb-textarea')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(element).toHaveClass(
+      'dnb-textarea dnb-textarea--virgin dnb-form-component dnb-textarea--vertical',
+      { exact: true }
+    )
+  })
+
+  it('should validate with ARIA rules as a textarea with a label', async () => {
+    const Comp = render(
+      <>
+        <label htmlFor="textarea">text</label>
+        <Textarea {...props} id="textarea" value="some value" />
+      </>
+    )
+
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+
+  it('gets valid ref element', () => {
+    let ref: RefObject<HTMLTextAreaElement>
+
+    function MockComponent() {
+      ref = useRef(null)
+      return <Textarea {...props} ref={ref} />
+    }
+
+    render(<MockComponent />)
+
+    // ref should be the DOM element, not a class instance
+    const textarea = document.querySelector('.dnb-textarea__textarea')
+    expect(ref.current).toBeInstanceOf(HTMLTextAreaElement)
+    expect(ref.current).toBe(textarea)
+    expect(ref.current.tagName).toBe('TEXTAREA')
+  })
+
+  it('gets valid element when ref is function', () => {
+    const refFn = vi.fn()
+
+    render(<Textarea id="unique" ref={refFn} />)
+
+    // ref callback receives the DOM element
+    expect(refFn).toHaveBeenCalledTimes(1)
+    const textarea = document.querySelector('#unique')
+    expect(refFn).toHaveBeenCalledWith(textarea)
+    expect(textarea.classList).toContain('dnb-textarea__textarea')
+    expect(textarea.tagName).toBe('TEXTAREA')
+  })
+
+  it('should support align property', () => {
+    render(<Textarea align="right" />)
+
+    expect(document.querySelector('.dnb-textarea')).toHaveClass(
+      'dnb-textarea__align--right'
+    )
+  })
+
+  it('should support size property', () => {
+    const { rerender } = render(
+      <Provider>
+        <Textarea size="medium" />
+      </Provider>
+    )
+
+    expect(document.querySelector('.dnb-textarea')).toHaveClass(
+      'dnb-textarea__size--medium'
+    )
+
+    rerender(
+      <Provider>
+        <Textarea size="large" />
+      </Provider>
+    )
+
+    expect(document.querySelector('.dnb-textarea')).toHaveClass(
+      'dnb-textarea__size--large'
+    )
+
+    rerender(
+      <Provider Textarea={{ size: 'medium' }}>
+        <Textarea />
+      </Provider>
+    )
+
+    expect(document.querySelector('.dnb-textarea')).toHaveClass(
+      'dnb-textarea__size--medium'
+    )
+  })
+
+  it('should render characterCounter', async () => {
+    const { rerender } = render(
+      <Textarea characterCounter={{ max: 8 }} value="foo" />
+    )
+
+    const counter = document.querySelector('.dnb-text-counter')
+    const textarea = document.querySelector('textarea')
+    const ariaLive = document.querySelector('.dnb-aria-live')
+
+    expect(counter).toHaveTextContent(
+      nb.TextCounter.characterDown
+        .replace('%count', '5')
+        .replace('%max', '8')
+    )
+    expect(ariaLive).toHaveTextContent('')
+
+    await userEvent.type(textarea, 'bar')
+
+    expect(counter).toHaveTextContent(
+      nb.TextCounter.characterDown
+        .replace('%count', '2')
+        .replace('%max', '8')
+    )
+    expect(ariaLive).toHaveTextContent(
+      nb.TextCounter.characterDown
+        .replace('%count', '2')
+        .replace('%max', '8')
+    )
+
+    rerender(
+      <Textarea characterCounter={{ max: 8 }} value="foo" lang="en-GB" />
+    )
+
+    expect(counter).toHaveTextContent(
+      gb.TextCounter.characterDown
+        .replace('%count', '2')
+        .replace('%max', '8')
+    )
+
+    await userEvent.type(textarea, 'baz')
+
+    expect(ariaLive).toHaveTextContent(
+      gb.TextCounter.characterExceeded
+        .replace('%count', '1')
+        .replace('%max', '8')
+    )
+
+    rerender(
+      <Textarea
+        characterCounter={{ max: 8, variant: 'down' }}
+        value="foo"
+        lang="en-GB"
+      />
+    )
+
+    expect(counter).toHaveTextContent(
+      gb.TextCounter.characterExceeded
+        .replace('%count', '1')
+        .replace('%max', '8')
+    )
+
+    rerender(
+      <Textarea
+        characterCounter={{ max: 8, variant: 'up' }}
+        value="foo"
+        lang="en-GB"
+      />
+    )
+
+    expect(counter).toHaveTextContent(
+      gb.TextCounter.characterExceeded
+        .replace('%count', '1')
+        .replace('%max', '8')
+    )
+  })
+
+  it('supports inline styling', () => {
+    render(<Textarea style={{ color: 'red' }} />)
+    expect(document.querySelector('textarea').getAttribute('style')).toBe(
+      'color: red;'
+    )
+  })
+})
+
+describe('Textarea scss', () => {
+  it('has to match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

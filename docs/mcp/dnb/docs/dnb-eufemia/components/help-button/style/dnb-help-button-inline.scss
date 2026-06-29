@@ -1,0 +1,41 @@
+/*
+ * HelpButton component
+ *
+ */
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-help-button__inline {
+  // Disable the fallback crossfade animation when not triggered by the user
+  &:not(#{&}--user-intent) {
+    .dnb-icon--transition-fallback svg[data-icon-state] {
+      transition-duration: 0ms;
+    }
+  }
+}
+
+.dnb-help-button__content {
+  .dnb-section {
+    --background-color: var(--token-color-background-neutral-subtle);
+    --outset-left: 1rem;
+    --outset-right: 1rem;
+
+    // Because we don't use/need an outline, we need to add to get a wider corner radius.
+    --rounded-corner--value: calc(var(--card-outline-width) + 0.5rem);
+
+    .dnb-p {
+      max-width: var(--prose-max-width); // to enhance readability;
+
+      transition: transform 400ms var(--easing-default) 40ms;
+      transform: translate3d(0, -0.5rem, 0);
+
+      @include utilities.reducedMotion() {
+        transition-duration: 0.01ms;
+      }
+    }
+  }
+
+  &.dnb-height-animation--parallax .dnb-section .dnb-p {
+    transform: translate3d(0, 0, 0);
+  }
+}

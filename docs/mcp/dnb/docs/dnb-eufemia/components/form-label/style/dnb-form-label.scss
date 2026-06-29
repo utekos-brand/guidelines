@@ -1,0 +1,45 @@
+/*
+ * FormLabel component
+ *
+ */
+
+.dnb-form-label {
+  display: inline-block;
+  padding: 0;
+
+  // Clickable labels should not have width larger than the text
+  &[for] {
+    width: fit-content;
+  }
+
+  text-align: left;
+  vertical-align: baseline;
+
+  white-space: pre-wrap;
+  word-break: normal;
+
+  font-size: var(--font-size-basis);
+  color: var(--token-color-text-neutral);
+
+  &--surface-dark {
+    color: var(--token-color-text-neutral-ondark);
+  }
+
+  &--vertical {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  &--interactive {
+    cursor: pointer;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}
+
+legend.dnb-form-label {
+  display: inline-block;
+}

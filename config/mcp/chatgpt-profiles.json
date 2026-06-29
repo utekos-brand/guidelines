@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "repoRoot": "/Users/kristofferohnstadhjelmeland/utekos-brand",
+  "profiles": [
+    {
+      "id": "utekos_brand_chatgpt_eufemia",
+      "name": "Utekos Brand Eufemia Insight",
+      "description": "Read-only design-system workbench for Utekos brand guidelines, DNB/Eufemia component source snapshots, installed Eufemia package files, token inventory, exact identifier lookup, and version context.",
+      "mode": "read-only-design-system-insight",
+      "defaultForChatGPT": true,
+      "tunnelTarget": "eufemia",
+      "tunnelProfile": "utekos-brand-eufemia",
+      "mcpCommand": "node ${repoRoot}/scripts/mcp/utekos-brand-eufemia-server.mjs",
+      "mcpSurface": "utekos-brand-eufemia-canonical-read-only",
+      "healthAddr": "127.0.0.1:8086",
+      "chatgpt": {
+        "connectorName": "Utekos Brand Eufemia Insight",
+        "authentication": "No Authentication",
+        "description": "Use when Utekos brand work needs precise DNB/Eufemia component, style, token, package, changelog, or local source-snapshot evidence. Prefer exact identifier lookup before reading files. The server is read-only and returns structured outputs with output schemas."
+      },
+      "canonicalTools": [
+        "brand_eufemia_bootstrap",
+        "connector_surface_audit",
+        "tool_inventory",
+        "search_exact_identifier",
+        "source_search",
+        "source_read",
+        "repo_tree",
+        "package_manifest",
+        "exports_map",
+        "component_source",
+        "component_style",
+        "component_tests",
+        "token_inventory",
+        "token_resolve",
+        "css_variable_inventory",
+        "version_context",
+        "changelog_diff",
+        "figma_token_export_read"
+      ],
+      "expectedTools": [
+        "brand_eufemia_bootstrap",
+        "search_exact_identifier",
+        "source_read",
+        "component_source",
+        "component_style",
+        "token_inventory",
+        "token_resolve",
+        "version_context"
+      ],
+      "forbiddenTools": [
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "move_file",
+        "git_add",
+        "git_checkout",
+        "git_commit",
+        "git_reset",
+        "mcp-add",
+        "mcp-remove",
+        "mcp-config-set",
+        "mcp-create-profile",
+        "mcp-activate-profile",
+        "mcp-exec",
+        "code-mode"
+      ],
+      "sourceRoots": [
+        "docs/README.md",
+        "docs/mcp/dnb",
+        "docs/eufemia-insight",
+        "styles",
+        "src/app",
+        "components/brand",
+        "components/ui",
+        "lib/brand",
+        "scripts/mcp",
+        "node_modules/@dnb/eufemia"
+      ],
+      "secretDenylist": [
+        ".env",
+        ".env.local",
+        ".env.tunnel.local",
+        "mcp.json",
+        ".cursor/mcp.json",
+        ".vscode/mcp.json",
+        ".git",
+        ".next",
+        ".vercel"
+      ]
+    }
+  ]
+}

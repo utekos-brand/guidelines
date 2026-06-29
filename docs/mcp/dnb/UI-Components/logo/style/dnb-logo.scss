@@ -1,0 +1,47 @@
+/*
+ * Logo Component
+ *
+ */
+
+.dnb-logo {
+  display: inline-block;
+  vertical-align: baseline;
+  font-size: inherit;
+  line-height: 0;
+
+  height: 1em;
+
+  &--has-size {
+    width: auto;
+    height: auto;
+  }
+
+  &--inherit-size {
+    height: inherit;
+  }
+
+  &--inherit-color {
+    color: currentcolor;
+
+    svg {
+      fill: currentcolor;
+    }
+  }
+
+  svg {
+    shape-rendering: geometricprecision;
+
+    &[color] {
+      fill: currentcolor;
+    }
+
+    &:not([width], [height]) {
+      width: inherit;
+      height: inherit;
+    }
+
+    &:not(:root) {
+      overflow: visible;
+    }
+  }
+}

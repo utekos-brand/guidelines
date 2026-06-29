@@ -1,0 +1,15 @@
+@theme static {
+  --color-maritime-blue: oklch(0.2948 0.0419 195.12);
+  --color-cloud-dancer: oklch(0.9493 0.007 88.64);
+
+  --color-havdyp-950: oklch(0.1142 0.0511 290.62);
+  --color-havdyp-900: oklch(0.16 0.048 285);
+  --color-havdyp-800: oklch(0.22 0.044 280);
+
+  --color-parchment-50: oklch(0.9649 0.005 78.3);
+  --color-parchment-100: oklch(0.9306 0.01 93.57);
+
+  --color-iced-apricot: oklch(0.86 0.09 63);
+  --color-fjellbla: oklch(0.45 0.055 225);
+  --color-vargnatt: oklch(0.16 0.048 285);
+}

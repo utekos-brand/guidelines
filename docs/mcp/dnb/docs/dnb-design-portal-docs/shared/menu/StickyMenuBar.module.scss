@@ -1,0 +1,128 @@
+@use '@dnb/eufemia/src/style/core/utilities.scss' as utilities;
+
+:global {
+  html {
+    scroll-padding-top: 6rem;
+  }
+}
+
+.headerStyle {
+  position: fixed;
+
+  // When using view transitions, like in the table component,
+  // we use view-transition-name on every tr when there are accordion rows,
+  // but then they appear above the header. We don't want that,
+  // so we add view-transition-name here as well to create a new stacking context.
+  view-transition-name: header;
+
+  /* 
+    - Higher than z-index of 2 by ContentWrapper (.dnb-app-content)
+    - and higher than z-index of 3200 by .dnb-drawer-list__portal__style 
+  */
+  z-index: 3201;
+
+  /* stylelint-disable-next-line */
+  html[data-dnb-modal-active] &,
+  html[data-portal-tools-open] & {
+    /* When a modal/drawer is open, lower the header behind it */
+    z-index: 2999;
+  }
+  html[data-dnb-drawer-list-active='portal-search'] & {
+    /* Now, when the drawer tools are opened, we lower it back to appear behind the modal  */
+    z-index: 3200;
+  }
+
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  background-color: var(--token-color-background-neutral);
+  border-bottom: 1px solid var(--token-color-stroke-neutral-subtle);
+
+  white-space: nowrap;
+
+  :global {
+    #toggle-sidebar-menu {
+      display: none;
+    }
+    #github-button,
+    #figma-button {
+      display: inline-flex;
+    }
+
+    /*
+    God for a mobile menu instead
+    make sure that Content main "styled.main" gets the same max-width
+   */
+    @include utilities.allBelow(medium) {
+      #toggle-sidebar-menu {
+        display: flex;
+      }
+      #github-button,
+      #figma-button {
+        display: none;
+      }
+    }
+    @include utilities.allBelow(small) {
+      #toggle-main-menu {
+        display: none;
+      }
+    }
+    @include utilities.allAbove(small) {
+      #toggle-main-menu-small-screen {
+        display: none;
+      }
+    }
+  }
+}
+
+.portalHeaderWrapperStyle {
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+
+  /* make sure we are on 64px instead of 65px */
+  padding: 0.5rem 2rem;
+
+  @include utilities.allBelow(small) {
+    padding: 0.5rem 5vw;
+  }
+
+  html[data-dnb-modal-active] & {
+    margin-right: var(--scrollbar-width);
+  }
+
+  align-items: center;
+}
+
+.centerWrapperStyle {
+  display: flex;
+  align-items: center;
+
+  font-size: var(--font-size-basis);
+
+  :global(svg path) {
+    stroke: none;
+    fill: var(--token-color-icon-neutral);
+  }
+
+  @include utilities.allBelow(small) {
+    display: none;
+  }
+}
+
+.toolsStyle {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.hideSidebarToggleButtonStyle {
+  #toggle-sidebar-menu {
+    display: none;
+  }
+}

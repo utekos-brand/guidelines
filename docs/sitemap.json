@@ -1,0 +1,649 @@
+{
+  "repo": {
+    "id": "utekos-brand",
+    "name": "Utekos Brand Guidelines",
+    "root": "/Users/kristofferohnstadhjelmeland/utekos-brand",
+    "site": "https://brand.utekos.no",
+    "framework": "Next.js 16.2 / React 19.2",
+    "packageManager": "pnpm",
+    "primaryInstructionFile": "AGENTS.md",
+    "sitemapMarkdown": "docs/sitemap.md",
+    "sitemapJson": "docs/sitemap.json",
+    "updated": "2026-06-29"
+  },
+  "agentReadOrder": [
+    {
+      "id": "agents-md",
+      "path": "AGENTS.md",
+      "kind": "agent-instructions",
+      "status": "active",
+      "audience": ["codex", "cursor", "human"],
+      "useWhen": "Always read first for project rules, token policy, and layout expectations.",
+      "authority": "canonical"
+    },
+    {
+      "id": "docs-sitemap-md",
+      "path": "docs/sitemap.md",
+      "kind": "agent-sitemap",
+      "status": "active",
+      "audience": ["codex", "cursor", "human"],
+      "useWhen": "Use for human-readable repository orientation and route/docs mapping.",
+      "authority": "canonical",
+      "related": ["docs/sitemap.json"]
+    },
+    {
+      "id": "docs-sitemap-json",
+      "path": "docs/sitemap.json",
+      "kind": "machine-sitemap",
+      "status": "active",
+      "audience": ["codex", "cursor", "tooling"],
+      "useWhen": "Use for AST-friendly structured lookup of routes, docs, tokens, and MCP surfaces.",
+      "authority": "canonical",
+      "related": ["docs/sitemap.md"]
+    }
+  ],
+  "sourceOfTruth": [
+    {
+      "id": "project-instructions",
+      "path": "AGENTS.md",
+      "kind": "agent-instructions",
+      "status": "active",
+      "audience": ["codex", "cursor", "human"],
+      "useWhen": "Any task in this repository.",
+      "authority": "canonical"
+    },
+    {
+      "id": "brand-sidebar-navigation",
+      "path": "src/config/brand-navigation.ts",
+      "kind": "navigation-config",
+      "status": "active",
+      "audience": ["frontend", "codex", "cursor"],
+      "useWhen": "Changing sidebar navigation, active route matching, or primary brand sections.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "brand-header-navigation",
+      "path": "src/config/brand-header-nav.ts",
+      "kind": "navigation-config",
+      "status": "active",
+      "audience": ["frontend", "codex", "cursor"],
+      "useWhen": "Changing top-level header navigation.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "brand-theme-registry",
+      "path": "config/brand-themes.ts",
+      "kind": "theme-registry",
+      "status": "active",
+      "audience": ["frontend", "design-system", "codex", "cursor"],
+      "useWhen": "Changing theme IDs, theme labels, theme persistence, or color mode support.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "mcp-runbook",
+      "path": "docs/README.md",
+      "kind": "mcp-runbook",
+      "status": "active",
+      "audience": ["codex", "cursor", "chatgpt", "human"],
+      "useWhen": "Working with the dedicated Utekos Brand Eufemia Insight MCP surface.",
+      "authority": "repo-local-runbook"
+    },
+    {
+      "id": "dnb-design-token-snapshot",
+      "path": "docs/dnb-design-tokens.md",
+      "kind": "design-token-snapshot",
+      "status": "local-snapshot",
+      "audience": ["design-system", "codex", "cursor"],
+      "useWhen": "Reading local DNB/Eufemia token context before verifying implementation-critical values with Eufemia MCP.",
+      "authority": "local-snapshot",
+      "related": ["styles/themes/dnb.css", "scripts/mcp/utekos-brand-eufemia-server.mjs"]
+    }
+  ],
+  "routes": [
+    {
+      "id": "route-home",
+      "path": "src/app/(brand)/page.mdx",
+      "route": "/",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["brand", "frontend", "codex", "cursor"],
+      "useWhen": "Editing the root Utekos brand overview page.",
+      "authority": "runtime-source",
+      "related": ["src/app/(brand)/layout.tsx", "src/config/brand-navigation.ts"]
+    },
+    {
+      "id": "route-logo",
+      "path": "src/app/(brand)/logo/page.mdx",
+      "route": "/logo",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["brand", "design", "codex", "cursor"],
+      "useWhen": "Editing logo guidelines and logo asset usage.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-colors",
+      "path": "src/app/(brand)/farger/page.mdx",
+      "route": "/farger",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["brand", "design-system", "codex", "cursor"],
+      "useWhen": "Editing color palette, contrast, and semantic color guidance.",
+      "authority": "runtime-source",
+      "related": ["styles/tokens/palette.css", "styles/tokens/semantic-map.css"]
+    },
+    {
+      "id": "route-themes",
+      "path": "src/app/(brand)/themes/page.mdx",
+      "route": "/themes",
+      "kind": "app-route",
+      "status": "lab",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing the theme lab overview and theme preview surface.",
+      "authority": "runtime-source",
+      "related": ["config/brand-themes.ts", "styles/themes/index.css"]
+    },
+    {
+      "id": "route-theme-dnb",
+      "path": "src/app/(brand)/themes/dnb/page.mdx",
+      "route": "/themes/dnb",
+      "kind": "app-route",
+      "status": "lab",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing DNB theme demos and Eufemia-derived examples.",
+      "authority": "runtime-source",
+      "related": ["docs/dnb-design-tokens.md", "styles/themes/dnb.css"]
+    },
+    {
+      "id": "route-theme-utekos",
+      "path": "src/app/(brand)/themes/utekos/page.mdx",
+      "route": "/themes/utekos",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Planning or filling the Utekos theme page.",
+      "authority": "runtime-source",
+      "related": ["styles/themes/utekos.css"]
+    },
+    {
+      "id": "route-theme-havdyp",
+      "path": "src/app/(brand)/themes/havdyp/page.mdx",
+      "route": "/themes/havdyp",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Planning or filling the Havdyp theme page.",
+      "authority": "runtime-source",
+      "related": ["styles/themes/havdyp.css"]
+    },
+    {
+      "id": "route-theme-vy",
+      "path": "src/app/(brand)/themes/vy/page.mdx",
+      "route": "/themes/vy",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Planning or filling the Vy theme page.",
+      "authority": "runtime-source",
+      "related": ["styles/themes/vy.css", "docs/mcp/spor-mcp/vyDigital-dark-tokens.md"]
+    },
+    {
+      "id": "route-theme-custom",
+      "path": "src/app/(brand)/themes/custom/page.mdx",
+      "route": "/themes/custom",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Planning custom theme experiments.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-typography",
+      "path": "src/app/(brand)/typografi/page.mdx",
+      "route": "/typografi",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["brand", "design", "codex", "cursor"],
+      "useWhen": "Editing typography guidelines.",
+      "authority": "runtime-source",
+      "related": ["src/app/typography.css"]
+    },
+    {
+      "id": "route-photography",
+      "path": "src/app/(brand)/fotografi/page.mdx",
+      "route": "/fotografi",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["brand", "design", "codex", "cursor"],
+      "useWhen": "Planning photography guidelines.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-illustrations",
+      "path": "src/app/(brand)/illustrasjoner/page.mdx",
+      "route": "/illustrasjoner",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["brand", "design", "codex", "cursor"],
+      "useWhen": "Planning illustration guidelines.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-icons",
+      "path": "src/app/(brand)/ikoner/page.mdx",
+      "route": "/ikoner",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["brand", "design-system", "codex", "cursor"],
+      "useWhen": "Planning icon guidelines.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-graphic-element",
+      "path": "src/app/(brand)/grafisk-element/page.mdx",
+      "route": "/grafisk-element",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["brand", "design", "codex", "cursor"],
+      "useWhen": "Planning graphic element guidelines.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-identity-in-use",
+      "path": "src/app/(brand)/identiteten-i-bruk/page.mdx",
+      "route": "/identiteten-i-bruk",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["brand", "design", "codex", "cursor"],
+      "useWhen": "Editing identity-in-use examples and practical application rules.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-identity-in-use-brand-building",
+      "path": "src/app/(brand)/identiteten-i-bruk/merkevarebygging/page.mdx",
+      "route": "/identiteten-i-bruk/merkevarebygging",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["brand", "marketing", "codex", "cursor"],
+      "useWhen": "Planning brand-building content inside identity-in-use.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-identitet",
+      "path": "src/app/identitet/page.mdx",
+      "route": "/identitet",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["brand", "frontend", "codex", "cursor"],
+      "useWhen": "Editing the alternate identity route exposed by the header navigation.",
+      "authority": "runtime-source",
+      "related": ["src/config/brand-header-nav.ts"]
+    },
+    {
+      "id": "route-identitet-design-system",
+      "path": "src/app/identitet/design/system/page.mdx",
+      "route": "/identitet/design/system",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing design system principles under the identity route.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "route-identitet-design-tokens",
+      "path": "src/app/identitet/design/tokens/page.mdx",
+      "route": "/identitet/design/tokens",
+      "kind": "app-route",
+      "status": "draft",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing Eufemia theme token documentation under the identity route.",
+      "authority": "runtime-source",
+      "related": ["docs/dnb-design-tokens.md"]
+    },
+    {
+      "id": "route-resources",
+      "path": "src/app/ressurser/page.mdx",
+      "route": "/ressurser",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["brand", "frontend", "codex", "cursor"],
+      "useWhen": "Planning resource downloads or asset references.",
+      "authority": "runtime-source",
+      "related": ["src/config/brand-header-nav.ts"]
+    },
+    {
+      "id": "route-brand-building",
+      "path": "src/app/merkevarebygging/page.mdx",
+      "route": "/merkevarebygging",
+      "kind": "app-route",
+      "status": "stub",
+      "audience": ["brand", "marketing", "codex", "cursor"],
+      "useWhen": "Planning standalone brand-building content.",
+      "authority": "runtime-source"
+    }
+  ],
+  "docs": [
+    {
+      "id": "docs-readme",
+      "path": "docs/README.md",
+      "kind": "mcp-runbook",
+      "status": "active",
+      "audience": ["codex", "cursor", "chatgpt", "human"],
+      "useWhen": "Understanding local MCP insight gaps, tunnel setup, and canonical tools.",
+      "authority": "repo-local-runbook",
+      "related": ["config/mcp/chatgpt-profiles.json", "scripts/mcp/utekos-brand-eufemia-server.mjs"]
+    },
+    {
+      "id": "docs-deployment",
+      "path": "docs/deployment.md",
+      "kind": "deployment-runbook",
+      "status": "active",
+      "audience": ["developer", "codex", "cursor"],
+      "useWhen": "Checking Vercel, DNS, and GitHub deployment notes.",
+      "authority": "repo-local-runbook"
+    },
+    {
+      "id": "docs-dnb-design-tokens",
+      "path": "docs/dnb-design-tokens.md",
+      "kind": "design-token-snapshot",
+      "status": "local-snapshot",
+      "audience": ["design-system", "codex", "cursor"],
+      "useWhen": "Reading local DNB/Eufemia token context before implementation.",
+      "authority": "local-snapshot-verify-with-eufemia-mcp",
+      "related": ["styles/themes/dnb.css"]
+    },
+    {
+      "id": "docs-spor-vy-digital-dark-tokens",
+      "path": "docs/mcp/spor-mcp/vyDigital-dark-tokens.md",
+      "kind": "design-token-snapshot",
+      "status": "local-snapshot",
+      "audience": ["design-system", "codex", "cursor"],
+      "useWhen": "Reading local Spor/Vy dark token mapping.",
+      "authority": "mcp-snapshot",
+      "related": ["styles/themes/vy.css"]
+    },
+    {
+      "id": "docs-ebm-library",
+      "path": "docs/ebm",
+      "kind": "research-library",
+      "status": "active",
+      "audience": ["brand", "marketing", "codex", "cursor", "human"],
+      "useWhen": "Grounding brand-building and evidence-based marketing claims.",
+      "authority": "source-library",
+      "related": [
+        "docs/ebm/How Brands Grow.md",
+        "docs/ebm/attention_economy.md",
+        "docs/ebm/binet-field_binet-field-the-long-and-the-short-of-it.md"
+      ]
+    },
+    {
+      "id": "docs-how-brands-grow-chapters",
+      "path": "docs/ebm/HowBrandsGrow",
+      "kind": "research-library",
+      "status": "active",
+      "audience": ["brand", "marketing", "codex", "cursor"],
+      "useWhen": "Referencing extracted How Brands Grow chapter notes.",
+      "authority": "source-library",
+      "related": [
+        "docs/ebm/HowBrandsGrow/02-Chapter-Two.md",
+        "docs/ebm/HowBrandsGrow/03-Chapter-Three.md",
+        "docs/ebm/HowBrandsGrow/04-Chapter-Four.md",
+        "docs/ebm/HowBrandsGrow/05-Chapter-Five.md",
+        "docs/ebm/HowBrandsGrow/07-Chapter-Seven.md"
+      ]
+    },
+    {
+      "id": "docs-eufemia-insight",
+      "path": "docs/eufemia-insight",
+      "kind": "vendor-source-snapshot",
+      "status": "read-only-snapshot",
+      "audience": ["design-system", "codex", "cursor"],
+      "useWhen": "Inspecting local Eufemia component source snapshots and demo files.",
+      "authority": "local-source-snapshot"
+    },
+    {
+      "id": "docs-dnb-mcp-mirror",
+      "path": "docs/mcp/dnb",
+      "kind": "vendor-docs-mirror",
+      "status": "read-only-vendor-mirror",
+      "audience": ["design-system", "codex", "cursor"],
+      "useWhen": "Searching large DNB/Eufemia local documentation mirrors.",
+      "authority": "vendor-mirror",
+      "related": ["docs/README.md"]
+    }
+  ],
+  "mcpSurfaces": [
+    {
+      "id": "cursor-mcp-config",
+      "path": ".cursor/mcp.json",
+      "kind": "mcp-client-config",
+      "status": "active",
+      "audience": ["cursor", "developer"],
+      "useWhen": "Checking Cursor-local MCP server definitions.",
+      "authority": "local-config"
+    },
+    {
+      "id": "chatgpt-eufemia-profile",
+      "path": "config/mcp/chatgpt-profiles.json",
+      "kind": "mcp-connector-profile",
+      "status": "active",
+      "audience": ["chatgpt", "codex", "developer"],
+      "useWhen": "Checking ChatGPT connector name, tunnel target, expected tools, and forbidden tools.",
+      "authority": "local-config",
+      "related": ["docs/README.md"]
+    },
+    {
+      "id": "brand-eufemia-server",
+      "path": "scripts/mcp/utekos-brand-eufemia-server.mjs",
+      "kind": "mcp-server",
+      "status": "active",
+      "audience": ["chatgpt", "codex", "developer"],
+      "useWhen": "Serving read-only Eufemia, source, token, package, and version lookup tools.",
+      "authority": "runtime-source",
+      "related": ["docs/README.md"]
+    },
+    {
+      "id": "brand-eufemia-doctor",
+      "path": "scripts/mcp/doctor-utekos-brand-eufemia-server.mjs",
+      "kind": "mcp-verification-script",
+      "status": "active",
+      "audience": ["developer", "codex"],
+      "useWhen": "Verifying tool inventory, output schemas, and read-only annotations.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "openai-tunnel-helper",
+      "path": "scripts/mcp/openai-tunnel.mjs",
+      "kind": "mcp-tunnel-helper",
+      "status": "active",
+      "audience": ["developer", "codex"],
+      "useWhen": "Bootstrapping, starting, stopping, checking, or doctoring the secure MCP tunnel.",
+      "authority": "runtime-source",
+      "related": ["docs/README.md"]
+    }
+  ],
+  "themeTokens": [
+    {
+      "id": "theme-registry",
+      "path": "config/brand-themes.ts",
+      "kind": "theme-registry",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Adding or changing theme IDs, labels, cookies, or color mode behavior.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "theme-index-css",
+      "path": "styles/themes/index.css",
+      "kind": "theme-css-entrypoint",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Checking the imported theme CSS chain.",
+      "authority": "runtime-source",
+      "related": [
+        "styles/themes/utekos.css",
+        "styles/themes/havdyp.css",
+        "styles/themes/dnb.css",
+        "styles/themes/vy.css"
+      ]
+    },
+    {
+      "id": "theme-utekos-css",
+      "path": "styles/themes/utekos.css",
+      "kind": "theme-css",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing the default Utekos semantic theme.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "theme-havdyp-css",
+      "path": "styles/themes/havdyp.css",
+      "kind": "theme-css",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing the Havdyp semantic theme.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "theme-dnb-css",
+      "path": "styles/themes/dnb.css",
+      "kind": "theme-css",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing the DNB semantic theme and raw Eufemia palette mappings.",
+      "authority": "runtime-source",
+      "related": ["docs/dnb-design-tokens.md"]
+    },
+    {
+      "id": "theme-vy-css",
+      "path": "styles/themes/vy.css",
+      "kind": "theme-css",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Editing the Vy semantic theme.",
+      "authority": "runtime-source",
+      "related": ["docs/mcp/spor-mcp/vyDigital-dark-tokens.md"]
+    },
+    {
+      "id": "token-palette-css",
+      "path": "styles/tokens/palette.css",
+      "kind": "token-css",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Reading or changing raw local palette tokens.",
+      "authority": "runtime-source"
+    },
+    {
+      "id": "token-semantic-map-css",
+      "path": "styles/tokens/semantic-map.css",
+      "kind": "token-css",
+      "status": "active",
+      "audience": ["design-system", "frontend", "codex", "cursor"],
+      "useWhen": "Reading or changing semantic token mapping.",
+      "authority": "runtime-source"
+    }
+  ],
+  "doNotIndex": [
+    {
+      "id": "ignore-next-build-output",
+      "path": ".next",
+      "kind": "generated-output",
+      "status": "ignored",
+      "audience": ["codex", "cursor", "tooling"],
+      "useWhen": "Avoid indexing generated Next.js build and dev cache output.",
+      "authority": "generated"
+    },
+    {
+      "id": "ignore-node-modules",
+      "path": "node_modules",
+      "kind": "dependency-output",
+      "status": "ignored",
+      "audience": ["codex", "cursor", "tooling"],
+      "useWhen": "Avoid indexing dependencies except when explicitly inspecting installed package source.",
+      "authority": "generated"
+    },
+    {
+      "id": "ignore-git-dir",
+      "path": ".git",
+      "kind": "vcs-internal",
+      "status": "ignored",
+      "audience": ["codex", "cursor", "tooling"],
+      "useWhen": "Avoid indexing Git internals.",
+      "authority": "generated"
+    },
+    {
+      "id": "ignore-env-files",
+      "path": ".env*",
+      "kind": "secret-or-local-config",
+      "status": "ignored",
+      "audience": ["codex", "cursor", "tooling"],
+      "useWhen": "Avoid indexing local environment files and secrets.",
+      "authority": "secret-denylist"
+    },
+    {
+      "id": "vendor-dnb-mirror-read-only",
+      "path": "docs/mcp/dnb",
+      "kind": "vendor-docs-mirror",
+      "status": "read-only-vendor-mirror",
+      "audience": ["codex", "cursor", "tooling"],
+      "useWhen": "Search only when DNB/Eufemia local vendor evidence is needed; do not edit unless explicitly requested.",
+      "authority": "vendor-mirror"
+    },
+    {
+      "id": "eufemia-insight-read-only",
+      "path": "docs/eufemia-insight",
+      "kind": "vendor-source-snapshot",
+      "status": "read-only-snapshot",
+      "audience": ["codex", "cursor", "tooling"],
+      "useWhen": "Search only when Eufemia component snapshot evidence is needed; do not edit unless explicitly requested.",
+      "authority": "local-source-snapshot"
+    }
+  ],
+  "verification": {
+    "required": [
+      {
+        "id": "json-parse",
+        "path": "docs/sitemap.json",
+        "kind": "verification-command",
+        "status": "required",
+        "audience": ["developer", "codex", "cursor"],
+        "useWhen": "Validate that the machine sitemap is valid JSON.",
+        "authority": "repo-local-check",
+        "command": "node -e 'JSON.parse(require(\"fs\").readFileSync(\"docs/sitemap.json\",\"utf8\"))'"
+      },
+      {
+        "id": "prettier-check",
+        "path": "docs/sitemap.md",
+        "kind": "verification-command",
+        "status": "required",
+        "audience": ["developer", "codex", "cursor"],
+        "useWhen": "Check formatting of the sitemap and normalized DNB token snapshot.",
+        "authority": "repo-local-check",
+        "command": "pnpm exec prettier --check docs/sitemap.md docs/sitemap.json docs/dnb-design-tokens.md",
+        "related": ["docs/sitemap.json", "docs/dnb-design-tokens.md"]
+      },
+      {
+        "id": "path-audit",
+        "path": "docs/sitemap.json",
+        "kind": "verification-command",
+        "status": "required",
+        "audience": ["developer", "codex", "cursor"],
+        "useWhen": "Review all repo-local paths listed in the machine sitemap.",
+        "authority": "repo-local-check",
+        "command": "rg -n '\"path\": \"(src/app|docs/|styles/|config/|scripts/|\\\\.cursor/)' docs/sitemap.json"
+      }
+    ],
+    "notRequired": [
+      {
+        "id": "typecheck-not-required",
+        "path": "tsconfig.json",
+        "kind": "verification-note",
+        "status": "not-required",
+        "audience": ["developer", "codex", "cursor"],
+        "useWhen": "This task adds docs-native Markdown/JSON only and does not add TypeScript runtime surface.",
+        "authority": "task-scope"
+      }
+    ]
+  }
+}

@@ -1,0 +1,215 @@
+/*
+* Icon component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-icon {
+  display: inline-block;
+
+  // since we use vertical-align: top on the SVG
+  // we have to move center the alignment here again
+  // else basic text afterwards will get aligned on top
+  vertical-align: middle;
+
+  font-size: 1rem; // to make sure we have always the same starting point
+  line-height: 1rem; // for vertical alignment, we have to have no line-height
+  color: inherit;
+
+  width: 1em;
+  height: 1em;
+
+  // responsive
+  img,
+  svg {
+    &,
+    :where(.dnb-core-style) & {
+      width: inherit;
+      height: inherit;
+      shape-rendering: geometricprecision;
+      vertical-align: top;
+    }
+  }
+
+  // auto size
+  svg[width='100%'] {
+    width: inherit;
+  }
+
+  svg[height='100%'] {
+    height: inherit;
+  }
+
+  // filled
+  &--filled svg {
+    path {
+      fill: currentcolor;
+    }
+  }
+
+  // color
+  &--inherit-color svg:not([fill]),
+  &--inherit-color svg [fill] {
+    fill: currentcolor;
+  }
+
+  &--inherit-color svg [stroke] {
+    stroke: currentcolor;
+  }
+
+  // sizes
+  &--small {
+    font-size: 0.75rem;
+  }
+
+  &--default {
+    font-size: 1rem;
+  }
+
+  &--medium {
+    font-size: 1.5rem;
+  }
+
+  &--large {
+    font-size: 2rem;
+  }
+
+  &--x-large {
+    font-size: 2.5rem;
+  }
+
+  &--xx-large {
+    font-size: 3rem;
+  }
+
+  &--custom-size {
+    width: auto; // only to feed the svg
+    height: auto; // only to feed the svg
+    line-height: 0; // minimize line height when icon doesn't scale with font size
+  }
+
+  &--auto {
+    font-size: 1em;
+  }
+
+  &--custom-size,
+  &--auto,
+  &--large,
+  &--x-large,
+  &--xx-large {
+    svg[width='24'] path {
+      vector-effect: non-scaling-stroke;
+    }
+  }
+
+  &--auto > &--wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // border
+  --icon-border-positioning: var(--icon-border-positioning--default, -25%);
+
+  &--border {
+    position: relative;
+    vertical-align: baseline;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: var(--icon-border-positioning);
+      right: var(--icon-border-positioning);
+      top: var(--icon-border-positioning);
+      bottom: var(--icon-border-positioning);
+
+      margin: auto;
+      border-radius: 50%;
+      border: 0.0875rem solid; // use 1.4px instead of 1.5 so webkit is rounding down
+      border-color: currentcolor;
+    }
+  }
+
+  h1 > &,
+  h2 > &,
+  h3 > &,
+  h4 > &,
+  h5 > &,
+  h6 > & {
+    vertical-align: middle;
+  }
+  p > & {
+    vertical-align: inherit;
+  }
+
+  &.dnb-skeleton {
+    &::before,
+    &::after {
+      content: none !important;
+    }
+    color: var(--skeleton-color) !important;
+  }
+
+  // Icon.transition() — animate between SVG path states via CSS d property.
+  // non-scaling-stroke keeps stroke width constant when a 16×16 icon is
+  // displayed at a larger size (e.g. medium/24px wrapper).
+  // When CSS d is supported, morph the first SVG's path and hide the rest.
+  @supports (d: path('')) {
+    &--transition-fallback[style*='--icon-transition'] {
+      svg[data-icon-state]:not(:first-of-type) {
+        display: none;
+      }
+
+      // Keep the first SVG always visible — its path is morphed via d.
+      svg[data-icon-state]:first-of-type {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      svg[data-icon-state]:first-of-type path {
+        d: var(--icon-transition, var(--icon-transition-default));
+        vector-effect: non-scaling-stroke;
+        transition: d 400ms var(--easing-default);
+
+        @include utilities.reducedMotion() {
+          transition-duration: 0.01ms;
+        }
+      }
+    }
+  }
+
+  // Icon.transition() fallback — crossfade stacked SVGs with transform
+  // when CSS d interpolation is not supported or paths are incompatible.
+  &--transition-fallback {
+    position: relative;
+
+    svg[data-icon-state] {
+      transition:
+        opacity 500ms var(--easing-default) 80ms,
+        transform 600ms var(--easing-default);
+
+      &:not(:first-of-type) {
+        position: absolute;
+        inset: 0;
+      }
+
+      &:not(.dnb-icon__state--active) {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      &.dnb-icon__state--active {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @include utilities.reducedMotion() {
+      svg[data-icon-state] {
+        transition-duration: 0.01ms;
+      }
+    }
+  }
+}

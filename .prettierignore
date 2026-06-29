@@ -1,0 +1,11 @@
+# Ignore artifacts:
+build
+coverage
+
+# Imported documentation and local tool snapshots are committed as source
+# references, but are not part of the app formatting surface.
+docs/**
+.codex-plugin/**
+.cursor/**
+.playwright-mcp/**
+canva/**

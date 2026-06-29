@@ -1,0 +1,326 @@
+import { useContext } from 'react'
+import type { HTMLProps, JSX, ReactNode } from 'react'
+import { clsx } from 'clsx'
+import type { NumberFormatProps } from '../number-format/NumberFormatBase'
+import useNumberFormatWithParts from '../number-format/useNumberFormatWithParts'
+import {
+  formatCurrency,
+  formatPercent,
+  formatNumber,
+} from '../number-format/utils'
+import type {
+  TypographySize,
+  TypographyWeight,
+} from '../../elements/typography/Typography'
+import { getHeadingLineHeightSize } from '../../elements/typography/Typography'
+import type { SpacingProps } from '../../shared/types'
+import { convertJsxToString } from '../../shared/component-helper'
+import StatValueContext from './StatValueContext'
+import useStatSkeleton from './useStatSkeleton'
+import { TextInternal as Text } from './Text'
+
+type AmountOwnProps = Omit<
+  NumberFormatProps,
+  'children' | 'currencyDisplay' | 'currencyPosition' | 'element'
+> & {
+  children?: string | number
+  element?: keyof JSX.IntrinsicElements
+  currencyDisplay?: NumberFormatProps['currencyDisplay']
+  currencyPosition?: NumberFormatProps['currencyPosition']
+  /**
+   * Typography size for the label. Line-height is derived from the shared heading/text scale.
+   * Default: `"basis"`
+   */
+  fontSize?: TypographySize
+  /**
+   * Typography size for the main content. Defaults to `large`.
+   */
+  mainSize?: TypographySize
+  /**
+   * Typography weight for the main content. Defaults to `medium`.
+   */
+  mainWeight?: TypographyWeight
+  /**
+   * Typography size for secondary content like affixes. Defaults to `large`.
+   */
+  auxiliarySize?: TypographySize
+  /**
+   * Typography weight for secondary content like currency sign and affixes.
+   *
+   * If not set, and `mainSize` equals `auxiliarySize` while `mainWeight` is not set,
+   * `medium` is used.
+   */
+  auxiliaryWeight?: TypographyWeight
+  /**
+   * If `true`, text color follows a signed child value when possible. You can also pass a number directly to control the tone for custom content.
+   * Default: `false`
+   */
+  colorizeBySign?: boolean
+  /** Formats the value as a percentage. */
+  percent?: boolean
+}
+
+export type AmountProps = Omit<
+  HTMLProps<HTMLElement>,
+  keyof AmountOwnProps | 'ref'
+> &
+  AmountOwnProps &
+  SpacingProps
+
+const renderAffix = (
+  resolved: NumberFormatProps['prefix'] | NumberFormatProps['suffix'],
+  className: string
+) => {
+  if (typeof resolved === 'function') {
+    resolved = resolved()
+  }
+
+  return <span className={className}>{resolved as ReactNode}</span>
+}
+
+function AmountBase(props: AmountProps) {
+  const {
+    element: Element = 'span',
+    value,
+    children,
+    currency = false,
+    currencyDisplay = null,
+    currencyPosition = 'auto',
+    locale = null,
+    className = null,
+    prefix = null,
+    suffix = null,
+    srLabel = null,
+    fontSize = null,
+    mainSize = null,
+    mainWeight,
+    auxiliarySize = null,
+    auxiliaryWeight = null,
+    colorizeBySign = false,
+    id = null,
+    style = null,
+    lang = null,
+    decimals = 0,
+    rounding = null,
+    signDisplay = null,
+    skeleton = null,
+    options = null,
+    compact = null,
+    percent = null,
+    ...rest
+  } = props
+  const { context } = useStatSkeleton(skeleton)
+  const { useBasisSize, defaultMainWeight } = useContext(StatValueContext)
+  const resolvedLocale =
+    locale ?? (context?.NumberFormat?.locale as string) ?? context?.locale
+
+  const rawValue =
+    typeof value !== 'undefined'
+      ? value
+      : typeof children === 'string' || typeof children === 'number'
+        ? children
+        : null
+
+  const isCurrency = currency === true || typeof currency === 'string'
+  const suffixStartsWithSlash =
+    typeof suffix === 'string' && suffix.startsWith('/')
+  const forceCurrencyAfterAmount =
+    isCurrency &&
+    currencyPosition === 'auto' &&
+    (suffixStartsWithSlash || signDisplay === 'always')
+  const resolvedCurrencyPosition = forceCurrencyAfterAmount
+    ? 'after'
+    : currencyPosition === 'auto'
+      ? null
+      : currencyPosition
+  const formatter = percent
+    ? formatPercent
+    : isCurrency
+      ? formatCurrency
+      : formatNumber
+
+  const formatted = useNumberFormatWithParts(rawValue, formatter, {
+    locale: resolvedLocale,
+    currency: isCurrency ? currency : false,
+    currencyDisplay,
+    currencyPosition: resolvedCurrencyPosition,
+    compact,
+    decimals,
+    rounding,
+    signDisplay,
+    options,
+  })
+
+  const parts = formatted.parts
+  const omitCurrencySpacing =
+    isCurrency && currencyPosition === 'auto' && signDisplay === 'always'
+  const isNegativeZero = Object.is(Number(rawValue), -0)
+  const renderSign =
+    signDisplay === 'always' && parts.sign
+      ? isNegativeZero && parts.sign === '+'
+        ? '\u2212'
+        : parts.sign
+      : null
+  const spaceAfterSign = renderSign === '-' || renderSign === '−'
+  const renderedAmount = renderSign ? parts.number : parts.signedNumber
+
+  const hasCurrency = Boolean(parts.currency)
+  const renderCurrencyBefore = parts.currencyPosition === 'before'
+  const hasExplicitSizeProps =
+    mainSize !== null || auxiliarySize !== null || fontSize !== null
+  const defaultFontSize =
+    useBasisSize && !hasExplicitSizeProps ? 'basis' : 'large'
+  const resolvedMainSize = mainSize ?? fontSize ?? defaultFontSize
+  const resolvedAuxiliarySize =
+    auxiliarySize ?? fontSize ?? defaultFontSize
+  const resolvedMainLineHeight = getHeadingLineHeightSize(resolvedMainSize)
+  const resolvedAuxiliaryLineHeight = getHeadingLineHeightSize(
+    resolvedAuxiliarySize
+  )
+  const resolvedMainWeight = mainWeight ?? defaultMainWeight ?? 'medium'
+  const resolvedAuxWeight =
+    auxiliaryWeight ??
+    (typeof mainWeight === 'undefined' &&
+    resolvedMainSize === resolvedAuxiliarySize
+      ? 'medium'
+      : null)
+  const numericValue = Number(rawValue)
+
+  const currencyClass = clsx(
+    'dnb-stat__currency',
+    `dnb-t__size--${resolvedAuxiliarySize}`,
+    `dnb-t__line-height--${resolvedAuxiliaryLineHeight}`,
+    resolvedAuxWeight && `dnb-t__weight--${resolvedAuxWeight}`
+  )
+  const amountClass = clsx(
+    'dnb-stat__amount',
+    `dnb-t__size--${resolvedMainSize}`,
+    `dnb-t__line-height--${resolvedMainLineHeight}`,
+    `dnb-t__weight--${resolvedMainWeight}`
+  )
+  const percentClass = clsx(
+    'dnb-stat__percent',
+    `dnb-t__size--${resolvedAuxiliarySize}`,
+    `dnb-t__line-height--${resolvedAuxiliaryLineHeight}`,
+    resolvedAuxWeight && `dnb-t__weight--${resolvedAuxWeight}`
+  )
+
+  let content = (
+    <>
+      {renderSign && (
+        <>
+          <span
+            className={clsx(
+              'dnb-stat__sign',
+              `dnb-t__size--${resolvedMainSize}`,
+              `dnb-t__line-height--${resolvedMainLineHeight}`,
+              `dnb-t__weight--${resolvedMainWeight}`
+            )}
+          >
+            {renderSign}
+          </span>
+          {spaceAfterSign ? ' ' : null}
+        </>
+      )}
+      {hasCurrency && renderCurrencyBefore && (
+        <>
+          <span className={currencyClass}>{parts.currency}</span>
+          {parts.spaceAfterCurrency && !omitCurrencySpacing ? ' ' : null}
+        </>
+      )}
+      <span className={amountClass}>{renderedAmount}</span>
+      {parts.percent && (
+        <>
+          {parts.percentSpacing}
+          <span className={percentClass}>{parts.percent}</span>
+        </>
+      )}
+      {hasCurrency && !renderCurrencyBefore && (
+        <>
+          {parts.spaceBeforeCurrency && !omitCurrencySpacing ? ' ' : null}
+          <span className={currencyClass}>{parts.currency}</span>
+        </>
+      )}
+    </>
+  )
+
+  let aria = formatted.aria
+
+  if (
+    isNegativeZero &&
+    signDisplay === 'always' &&
+    typeof aria === 'string'
+  ) {
+    aria = aria.replace(/^\+/, '\u2212')
+  }
+
+  if (prefix) {
+    const prefixElement = renderAffix(
+      prefix,
+      clsx(
+        'dnb-stat__prefix',
+        `dnb-t__size--${resolvedAuxiliarySize}`,
+        `dnb-t__line-height--${resolvedAuxiliaryLineHeight}`,
+        resolvedAuxWeight && `dnb-t__weight--${resolvedAuxWeight}`
+      )
+    )
+    content = (
+      <>
+        {prefixElement}
+        {'\u00A0'}
+        {content}
+      </>
+    )
+    aria = `${convertJsxToString(prefixElement)} ${aria}`
+  }
+
+  if (suffix) {
+    const suffixElement = renderAffix(
+      suffix,
+      clsx(
+        'dnb-stat__suffix',
+        `dnb-t__size--${resolvedAuxiliarySize}`,
+        `dnb-t__line-height--${resolvedAuxiliaryLineHeight}`,
+        resolvedAuxWeight && `dnb-t__weight--${resolvedAuxWeight}`
+      )
+    )
+    const suffixSpace = suffixStartsWithSlash ? '' : '\u00A0'
+    content = (
+      <>
+        {content}
+        {suffixSpace}
+        {suffixElement}
+      </>
+    )
+    aria = `${aria}${suffixStartsWithSlash ? '' : ' '}${convertJsxToString(suffixElement)}`
+  }
+
+  const srText = srLabel
+    ? `${convertJsxToString(srLabel)}${' '}${aria}`
+    : aria
+
+  return (
+    <Text
+      {...rest}
+      id={id}
+      element={Element}
+      className={clsx('dnb-stat', className)}
+      colorizeBySign={colorizeBySign ? numericValue : false}
+      style={style}
+      lang={lang || resolvedLocale || formatted.locale}
+      skeleton={skeleton}
+      textClassName={false}
+    >
+      <span className="dnb-stat__content" aria-hidden>
+        {content}
+      </span>
+      {/* Used for VoiceOver and NVDA when navigating with arrow keys */}
+      <span className="dnb-sr-only" data-text={srText} />
+    </Text>
+  )
+}
+
+AmountBase._supportsSpacingProps = true
+
+export { AmountBase }
+export default AmountBase

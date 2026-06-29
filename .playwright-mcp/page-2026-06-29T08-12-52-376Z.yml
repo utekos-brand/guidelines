@@ -1,0 +1,190 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "Utekos Brand" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - img "Utekos Brand" [ref=e11]
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: Grunnlag
+          - list [ref=e16]:
+            - listitem [ref=e17]:
+              - link "Merkevaren Utekos" [ref=e18] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e19]: Merkevaren Utekos
+            - listitem [ref=e20]:
+              - link "Logo" [ref=e21] [cursor=pointer]:
+                - /url: /logo
+                - generic [ref=e22]: Logo
+        - generic [ref=e23]:
+          - generic [ref=e24]: Visuell identitet
+          - list [ref=e26]:
+            - listitem [ref=e27]:
+              - link "Farger" [ref=e28] [cursor=pointer]:
+                - /url: /farger
+                - generic [ref=e29]: Farger
+            - listitem [ref=e30]:
+              - link "Themes" [ref=e31] [cursor=pointer]:
+                - /url: /themes
+                - generic [ref=e32]: Themes
+              - generic: Lab
+            - listitem [ref=e33]:
+              - link "Typografi" [ref=e34] [cursor=pointer]:
+                - /url: /typografi
+                - generic [ref=e35]: Typografi
+            - listitem [ref=e36]:
+              - link "Fotografi" [ref=e37] [cursor=pointer]:
+                - /url: /fotografi
+                - generic [ref=e38]: Fotografi
+            - listitem [ref=e39]:
+              - link "Illustrasjoner" [ref=e40] [cursor=pointer]:
+                - /url: /illustrasjoner
+                - generic [ref=e41]: Illustrasjoner
+            - listitem [ref=e42]:
+              - link "Ikoner" [ref=e43] [cursor=pointer]:
+                - /url: /ikoner
+                - generic [ref=e44]: Ikoner
+            - listitem [ref=e45]:
+              - link "Grafisk element" [ref=e46] [cursor=pointer]:
+                - /url: /grafisk-element
+                - generic [ref=e47]: Grafisk element
+        - separator [ref=e48]
+        - generic [ref=e49]:
+          - generic [ref=e50]: Anvendelse
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - link "Identiteten i bruk" [ref=e54] [cursor=pointer]:
+                - /url: /identiteten-i-bruk
+                - generic [ref=e55]: Identiteten i bruk
+    - main [ref=e56]:
+      - generic [ref=e57]:
+        - button "Toggle Sidebar" [ref=e59]:
+          - img
+          - generic [ref=e60]: Toggle Sidebar
+        - navigation "Hovednavigasjon" [ref=e61]:
+          - list [ref=e62]:
+            - listitem [ref=e63]:
+              - link "Identitet" [ref=e64] [cursor=pointer]:
+                - /url: /identitet
+            - listitem [ref=e65]:
+              - link "Ressurser" [ref=e66] [cursor=pointer]:
+                - /url: /ressurser
+            - listitem [ref=e67]:
+              - button "Søk" [ref=e68]:
+                - img [ref=e69]
+                - text: Søk
+            - listitem [ref=e72]:
+              - button "Utseende" [ref=e73]:
+                - img [ref=e74]
+                - text: Utseende
+      - generic [ref=e77]:
+        - article [ref=e80]:
+          - generic [ref=e81]:
+            - text: Fundamenter
+            - status [ref=e82]
+          - heading "Lenke til seksjonen" [level=1] [ref=e83]:
+            - link "Lenke til seksjonen" [ref=e84] [cursor=pointer]:
+              - /url: "#farger"
+              - text: Farger
+          - paragraph [ref=e85]: Paletten er bygget opp av varme og kalde toner med ulik styrke og klarhet, og gir et stort spenn i uttrykket – fra optimistisk og engasjerende til bærekraftig og ansvarlig.
+          - paragraph [ref=e86]: Alle farger er definert med spesifikke verdier for både trykte og digitale flater. For å sikre riktig gjengivelse skal kun de oppgitte verdiene brukes.
+          - paragraph [ref=e87]: For digitale flater som web og app finnes et utvidet spekter av nyanser for hver farge, samt et utvalg rødtoner. Disse er kun definert i RGB og gir større fleksibilitet i digitale kanaler.
+          - separator [ref=e88]
+          - list [ref=e89]:
+            - listitem [ref=e90]:
+              - link "Bakgrunnsfarge" [ref=e91] [cursor=pointer]:
+                - /url: https://brand.utekos.no/(brand)/farger#background-color
+            - listitem [ref=e92]:
+              - link "Komponentfarge" [ref=e93] [cursor=pointer]:
+                - /url: https://brand.utekos.no/(brand)/farger#component-color
+            - listitem [ref=e94]:
+              - link "Farge og ikoner" [ref=e95] [cursor=pointer]:
+                - /url: https://brand.utekos.no/(brand)/farger#color-and-icons
+            - listitem [ref=e96]:
+              - link "Farge og tilstander" [ref=e97] [cursor=pointer]:
+                - /url: https://brand.utekos.no/(brand)/farger#color-and-states
+            - listitem [ref=e98]:
+              - link "Retningslinjer" [ref=e99] [cursor=pointer]:
+                - /url: https://brand.utekos.no/(brand)/farger#guidelines
+          - paragraph [ref=e100]:
+            - link "Gå til fargetokens" [ref=e101] [cursor=pointer]:
+              - /url: https://brand.utekos.no/(brand)/farger#design-tokens
+          - heading "Lenke til seksjonen" [level=2] [ref=e102]:
+            - link "Lenke til seksjonen" [ref=e103] [cursor=pointer]:
+              - /url: "#bakgrunnsfarge"
+              - text: Bakgrunnsfarge
+          - paragraph [ref=e104]: Spor bruker to ulike bakgrunnsfarger som skal benyttes både i app og på web. Bakgrunnsfarge brukes til å gruppere komponenter, skille ulike typer innhold eller løfte noe frem fra bakgrunnen for å fremheve noe som er klikkbart. Det er viktig at vi er konsekvente i bruken av bakgrunnsfarger. Se helheten i en flyt og hvordan innholdet henger sammen. Det er viktig at like elementer får samme design, og dette gjelder også bakgrunnsfarge.
+          - heading "Lenke til seksjonen" [level=2] [ref=e105]:
+            - link "Lenke til seksjonen" [ref=e106] [cursor=pointer]:
+              - /url: "#komponentfarge"
+              - text: Komponentfarge
+          - paragraph [ref=e107]: Komponenter gir større rom for bruk av farger, men det skal alltid være fokus på lesbarhet og kontrast. Enkelte komponenter bruker for eksempel ulike bakgrunnsfarger for å signalisere forskjell i viktighet. Du kan også bruke spesifikke farger for å fremheve et element, eller for å skjule det.
+          - paragraph [ref=e108]: Ved bruk av andre farger enn hvit og grå, er det viktig å vurdere bruken nøye. Er dette signalfarger som brukes til varsler? Vil det konkurrere med navigasjon eller brukerens valg?
+          - heading "Lenke til seksjonen" [level=2] [ref=e109]:
+            - link "Lenke til seksjonen" [ref=e110] [cursor=pointer]:
+              - /url: "#farge-og-ikoner"
+              - text: Farge og ikoner
+          - paragraph [ref=e111]: Ikoner leveres som standard i «mørk grå», men kan brukes i andre farger i spesielle tilfeller.
+          - list [ref=e112]:
+            - listitem [ref=e113]: På mørke bakgrunner bør en lys farge brukes, og helst den «fylte» versjonen av ikonet. Her er det naturlig å bruke hvit dersom du ønsker høyest kontrast.
+            - listitem [ref=e114]: Fremhevede ikoner kan bruke en annen farge enn mørk grå dersom det bidrar til å skille dem fra resten.
+            - listitem [ref=e115]: Noen komponenter trenger ikoner i andre farger enn standard. Dette er for å tilpasse seg det underliggende designet. Choice Chips bruker to nyanser av grønn for å gi et mykere uttrykk.
+            - listitem [ref=e116]: Ikoner som tilhører et produkt kan brukes i produktets farge.
+          - heading "Lenke til seksjonen" [level=2] [ref=e117]:
+            - link "Lenke til seksjonen" [ref=e118] [cursor=pointer]:
+              - /url: "#farge-og-tilstander"
+              - text: Farge og tilstander
+          - paragraph [ref=e119]: Spor-komponenter har en systematisk bruk av design-tokens for å vise interaktive tilstander. Vi ønsker at brukeren skal kunne gjenkjenne lik interaksjon uavhengig av om de er på web eller i app, eller om de trykker på en knapp eller legger til et dokument.
+          - paragraph [ref=e120]: For eksempel bruker de fleste knapper en mørkere fargeverdi ved hover, før de får en lysere fargeverdi når du trykker ned knappen. Unntaket er Legg til-knappen, som ofte supplerer andre typer knapper og kan brukes der du ønsker flere knapper samlet med lik vekt. Deaktivert knappetilstand vil være lik på tvers av alle typer knapper slik at brukeren kan gjenkjenne den.
+          - heading "Lenke til seksjonen" [level=2] [ref=e121]:
+            - link "Lenke til seksjonen" [ref=e122] [cursor=pointer]:
+              - /url: "#retningslinjer"
+              - text: Retningslinjer
+          - heading "Lenke til seksjonen" [level=3] [ref=e123]:
+            - link "Lenke til seksjonen" [ref=e124] [cursor=pointer]:
+              - /url: "#ikke-bruk-egendefinerte-farger"
+              - text: "Ikke bruk egendefinerte farger:"
+          - paragraph [ref=e125]: Du skal ikke bruke andre farger enn de som allerede finnes i en komponent, eller som er avledet fra design-tokens og basert på eksisterende design.
+          - heading "Lenke til seksjonen" [level=3] [ref=e126]:
+            - link "Lenke til seksjonen" [ref=e127] [cursor=pointer]:
+              - /url: "#unngå-lav-fargekontrast"
+              - text: "Unngå lav fargekontrast:"
+          - paragraph [ref=e128]: Tekst, ikoner og komponenter må følge WCAG-kravene for minimum kontrast. Dette kan kontrolleres gjennom plugins eller nettbaserte verktøy.
+          - heading "Lenke til seksjonen" [level=3] [ref=e129]:
+            - link "Lenke til seksjonen" [ref=e130] [cursor=pointer]:
+              - /url: "#ikke-bruk-kun-farger"
+              - text: "Ikke bruk kun farger:"
+          - paragraph [ref=e131]: Det er ikke tilstrekkelig å kun bruke farge alene for å gi tilbakemelding til brukeren. Det skal alltid være en etikett eller et ikon som gir fargen riktig kontekst.
+        - complementary "Innhold på siden" [ref=e132]:
+          - navigation [ref=e133]:
+            - paragraph [ref=e134]: Innhold
+            - list [ref=e135]:
+              - listitem [ref=e136]:
+                - link "Bakgrunnsfarge" [ref=e137] [cursor=pointer]:
+                  - /url: "#bakgrunnsfarge"
+              - listitem [ref=e138]:
+                - link "Komponentfarge" [ref=e139] [cursor=pointer]:
+                  - /url: "#komponentfarge"
+              - listitem [ref=e140]:
+                - link "Farge og ikoner" [ref=e141] [cursor=pointer]:
+                  - /url: "#farge-og-ikoner"
+              - listitem [ref=e142]:
+                - link "Farge og tilstander" [ref=e143] [cursor=pointer]:
+                  - /url: "#farge-og-tilstander"
+              - listitem [ref=e144]:
+                - link "Retningslinjer" [ref=e145] [cursor=pointer]:
+                  - /url: "#retningslinjer"
+              - listitem [ref=e146]:
+                - link "Ikke bruk egendefinerte farger:" [ref=e147] [cursor=pointer]:
+                  - /url: "#ikke-bruk-egendefinerte-farger"
+              - listitem [ref=e148]:
+                - link "Unngå lav fargekontrast:" [ref=e149] [cursor=pointer]:
+                  - /url: "#unngå-lav-fargekontrast"
+              - listitem [ref=e150]:
+                - link "Ikke bruk kun farger:" [ref=e151] [cursor=pointer]:
+                  - /url: "#ikke-bruk-kun-farger"
+  - button "Open Next.js Dev Tools" [ref=e157] [cursor=pointer]:
+    - img [ref=e158]
+  - alert [ref=e161]

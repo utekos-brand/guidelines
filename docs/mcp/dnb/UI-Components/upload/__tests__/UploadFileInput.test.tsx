@@ -1,0 +1,202 @@
+import { fireEvent, render, screen } from '@testing-library/react'
+import UploadFileInput from '../UploadFileInput'
+import { createMockFile } from './testHelpers'
+import type { UploadContextValue } from '../types'
+import { UploadContext } from '../UploadContext'
+
+const defaultProps: UploadContextValue = {
+  acceptedFileTypes: ['png'],
+  onInputUpload: vi.fn(),
+  buttonText: 'upload button text',
+  fileMaxSize: 1000,
+  errorLargeFile: 'error message',
+  errorUnsupportedFile: 'error message',
+  filesAmountLimit: 2,
+}
+
+const makeWrapper = (props = null) => {
+  const defaultContext: UploadContextValue = {
+    ...defaultProps,
+    ...props,
+  }
+  return ({ children }) => {
+    return <UploadContext value={defaultContext}>{children}</UploadContext>
+  }
+}
+
+describe('UploadFileInput', () => {
+  it('renders the upload button', () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper(),
+    })
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
+
+  it('renders the upload button text', () => {
+    const buttonText = 'button text'
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper({
+        buttonText: buttonText,
+      }),
+    })
+
+    expect(screen.queryByText(buttonText)).toBeInTheDocument()
+  })
+
+  it('renders the upload input', () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper(),
+    })
+
+    expect(
+      document.querySelector('.dnb-upload__file-input')
+    ).toBeInTheDocument()
+  })
+
+  it('accepts multiple files by default', () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper(),
+    })
+
+    const element = document.querySelector('.dnb-upload__file-input')
+
+    expect(element).toHaveAttribute('multiple')
+  })
+
+  it('accepts ony one file when filesAmountLimit is 1', () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper({
+        filesAmountLimit: 1,
+      }),
+    })
+
+    const element = document.querySelector('.dnb-upload__file-input')
+
+    expect(element).not.toHaveAttribute('multiple')
+  })
+
+  it('renders the input', () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper(),
+    })
+    const element = document.querySelector('.dnb-upload__file-input')
+
+    expect(element).toBeInTheDocument()
+    expect(element.getAttribute('class')).toMatch('dnb-upload__file-input')
+  })
+
+  it('simulates a click on the input when clicking the button', () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper(),
+    })
+
+    const buttonElement = screen.getByRole('button')
+
+    const inputElement = document.querySelector('.dnb-upload__file-input')
+
+    const clickEventListener = vi.fn()
+    inputElement.addEventListener('click', clickEventListener)
+
+    fireEvent.click(buttonElement)
+
+    expect(clickEventListener).toHaveBeenCalled()
+  })
+
+  it('calls the onInputUpload function', async () => {
+    const file = createMockFile('fileName.png', 100, 'image/png')
+
+    const onInputUpload = vi.fn()
+
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper({ onInputUpload }),
+    })
+
+    const inputElement = document.querySelector('.dnb-upload__file-input')
+
+    fireEvent.change(inputElement, {
+      target: { files: [file] },
+    })
+
+    expect(onInputUpload).toHaveBeenCalledWith([{ file }])
+  })
+
+  it('will reset input value on click', async () => {
+    const file = createMockFile('fileName.png', 100, 'image/png')
+
+    const onInputUpload = vi.fn()
+
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper({ onInputUpload }),
+    })
+
+    const inputElement = document.querySelector(
+      '.dnb-upload__file-input'
+    ) as HTMLInputElement
+
+    Object.defineProperty(inputElement, 'value', {
+      writable: true,
+      value: 'mock-value',
+    })
+
+    expect(inputElement.value).toBe('mock-value')
+
+    fireEvent.click(inputElement)
+
+    expect(inputElement.value).toBe(null)
+
+    fireEvent.change(inputElement, {
+      target: { files: [file] },
+    })
+    expect(onInputUpload).toHaveBeenCalledWith([{ file }])
+  })
+
+  it('accepts given acceptedFileTypes', async () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper({
+        acceptedFileTypes: ['png', 'pdf'],
+      }),
+    })
+
+    const inputElement = document.querySelector(
+      '.dnb-upload__file-input'
+    ) as HTMLInputElement
+
+    expect(inputElement.accept).toBe('.png,.pdf')
+  })
+
+  it('accepts jpeg when jpg is defined', async () => {
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper({
+        acceptedFileTypes: ['png', 'jpg'],
+      }),
+    })
+
+    const inputElement = document.querySelector(
+      '.dnb-upload__file-input'
+    ) as HTMLInputElement
+
+    expect(inputElement.accept).toBe('.png,.jpg,.jpeg')
+  })
+
+  it('can upload multiple files', async () => {
+    const file1 = createMockFile('fileName1.png', 100, 'image/png')
+    const file2 = createMockFile('fileName2.png', 100, 'image/png')
+
+    const onInputUpload = vi.fn()
+
+    render(<UploadFileInput />, {
+      wrapper: makeWrapper({ onInputUpload }),
+    })
+
+    const inputElement = document.querySelector('.dnb-upload__file-input')
+
+    fireEvent.change(inputElement, {
+      target: { files: [file1, file2] },
+    })
+
+    expect(onInputUpload).toHaveBeenCalledWith([
+      { file: file1 },
+      { file: file2 },
+    ])
+  })
+})

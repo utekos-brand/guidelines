@@ -1,0 +1,251 @@
+/**
+ * UI lib Component Example
+ *
+ */
+
+import ComponentBox from '../../../../shared/tags/ComponentBox'
+import styled from '@emotion/styled'
+import { Provider } from '@dnb/eufemia/src/shared'
+import { Flex, InputMasked } from '@dnb/eufemia/src'
+
+export const InputMaskedExampleNumberLocale = () => (
+  <Wrapper>
+    <ComponentBox data-visual-test="input-masked-number">
+      <Flex.Vertical>
+        <InputMasked
+          label="Number"
+          asNumber
+          maskOptions={{ allowNegative: false }}
+          value="1234.50"
+          onChange={({ numberValue }) => {
+            console.log(numberValue)
+          }}
+        />
+        <InputMasked
+          label="Number (decimal limit)"
+          asNumber
+          numberMask={{ decimalLimit: 2 }}
+          value="1234.016"
+          onChange={({ numberValue }) => {
+            console.log(numberValue)
+          }}
+        />
+        <InputMasked
+          label="Percentage"
+          asPercent
+          numberMask={{ decimalLimit: 1 }}
+          value="1234.016"
+          onChange={({ numberValue }) => {
+            console.log(numberValue)
+          }}
+        />
+      </Flex.Vertical>
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedExampleCurrencyLocale = () => (
+  <Wrapper>
+    <ComponentBox data-visual-test="input-masked-currency">
+      <Flex.Vertical>
+        <InputMasked
+          label="Currency"
+          asCurrency="EUR"
+          value="1234.50"
+          onChange={({ numberValue }) => {
+            console.log(numberValue)
+          }}
+        />
+        <Provider
+          locale="en-GB"
+          InputMasked={{
+            currencyMask: {
+              decimalLimit: 3,
+            },
+          }}
+        >
+          <InputMasked
+            label="Currency"
+            asCurrency="USD"
+            value="1234.567"
+            onChange={({ numberValue }) => {
+              console.log(numberValue)
+            }}
+          />
+        </Provider>
+      </Flex.Vertical>
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedExampleCurrencyMask = () => (
+  <Wrapper>
+    <ComponentBox data-visual-test="input-masked-currency_mask">
+      <Flex.Vertical>
+        <InputMasked
+          label="Left aligned (default)"
+          showMask
+          currencyMask="kr"
+          onChange={({ numberValue }) => {
+            console.log(numberValue)
+          }}
+        />
+        <InputMasked
+          label="Right aligned"
+          showMask
+          currencyMask={{ currency: 'NOK' }}
+          align="right"
+          onChange={({ numberValue }) => {
+            console.log(numberValue)
+          }}
+        />
+      </Flex.Vertical>
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedExampleCustomNumberMask = () => (
+  <Wrapper>
+    <ComponentBox>
+      <InputMasked
+        label="Masked amount"
+        showMask
+        numberMask={{
+          suffix: ' kr',
+          allowDecimal: true,
+        }}
+        onChange={({ numberValue }) => {
+          console.log(numberValue)
+        }}
+      />
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedExampleNumberMask = () => (
+  <Wrapper>
+    <ComponentBox data-visual-test="input-masked-number_mask">
+      <InputMasked
+        label="Masked input"
+        value="1000000"
+        numberMask={{
+          suffix: ',-',
+          allowDecimal: false,
+        }}
+        suffix="kr"
+        onChange={({ numberValue }) => {
+          console.log(numberValue)
+        }}
+      />
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedExamplePrefix = () => (
+  <Wrapper>
+    <ComponentBox>
+      <InputMasked
+        label="Masked input"
+        numberMask={{
+          prefix: 'NOK ',
+        }}
+        stretch={true}
+        placeholder="Enter a number"
+        onChange={({ numberValue }) => {
+          console.log(numberValue)
+        }}
+      />
+    </ComponentBox>
+  </Wrapper>
+)
+
+const Wrapper = styled.div`
+  display: block;
+  width: 100%;
+
+  .dnb-masked-input {
+    margin: 1rem 0;
+  }
+  .dnb-form-label + .dnb-masked-input {
+    margin-top: 0;
+  }
+`
+
+export const InputMaskedInfoInputMode = () => (
+  <Wrapper>
+    <ComponentBox hidePreview hideToolbar>
+      <InputMasked maskOptions={{ allowNegative: false }} />
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedInfoCleanNumberValues = () => (
+  <Wrapper>
+    <ComponentBox hidePreview>
+      <InputMasked asCurrency="EUR" value="1234.50" />
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedInfoCleanNumberValues2 = () => (
+  <Wrapper>
+    <ComponentBox hidePreview>
+      <InputMasked
+        asCurrency="EUR"
+        value="1234.50"
+        onChange={({ numberValue }) => {
+          console.log(numberValue) // type of float
+        }}
+      />
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedInfoDecimalsCurrencyProvider = () => (
+  <Wrapper>
+    <ComponentBox hidePreview>
+      <Provider
+        locale="en-GB"
+        InputMasked={{
+          currencyMask: {
+            decimalLimit: 1, // defaults to 2
+          },
+        }}
+      >
+        <InputMasked asCurrency="USD" value="1234.567" />
+      </Provider>
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedInfoDecimalsNumberProvider = () => (
+  <Wrapper>
+    <ComponentBox hidePreview>
+      <Provider
+        locale="en-GB"
+        InputMasked={{
+          numberMask: {
+            decimalLimit: 2, // defaults to no decimals
+          },
+        }}
+      >
+        <InputMasked asNumber value="1234.567" />
+      </Provider>
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputMaskedInfoRemoveDecimalLimit = () => (
+  <Wrapper>
+    <ComponentBox hidePreview>
+      <InputMasked
+        asNumber
+        maskOptions={{
+          allowDecimal: true,
+          decimalLimit: null,
+        }}
+        value="1234.567"
+      />
+    </ComponentBox>
+  </Wrapper>
+)

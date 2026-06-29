@@ -1,0 +1,1215 @@
+/**
+ * Pagination Test
+ *
+ */
+
+import { useEffect, useReducer, useState } from 'react'
+import { vi } from 'vitest'
+import {
+  axeComponent,
+  loadScss,
+  wait,
+} from '../../../core/test-utils/testSetup'
+import {
+  createEvent,
+  fireEvent,
+  render,
+  waitFor,
+} from '@testing-library/react'
+import type { PaginationProps } from '../Pagination'
+import Pagination, { createPagination, Bar } from '../Pagination'
+import Anchor from '../../anchor/Anchor'
+import nbNO from '../../../shared/locales/nb-NO'
+import enGB from '../../../shared/locales/en-GB'
+import Provider from '../../../shared/Provider'
+
+const nb = nbNO['nb-NO'].Pagination
+const en = enGB['en-GB'].Pagination
+
+describe('Pagination bar', () => {
+  const props: PaginationProps = {
+    pageCount: 30,
+    currentPage: 15,
+  }
+
+  it('has correct state at startup', () => {
+    render(<Pagination {...props} />)
+    const innerElem = document.querySelector('.dnb-pagination__bar__inner')
+
+    expect(
+      innerElem.querySelectorAll('button.dnb-pagination__button').length
+    ).toBe(9)
+    expect(
+      innerElem.querySelectorAll('button.dnb-button--secondary').length
+    ).toBe(8)
+    expect(
+      innerElem.querySelectorAll('button.dnb-button--primary').length
+    ).toBe(1)
+  })
+
+  it('reacts to prop changes with valid button attributes', () => {
+    const { rerender } = render(
+      <Pagination {...props}>
+        <div id="page-content">content</div>
+      </Pagination>
+    )
+
+    expect(document.querySelector('div#page-content')).toBeInTheDocument()
+
+    rerender(
+      <Pagination {...props} currentPage={1}>
+        <div id="page-content">content</div>
+      </Pagination>
+    )
+
+    expect(document.querySelector('div#page-content')).toBeInTheDocument()
+
+    const buttonElements = document
+      .querySelector('.dnb-pagination__bar__inner')
+      .querySelectorAll('button.dnb-pagination__button')
+
+    const firstButton = buttonElements[0]
+    expect(firstButton.classList).toContain('dnb-button--primary')
+    expect(firstButton.getAttribute('aria-current')).toBe('page')
+
+    const secondButton = buttonElements[1]
+    expect(secondButton.classList).toContain('dnb-button--secondary')
+    expect(secondButton).not.toHaveAttribute('aria-current')
+
+    const prevNavButton = document.querySelectorAll('.dnb-button')[0]
+    expect(prevNavButton).toHaveAttribute('disabled')
+    expect(
+      prevNavButton
+        .querySelector('span.dnb-icon')
+
+        .getAttribute('data-testid')
+    ).toBe('chevron left icon')
+  })
+
+  it('reacts to prop changes and calls the render prop fn', () => {
+    // Set our test reference
+    let currentPage = 15
+
+    const { rerender } = render(
+      <Pagination {...props}>
+        {({ pageNumber }) => {
+          // Update our test reference
+          currentPage = pageNumber
+
+          return <div id="page-no">{pageNumber}</div>
+        }}
+      </Pagination>
+    )
+
+    expect(document.querySelector('div#page-no').textContent).toBe('15')
+
+    const buttonElements = document
+      .querySelector('.dnb-pagination__bar__inner')
+      .querySelectorAll('button.dnb-pagination__button')
+
+    fireEvent.click(buttonElements[2])
+    expect(currentPage).toBe(13)
+    expect(document.querySelector('div#page-no').textContent).toBe('13')
+
+    fireEvent.click(buttonElements[3])
+    expect(currentPage).toBe(14)
+    expect(document.querySelector('div#page-no').textContent).toBe('14')
+
+    rerender(
+      <Pagination {...props} currentPage={5}>
+        {({ pageNumber }) => {
+          // Update our test reference
+          currentPage = pageNumber
+
+          return <div id="page-no">{pageNumber}</div>
+        }}
+      </Pagination>
+    )
+    expect(currentPage).toBe(5)
+    expect(document.querySelector('div#page-no').textContent).toBe('5')
+
+    rerender(
+      <Pagination {...props} currentPage={3}>
+        {({ pageNumber }) => {
+          // Update our test reference
+          currentPage = pageNumber
+
+          return <div id="page-no">{pageNumber}</div>
+        }}
+      </Pagination>
+    )
+    expect(currentPage).toBe(3)
+    expect(document.querySelector('div#page-no').textContent).toBe('3')
+  })
+
+  it('accepts element in the function return', () => {
+    render(
+      <Pagination pageCount={3} startupPage={2}>
+        {({ pageNumber }) => <div>{pageNumber}</div>}
+      </Pagination>
+    )
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('2')
+  })
+
+  it('sets content with setContent', () => {
+    render(
+      <Pagination pageCount={3} startupPage={2}>
+        {({ pageNumber, setContent }) => {
+          setContent(pageNumber, <div>{pageNumber}</div>)
+        }}
+      </Pagination>
+    )
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('2')
+
+    const nextButton = document
+      .querySelector('div.dnb-pagination__bar')
+      .querySelector('.dnb-pagination__bar__skip')
+      .querySelectorAll('.dnb-button')[1]
+
+    expect(nextButton.getAttribute('title')).toBe('Neste side')
+
+    fireEvent.click(nextButton)
+
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('3')
+  })
+
+  it('should set correct class when paginationBarLayout is set to "horizontal"', () => {
+    render(
+      <Pagination
+        pageCount={3}
+        startupPage={2}
+        paginationBarLayout="horizontal"
+      >
+        {({ pageNumber, setContent }) => {
+          setContent(pageNumber, <div>{pageNumber}</div>)
+        }}
+      </Pagination>
+    )
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('2')
+
+    expect(document.querySelector('.dnb-pagination')).toHaveClass(
+      'dnb-pagination--layout-horizontal'
+    )
+  })
+
+  it('rerenders properly', () => {
+    const Rerender = () => {
+      const [count, incrementBy] = useReducer((state, count) => {
+        return state + count
+      }, 1)
+      const onClickHandler = () => incrementBy(1)
+      return (
+        <>
+          <button id="button" onClick={onClickHandler}>
+            {count}
+          </button>
+          <Pagination pageCount={3} startupPage={2}>
+            {({ pageNumber, setContent }) => {
+              setContent(
+                pageNumber,
+                <code>{JSON.stringify({ pageNumber, count })}</code>
+              )
+            }}
+          </Pagination>
+        </>
+      )
+    }
+    render(<Rerender />)
+
+    expect(document.querySelector('#button').textContent).toBe('1')
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('{"pageNumber":2,"count":1}')
+
+    fireEvent.click(document.querySelector('#button'))
+
+    expect(document.querySelector('#button').textContent).toBe('2')
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('{"pageNumber":2,"count":2}')
+
+    const nextButton = document
+      .querySelector('div.dnb-pagination__bar')
+      .querySelector('.dnb-pagination__bar__skip')
+      .querySelectorAll('.dnb-button')[1]
+
+    fireEvent.click(nextButton)
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('{"pageNumber":3,"count":2}')
+
+    fireEvent.click(document.querySelector('#button'))
+    expect(
+      document.querySelector('.dnb-pagination__content').textContent
+    ).toBe('{"pageNumber":3,"count":3}')
+  })
+
+  it('has valid onChange callback', () => {
+    const onChange = vi.fn()
+
+    render(<Pagination {...props} onChange={onChange} />)
+
+    const nextButton = document
+      .querySelector('div.dnb-pagination__bar')
+      .querySelector('.dnb-pagination__bar__skip')
+      .querySelectorAll('.dnb-button')[1]
+
+    fireEvent.click(nextButton)
+    expect(onChange).toHaveBeenCalledTimes(1)
+    expect(onChange.mock.calls[0][0].pageNumber).toBe(16)
+
+    fireEvent.click(nextButton)
+    expect(onChange).toHaveBeenCalledTimes(2)
+    expect(onChange.mock.calls[1][0].pageNumber).toBe(17)
+  })
+})
+
+describe('Infinity scroller', () => {
+  beforeEach(() => {
+    window.IntersectionObserver = vi.fn().mockImplementation(function () {
+      return {
+        observe: vi.fn(),
+        disconnect: vi.fn(),
+      }
+    })
+  })
+
+  const props: PaginationProps = {
+    pageCount: 5,
+    currentPage: 3,
+    minWaitTime: 0,
+  }
+
+  const PageItem = ({ children }) => (
+    <div className="page-item">{children}</div>
+  )
+
+  const waitForComponent = async () => {
+    await wait(20)
+  }
+
+  it('should derive startupPage from currentPage set after mount', async () => {
+    const onStartup = vi.fn()
+
+    const MyComponent = () => {
+      const [currentPage, setCurrentPage] = useState(null)
+
+      useEffect(() => {
+        setCurrentPage(3)
+      }, [])
+
+      return (
+        <Pagination
+          mode="infinity"
+          currentPage={currentPage}
+          minWaitTime={0}
+          onStartup={({ pageNumber, setContent }) => {
+            setContent(pageNumber, <PageItem>{pageNumber}</PageItem>)
+            onStartup({ pageNumber })
+          }}
+        />
+      )
+    }
+
+    render(<MyComponent />)
+
+    await waitFor(() => {
+      expect(onStartup).toHaveBeenCalledTimes(1)
+    })
+    expect(onStartup).toHaveBeenCalledWith(
+      expect.objectContaining({ pageNumber: 3 })
+    )
+  })
+
+  it('should load pages with intersection observer (after)', async () => {
+    const action = ({ pageNumber, setContent }) => {
+      setContent(pageNumber, <PageItem>{pageNumber}</PageItem>)
+    }
+
+    const onEnd = vi.fn()
+    const onStartup = vi.fn(action)
+    const onChange = vi.fn(action)
+    const onLoad = vi.fn()
+    const observe = vi.fn()
+    const disconnect = vi.fn()
+
+    let callObserver
+    window.IntersectionObserver = vi
+      .fn()
+      .mockImplementation(function (cb) {
+        callObserver = cb
+        return {
+          observe,
+          disconnect,
+        }
+      })
+
+    const intersect = async () => {
+      // Ensure the observer callback is initialized before calling it
+      let attempts = 0
+      while (!callObserver && attempts < 50) {
+        await wait(10)
+        attempts++
+      }
+      if (!callObserver) {
+        throw new Error('IntersectionObserver was not initialized')
+      }
+      callObserver([{ isIntersecting: true }])
+      await waitForComponent()
+    }
+
+    render(
+      <Pagination
+        mode="infinity"
+        {...props}
+        onStartup={onStartup}
+        onChange={onChange}
+        onLoad={onLoad}
+        onEnd={onEnd}
+      />
+    )
+
+    await waitForComponent()
+
+    await intersect()
+    expect(observe).toHaveBeenCalledTimes(2)
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(2)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      '3'
+    )
+    expect(document.querySelectorAll('div.page-item')[1].textContent).toBe(
+      '4'
+    )
+
+    await intersect()
+    expect(observe).toHaveBeenCalledTimes(3)
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(3)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      '3'
+    )
+    expect(document.querySelectorAll('div.page-item')[1].textContent).toBe(
+      '4'
+    )
+    expect(document.querySelectorAll('div.page-item')[2].textContent).toBe(
+      '5'
+    )
+
+    expect(disconnect).toHaveBeenCalledTimes(2)
+
+    await intersect()
+
+    expect(onStartup).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledTimes(2)
+    expect(onLoad).toHaveBeenCalledTimes(3)
+    expect(onEnd).toHaveBeenCalledTimes(1)
+  })
+
+  it('should handle startupCount properly', async () => {
+    let resetInfinityHandler
+
+    const onStartup = vi.fn()
+    const onChange = vi.fn()
+
+    let callObserver
+    window.IntersectionObserver = vi
+      .fn()
+      .mockImplementation(function (cb) {
+        callObserver = cb
+        return {
+          observe: vi.fn(),
+          disconnect: vi.fn(),
+        }
+      })
+
+    const intersect = async () => {
+      callObserver([{ isIntersecting: true }])
+      await waitForComponent()
+    }
+
+    const startupPage = 2
+    const perPageCount = 10
+
+    const tableItems = []
+    for (let i = 1; i <= 60; i++) {
+      tableItems.push({
+        ssn: i,
+        content: <PageItem key={i}>page-{i}</PageItem>,
+      })
+    }
+
+    const localStack = { current: {} }
+
+    const MyComponent = () => {
+      const [{ InfinityMarker, endInfinity, resetInfinity }] =
+        useState(createPagination)
+      const [currentPage, setCurrentPage] = useState(startupPage)
+
+      resetInfinityHandler = resetInfinity
+
+      tableItems
+        .filter((cur, idx) => {
+          const floor = (currentPage - 1) * perPageCount
+          const ceil = floor + perPageCount
+          return idx >= floor && idx < ceil
+        })
+        .forEach((item) => {
+          localStack.current[item.ssn] = item.content
+        })
+      const items = Object.values(localStack.current)
+
+      const action = ({ pageNumber }) => {
+        setCurrentPage(pageNumber)
+
+        if (pageNumber === 1) {
+          endInfinity()
+        }
+      }
+
+      return (
+        <InfinityMarker
+          minWaitTime={0}
+          currentPage={currentPage}
+          startupCount={2}
+          onStartup={(e) => {
+            action(e)
+            onStartup(e)
+          }}
+          onChange={(e) => {
+            action(e)
+            onChange(e)
+          }}
+        >
+          {items}
+        </InfinityMarker>
+      )
+    }
+
+    render(<MyComponent />)
+
+    await waitForComponent()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(20)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      'page-11'
+    )
+    expect(
+      document.querySelectorAll('div.page-item')[
+        document.querySelectorAll('div.page-item').length - 1
+      ].textContent
+    ).toBe('page-30')
+
+    await intersect()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(30)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      'page-11'
+    )
+    expect(
+      document.querySelectorAll('div.page-item')[
+        document.querySelectorAll('div.page-item').length - 1
+      ].textContent
+    ).toBe('page-40')
+
+    await waitForComponent()
+    await intersect()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(40)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      'page-11'
+    )
+    expect(
+      document.querySelectorAll('div.page-item')[
+        document.querySelectorAll('div.page-item').length - 1
+      ].textContent
+    ).toBe('page-50')
+
+    localStack.current = {}
+    resetInfinityHandler()
+
+    await waitForComponent()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(10)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      'page-21'
+    )
+    expect(
+      document.querySelectorAll('div.page-item')[
+        document.querySelectorAll('div.page-item').length - 1
+      ].textContent
+    ).toBe('page-30')
+  })
+
+  it('should handle re-render with decreasing currentPage and not show the loadbar', async () => {
+    const perPageCount = 10
+
+    const tableItems = []
+    for (let i = 1; i <= 60; i++) {
+      tableItems.push({
+        ssn: i,
+        content: <PageItem key={i}>page-{i}</PageItem>,
+      })
+    }
+
+    const localStack = { current: {} }
+
+    const MyComponent = () => {
+      const [{ InfinityMarker }] = useState(createPagination)
+
+      // 1. Start with 2
+      const [currentPage, setCurrentPage] = useState(2)
+
+      tableItems
+        .filter((cur, idx) => {
+          const floor = (currentPage - 1) * perPageCount
+          const ceil = floor + perPageCount
+          return idx >= floor && idx < ceil
+        })
+        .forEach((item) => {
+          localStack.current[item.ssn] = item.content
+        })
+      const items = Object.values(localStack.current)
+
+      // 2. And set it back to 1
+      useEffect(() => {
+        setCurrentPage(1)
+      }, [])
+
+      return (
+        <InfinityMarker minWaitTime={0} currentPage={currentPage}>
+          {items}
+        </InfinityMarker>
+      )
+    }
+
+    render(<MyComponent />)
+
+    await waitForComponent()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(20)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      'page-1'
+    )
+    expect(
+      document.querySelectorAll('div.page-item')[
+        document.querySelectorAll('div.page-item').length - 1
+      ].textContent
+    ).toBe('page-20')
+    expect(
+      document.querySelector('div.dnb-pagination__loadbar')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should load pages with load more button (before)', async () => {
+    const action = ({ pageNumber, setContent }) => {
+      setContent(pageNumber, <PageItem>{pageNumber}</PageItem>)
+    }
+
+    const onStartup = vi.fn(action)
+    const onChange = vi.fn(action)
+    const onLoad = vi.fn()
+
+    const clickOnLoadMore = async () => {
+      fireEvent.click(
+        document.querySelector('div.dnb-pagination__loadbar button')
+      )
+
+      await waitForComponent()
+    }
+
+    render(
+      <Pagination
+        mode="infinity"
+        {...props}
+        onStartup={onStartup}
+        onChange={onChange}
+        onLoad={onLoad}
+      />
+    )
+
+    await waitForComponent()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(1)
+
+    await clickOnLoadMore()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(2)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      '2'
+    )
+
+    await clickOnLoadMore()
+
+    expect(document.querySelectorAll('div.page-item').length).toBe(3)
+    expect(document.querySelectorAll('div.page-item')[0].textContent).toBe(
+      '1'
+    )
+    expect(
+      document.querySelector('div.dnb-pagination__loadbar')
+    ).not.toBeInTheDocument()
+
+    expect(onStartup).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledTimes(2)
+    expect(onLoad).toHaveBeenCalledTimes(3)
+  })
+
+  it('will pass children', () => {
+    render(
+      <Pagination mode="infinity" {...props}>
+        <div id="page-content">content</div>
+      </Pagination>
+    )
+
+    expect(document.querySelector('div#page-content')).toBeInTheDocument()
+  })
+
+  it('should support locale from provider', () => {
+    const { rerender } = render(
+      <Provider>
+        <Pagination {...props} />
+      </Provider>
+    )
+
+    const element = document.querySelector(
+      '.dnb-pagination__bar__skip button'
+    )
+
+    expect(element.textContent).toContain(nb.prevTitle)
+
+    rerender(
+      <Provider locale="en-GB">
+        <Pagination {...props} />
+      </Provider>
+    )
+
+    expect(element.textContent).toContain(en.prevTitle)
+
+    rerender(
+      <Provider locale="nb-NO">
+        <Pagination {...props} />
+      </Provider>
+    )
+
+    expect(element.textContent).toContain(nb.prevTitle)
+  })
+
+  it('should support spacing props', () => {
+    render(<Pagination top="2rem" {...props} />)
+
+    const element = document.querySelector('.dnb-pagination')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(element).toHaveClass(
+      'dnb-pagination',
+      'dnb-space__top--large',
+      'dnb-pagination--left'
+    )
+  })
+
+  it('should support pagination bar space prop', () => {
+    render(<Pagination barSpace="2rem" {...props} />)
+
+    const element = document.querySelector('.dnb-pagination__bar')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(element).toHaveClass(
+      'dnb-pagination__bar',
+      'dnb-space__top--large'
+    )
+  })
+
+  it('should support setContent from createPagination', async () => {
+    const { Pagination, setContent } = createPagination()
+
+    const PageItem = ({ children }) => (
+      <div className="page-item">{children}</div>
+    )
+
+    render(
+      <Pagination pageCount={3} currentPage={1}>
+        {({ pageNumber, setContent: internalSetContent }) => {
+          internalSetContent(
+            pageNumber,
+            <PageItem>page-{pageNumber}</PageItem>
+          )
+        }}
+      </Pagination>
+    )
+
+    await waitForComponent()
+
+    expect(document.querySelector('.page-item')?.textContent).toBe(
+      'page-1'
+    )
+
+    // External setContent via createPagination should also work
+    setContent(2, <PageItem>page-2-external</PageItem>)
+
+    await waitForComponent()
+
+    const items = document.querySelectorAll('.page-item')
+    const texts = Array.from(items).map((el) => el.textContent)
+    expect(texts).toContain('page-2-external')
+  })
+
+  it('should support InfinityMarker from createPagination', async () => {
+    let resetInfinityHandler
+
+    const onStartup = vi.fn()
+    const onChange = vi.fn()
+    const onLoad = vi.fn()
+    const onEnd = vi.fn()
+
+    const MyComponent = () => {
+      const startupPage = 3
+      const [{ InfinityMarker, endInfinity, resetInfinity }] =
+        useState(createPagination)
+      const [currentPage, setCurrentPage] = useState(startupPage)
+
+      resetInfinityHandler = resetInfinity
+
+      const action = ({ pageNumber }) => {
+        setCurrentPage(pageNumber)
+
+        if (pageNumber === 1) {
+          endInfinity()
+        }
+      }
+
+      return (
+        <InfinityMarker
+          minWaitTime={0}
+          currentPage={currentPage}
+          onStartup={(e) => {
+            action(e)
+            onStartup(e)
+          }}
+          onChange={(e) => {
+            action(e)
+            onChange(e)
+          }}
+          onLoad={onLoad}
+          onEnd={onEnd}
+        >
+          <div id="page-content">page-{currentPage}</div>
+        </InfinityMarker>
+      )
+    }
+
+    render(<MyComponent />)
+
+    await waitForComponent()
+
+    const clickOnLoadMore = async () => {
+      fireEvent.click(
+        document.querySelector('div.dnb-pagination__loadbar button')
+      )
+
+      await waitForComponent()
+    }
+
+    expect(document.querySelector('div#page-content').textContent).toBe(
+      'page-3'
+    )
+
+    await clickOnLoadMore()
+
+    expect(document.querySelector('div#page-content').textContent).toBe(
+      'page-2'
+    )
+
+    await clickOnLoadMore()
+
+    expect(document.querySelector('div#page-content').textContent).toBe(
+      'page-1'
+    )
+
+    expect(onStartup).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledTimes(2)
+    expect(onLoad).toHaveBeenCalledTimes(3)
+    expect(onEnd).toHaveBeenCalledTimes(1)
+
+    resetInfinityHandler()
+
+    await waitForComponent()
+
+    expect(document.querySelector('div#page-content').textContent).toBe(
+      'page-3'
+    )
+
+    expect(onStartup).toHaveBeenCalledTimes(2)
+    expect(onChange).toHaveBeenCalledTimes(2)
+    expect(onLoad).toHaveBeenCalledTimes(4)
+    expect(onEnd).toHaveBeenCalledTimes(1)
+  })
+
+  it('should show pagination bar using Bar component', () => {
+    render(<Bar skeleton={false} />)
+
+    expect(
+      document.querySelector('.dnb-pagination__bar')
+    ).toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-pagination__indicator')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should forward load button props', async () => {
+    const action = ({ pageNumber, setContent }) => {
+      setContent(pageNumber, <PageItem>{pageNumber}</PageItem>)
+    }
+
+    const onStartup = vi.fn(action)
+
+    render(
+      <Pagination
+        mode="infinity"
+        {...props}
+        onStartup={onStartup}
+        useLoadButton
+        loadButton={{ text: 'Load please', iconPosition: 'right' }}
+      />
+    )
+
+    await waitForComponent()
+
+    const loadButton = await waitFor(() => {
+      const element = document.querySelector('.dnb-button--secondary')
+
+      expect(element).toBeInTheDocument()
+
+      return element as HTMLButtonElement
+    })
+
+    expect(loadButton).toHaveTextContent('Load please')
+    expect(loadButton).toHaveClass('dnb-button--icon-position-right')
+  })
+
+  it('should accept custom component as value for loadButton', async () => {
+    const action = ({ pageNumber, setContent }) => {
+      setContent(pageNumber, <PageItem>{pageNumber}</PageItem>)
+    }
+
+    const onStartup = vi.fn(action)
+
+    render(
+      <Pagination
+        mode="infinity"
+        {...props}
+        onStartup={onStartup}
+        useLoadButton
+        loadButton={() => (
+          <button className="my-cool-button">The best load button</button>
+        )}
+      />
+    )
+
+    await waitForComponent()
+
+    const loadButton = document.querySelector(
+      '.my-cool-button'
+    ) as HTMLButtonElement
+
+    expect(loadButton).toHaveTextContent('The best load button')
+    expect(loadButton.tagName).toBe('BUTTON')
+  })
+})
+
+describe('Pagination ARIA', () => {
+  it('should validate with ARIA rules for pagination bar', async () => {
+    const snapshotProps: PaginationProps = {
+      pageCount: 4,
+      currentPage: 2,
+    }
+
+    const result = render(<Pagination {...snapshotProps} />)
+    expect(await axeComponent(result)).toHaveNoViolations()
+  })
+
+  it('should validate with ARIA rules for Infinity Scroller', async () => {
+    const result = render(
+      <Pagination
+        mode="infinity"
+        pageCount={5}
+        currentPage={3}
+        minWaitTime={0}
+      />
+    )
+    await wait(1)
+    expect(await axeComponent(result)).toHaveNoViolations()
+  })
+})
+
+// React's deprecated .defaultProps would convert undefined values to the
+// declared default. After migrating away from .defaultProps we replicate
+// that behavior with removeUndefinedProps so that context overrides still
+// work when a consumer passes an explicit `undefined`.
+describe('undefined props should fall through to defaults', () => {
+  it('should render with default pageCount when prop is explicitly undefined', () => {
+    render(
+      <Pagination pageCount={undefined} currentPage={1}>
+        <div id="page-content">content</div>
+      </Pagination>
+    )
+
+    // Should render without errors even when pageCount is undefined
+    expect(document.querySelector('#page-content')).toBeInTheDocument()
+  })
+})
+
+describe('Pagination transformNavigationItem', () => {
+  const transformNavigationItem = (page: number, navigationItemProps) => (
+    <Anchor href={`/page/${page}`} {...navigationItemProps} />
+  )
+
+  it('renders navigation buttons as anchor elements when transformNavigationItem is provided', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={1}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const anchors = document.querySelectorAll(
+      '.dnb-pagination__bar__inner a.dnb-pagination__button'
+    )
+
+    expect(anchors.length).toBeGreaterThan(0)
+    anchors.forEach((anchor) => {
+      expect(anchor.tagName).toBe('A')
+    })
+  })
+
+  it('sets correct href on navigation buttons', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={1}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const anchors = document.querySelectorAll(
+      '.dnb-pagination__bar__inner a.dnb-pagination__button:not(.dnb-pagination__button--prev):not(.dnb-pagination__button--next)'
+    )
+
+    anchors.forEach((anchor) => {
+      const pageNumber = anchor.textContent
+      expect(anchor.getAttribute('href')).toBe(`/page/${pageNumber}`)
+    })
+  })
+
+  it('renders prev/next as anchors inside the inner row', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={3}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const prevButton = document.querySelector(
+      '.dnb-pagination__bar__inner .dnb-pagination__button--prev'
+    )
+    const nextButton = document.querySelector(
+      '.dnb-pagination__bar__inner .dnb-pagination__button--next'
+    )
+
+    expect(prevButton.tagName).toBe('A')
+    expect(prevButton.getAttribute('href')).toBe('/page/2')
+
+    expect(nextButton.tagName).toBe('A')
+    expect(nextButton.getAttribute('href')).toBe('/page/4')
+  })
+
+  it('does not render prev button on first page', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={1}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const prevButton = document.querySelector(
+      '.dnb-pagination__bar__inner .dnb-pagination__button--prev'
+    )
+
+    expect(prevButton).toBeNull()
+  })
+
+  it('does not render next button on last page', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={5}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const nextButton = document.querySelector(
+      '.dnb-pagination__bar__inner .dnb-pagination__button--next'
+    )
+
+    expect(nextButton).toBeNull()
+  })
+
+  it('renders as buttons when transformNavigationItem is not provided', () => {
+    render(<Pagination pageCount={5} currentPage={1} />)
+
+    const buttons = document.querySelectorAll(
+      '.dnb-pagination__bar__inner .dnb-pagination__button'
+    )
+
+    buttons.forEach((button) => {
+      expect(button.tagName).toBe('BUTTON')
+    })
+  })
+
+  it('does not render skip bar when transformNavigationItem is provided', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={3}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const skipBar = document.querySelector('.dnb-pagination__bar__skip')
+
+    expect(skipBar).toBeNull()
+  })
+
+  it('still calls onChange when clicking an anchor navigation button', () => {
+    const onChange = vi.fn()
+
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={1}
+        transformNavigationItem={transformNavigationItem}
+        onChange={onChange}
+      />
+    )
+
+    const secondPage = document.querySelector(
+      '.dnb-pagination__bar__inner a.dnb-pagination__button:nth-child(2)'
+    )
+    fireEvent.click(secondPage)
+
+    expect(onChange).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledWith(
+      expect.objectContaining({ pageNumber: 2 })
+    )
+  })
+
+  it('does not call onChange on modified clicks when using anchor navigation items', () => {
+    const onChange = vi.fn()
+
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={1}
+        transformNavigationItem={transformNavigationItem}
+        onChange={onChange}
+      />
+    )
+
+    const secondPage = document.querySelector(
+      '.dnb-pagination__bar__inner a.dnb-pagination__button:nth-child(2)'
+    )
+
+    // Use createEvent + preventDefault so jsdom does not attempt
+    // navigation (which emits "Not implemented" warnings).
+    const event = createEvent.click(secondPage, { metaKey: true })
+    event.preventDefault()
+    fireEvent(secondPage, event)
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('does not call onChange on modified prev/next clicks when using anchor navigation items', () => {
+    const onChange = vi.fn()
+
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={3}
+        transformNavigationItem={transformNavigationItem}
+        onChange={onChange}
+      />
+    )
+
+    const nextButton = document.querySelector(
+      '.dnb-pagination__bar__inner a.dnb-pagination__button--next'
+    )
+
+    // Use createEvent + preventDefault so jsdom does not attempt
+    // navigation (which emits "Not implemented" warnings).
+    const event = createEvent.click(nextButton, { ctrlKey: true })
+    event.preventDefault()
+    fireEvent(nextButton, event)
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('calls preventDefault on normal anchor clicks to avoid double navigation', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={1}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const anchor = document.querySelector(
+      '.dnb-pagination__bar__inner a.dnb-pagination__button:nth-child(2)'
+    )
+    const event = createEvent.click(anchor)
+    fireEvent(anchor, event)
+
+    expect(event.defaultPrevented).toBe(true)
+  })
+
+  it('renders current page as a non-interactive span', () => {
+    render(
+      <Pagination
+        pageCount={5}
+        currentPage={3}
+        transformNavigationItem={transformNavigationItem}
+      />
+    )
+
+    const currentPage = document.querySelector(
+      '.dnb-pagination__button--current'
+    )
+
+    expect(currentPage.tagName).toBe('SPAN')
+    expect(currentPage.getAttribute('aria-current')).toBe('page')
+    expect(currentPage.textContent).toBe('3')
+    expect(currentPage.getAttribute('href')).toBeNull()
+  })
+})
+
+describe('Pagination scss', () => {
+  it('has to match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

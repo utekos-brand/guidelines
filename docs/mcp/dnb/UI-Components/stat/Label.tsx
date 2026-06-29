@@ -1,0 +1,99 @@
+import { useContext } from 'react'
+import type { ElementType, HTMLProps } from 'react'
+import { clsx } from 'clsx'
+import { useSpacing } from '../space/SpacingUtils'
+import type { SpacingProps } from '../../shared/types'
+import type {
+  TypographySize,
+  TypographyWeight,
+} from '../../elements/typography/Typography'
+import { getHeadingLineHeightSize } from '../../elements/typography/Typography'
+import { validateDOMAttributes, warn } from '../../shared/component-helper'
+import type { SkeletonShow } from '../skeleton/Skeleton'
+import StatRootContext from './StatRootContext'
+import useStatSkeleton from './useStatSkeleton'
+import Provider from '../../shared/Provider'
+
+type LabelOwnProps = {
+  element?: ElementType
+  srOnly?: boolean
+  fontSize?: TypographySize
+  fontWeight?: TypographyWeight
+  variant?: 'plain' | 'subtle'
+  skeleton?: SkeletonShow
+}
+
+export type LabelProps = Omit<
+  HTMLProps<HTMLElement>,
+  keyof LabelOwnProps | 'ref'
+> &
+  LabelOwnProps &
+  SpacingProps
+
+function Label(props: LabelProps) {
+  const { inRoot, skeleton: rootSkeleton } = useContext(StatRootContext)
+
+  const {
+    children,
+    element: elementProp,
+    className = null,
+    srOnly = false,
+    fontSize = 'basis',
+    fontWeight = 'regular',
+    variant = 'plain',
+    skeleton = null,
+    style = null,
+    ...rest
+  } = props
+
+  const Element = elementProp ?? (inRoot ? 'dt' : 'span')
+
+  const { hasSkeleton, skeletonClass, applySkeletonAttributes } =
+    useStatSkeleton(skeleton)
+
+  // Only override the root skeleton context if this Label has an
+  // explicit skeleton prop — otherwise, let the root value propagate.
+  const childSkeleton =
+    skeleton !== null && skeleton !== undefined
+      ? hasSkeleton
+      : rootSkeleton
+  const resolvedLineHeight = getHeadingLineHeightSize(fontSize)
+
+  if (!inRoot) {
+    warn('Stat.Label should be used inside Stat.Root')
+  }
+
+  const attributes = validateDOMAttributes(
+    props,
+    useSpacing(props, {
+      ...rest,
+      style,
+      className: clsx(
+        'dnb-stat',
+        'dnb-stat__label',
+        `dnb-stat__label--${variant}`,
+        srOnly && 'dnb-sr-only',
+        `dnb-t__size--${fontSize}`,
+        `dnb-t__line-height--${resolvedLineHeight}`,
+        `dnb-t__weight--${fontWeight}`,
+        skeletonClass,
+        className
+      ),
+    })
+  )
+
+  applySkeletonAttributes(attributes)
+
+  return (
+    <StatRootContext value={{ inRoot, skeleton: childSkeleton }}>
+      <Provider skeleton={hasSkeleton}>
+        <Element {...attributes}>{children}</Element>
+      </Provider>
+    </StatRootContext>
+  )
+}
+
+Label._supportsSpacingProps = true
+Label._statRole = 'label'
+
+export default Label

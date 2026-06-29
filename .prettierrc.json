@@ -1,0 +1,28 @@
+{
+  "tabWidth": 2,
+  "printWidth": 100,
+  "singleQuote": false,
+  "trailingComma": "all",
+  "semi": true,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-markdown-html",
+    "prettier-plugin-yaml",
+    "@prettier/plugin-xml",
+    "prettier-plugin-powershell"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ps1", "*.psm1", "*.psd1"],
+      "options": {
+        "parser": "powershell",
+        "powershellTrailingComma": "all",
+        "powershellPreset": "invoke-formatter",
+        "powershellRewriteAliases": true
+      }
+    }
+  ]
+}

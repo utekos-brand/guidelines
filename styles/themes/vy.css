@@ -1,0 +1,240 @@
+/**
+ * VY theme — sourced from Spor vyDigital via @vygruppen/spor-mcp-server (get_spor_tokens).
+ * Raw palette is included in full for brand documentation; UI uses shadcn semantic tokens only.
+ */
+[data-theme="vy"] {
+  /* ── Spor vyDigital — complete palette ─────────────────────────────────── */
+
+  /* grey */
+  --vy-grey-50: #f5f5f5;
+  --vy-grey-100: #ebebec;
+  --vy-grey-200: #d7d8d9;
+  --vy-grey-300: #afb2b3;
+  --vy-grey-400: #888b8e;
+  --vy-grey-500: #606568;
+  --vy-grey-600: #4f5054;
+  --vy-grey-700: #363638;
+  --vy-grey-800: #2b2b2c;
+  --vy-grey-900: #1c1c1d;
+  --vy-grey-1000: #131314;
+  --vy-grey-1100: #0b0b0b;
+
+  /* green */
+  --vy-green-50: #e5f4f1;
+  --vy-green-100: #cceae4;
+  --vy-green-200: #b2dfd7;
+  --vy-green-300: #84cfc2;
+  --vy-green-400: #38b49e;
+  --vy-green-500: #00957a;
+  --vy-green-600: #037d67;
+  --vy-green-700: #00685e;
+  --vy-green-800: #00453e;
+  --vy-green-900: #012622;
+  --vy-green-1000: #001a18;
+  --vy-green-1100: #001211;
+
+  /* blue */
+  --vy-blue-50: #edf1f7;
+  --vy-blue-100: #dce4ef;
+  --vy-blue-200: #b9c9de;
+  --vy-blue-300: #a7bcd6;
+  --vy-blue-400: #8ba7ca;
+  --vy-blue-500: #688cba;
+  --vy-blue-600: #4b78b0;
+  --vy-blue-700: #325d93;
+  --vy-blue-800: #003a70;
+  --vy-blue-900: #032647;
+  --vy-blue-1000: #041a2f;
+  --vy-blue-1100: #01101d;
+
+  /* yellow */
+  --vy-yellow-50: #fef9dd;
+  --vy-yellow-100: #fdf3ba;
+  --vy-yellow-200: #fcec98;
+  --vy-yellow-300: #fae053;
+  --vy-yellow-400: #f1c400;
+  --vy-yellow-500: #d7a700;
+  --vy-yellow-600: #b38307;
+  --vy-yellow-700: #8a6404;
+  --vy-yellow-800: #634803;
+  --vy-yellow-900: #413300;
+  --vy-yellow-1000: #2a2203;
+  --vy-yellow-1100: #1c1600;
+
+  /* orange */
+  --vy-orange-50: #ffe6cc;
+  --vy-orange-100: #ffcd99;
+  --vy-orange-200: #ffb466;
+  --vy-orange-300: #ff9b33;
+  --vy-orange-400: #ee8a14;
+  --vy-orange-500: #df8200;
+  --vy-orange-600: #bb4d0f;
+  --vy-orange-700: #84441f;
+  --vy-orange-800: #572f0f;
+  --vy-orange-900: #3a1e0e;
+  --vy-orange-1000: #28160a;
+  --vy-orange-1100: #1a0f07;
+
+  /* red */
+  --vy-red-50: #ffebeb;
+  --vy-red-100: #fbcccc;
+  --vy-red-200: #f8a6a6;
+  --vy-red-300: #ef7e7e;
+  --vy-red-400: #e26767;
+  --vy-red-500: #c34c4c;
+  --vy-red-600: #d71818;
+  --vy-red-700: #932b2b;
+  --vy-red-800: #581f1f;
+  --vy-red-900: #371818;
+  --vy-red-1000: #240d0d;
+  --vy-red-1100: #120404;
+
+  /* base */
+  --vy-white: #ffffff;
+  --vy-black: #000000;
+
+  /* whiteAlpha */
+  --vy-white-alpha-25: rgb(255 255 255 / 2.5%);
+  --vy-white-alpha-50: rgb(255 255 255 / 5%);
+  --vy-white-alpha-100: rgb(255 255 255 / 10%);
+  --vy-white-alpha-200: rgb(255 255 255 / 20%);
+  --vy-white-alpha-300: rgb(255 255 255 / 30%);
+  --vy-white-alpha-400: rgb(255 255 255 / 40%);
+  --vy-white-alpha-500: rgb(255 255 255 / 50%);
+  --vy-white-alpha-600: rgb(255 255 255 / 60%);
+  --vy-white-alpha-700: rgb(255 255 255 / 70%);
+  --vy-white-alpha-800: rgb(255 255 255 / 80%);
+  --vy-white-alpha-900: rgb(255 255 255 / 90%);
+
+  /* blackAlpha */
+  --vy-black-alpha-25: rgb(0 0 0 / 2.5%);
+  --vy-black-alpha-50: rgb(0 0 0 / 5%);
+  --vy-black-alpha-100: rgb(0 0 0 / 10%);
+  --vy-black-alpha-200: rgb(0 0 0 / 20%);
+  --vy-black-alpha-300: rgb(0 0 0 / 30%);
+  --vy-black-alpha-400: rgb(0 0 0 / 40%);
+  --vy-black-alpha-500: rgb(0 0 0 / 50%);
+  --vy-black-alpha-600: rgb(0 0 0 / 60%);
+  --vy-black-alpha-700: rgb(0 0 0 / 70%);
+  --vy-black-alpha-800: rgb(0 0 0 / 80%);
+  --vy-black-alpha-900: rgb(0 0 0 / 90%);
+
+  --radius: 0.75rem;
+}
+
+[data-theme="vy"][data-color-mode="light"] {
+  color-scheme: light;
+
+  /* bg.DEFAULT → white */
+  --background: var(--vy-white);
+  /* text.DEFAULT → darkGrey */
+  --foreground: var(--vy-grey-800);
+
+  /* surface.floating / card */
+  --card: var(--vy-white);
+  --card-foreground: var(--vy-grey-800);
+
+  --popover: var(--vy-white);
+  --popover-foreground: var(--vy-grey-800);
+
+  /* surface.brand → pine / text.brand → white */
+  --primary: var(--vy-green-700);
+  --primary-foreground: var(--vy-white);
+
+  /* surface.neutral → platinum */
+  --secondary: var(--vy-grey-100);
+  --secondary-foreground: var(--vy-grey-800);
+
+  /* bg.subtle / text.subtle */
+  --muted: var(--vy-grey-50);
+  --muted-foreground: var(--vy-grey-500);
+
+  /* surface.accent → seaMist */
+  --accent: var(--vy-green-100);
+  --accent-foreground: var(--vy-green-800);
+
+  --destructive: var(--vy-red-600);
+  --destructive-foreground: var(--vy-white);
+
+  /* spor vyDigital: outline.floating */
+  --border: var(--vy-grey-100);
+  --input: var(--vy-grey-200);
+  --ring: var(--vy-green-500);
+
+  /* spor vyDigital: surface.floating.active */
+  --header-nav-active: var(--vy-green-50);
+  --header-nav-active-foreground: var(--vy-grey-800);
+
+  --chart-1: var(--vy-green-700);
+  --chart-2: var(--vy-blue-700);
+  --chart-3: var(--vy-yellow-500);
+  --chart-4: var(--vy-orange-500);
+  --chart-5: var(--vy-red-500);
+
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+[data-theme="vy"][data-color-mode="dark"] {
+  color-scheme: dark;
+
+  /* bg.DEFAULT → interstellar */
+  --background: var(--vy-green-1100);
+  /* text.DEFAULT */
+  --foreground: var(--vy-white);
+
+  /* surface.subtle → jungle */
+  --card: var(--vy-green-900);
+  --card-foreground: var(--vy-white);
+
+  --popover: var(--vy-green-900);
+  --popover-foreground: var(--vy-white);
+
+  /* surface.brand → coralGreen / text.brand → darkTeal */
+  --primary: var(--vy-green-200);
+  --primary-foreground: var(--vy-green-800);
+
+  /* surface.neutral → carbon */
+  --secondary: var(--vy-grey-700);
+  --secondary-foreground: var(--vy-white);
+
+  /* surface.accent → pine / text.neutral.subtle → silver */
+  --muted: var(--vy-green-700);
+  --muted-foreground: var(--vy-grey-200);
+
+  --accent: var(--vy-green-200);
+  --accent-foreground: var(--vy-green-1100);
+
+  --destructive: var(--vy-red-600);
+  --destructive-foreground: var(--vy-white);
+
+  /* spor vyDigital: outline.floating */
+  --border: var(--vy-white-alpha-300);
+  --input: var(--vy-white-alpha-200);
+  --ring: var(--vy-green-400);
+
+  /* spor vyDigital: surface.floating.active */
+  --header-nav-active: var(--vy-green-800);
+  --header-nav-active-foreground: var(--vy-white);
+
+  --chart-1: var(--vy-green-400);
+  --chart-2: var(--vy-blue-500);
+  --chart-3: var(--vy-yellow-400);
+  --chart-4: var(--vy-orange-400);
+  --chart-5: var(--vy-red-500);
+
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}

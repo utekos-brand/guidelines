@@ -1,0 +1,30 @@
+{
+  "html": "<nav class=\"border-b border-gray-100 bg-white/75 backdrop-blur dark:bg-gray-900/75 dark:border-gray-800\">\n  <div class=\"flex h-14 items-center px-4 sm:px-6 lg:px-8\">\n    <div class=\"mr-4 flex\">\n      <a class=\"mr-6 flex items-center space-x-2\" href=\"/\">\n        <span class=\"font-bold text-xl\">Logo</span>\n      </a>\n      <nav class=\"flex items-center space-x-6 text-sm font-medium hidden md:flex\">\n        <a href=\"/\" class=\"transition-colors hover:text-foreground/80 text-foreground/60\">Home</a>\n        <a href=\"/about\" class=\"transition-colors hover:text-foreground/80 text-foreground/60\">About</a>\n        <a href=\"/services\" class=\"transition-colors hover:text-foreground/80 text-foreground/60\">Services</a>\n        <a href=\"/contact\" class=\"transition-colors hover:text-foreground/80 text-foreground/60\">Contact</a>\n      </nav>\n    </div>\n    <div class=\"flex flex-1 items-center justify-end space-x-2\">\n      <nav class=\"flex items-center\">\n        <button class=\"inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2\">\n          Get Started\n        </button>\n      </nav>\n    </div>\n  </div>\n</nav>",
+  "description": "A modern style navbar with dark mode support and responsive design",
+  "utilities": [
+    "border-b",
+    "border-gray-100",
+    "bg-white/75",
+    "backdrop-blur",
+    "dark:bg-gray-900/75",
+    "dark:border-gray-800",
+    "flex",
+    "h-14",
+    "items-center",
+    "px-4",
+    "sm:px-6",
+    "lg:px-8"
+  ],
+  "customizations": [
+    "Update navigation links",
+    "Add mobile menu toggle",
+    "Customize logo and branding",
+    "Adjust spacing and typography"
+  ],
+  "_query": {
+    "componentType": "navbar",
+    "style": "modern",
+    "darkMode": true,
+    "responsive": true
+  }
+}

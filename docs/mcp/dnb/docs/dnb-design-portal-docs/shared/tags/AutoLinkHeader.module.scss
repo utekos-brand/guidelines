@@ -1,0 +1,77 @@
+.anchorLinkStyle {
+  :global {
+    .anchor-hash {
+      display: inline-block;
+      visibility: hidden;
+
+      width: 1em;
+      margin-left: -1em;
+      padding: 0;
+
+      line-height: 1;
+      text-align: center;
+      border-bottom: none;
+
+      transition: opacity 300ms ease-out 200ms;
+      opacity: 0;
+    }
+
+    .anchor-hash.focus {
+      animation: link-attention-focus 2.2s var(--easing-default) 1 10ms;
+
+      @keyframes link-attention-focus {
+        0%,
+        100% {
+          visibility: visible;
+          color: var(--token-color-text-action);
+          background-color: transparent;
+        }
+
+        35% {
+          color: var(--token-color-text-neutral-inverse);
+          background-color: var(--token-color-background-action);
+        }
+
+        // stylelint-disable-next-line
+        0%,
+        80% {
+          opacity: 1;
+        }
+
+        // stylelint-disable-next-line
+        100% {
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  :global(.anchor-hash:hover),
+  &:hover :global(.anchor-hash) {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &:global(.focus) {
+    display: inline-block;
+
+    @keyframes parent-attention-focus {
+      0%,
+      100% {
+        color: initial;
+        background-color: initial;
+      }
+
+      35% {
+        color: var(--token-color-text-neutral-inverse);
+        background-color: var(--token-color-background-action);
+      }
+    }
+
+    animation: parent-attention-focus 2.2s var(--easing-default) 1 10ms;
+
+    * {
+      animation: parent-attention-focus 3s var(--easing-default) 1 150ms;
+    }
+  }
+}

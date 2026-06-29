@@ -1,0 +1,166 @@
+import { useContext } from 'react'
+import type {
+  FormEvent,
+  SyntheticEvent,
+  MouseEvent as ReactMouseEvent,
+  TouchEvent as ReactTouchEvent,
+} from 'react'
+import {
+  dispatchCustomElementEvent,
+  warn,
+} from '../../../shared/component-helper'
+import { calculatePercent, percentToValue } from '../SliderHelpers'
+import { SliderContext } from '../SliderProvider'
+
+export function useSliderEvents() {
+  const {
+    isReverse,
+    isMulti,
+    emitChange,
+    trackRef,
+    isVertical,
+    setShouldAnimate,
+    setThumbState,
+    setThumbIndex,
+    allProps,
+  } = useContext(SliderContext)
+  const { min, max, onDragStart, onDragEnd } = allProps
+
+  const onTrackMouseDownHandler = (
+    event: MouseEvent | TouchEvent | ReactMouseEvent | ReactTouchEvent
+  ) => {
+    onThumbMouseDownHandler(event)
+
+    const nativeEvent = 'nativeEvent' in event ? event.nativeEvent : event
+    const percent = calculatePercent(
+      trackRef.current,
+      nativeEvent as MouseEvent | TouchEvent,
+      isVertical
+    )
+
+    emitChange(
+      nativeEvent as MouseEvent | TouchEvent,
+      percentToValue(percent, min, max, isReverse)
+    )
+    setShouldAnimate(true)
+  }
+
+  const onThumbMouseDownHandler = (
+    event: MouseEvent | TouchEvent | SyntheticEvent
+  ) => {
+    const target = event.target as HTMLButtonElement
+
+    setThumbIndex(parseFloat(target.dataset.index))
+    setThumbState('activated')
+
+    if (typeof onDragStart === 'function') {
+      dispatchCustomElementEvent(allProps, 'onDragStart', {
+        event,
+      })
+    }
+
+    if (typeof document !== 'undefined') {
+      try {
+        document.body.addEventListener('touchmove', onBodyMouseMoveHandler)
+        document.body.addEventListener('touchend', onBodyMouseUpHandler)
+        document.body.addEventListener('mousemove', onBodyMouseMoveHandler)
+        document.body.addEventListener('mouseup', onBodyMouseUpHandler)
+      } catch (e) {
+        warn('Slider: Failed to add drag event listeners:', e)
+      }
+    }
+  }
+
+  const onThumbMouseUpHandler = () => {
+    setThumbState('released')
+  }
+
+  const removeEvents = () => {
+    if (typeof document !== 'undefined') {
+      try {
+        document.body.removeEventListener(
+          'touchmove',
+          onBodyMouseMoveHandler
+        )
+        document.body.removeEventListener('touchend', onBodyMouseUpHandler)
+        document.body.removeEventListener(
+          'mousemove',
+          onBodyMouseMoveHandler
+        )
+        document.body.removeEventListener('mouseup', onBodyMouseUpHandler)
+      } catch (e) {
+        warn('Slider: Failed to remove drag event listeners:', e)
+      }
+    }
+  }
+
+  const onBodyMouseUpHandler = (event: MouseEvent | TouchEvent) => {
+    removeEvents()
+
+    setThumbIndex(-1)
+    setThumbState('normal')
+
+    if (typeof onDragEnd === 'function') {
+      dispatchCustomElementEvent(allProps, 'onDragEnd', {
+        event,
+      })
+    }
+  }
+
+  const onBodyMouseMoveHandler = (event: MouseEvent | TouchEvent) => {
+    event.preventDefault() // ensures correct cursor in Safari (desktop)
+
+    const elem = trackRef.current
+
+    if (elem) {
+      const percent = calculatePercent(elem, event, isVertical)
+      emitChange(event, percentToValue(percent, min, max, isReverse))
+    }
+
+    setShouldAnimate(false)
+  }
+
+  const onHelperChangeHandler = (event: FormEvent<HTMLInputElement>) => {
+    const emitEvent = event as unknown
+    const currentValue = parseFloat(event.currentTarget.value)
+    const currentIndex = parseFloat(event.currentTarget.dataset.index)
+
+    emitChange(emitEvent as MouseEvent, currentValue)
+
+    if (isMulti) {
+      const thumbs: NodeListOf<HTMLInputElement> =
+        trackRef.current.querySelectorAll(
+          'input.dnb-slider__button-helper'
+        )
+
+      Array.from(thumbs).some((element, indexA) => {
+        if (indexA !== currentIndex) {
+          const value = parseFloat(element.value)
+          if (
+            (indexA > currentIndex && currentValue >= value) ||
+            (indexA < currentIndex && currentValue <= value)
+          ) {
+            element.focus()
+            return true
+          }
+        }
+
+        return false
+      })
+    }
+  }
+
+  const onHelperFocusHandler = (event: FormEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement
+    setThumbIndex(parseFloat(target.dataset.index))
+  }
+
+  return {
+    onThumbMouseDownHandler,
+    onThumbMouseUpHandler,
+    onTrackMouseDownHandler,
+    onHelperChangeHandler,
+    onHelperFocusHandler,
+    removeEvents,
+  }
+}

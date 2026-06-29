@@ -1,0 +1,261 @@
+import { render } from '@testing-library/react'
+import { axeComponent } from '../../../core/test-utils/testSetup'
+import Stat from '../Stat'
+
+describe('Stat.Root', () => {
+  it('supports spacing props through Space', () => {
+    render(
+      <Stat.Root top="large">
+        <Stat.Label>Revenue growth</Stat.Label>
+      </Stat.Root>
+    )
+
+    const root = document.querySelector('.dnb-stat__root')
+
+    expect(root.classList).toContain('dnb-space__top--large')
+  })
+
+  it('supports boolean shorthand spacing', () => {
+    render(
+      <Stat.Root top>
+        <Stat.Label>Revenue growth</Stat.Label>
+      </Stat.Root>
+    )
+
+    const root = document.querySelector('.dnb-stat__root')
+
+    expect(root.classList).toContain('dnb-space__top--small')
+  })
+
+  it('supports id prop', () => {
+    render(
+      <Stat.Root id="my-root">
+        <Stat.Label>Revenue growth</Stat.Label>
+      </Stat.Root>
+    )
+
+    const root = document.querySelector('.dnb-stat__root')
+
+    expect(root.getAttribute('id')).toBe('my-root')
+  })
+
+  it('applies style prop to the element', () => {
+    render(
+      <Stat.Root style={{ color: 'red' }}>
+        <Stat.Label>Revenue growth</Stat.Label>
+      </Stat.Root>
+    )
+
+    const root = document.querySelector('.dnb-stat__root')
+
+    expect(root.getAttribute('style')).toContain('color: red')
+  })
+
+  it('warns when unsupported children are used', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    render(
+      <Stat.Root>
+        <span>unsupported</span>
+        <Stat.Label>Revenue growth</Stat.Label>
+      </Stat.Root>
+    )
+
+    const didWarn = spy.mock.calls.some((call) =>
+      call
+        .map((entry) => String(entry))
+        .join(' ')
+        .includes(
+          'Stat.Root should only contain Stat.Label and Stat.Content.'
+        )
+    )
+
+    expect(didWarn).toBe(true)
+    spy.mockRestore()
+  })
+
+  it('warns when Stat.Label is missing', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    render(
+      <Stat.Root>
+        <Stat.Content>
+          <Stat.Currency value={1234} />
+        </Stat.Content>
+      </Stat.Root>
+    )
+
+    const didWarn = spy.mock.calls.some((call) =>
+      call
+        .map((entry) => String(entry))
+        .join(' ')
+        .includes('Stat.Root should contain a Stat.Label.')
+    )
+
+    expect(didWarn).toBe(true)
+    spy.mockRestore()
+  })
+
+  it('does not warn when Stat.Label is present', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    render(
+      <Stat.Root>
+        <Stat.Label>Revenue growth</Stat.Label>
+        <Stat.Content>
+          <Stat.Currency value={1234} />
+        </Stat.Content>
+      </Stat.Root>
+    )
+
+    const didWarn = spy.mock.calls.some((call) =>
+      call
+        .map((entry) => String(entry))
+        .join(' ')
+        .includes('Stat.Root should contain a Stat.Label.')
+    )
+
+    expect(didWarn).toBe(false)
+    spy.mockRestore()
+  })
+
+  it('should fail root composition with invalid ARIA rules', async () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    const component = render(
+      <Stat.Root>
+        <Stat.Label>Revenue growth</Stat.Label>
+        <div>
+          <Stat.Content direction="vertical">content</Stat.Content>
+        </div>
+      </Stat.Root>
+    )
+
+    expect(await axeComponent(component)).not.toHaveNoViolations()
+    spy.mockRestore()
+  })
+
+  it('warns when Content appears before any Label', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    render(
+      <Stat.Root>
+        <Stat.Content>
+          <Stat.Currency value={1234} />
+        </Stat.Content>
+        <Stat.Label>Revenue</Stat.Label>
+      </Stat.Root>
+    )
+
+    const didWarn = spy.mock.calls.some((call) =>
+      call
+        .map((entry) => String(entry))
+        .join(' ')
+        .includes('every Stat.Content should be preceded by a Stat.Label')
+    )
+
+    expect(didWarn).toBe(true)
+    spy.mockRestore()
+  })
+
+  it('does not warn when Label precedes Content', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    render(
+      <Stat.Root>
+        <Stat.Label>Revenue</Stat.Label>
+        <Stat.Content>
+          <Stat.Currency value={1234} />
+        </Stat.Content>
+      </Stat.Root>
+    )
+
+    const didWarn = spy.mock.calls.some((call) =>
+      call
+        .map((entry) => String(entry))
+        .join(' ')
+        .includes('every Stat.Content should be preceded by a Stat.Label')
+    )
+
+    expect(didWarn).toBe(false)
+    spy.mockRestore()
+  })
+
+  it('warns when Content precedes Label inside a Fragment', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    render(
+      <Stat.Root>
+        <>
+          <Stat.Content>
+            <Stat.Currency value={1234} />
+          </Stat.Content>
+        </>
+        <Stat.Label>Revenue</Stat.Label>
+      </Stat.Root>
+    )
+
+    const didWarn = spy.mock.calls.some((call) =>
+      call
+        .map((entry) => String(entry))
+        .join(' ')
+        .includes('every Stat.Content should be preceded by a Stat.Label')
+    )
+
+    expect(didWarn).toBe(true)
+    spy.mockRestore()
+  })
+
+  it('does not emit order warning when Label is missing entirely', () => {
+    const spy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    render(
+      <Stat.Root>
+        <Stat.Content>
+          <Stat.Currency value={1234} />
+        </Stat.Content>
+      </Stat.Root>
+    )
+
+    const didWarnOrder = spy.mock.calls.some((call) =>
+      call
+        .map((entry) => String(entry))
+        .join(' ')
+        .includes('every Stat.Content should be preceded by a Stat.Label')
+    )
+
+    expect(didWarnOrder).toBe(false)
+    spy.mockRestore()
+  })
+
+  it('forwards data-* and aria-* attributes to the DOM element', () => {
+    render(
+      <Stat.Root
+        data-testid="stat-root"
+        data-foo="bar"
+        aria-describedby="desc"
+      >
+        <Stat.Label>Revenue</Stat.Label>
+      </Stat.Root>
+    )
+
+    const root = document.querySelector('.dnb-stat__root')
+
+    expect(root.getAttribute('data-testid')).toBe('stat-root')
+    expect(root.getAttribute('data-foo')).toBe('bar')
+    expect(root.getAttribute('aria-describedby')).toBe('desc')
+  })
+
+  it('does not forward component-specific props to the DOM', () => {
+    render(
+      <Stat.Root visualOrder="content-label" skeleton>
+        <Stat.Label>Revenue</Stat.Label>
+      </Stat.Root>
+    )
+
+    const root = document.querySelector('.dnb-stat__root')
+
+    expect(root.getAttribute('visualOrder')).toBeNull()
+    expect(root.getAttribute('skeleton')).toBeNull()
+  })
+})

@@ -1,0 +1,43 @@
+import { useContext } from 'react'
+import { clsx } from 'clsx'
+import type { FlexItemAllProps as FlexItemProps } from '../flex/Item'
+import FlexItem from '../flex/Item'
+import Icon, { type IconIcon } from '../icon/Icon'
+import { ListContext } from './ListContext'
+import { createSkeletonClass } from '../skeleton/SkeletonHelper'
+import type { SkeletonShow } from '../Skeleton'
+
+export type ItemIconProps = Omit<FlexItemProps, 'children'> & {
+  children: IconIcon
+  /**
+   * When `true`, applies skeleton font styling to all child items inside the scroll view. Propagated via context so nested `List.Container` and items inherit it.
+   */
+  skeleton?: SkeletonShow
+}
+
+function ItemIcon({
+  children,
+  className,
+  skeleton,
+  ...rest
+}: ItemIconProps) {
+  const inheritedSkeleton = useContext(ListContext)?.skeleton
+  const appliedSkeleton = skeleton ?? inheritedSkeleton
+
+  return (
+    <FlexItem
+      className={clsx(
+        'dnb-list__item__icon',
+        appliedSkeleton && createSkeletonClass('font', true),
+        className
+      )}
+      innerSpace={{ left: 'small' }}
+      {...rest}
+    >
+      <Icon size="medium">{children}</Icon>
+    </FlexItem>
+  )
+}
+ItemIcon._supportsSpacingProps = true
+
+export default ItemIcon

@@ -1,0 +1,7 @@
+.tabsWrapperStyle {
+  :global {
+    .dnb-tabs__tabs {
+      justify-content: space-between;
+    }
+  }
+}

@@ -1,0 +1,78 @@
+/*
+* InfoCard component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-info-card {
+  display: flex;
+  flex-direction: row;
+
+  position: relative;
+  padding: 1rem;
+
+  overflow: hidden;
+
+  background: var(--token-color-background-neutral);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid var(--token-color-stroke-neutral-subtle);
+  }
+
+  &,
+  &::after {
+    border-radius: var(--token-radius-sm);
+  }
+
+  &--centered {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  &--centered:not(&--stretch) {
+    margin: auto;
+  }
+
+  &--shadow {
+    @include utilities.defaultDropShadow();
+  }
+
+  &__content {
+    flex-direction: column;
+    margin-top: 0.1875rem;
+  }
+
+  &:not(&--stretch),
+  &__content {
+    max-width: var(--prose-max-width);
+  }
+
+  &--centered &__content {
+    margin-top: 0;
+  }
+
+  &__icon {
+    color: var(--token-color-icon-action);
+  }
+
+  &__image {
+    height: 4rem;
+    width: 4rem;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  &--centered &__buttons {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}

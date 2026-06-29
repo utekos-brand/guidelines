@@ -1,0 +1,1111 @@
+- generic [ref=e2]:
+  - generic [ref=e5]:
+    - list [ref=e7]:
+      - listitem [ref=e8]:
+        - link "Utekos Brand" [ref=e9] [cursor=pointer]:
+          - /url: /
+          - img "Utekos Brand" [ref=e11]
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: Grunnlag
+        - list [ref=e16]:
+          - listitem [ref=e17]:
+            - link "Merkevaren Utekos" [ref=e18] [cursor=pointer]:
+              - /url: /
+              - generic [ref=e19]: Merkevaren Utekos
+          - listitem [ref=e20]:
+            - link "Logo" [ref=e21] [cursor=pointer]:
+              - /url: /logo
+              - generic [ref=e22]: Logo
+      - generic [ref=e23]:
+        - generic [ref=e24]: Visuell identitet
+        - list [ref=e26]:
+          - listitem [ref=e27]:
+            - link "Farger" [ref=e28] [cursor=pointer]:
+              - /url: /farger
+              - generic [ref=e29]: Farger
+          - listitem [ref=e30]:
+            - link "Themes" [ref=e31] [cursor=pointer]:
+              - /url: /themes
+              - generic [ref=e32]: Themes
+            - generic: Lab
+          - listitem [ref=e33]:
+            - link "Typografi" [ref=e34] [cursor=pointer]:
+              - /url: /typografi
+              - generic [ref=e35]: Typografi
+          - listitem [ref=e36]:
+            - link "Fotografi" [ref=e37] [cursor=pointer]:
+              - /url: /fotografi
+              - generic [ref=e38]: Fotografi
+          - listitem [ref=e39]:
+            - link "Illustrasjoner" [ref=e40] [cursor=pointer]:
+              - /url: /illustrasjoner
+              - generic [ref=e41]: Illustrasjoner
+          - listitem [ref=e42]:
+            - link "Ikoner" [ref=e43] [cursor=pointer]:
+              - /url: /ikoner
+              - generic [ref=e44]: Ikoner
+          - listitem [ref=e45]:
+            - link "Grafisk element" [ref=e46] [cursor=pointer]:
+              - /url: /grafisk-element
+              - generic [ref=e47]: Grafisk element
+      - separator [ref=e48]
+      - generic [ref=e49]:
+        - generic [ref=e50]: Anvendelse
+        - list [ref=e52]:
+          - listitem [ref=e53]:
+            - link "Identiteten i bruk" [ref=e54] [cursor=pointer]:
+              - /url: /identiteten-i-bruk
+              - generic [ref=e55]: Identiteten i bruk
+  - main [ref=e56]:
+    - generic [ref=e57]:
+      - button "Toggle Sidebar" [ref=e59]:
+        - img
+        - generic [ref=e60]: Toggle Sidebar
+      - navigation "Hovednavigasjon" [ref=e61]:
+        - list [ref=e62]:
+          - listitem [ref=e63]:
+            - link "Identitet" [ref=e64] [cursor=pointer]:
+              - /url: /identitet
+          - listitem [ref=e65]:
+            - link "Ressurser" [ref=e66] [cursor=pointer]:
+              - /url: /ressurser
+          - listitem [ref=e67]:
+            - button "Søk" [ref=e68]:
+              - img [ref=e69]
+              - text: Søk
+          - listitem [ref=e72]:
+            - button "Utseende" [ref=e73]:
+              - img [ref=e74]
+              - text: Utseende
+    - article [ref=e80]:
+      - heading "Lenke til seksjonen" [level=1] [ref=e81]:
+        - link "Lenke til seksjonen" [ref=e82] [cursor=pointer]:
+          - /url: "#havdyp-theme"
+          - text: Havdyp theme
+      - paragraph [ref=e83]: Havdyp-siden dokumenterer den mørkere theme-retningen med repoets faktiske havdyp-, parchment- og Utekos-baseverdier.
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - paragraph [ref=e86]: styles/themes/havdyp.css + styles/tokens/palette.css
+          - paragraph [ref=e87]: Mørkere Utekos-retning som bruker havdyp- og parchment-tokenene i dagens repo.
+          - paragraph [ref=e88]: Havdyp-siden viser de faktiske repo-tokenene theme-et bruker, med semantiske light/dark-mappinger.
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - heading "Hovedpalett" [level=2] [ref=e91]
+            - paragraph [ref=e92]: Kjerneverdier for Havdyp-retningen.
+            - generic [ref=e93]:
+              - article [ref=e94]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Havdyp 950" [ref=e96]:
+                  - img [ref=e98]
+                - generic [ref=e102]:
+                  - heading "Havdyp 950" [level=3] [ref=e103]
+                  - paragraph [ref=e104]: "--color-havdyp-950"
+                  - generic [ref=e106]:
+                    - term [ref=e107]: Verdi
+                    - definition [ref=e108]: oklch(0.1142 0.0511 290.62)
+              - article [ref=e109]:
+                - button "Kopier oklch(0.16 0.048 285) for Havdyp 900" [ref=e111]:
+                  - img [ref=e113]
+                - generic [ref=e117]:
+                  - heading "Havdyp 900" [level=3] [ref=e118]
+                  - paragraph [ref=e119]: "--color-havdyp-900"
+                  - generic [ref=e121]:
+                    - term [ref=e122]: Verdi
+                    - definition [ref=e123]: oklch(0.16 0.048 285)
+              - article [ref=e124]:
+                - button "Kopier oklch(0.22 0.044 280) for Havdyp 800" [ref=e126]:
+                  - img [ref=e128]
+                - generic [ref=e132]:
+                  - heading "Havdyp 800" [level=3] [ref=e133]
+                  - paragraph [ref=e134]: "--color-havdyp-800"
+                  - generic [ref=e136]:
+                    - term [ref=e137]: Verdi
+                    - definition [ref=e138]: oklch(0.22 0.044 280)
+              - article [ref=e139]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Cloud Dancer" [ref=e141]:
+                  - img [ref=e143]
+                - generic [ref=e147]:
+                  - heading "Cloud Dancer" [level=3] [ref=e148]
+                  - paragraph [ref=e149]: "--color-cloud-dancer"
+                  - generic [ref=e151]:
+                    - term [ref=e152]: Verdi
+                    - definition [ref=e153]: oklch(0.9493 0.007 88.64)
+              - article [ref=e154]:
+                - button "Kopier oklch(0.9649 0.005 78.3) for Parchment 50" [ref=e156]:
+                  - img [ref=e158]
+                - generic [ref=e162]:
+                  - heading "Parchment 50" [level=3] [ref=e163]
+                  - paragraph [ref=e164]: "--color-parchment-50"
+                  - generic [ref=e166]:
+                    - term [ref=e167]: Verdi
+                    - definition [ref=e168]: oklch(0.9649 0.005 78.3)
+              - article [ref=e169]:
+                - button "Kopier oklch(0.9306 0.01 93.57) for Parchment 100" [ref=e171]:
+                  - img [ref=e173]
+                - generic [ref=e177]:
+                  - heading "Parchment 100" [level=3] [ref=e178]
+                  - paragraph [ref=e179]: "--color-parchment-100"
+                  - generic [ref=e181]:
+                    - term [ref=e182]: Verdi
+                    - definition [ref=e183]: oklch(0.9306 0.01 93.57)
+              - article [ref=e184]:
+                - button "Kopier oklch(0.86 0.09 63) for Iced Apricot" [ref=e186]:
+                  - img [ref=e188]
+                - generic [ref=e192]:
+                  - heading "Iced Apricot" [level=3] [ref=e193]
+                  - paragraph [ref=e194]: "--color-iced-apricot"
+                  - generic [ref=e196]:
+                    - term [ref=e197]: Verdi
+                    - definition [ref=e198]: oklch(0.86 0.09 63)
+              - article [ref=e199]:
+                - button "Kopier oklch(0.45 0.055 225) for Fjellbla" [ref=e201]:
+                  - img [ref=e203]
+                - generic [ref=e207]:
+                  - heading "Fjellbla" [level=3] [ref=e208]
+                  - paragraph [ref=e209]: "--color-fjellbla"
+                  - generic [ref=e211]:
+                    - term [ref=e212]: Verdi
+                    - definition [ref=e213]: oklch(0.45 0.055 225)
+              - article [ref=e214]:
+                - button "Kopier oklch(0.16 0.048 285) for Vargnatt" [ref=e216]:
+                  - img [ref=e218]
+                - generic [ref=e222]:
+                  - heading "Vargnatt" [level=3] [ref=e223]
+                  - paragraph [ref=e224]: "--color-vargnatt"
+                  - generic [ref=e226]:
+                    - term [ref=e227]: Verdi
+                    - definition [ref=e228]: oklch(0.16 0.048 285)
+          - generic [ref=e229]:
+            - heading "Semantikk - light" [level=2] [ref=e230]
+            - paragraph [ref=e231]: Semantiske shadcn-variabler med faktisk fargeverdi og kilde-token.
+            - generic [ref=e232]:
+              - article [ref=e233]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Background" [ref=e235]:
+                  - img [ref=e237]
+                - generic [ref=e241]:
+                  - heading "Background" [level=3] [ref=e242]
+                  - paragraph [ref=e243]: "--background"
+                  - generic [ref=e244]:
+                    - generic [ref=e245]:
+                      - term [ref=e246]: Verdi
+                      - definition [ref=e247]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e248]:
+                      - term [ref=e249]: Kilde
+                      - definition [ref=e250]: var(--color-cloud-dancer)
+              - article [ref=e251]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Foreground" [ref=e253]:
+                  - img [ref=e255]
+                - generic [ref=e259]:
+                  - heading "Foreground" [level=3] [ref=e260]
+                  - paragraph [ref=e261]: "--foreground"
+                  - generic [ref=e262]:
+                    - generic [ref=e263]:
+                      - term [ref=e264]: Verdi
+                      - definition [ref=e265]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e266]:
+                      - term [ref=e267]: Kilde
+                      - definition [ref=e268]: var(--color-havdyp-950)
+              - article [ref=e269]:
+                - button "Kopier oklch(0.9649 0.005 78.3) for Card" [ref=e271]:
+                  - img [ref=e273]
+                - generic [ref=e277]:
+                  - heading "Card" [level=3] [ref=e278]
+                  - paragraph [ref=e279]: "--card"
+                  - generic [ref=e280]:
+                    - generic [ref=e281]:
+                      - term [ref=e282]: Verdi
+                      - definition [ref=e283]: oklch(0.9649 0.005 78.3)
+                    - generic [ref=e284]:
+                      - term [ref=e285]: Kilde
+                      - definition [ref=e286]: var(--color-parchment-50)
+              - article [ref=e287]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Card Foreground" [ref=e289]:
+                  - img [ref=e291]
+                - generic [ref=e295]:
+                  - heading "Card Foreground" [level=3] [ref=e296]
+                  - paragraph [ref=e297]: "--card-foreground"
+                  - generic [ref=e298]:
+                    - generic [ref=e299]:
+                      - term [ref=e300]: Verdi
+                      - definition [ref=e301]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e302]:
+                      - term [ref=e303]: Kilde
+                      - definition [ref=e304]: var(--color-havdyp-950)
+              - article [ref=e305]:
+                - button "Kopier oklch(0.9649 0.005 78.3) for Popover" [ref=e307]:
+                  - img [ref=e309]
+                - generic [ref=e313]:
+                  - heading "Popover" [level=3] [ref=e314]
+                  - paragraph [ref=e315]: "--popover"
+                  - generic [ref=e316]:
+                    - generic [ref=e317]:
+                      - term [ref=e318]: Verdi
+                      - definition [ref=e319]: oklch(0.9649 0.005 78.3)
+                    - generic [ref=e320]:
+                      - term [ref=e321]: Kilde
+                      - definition [ref=e322]: var(--card)
+              - article [ref=e323]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Popover Foreground" [ref=e325]:
+                  - img [ref=e327]
+                - generic [ref=e331]:
+                  - heading "Popover Foreground" [level=3] [ref=e332]
+                  - paragraph [ref=e333]: "--popover-foreground"
+                  - generic [ref=e334]:
+                    - generic [ref=e335]:
+                      - term [ref=e336]: Verdi
+                      - definition [ref=e337]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e338]:
+                      - term [ref=e339]: Kilde
+                      - definition [ref=e340]: var(--card-foreground)
+              - article [ref=e341]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Primary" [ref=e343]:
+                  - img [ref=e345]
+                - generic [ref=e349]:
+                  - heading "Primary" [level=3] [ref=e350]
+                  - paragraph [ref=e351]: "--primary"
+                  - generic [ref=e352]:
+                    - generic [ref=e353]:
+                      - term [ref=e354]: Verdi
+                      - definition [ref=e355]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e356]:
+                      - term [ref=e357]: Kilde
+                      - definition [ref=e358]: var(--color-havdyp-950)
+              - article [ref=e359]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Primary Foreground" [ref=e361]:
+                  - img [ref=e363]
+                - generic [ref=e367]:
+                  - heading "Primary Foreground" [level=3] [ref=e368]
+                  - paragraph [ref=e369]: "--primary-foreground"
+                  - generic [ref=e370]:
+                    - generic [ref=e371]:
+                      - term [ref=e372]: Verdi
+                      - definition [ref=e373]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e374]:
+                      - term [ref=e375]: Kilde
+                      - definition [ref=e376]: var(--color-cloud-dancer)
+              - article [ref=e377]:
+                - button "Kopier oklch(0.9306 0.01 93.57) for Secondary" [ref=e379]:
+                  - img [ref=e381]
+                - generic [ref=e385]:
+                  - heading "Secondary" [level=3] [ref=e386]
+                  - paragraph [ref=e387]: "--secondary"
+                  - generic [ref=e388]:
+                    - generic [ref=e389]:
+                      - term [ref=e390]: Verdi
+                      - definition [ref=e391]: oklch(0.9306 0.01 93.57)
+                    - generic [ref=e392]:
+                      - term [ref=e393]: Kilde
+                      - definition [ref=e394]: var(--color-parchment-100)
+              - article [ref=e395]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Secondary Foreground" [ref=e397]:
+                  - img [ref=e399]
+                - generic [ref=e403]:
+                  - heading "Secondary Foreground" [level=3] [ref=e404]
+                  - paragraph [ref=e405]: "--secondary-foreground"
+                  - generic [ref=e406]:
+                    - generic [ref=e407]:
+                      - term [ref=e408]: Verdi
+                      - definition [ref=e409]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e410]:
+                      - term [ref=e411]: Kilde
+                      - definition [ref=e412]: var(--color-havdyp-950)
+              - article [ref=e413]:
+                - button "Kopier oklch(0.9306 0.01 93.57) for Muted" [ref=e415]:
+                  - img [ref=e417]
+                - generic [ref=e421]:
+                  - heading "Muted" [level=3] [ref=e422]
+                  - paragraph [ref=e423]: "--muted"
+                  - generic [ref=e424]:
+                    - generic [ref=e425]:
+                      - term [ref=e426]: Verdi
+                      - definition [ref=e427]: oklch(0.9306 0.01 93.57)
+                    - generic [ref=e428]:
+                      - term [ref=e429]: Kilde
+                      - definition [ref=e430]: var(--color-parchment-100)
+              - article [ref=e431]:
+                - button "Kopier oklch(0.45 0.03 285) for Muted Foreground" [ref=e433]:
+                  - img [ref=e435]
+                - generic [ref=e439]:
+                  - heading "Muted Foreground" [level=3] [ref=e440]
+                  - paragraph [ref=e441]: "--muted-foreground"
+                  - generic [ref=e443]:
+                    - term [ref=e444]: Verdi
+                    - definition [ref=e445]: oklch(0.45 0.03 285)
+              - article [ref=e446]:
+                - button "Kopier oklch(0.86 0.09 63) for Accent" [ref=e448]:
+                  - img [ref=e450]
+                - generic [ref=e454]:
+                  - heading "Accent" [level=3] [ref=e455]
+                  - paragraph [ref=e456]: "--accent"
+                  - generic [ref=e457]:
+                    - generic [ref=e458]:
+                      - term [ref=e459]: Verdi
+                      - definition [ref=e460]: oklch(0.86 0.09 63)
+                    - generic [ref=e461]:
+                      - term [ref=e462]: Kilde
+                      - definition [ref=e463]: var(--color-iced-apricot)
+              - article [ref=e464]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Accent Foreground" [ref=e466]:
+                  - img [ref=e468]
+                - generic [ref=e472]:
+                  - heading "Accent Foreground" [level=3] [ref=e473]
+                  - paragraph [ref=e474]: "--accent-foreground"
+                  - generic [ref=e475]:
+                    - generic [ref=e476]:
+                      - term [ref=e477]: Verdi
+                      - definition [ref=e478]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e479]:
+                      - term [ref=e480]: Kilde
+                      - definition [ref=e481]: var(--color-havdyp-950)
+              - article [ref=e482]:
+                - button "Kopier oklch(0.577 0.245 27.325) for Destructive" [ref=e484]:
+                  - img [ref=e486]
+                - generic [ref=e490]:
+                  - heading "Destructive" [level=3] [ref=e491]
+                  - paragraph [ref=e492]: "--destructive"
+                  - generic [ref=e494]:
+                    - term [ref=e495]: Verdi
+                    - definition [ref=e496]: oklch(0.577 0.245 27.325)
+              - article [ref=e497]:
+                - button "Kopier oklch(0.985 0 0) for Destructive Foreground" [ref=e499]:
+                  - img [ref=e501]
+                - generic [ref=e505]:
+                  - heading "Destructive Foreground" [level=3] [ref=e506]
+                  - paragraph [ref=e507]: "--destructive-foreground"
+                  - generic [ref=e509]:
+                    - term [ref=e510]: Verdi
+                    - definition [ref=e511]: oklch(0.985 0 0)
+              - article [ref=e512]:
+                - button "Kopier oklch(0.93 0.006 88) for Border" [ref=e514]:
+                  - img [ref=e516]
+                - generic [ref=e520]:
+                  - heading "Border" [level=3] [ref=e521]
+                  - paragraph [ref=e522]: "--border"
+                  - generic [ref=e524]:
+                    - term [ref=e525]: Verdi
+                    - definition [ref=e526]: oklch(0.93 0.006 88)
+              - article [ref=e527]:
+                - button "Kopier oklch(0.88 0.01 88) for Input" [ref=e529]:
+                  - img [ref=e531]
+                - generic [ref=e535]:
+                  - heading "Input" [level=3] [ref=e536]
+                  - paragraph [ref=e537]: "--input"
+                  - generic [ref=e539]:
+                    - term [ref=e540]: Verdi
+                    - definition [ref=e541]: oklch(0.88 0.01 88)
+              - article [ref=e542]:
+                - button "Kopier oklch(0.22 0.044 280) for Ring" [ref=e544]:
+                  - img [ref=e546]
+                - generic [ref=e550]:
+                  - heading "Ring" [level=3] [ref=e551]
+                  - paragraph [ref=e552]: "--ring"
+                  - generic [ref=e553]:
+                    - generic [ref=e554]:
+                      - term [ref=e555]: Verdi
+                      - definition [ref=e556]: oklch(0.22 0.044 280)
+                    - generic [ref=e557]:
+                      - term [ref=e558]: Kilde
+                      - definition [ref=e559]: var(--color-havdyp-800)
+              - article [ref=e560]:
+                - button "Kopier oklch(0.9306 0.01 93.57) for Header Nav Active" [ref=e562]:
+                  - img [ref=e564]
+                - generic [ref=e568]:
+                  - heading "Header Nav Active" [level=3] [ref=e569]
+                  - paragraph [ref=e570]: "--header-nav-active"
+                  - generic [ref=e571]:
+                    - generic [ref=e572]:
+                      - term [ref=e573]: Verdi
+                      - definition [ref=e574]: oklch(0.9306 0.01 93.57)
+                    - generic [ref=e575]:
+                      - term [ref=e576]: Kilde
+                      - definition [ref=e577]: var(--color-parchment-100)
+              - article [ref=e578]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Header Nav Active Foreground" [ref=e580]:
+                  - img [ref=e582]
+                - generic [ref=e586]:
+                  - heading "Header Nav Active Foreground" [level=3] [ref=e587]
+                  - paragraph [ref=e588]: "--header-nav-active-foreground"
+                  - generic [ref=e589]:
+                    - generic [ref=e590]:
+                      - term [ref=e591]: Verdi
+                      - definition [ref=e592]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e593]:
+                      - term [ref=e594]: Kilde
+                      - definition [ref=e595]: var(--color-havdyp-950)
+              - article [ref=e596]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Chart 1" [ref=e598]:
+                  - img [ref=e600]
+                - generic [ref=e604]:
+                  - heading "Chart 1" [level=3] [ref=e605]
+                  - paragraph [ref=e606]: "--chart-1"
+                  - generic [ref=e607]:
+                    - generic [ref=e608]:
+                      - term [ref=e609]: Verdi
+                      - definition [ref=e610]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e611]:
+                      - term [ref=e612]: Kilde
+                      - definition [ref=e613]: var(--color-havdyp-950)
+              - article [ref=e614]:
+                - button "Kopier oklch(0.45 0.055 225) for Chart 2" [ref=e616]:
+                  - img [ref=e618]
+                - generic [ref=e622]:
+                  - heading "Chart 2" [level=3] [ref=e623]
+                  - paragraph [ref=e624]: "--chart-2"
+                  - generic [ref=e625]:
+                    - generic [ref=e626]:
+                      - term [ref=e627]: Verdi
+                      - definition [ref=e628]: oklch(0.45 0.055 225)
+                    - generic [ref=e629]:
+                      - term [ref=e630]: Kilde
+                      - definition [ref=e631]: var(--color-fjellbla)
+              - article [ref=e632]:
+                - button "Kopier oklch(0.86 0.09 63) for Chart 3" [ref=e634]:
+                  - img [ref=e636]
+                - generic [ref=e640]:
+                  - heading "Chart 3" [level=3] [ref=e641]
+                  - paragraph [ref=e642]: "--chart-3"
+                  - generic [ref=e643]:
+                    - generic [ref=e644]:
+                      - term [ref=e645]: Verdi
+                      - definition [ref=e646]: oklch(0.86 0.09 63)
+                    - generic [ref=e647]:
+                      - term [ref=e648]: Kilde
+                      - definition [ref=e649]: var(--color-iced-apricot)
+              - article [ref=e650]:
+                - button "Kopier oklch(0.22 0.044 280) for Chart 4" [ref=e652]:
+                  - img [ref=e654]
+                - generic [ref=e658]:
+                  - heading "Chart 4" [level=3] [ref=e659]
+                  - paragraph [ref=e660]: "--chart-4"
+                  - generic [ref=e661]:
+                    - generic [ref=e662]:
+                      - term [ref=e663]: Verdi
+                      - definition [ref=e664]: oklch(0.22 0.044 280)
+                    - generic [ref=e665]:
+                      - term [ref=e666]: Kilde
+                      - definition [ref=e667]: var(--color-havdyp-800)
+              - article [ref=e668]:
+                - button "Kopier oklch(0.55 0.18 27) for Chart 5" [ref=e670]:
+                  - img [ref=e672]
+                - generic [ref=e676]:
+                  - heading "Chart 5" [level=3] [ref=e677]
+                  - paragraph [ref=e678]: "--chart-5"
+                  - generic [ref=e680]:
+                    - term [ref=e681]: Verdi
+                    - definition [ref=e682]: oklch(0.55 0.18 27)
+              - article [ref=e683]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Sidebar" [ref=e685]:
+                  - img [ref=e687]
+                - generic [ref=e691]:
+                  - heading "Sidebar" [level=3] [ref=e692]
+                  - paragraph [ref=e693]: "--sidebar"
+                  - generic [ref=e694]:
+                    - generic [ref=e695]:
+                      - term [ref=e696]: Verdi
+                      - definition [ref=e697]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e698]:
+                      - term [ref=e699]: Kilde
+                      - definition [ref=e700]: var(--background)
+              - article [ref=e701]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Sidebar Foreground" [ref=e703]:
+                  - img [ref=e705]
+                - generic [ref=e709]:
+                  - heading "Sidebar Foreground" [level=3] [ref=e710]
+                  - paragraph [ref=e711]: "--sidebar-foreground"
+                  - generic [ref=e712]:
+                    - generic [ref=e713]:
+                      - term [ref=e714]: Verdi
+                      - definition [ref=e715]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e716]:
+                      - term [ref=e717]: Kilde
+                      - definition [ref=e718]: var(--foreground)
+              - article [ref=e719]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Sidebar Primary" [ref=e721]:
+                  - img [ref=e723]
+                - generic [ref=e727]:
+                  - heading "Sidebar Primary" [level=3] [ref=e728]
+                  - paragraph [ref=e729]: "--sidebar-primary"
+                  - generic [ref=e730]:
+                    - generic [ref=e731]:
+                      - term [ref=e732]: Verdi
+                      - definition [ref=e733]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e734]:
+                      - term [ref=e735]: Kilde
+                      - definition [ref=e736]: var(--primary)
+              - article [ref=e737]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Sidebar Primary Foreground" [ref=e739]:
+                  - img [ref=e741]
+                - generic [ref=e745]:
+                  - heading "Sidebar Primary Foreground" [level=3] [ref=e746]
+                  - paragraph [ref=e747]: "--sidebar-primary-foreground"
+                  - generic [ref=e748]:
+                    - generic [ref=e749]:
+                      - term [ref=e750]: Verdi
+                      - definition [ref=e751]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e752]:
+                      - term [ref=e753]: Kilde
+                      - definition [ref=e754]: var(--primary-foreground)
+              - article [ref=e755]:
+                - button "Kopier oklch(0.86 0.09 63) for Sidebar Accent" [ref=e757]:
+                  - img [ref=e759]
+                - generic [ref=e763]:
+                  - heading "Sidebar Accent" [level=3] [ref=e764]
+                  - paragraph [ref=e765]: "--sidebar-accent"
+                  - generic [ref=e766]:
+                    - generic [ref=e767]:
+                      - term [ref=e768]: Verdi
+                      - definition [ref=e769]: oklch(0.86 0.09 63)
+                    - generic [ref=e770]:
+                      - term [ref=e771]: Kilde
+                      - definition [ref=e772]: var(--accent)
+              - article [ref=e773]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Sidebar Accent Foreground" [ref=e775]:
+                  - img [ref=e777]
+                - generic [ref=e781]:
+                  - heading "Sidebar Accent Foreground" [level=3] [ref=e782]
+                  - paragraph [ref=e783]: "--sidebar-accent-foreground"
+                  - generic [ref=e784]:
+                    - generic [ref=e785]:
+                      - term [ref=e786]: Verdi
+                      - definition [ref=e787]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e788]:
+                      - term [ref=e789]: Kilde
+                      - definition [ref=e790]: var(--accent-foreground)
+              - article [ref=e791]:
+                - button "Kopier oklch(0.93 0.006 88) for Sidebar Border" [ref=e793]:
+                  - img [ref=e795]
+                - generic [ref=e799]:
+                  - heading "Sidebar Border" [level=3] [ref=e800]
+                  - paragraph [ref=e801]: "--sidebar-border"
+                  - generic [ref=e802]:
+                    - generic [ref=e803]:
+                      - term [ref=e804]: Verdi
+                      - definition [ref=e805]: oklch(0.93 0.006 88)
+                    - generic [ref=e806]:
+                      - term [ref=e807]: Kilde
+                      - definition [ref=e808]: var(--border)
+              - article [ref=e809]:
+                - button "Kopier oklch(0.22 0.044 280) for Sidebar Ring" [ref=e811]:
+                  - img [ref=e813]
+                - generic [ref=e817]:
+                  - heading "Sidebar Ring" [level=3] [ref=e818]
+                  - paragraph [ref=e819]: "--sidebar-ring"
+                  - generic [ref=e820]:
+                    - generic [ref=e821]:
+                      - term [ref=e822]: Verdi
+                      - definition [ref=e823]: oklch(0.22 0.044 280)
+                    - generic [ref=e824]:
+                      - term [ref=e825]: Kilde
+                      - definition [ref=e826]: var(--ring)
+          - generic [ref=e827]:
+            - heading "Semantikk - dark" [level=2] [ref=e828]
+            - paragraph [ref=e829]: Semantiske shadcn-variabler med faktisk fargeverdi og kilde-token.
+            - generic [ref=e830]:
+              - article [ref=e831]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Background" [ref=e833]:
+                  - img [ref=e835]
+                - generic [ref=e839]:
+                  - heading "Background" [level=3] [ref=e840]
+                  - paragraph [ref=e841]: "--background"
+                  - generic [ref=e842]:
+                    - generic [ref=e843]:
+                      - term [ref=e844]: Verdi
+                      - definition [ref=e845]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e846]:
+                      - term [ref=e847]: Kilde
+                      - definition [ref=e848]: var(--color-havdyp-950)
+              - article [ref=e849]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Foreground" [ref=e851]:
+                  - img [ref=e853]
+                - generic [ref=e857]:
+                  - heading "Foreground" [level=3] [ref=e858]
+                  - paragraph [ref=e859]: "--foreground"
+                  - generic [ref=e860]:
+                    - generic [ref=e861]:
+                      - term [ref=e862]: Verdi
+                      - definition [ref=e863]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e864]:
+                      - term [ref=e865]: Kilde
+                      - definition [ref=e866]: var(--color-cloud-dancer)
+              - article [ref=e867]:
+                - button "Kopier oklch(0.16 0.048 285) for Card" [ref=e869]:
+                  - img [ref=e871]
+                - generic [ref=e875]:
+                  - heading "Card" [level=3] [ref=e876]
+                  - paragraph [ref=e877]: "--card"
+                  - generic [ref=e878]:
+                    - generic [ref=e879]:
+                      - term [ref=e880]: Verdi
+                      - definition [ref=e881]: oklch(0.16 0.048 285)
+                    - generic [ref=e882]:
+                      - term [ref=e883]: Kilde
+                      - definition [ref=e884]: var(--color-havdyp-900)
+              - article [ref=e885]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Card Foreground" [ref=e887]:
+                  - img [ref=e889]
+                - generic [ref=e893]:
+                  - heading "Card Foreground" [level=3] [ref=e894]
+                  - paragraph [ref=e895]: "--card-foreground"
+                  - generic [ref=e896]:
+                    - generic [ref=e897]:
+                      - term [ref=e898]: Verdi
+                      - definition [ref=e899]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e900]:
+                      - term [ref=e901]: Kilde
+                      - definition [ref=e902]: var(--color-cloud-dancer)
+              - article [ref=e903]:
+                - button "Kopier oklch(0.16 0.048 285) for Popover" [ref=e905]:
+                  - img [ref=e907]
+                - generic [ref=e911]:
+                  - heading "Popover" [level=3] [ref=e912]
+                  - paragraph [ref=e913]: "--popover"
+                  - generic [ref=e914]:
+                    - generic [ref=e915]:
+                      - term [ref=e916]: Verdi
+                      - definition [ref=e917]: oklch(0.16 0.048 285)
+                    - generic [ref=e918]:
+                      - term [ref=e919]: Kilde
+                      - definition [ref=e920]: var(--color-havdyp-900)
+              - article [ref=e921]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Popover Foreground" [ref=e923]:
+                  - img [ref=e925]
+                - generic [ref=e929]:
+                  - heading "Popover Foreground" [level=3] [ref=e930]
+                  - paragraph [ref=e931]: "--popover-foreground"
+                  - generic [ref=e932]:
+                    - generic [ref=e933]:
+                      - term [ref=e934]: Verdi
+                      - definition [ref=e935]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e936]:
+                      - term [ref=e937]: Kilde
+                      - definition [ref=e938]: var(--color-cloud-dancer)
+              - article [ref=e939]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Primary" [ref=e941]:
+                  - img [ref=e943]
+                - generic [ref=e947]:
+                  - heading "Primary" [level=3] [ref=e948]
+                  - paragraph [ref=e949]: "--primary"
+                  - generic [ref=e950]:
+                    - generic [ref=e951]:
+                      - term [ref=e952]: Verdi
+                      - definition [ref=e953]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e954]:
+                      - term [ref=e955]: Kilde
+                      - definition [ref=e956]: var(--color-cloud-dancer)
+              - article [ref=e957]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Primary Foreground" [ref=e959]:
+                  - img [ref=e961]
+                - generic [ref=e965]:
+                  - heading "Primary Foreground" [level=3] [ref=e966]
+                  - paragraph [ref=e967]: "--primary-foreground"
+                  - generic [ref=e968]:
+                    - generic [ref=e969]:
+                      - term [ref=e970]: Verdi
+                      - definition [ref=e971]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e972]:
+                      - term [ref=e973]: Kilde
+                      - definition [ref=e974]: var(--color-havdyp-950)
+              - article [ref=e975]:
+                - button "Kopier oklch(0.22 0.044 280) for Secondary" [ref=e977]:
+                  - img [ref=e979]
+                - generic [ref=e983]:
+                  - heading "Secondary" [level=3] [ref=e984]
+                  - paragraph [ref=e985]: "--secondary"
+                  - generic [ref=e986]:
+                    - generic [ref=e987]:
+                      - term [ref=e988]: Verdi
+                      - definition [ref=e989]: oklch(0.22 0.044 280)
+                    - generic [ref=e990]:
+                      - term [ref=e991]: Kilde
+                      - definition [ref=e992]: var(--color-havdyp-800)
+              - article [ref=e993]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Secondary Foreground" [ref=e995]:
+                  - img [ref=e997]
+                - generic [ref=e1001]:
+                  - heading "Secondary Foreground" [level=3] [ref=e1002]
+                  - paragraph [ref=e1003]: "--secondary-foreground"
+                  - generic [ref=e1004]:
+                    - generic [ref=e1005]:
+                      - term [ref=e1006]: Verdi
+                      - definition [ref=e1007]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e1008]:
+                      - term [ref=e1009]: Kilde
+                      - definition [ref=e1010]: var(--color-cloud-dancer)
+              - article [ref=e1011]:
+                - button "Kopier oklch(0.22 0.03 285) for Muted" [ref=e1013]:
+                  - img [ref=e1015]
+                - generic [ref=e1019]:
+                  - heading "Muted" [level=3] [ref=e1020]
+                  - paragraph [ref=e1021]: "--muted"
+                  - generic [ref=e1023]:
+                    - term [ref=e1024]: Verdi
+                    - definition [ref=e1025]: oklch(0.22 0.03 285)
+              - article [ref=e1026]:
+                - button "Kopier oklch(0.78 0.012 88) for Muted Foreground" [ref=e1028]:
+                  - img [ref=e1030]
+                - generic [ref=e1034]:
+                  - heading "Muted Foreground" [level=3] [ref=e1035]
+                  - paragraph [ref=e1036]: "--muted-foreground"
+                  - generic [ref=e1038]:
+                    - term [ref=e1039]: Verdi
+                    - definition [ref=e1040]: oklch(0.78 0.012 88)
+              - article [ref=e1041]:
+                - button "Kopier oklch(0.86 0.09 63) for Accent" [ref=e1043]:
+                  - img [ref=e1045]
+                - generic [ref=e1049]:
+                  - heading "Accent" [level=3] [ref=e1050]
+                  - paragraph [ref=e1051]: "--accent"
+                  - generic [ref=e1052]:
+                    - generic [ref=e1053]:
+                      - term [ref=e1054]: Verdi
+                      - definition [ref=e1055]: oklch(0.86 0.09 63)
+                    - generic [ref=e1056]:
+                      - term [ref=e1057]: Kilde
+                      - definition [ref=e1058]: var(--color-iced-apricot)
+              - article [ref=e1059]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Accent Foreground" [ref=e1061]:
+                  - img [ref=e1063]
+                - generic [ref=e1067]:
+                  - heading "Accent Foreground" [level=3] [ref=e1068]
+                  - paragraph [ref=e1069]: "--accent-foreground"
+                  - generic [ref=e1070]:
+                    - generic [ref=e1071]:
+                      - term [ref=e1072]: Verdi
+                      - definition [ref=e1073]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e1074]:
+                      - term [ref=e1075]: Kilde
+                      - definition [ref=e1076]: var(--color-havdyp-950)
+              - article [ref=e1077]:
+                - button "Kopier oklch(0.704 0.191 22.216) for Destructive" [ref=e1079]:
+                  - img [ref=e1081]
+                - generic [ref=e1085]:
+                  - heading "Destructive" [level=3] [ref=e1086]
+                  - paragraph [ref=e1087]: "--destructive"
+                  - generic [ref=e1089]:
+                    - term [ref=e1090]: Verdi
+                    - definition [ref=e1091]: oklch(0.704 0.191 22.216)
+              - article [ref=e1092]:
+                - button "Kopier oklch(0.985 0 0) for Destructive Foreground" [ref=e1094]:
+                  - img [ref=e1096]
+                - generic [ref=e1100]:
+                  - heading "Destructive Foreground" [level=3] [ref=e1101]
+                  - paragraph [ref=e1102]: "--destructive-foreground"
+                  - generic [ref=e1104]:
+                    - term [ref=e1105]: Verdi
+                    - definition [ref=e1106]: oklch(0.985 0 0)
+              - article [ref=e1107]:
+                - button "Kopier rgb(255 255 255 / 30%) for Border" [ref=e1109]:
+                  - img [ref=e1111]
+                - generic [ref=e1115]:
+                  - heading "Border" [level=3] [ref=e1116]
+                  - paragraph [ref=e1117]: "--border"
+                  - generic [ref=e1119]:
+                    - term [ref=e1120]: Verdi
+                    - definition [ref=e1121]: rgb(255 255 255 / 30%)
+              - article [ref=e1122]:
+                - button "Kopier rgb(255 255 255 / 20%) for Input" [ref=e1124]:
+                  - img [ref=e1126]
+                - generic [ref=e1130]:
+                  - heading "Input" [level=3] [ref=e1131]
+                  - paragraph [ref=e1132]: "--input"
+                  - generic [ref=e1134]:
+                    - term [ref=e1135]: Verdi
+                    - definition [ref=e1136]: rgb(255 255 255 / 20%)
+              - article [ref=e1137]:
+                - button "Kopier oklch(0.86 0.09 63) for Ring" [ref=e1139]:
+                  - img [ref=e1141]
+                - generic [ref=e1145]:
+                  - heading "Ring" [level=3] [ref=e1146]
+                  - paragraph [ref=e1147]: "--ring"
+                  - generic [ref=e1148]:
+                    - generic [ref=e1149]:
+                      - term [ref=e1150]: Verdi
+                      - definition [ref=e1151]: oklch(0.86 0.09 63)
+                    - generic [ref=e1152]:
+                      - term [ref=e1153]: Kilde
+                      - definition [ref=e1154]: var(--color-iced-apricot)
+              - article [ref=e1155]:
+                - button "Kopier oklch(0.16 0.048 285) for Header Nav Active" [ref=e1157]:
+                  - img [ref=e1159]
+                - generic [ref=e1163]:
+                  - heading "Header Nav Active" [level=3] [ref=e1164]
+                  - paragraph [ref=e1165]: "--header-nav-active"
+                  - generic [ref=e1166]:
+                    - generic [ref=e1167]:
+                      - term [ref=e1168]: Verdi
+                      - definition [ref=e1169]: oklch(0.16 0.048 285)
+                    - generic [ref=e1170]:
+                      - term [ref=e1171]: Kilde
+                      - definition [ref=e1172]: var(--color-havdyp-900)
+              - article [ref=e1173]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Header Nav Active Foreground" [ref=e1175]:
+                  - img [ref=e1177]
+                - generic [ref=e1181]:
+                  - heading "Header Nav Active Foreground" [level=3] [ref=e1182]
+                  - paragraph [ref=e1183]: "--header-nav-active-foreground"
+                  - generic [ref=e1184]:
+                    - generic [ref=e1185]:
+                      - term [ref=e1186]: Verdi
+                      - definition [ref=e1187]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e1188]:
+                      - term [ref=e1189]: Kilde
+                      - definition [ref=e1190]: var(--color-cloud-dancer)
+              - article [ref=e1191]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Chart 1" [ref=e1193]:
+                  - img [ref=e1195]
+                - generic [ref=e1199]:
+                  - heading "Chart 1" [level=3] [ref=e1200]
+                  - paragraph [ref=e1201]: "--chart-1"
+                  - generic [ref=e1202]:
+                    - generic [ref=e1203]:
+                      - term [ref=e1204]: Verdi
+                      - definition [ref=e1205]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e1206]:
+                      - term [ref=e1207]: Kilde
+                      - definition [ref=e1208]: var(--color-cloud-dancer)
+              - article [ref=e1209]:
+                - button "Kopier oklch(0.86 0.09 63) for Chart 2" [ref=e1211]:
+                  - img [ref=e1213]
+                - generic [ref=e1217]:
+                  - heading "Chart 2" [level=3] [ref=e1218]
+                  - paragraph [ref=e1219]: "--chart-2"
+                  - generic [ref=e1220]:
+                    - generic [ref=e1221]:
+                      - term [ref=e1222]: Verdi
+                      - definition [ref=e1223]: oklch(0.86 0.09 63)
+                    - generic [ref=e1224]:
+                      - term [ref=e1225]: Kilde
+                      - definition [ref=e1226]: var(--color-iced-apricot)
+              - article [ref=e1227]:
+                - button "Kopier oklch(0.45 0.055 225) for Chart 3" [ref=e1229]:
+                  - img [ref=e1231]
+                - generic [ref=e1235]:
+                  - heading "Chart 3" [level=3] [ref=e1236]
+                  - paragraph [ref=e1237]: "--chart-3"
+                  - generic [ref=e1238]:
+                    - generic [ref=e1239]:
+                      - term [ref=e1240]: Verdi
+                      - definition [ref=e1241]: oklch(0.45 0.055 225)
+                    - generic [ref=e1242]:
+                      - term [ref=e1243]: Kilde
+                      - definition [ref=e1244]: var(--color-fjellbla)
+              - article [ref=e1245]:
+                - button "Kopier oklch(0.22 0.044 280) for Chart 4" [ref=e1247]:
+                  - img [ref=e1249]
+                - generic [ref=e1253]:
+                  - heading "Chart 4" [level=3] [ref=e1254]
+                  - paragraph [ref=e1255]: "--chart-4"
+                  - generic [ref=e1256]:
+                    - generic [ref=e1257]:
+                      - term [ref=e1258]: Verdi
+                      - definition [ref=e1259]: oklch(0.22 0.044 280)
+                    - generic [ref=e1260]:
+                      - term [ref=e1261]: Kilde
+                      - definition [ref=e1262]: var(--color-havdyp-800)
+              - article [ref=e1263]:
+                - button "Kopier oklch(0.62 0.16 27) for Chart 5" [ref=e1265]:
+                  - img [ref=e1267]
+                - generic [ref=e1271]:
+                  - heading "Chart 5" [level=3] [ref=e1272]
+                  - paragraph [ref=e1273]: "--chart-5"
+                  - generic [ref=e1275]:
+                    - term [ref=e1276]: Verdi
+                    - definition [ref=e1277]: oklch(0.62 0.16 27)
+              - article [ref=e1278]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Sidebar" [ref=e1280]:
+                  - img [ref=e1282]
+                - generic [ref=e1286]:
+                  - heading "Sidebar" [level=3] [ref=e1287]
+                  - paragraph [ref=e1288]: "--sidebar"
+                  - generic [ref=e1289]:
+                    - generic [ref=e1290]:
+                      - term [ref=e1291]: Verdi
+                      - definition [ref=e1292]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e1293]:
+                      - term [ref=e1294]: Kilde
+                      - definition [ref=e1295]: var(--background)
+              - article [ref=e1296]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Sidebar Foreground" [ref=e1298]:
+                  - img [ref=e1300]
+                - generic [ref=e1304]:
+                  - heading "Sidebar Foreground" [level=3] [ref=e1305]
+                  - paragraph [ref=e1306]: "--sidebar-foreground"
+                  - generic [ref=e1307]:
+                    - generic [ref=e1308]:
+                      - term [ref=e1309]: Verdi
+                      - definition [ref=e1310]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e1311]:
+                      - term [ref=e1312]: Kilde
+                      - definition [ref=e1313]: var(--foreground)
+              - article [ref=e1314]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Sidebar Primary" [ref=e1316]:
+                  - img [ref=e1318]
+                - generic [ref=e1322]:
+                  - heading "Sidebar Primary" [level=3] [ref=e1323]
+                  - paragraph [ref=e1324]: "--sidebar-primary"
+                  - generic [ref=e1325]:
+                    - generic [ref=e1326]:
+                      - term [ref=e1327]: Verdi
+                      - definition [ref=e1328]: oklch(0.9493 0.007 88.64)
+                    - generic [ref=e1329]:
+                      - term [ref=e1330]: Kilde
+                      - definition [ref=e1331]: var(--primary)
+              - article [ref=e1332]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Sidebar Primary Foreground" [ref=e1334]:
+                  - img [ref=e1336]
+                - generic [ref=e1340]:
+                  - heading "Sidebar Primary Foreground" [level=3] [ref=e1341]
+                  - paragraph [ref=e1342]: "--sidebar-primary-foreground"
+                  - generic [ref=e1343]:
+                    - generic [ref=e1344]:
+                      - term [ref=e1345]: Verdi
+                      - definition [ref=e1346]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e1347]:
+                      - term [ref=e1348]: Kilde
+                      - definition [ref=e1349]: var(--primary-foreground)
+              - article [ref=e1350]:
+                - button "Kopier oklch(0.86 0.09 63) for Sidebar Accent" [ref=e1352]:
+                  - img [ref=e1354]
+                - generic [ref=e1358]:
+                  - heading "Sidebar Accent" [level=3] [ref=e1359]
+                  - paragraph [ref=e1360]: "--sidebar-accent"
+                  - generic [ref=e1361]:
+                    - generic [ref=e1362]:
+                      - term [ref=e1363]: Verdi
+                      - definition [ref=e1364]: oklch(0.86 0.09 63)
+                    - generic [ref=e1365]:
+                      - term [ref=e1366]: Kilde
+                      - definition [ref=e1367]: var(--accent)
+              - article [ref=e1368]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Sidebar Accent Foreground" [ref=e1370]:
+                  - img [ref=e1372]
+                - generic [ref=e1376]:
+                  - heading "Sidebar Accent Foreground" [level=3] [ref=e1377]
+                  - paragraph [ref=e1378]: "--sidebar-accent-foreground"
+                  - generic [ref=e1379]:
+                    - generic [ref=e1380]:
+                      - term [ref=e1381]: Verdi
+                      - definition [ref=e1382]: oklch(0.1142 0.0511 290.62)
+                    - generic [ref=e1383]:
+                      - term [ref=e1384]: Kilde
+                      - definition [ref=e1385]: var(--accent-foreground)
+              - article [ref=e1386]:
+                - button "Kopier rgb(255 255 255 / 30%) for Sidebar Border" [ref=e1388]:
+                  - img [ref=e1390]
+                - generic [ref=e1394]:
+                  - heading "Sidebar Border" [level=3] [ref=e1395]
+                  - paragraph [ref=e1396]: "--sidebar-border"
+                  - generic [ref=e1397]:
+                    - generic [ref=e1398]:
+                      - term [ref=e1399]: Verdi
+                      - definition [ref=e1400]: rgb(255 255 255 / 30%)
+                    - generic [ref=e1401]:
+                      - term [ref=e1402]: Kilde
+                      - definition [ref=e1403]: var(--border)
+              - article [ref=e1404]:
+                - button "Kopier oklch(0.86 0.09 63) for Sidebar Ring" [ref=e1406]:
+                  - img [ref=e1408]
+                - generic [ref=e1412]:
+                  - heading "Sidebar Ring" [level=3] [ref=e1413]
+                  - paragraph [ref=e1414]: "--sidebar-ring"
+                  - generic [ref=e1415]:
+                    - generic [ref=e1416]:
+                      - term [ref=e1417]: Verdi
+                      - definition [ref=e1418]: oklch(0.86 0.09 63)
+                    - generic [ref=e1419]:
+                      - term [ref=e1420]: Kilde
+                      - definition [ref=e1421]: var(--ring)
+          - generic [ref=e1422]:
+            - heading "Rå repo-verdier" [level=2] [ref=e1423]
+            - paragraph [ref=e1424]: Alle rå basefarger som ligger i den delte palette-filen nå.
+            - generic [ref=e1425]:
+              - article [ref=e1426]:
+                - button "Kopier oklch(0.2948 0.0419 195.12) for Maritime Blue" [ref=e1428]:
+                  - img [ref=e1430]
+                - generic [ref=e1434]:
+                  - heading "Maritime Blue" [level=3] [ref=e1435]
+                  - paragraph [ref=e1436]: "--color-maritime-blue"
+                  - generic [ref=e1438]:
+                    - term [ref=e1439]: Verdi
+                    - definition [ref=e1440]: oklch(0.2948 0.0419 195.12)
+              - article [ref=e1441]:
+                - button "Kopier oklch(0.9493 0.007 88.64) for Cloud Dancer" [ref=e1443]:
+                  - img [ref=e1445]
+                - generic [ref=e1449]:
+                  - heading "Cloud Dancer" [level=3] [ref=e1450]
+                  - paragraph [ref=e1451]: "--color-cloud-dancer"
+                  - generic [ref=e1453]:
+                    - term [ref=e1454]: Verdi
+                    - definition [ref=e1455]: oklch(0.9493 0.007 88.64)
+              - article [ref=e1456]:
+                - button "Kopier oklch(0.1142 0.0511 290.62) for Havdyp 950" [ref=e1458]:
+                  - img [ref=e1460]
+                - generic [ref=e1464]:
+                  - heading "Havdyp 950" [level=3] [ref=e1465]
+                  - paragraph [ref=e1466]: "--color-havdyp-950"
+                  - generic [ref=e1468]:
+                    - term [ref=e1469]: Verdi
+                    - definition [ref=e1470]: oklch(0.1142 0.0511 290.62)
+              - article [ref=e1471]:
+                - button "Kopier oklch(0.16 0.048 285) for Havdyp 900" [ref=e1473]:
+                  - img [ref=e1475]
+                - generic [ref=e1479]:
+                  - heading "Havdyp 900" [level=3] [ref=e1480]
+                  - paragraph [ref=e1481]: "--color-havdyp-900"
+                  - generic [ref=e1483]:
+                    - term [ref=e1484]: Verdi
+                    - definition [ref=e1485]: oklch(0.16 0.048 285)
+              - article [ref=e1486]:
+                - button "Kopier oklch(0.22 0.044 280) for Havdyp 800" [ref=e1488]:
+                  - img [ref=e1490]
+                - generic [ref=e1494]:
+                  - heading "Havdyp 800" [level=3] [ref=e1495]
+                  - paragraph [ref=e1496]: "--color-havdyp-800"
+                  - generic [ref=e1498]:
+                    - term [ref=e1499]: Verdi
+                    - definition [ref=e1500]: oklch(0.22 0.044 280)
+              - article [ref=e1501]:
+                - button "Kopier oklch(0.9649 0.005 78.3) for Parchment 50" [ref=e1503]:
+                  - img [ref=e1505]
+                - generic [ref=e1509]:
+                  - heading "Parchment 50" [level=3] [ref=e1510]
+                  - paragraph [ref=e1511]: "--color-parchment-50"
+                  - generic [ref=e1513]:
+                    - term [ref=e1514]: Verdi
+                    - definition [ref=e1515]: oklch(0.9649 0.005 78.3)
+              - article [ref=e1516]:
+                - button "Kopier oklch(0.9306 0.01 93.57) for Parchment 100" [ref=e1518]:
+                  - img [ref=e1520]
+                - generic [ref=e1524]:
+                  - heading "Parchment 100" [level=3] [ref=e1525]
+                  - paragraph [ref=e1526]: "--color-parchment-100"
+                  - generic [ref=e1528]:
+                    - term [ref=e1529]: Verdi
+                    - definition [ref=e1530]: oklch(0.9306 0.01 93.57)
+              - article [ref=e1531]:
+                - button "Kopier oklch(0.86 0.09 63) for Iced Apricot" [ref=e1533]:
+                  - img [ref=e1535]
+                - generic [ref=e1539]:
+                  - heading "Iced Apricot" [level=3] [ref=e1540]
+                  - paragraph [ref=e1541]: "--color-iced-apricot"
+                  - generic [ref=e1543]:
+                    - term [ref=e1544]: Verdi
+                    - definition [ref=e1545]: oklch(0.86 0.09 63)
+              - article [ref=e1546]:
+                - button "Kopier oklch(0.45 0.055 225) for Fjellbla" [ref=e1548]:
+                  - img [ref=e1550]
+                - generic [ref=e1554]:
+                  - heading "Fjellbla" [level=3] [ref=e1555]
+                  - paragraph [ref=e1556]: "--color-fjellbla"
+                  - generic [ref=e1558]:
+                    - term [ref=e1559]: Verdi
+                    - definition [ref=e1560]: oklch(0.45 0.055 225)
+              - article [ref=e1561]:
+                - button "Kopier oklch(0.16 0.048 285) for Vargnatt" [ref=e1563]:
+                  - img [ref=e1565]
+                - generic [ref=e1569]:
+                  - heading "Vargnatt" [level=3] [ref=e1570]
+                  - paragraph [ref=e1571]: "--color-vargnatt"
+                  - generic [ref=e1573]:
+                    - term [ref=e1574]: Verdi
+                    - definition [ref=e1575]: oklch(0.16 0.048 285)

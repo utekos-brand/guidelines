@@ -1,0 +1,14 @@
+/*
+* VisuallyHidden component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-visually-hidden {
+  &--focusable {
+    &:not(:focus, :focus-within) {
+      @include utilities.srOnly();
+    }
+  }
+}

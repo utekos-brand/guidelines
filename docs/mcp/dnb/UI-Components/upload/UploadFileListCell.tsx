@@ -1,0 +1,270 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+import { clsx } from 'clsx'
+
+// Components
+import Button from '../button/Button'
+import Icon from '../../components/Icon'
+import FormStatus from '../../components/FormStatus'
+import ProgressIndicator from '../../components/progress-indicator'
+
+// Elements
+import P from '../../elements/P'
+
+// Icons
+import {
+  trash as TrashIcon,
+  exclamation_medium as ExclamationIcon,
+  file_png_medium as PngIcon,
+  file_jpg_medium as JpgIcon,
+  file_word_medium as DocIcon,
+  file_pdf_medium as PdfIcon,
+  file_xls_medium as XlsIcon,
+  file_ppt_medium as PptIcon,
+  file_csv_medium as CsvIcon,
+  file_txt_medium as TxtIcon,
+  file_xml_medium as XmlIcon,
+  file_medium as FileIcon,
+} from '../../icons'
+import type { UploadFile, UploadFileNative } from './types'
+
+// Shared
+import { getClosestParent } from '../../shared/component-helper'
+import useUpload, { isFileEqual } from './useUpload'
+import { getFileTypeFromExtension } from './UploadVerify'
+import UploadFileLink from './UploadFileListLink'
+import type { ProgressIndicatorAllProps } from '../progress-indicator/types'
+
+export const fileExtensionImages = {
+  png: PngIcon,
+  jpg: JpgIcon,
+  pdf: PdfIcon,
+  doc: DocIcon,
+  docx: DocIcon,
+  odt: DocIcon,
+  xls: XlsIcon,
+  ppt: PptIcon,
+  csv: CsvIcon,
+  txt: TxtIcon,
+  xml: XmlIcon,
+  file: FileIcon,
+}
+
+export type UploadFileListCellProps = {
+  id: string
+
+  /**
+   * Uploaded file
+   */
+  uploadFile: UploadFile | UploadFileNative
+
+  /**
+   * Calls onDelete when clicking the delete button
+   */
+  onDelete: () => void
+
+  /**
+   * Calls onClick when clicking the file name
+   */
+  onClick?: () => void
+
+  /**
+   * Causes the browser to treat all listed files as downloadable instead of opening them in a new browser tab or window.
+   * Default: `false`
+   */
+  download?: boolean
+
+  /**
+   * Allows uploading of duplicate files.
+   * Default: `false`
+   */
+  allowDuplicates?: boolean
+
+  /**
+   * Text
+   */
+  loadingText: ReactNode
+  deleteButtonText: ReactNode
+}
+
+const UploadFileListCell = ({
+  id,
+  uploadFile,
+  onDelete,
+  onClick,
+  loadingText,
+  deleteButtonText,
+  download,
+  allowDuplicates,
+}: UploadFileListCellProps) => {
+  const {
+    file,
+    errorMessage,
+    isLoading,
+    description,
+    removeDeleteButton,
+    deleteButtonProps,
+    removeLink,
+  } = uploadFile
+  const hasWarning = errorMessage != null
+
+  const imageUrl = file?.size > 0 ? URL.createObjectURL(file) : null
+  const cellRef = useRef<HTMLLIElement>(undefined)
+  const exists = useExistsHighlight(id, file)
+  const isDuplicate = !allowDuplicates && exists
+
+  const handleDisappearFocus = useCallback(() => {
+    const cellElement = cellRef.current
+    const focusElement = getClosestParent(
+      '.dnb-upload',
+      cellElement
+    )?.querySelector('.dnb-upload__file-input-button') as HTMLButtonElement
+    focusElement?.focus({ preventScroll: true })
+  }, [cellRef])
+
+  const onDeleteHandler = useCallback(() => {
+    handleDisappearFocus()
+
+    onDelete()
+  }, [handleDisappearFocus, onDelete])
+
+  return (
+    <li
+      className={clsx(
+        'dnb-upload__file-cell',
+        hasWarning && 'dnb-upload__file-cell--warning',
+        isDuplicate && 'dnb-upload__file-cell--highlight'
+      )}
+      ref={cellRef}
+    >
+      <div className="dnb-upload__file-cell__content">
+        <div className="dnb-upload__file-cell__content__left">
+          {getFileIcon(file, { isLoading }, hasWarning)}
+          {getTitle()}
+        </div>
+        {getDeleteButton()}
+      </div>
+      {getWarning()}
+    </li>
+  )
+
+  function getTitle() {
+    return isLoading ? (
+      <div
+        className={clsx(
+          'dnb-upload__file-cell__text-container',
+          'dnb-upload__file-cell__text-container--loading'
+        )}
+      >
+        {loadingText}
+      </div>
+    ) : (
+      <div className="dnb-upload__file-cell__text-container">
+        <UploadFileLink
+          text={file.name}
+          href={removeLink ? null : imageUrl}
+          download={removeLink ? false : download}
+          onClick={removeLink ? undefined : onClick}
+          bottom={0}
+        />
+        {getDescription()}
+      </div>
+    )
+  }
+
+  function getDeleteButton() {
+    if (removeDeleteButton) {
+      return null
+    }
+    return (
+      <div>
+        <Button
+          icon={TrashIcon}
+          variant="tertiary"
+          iconPosition="left"
+          disabled={isLoading}
+          {...deleteButtonProps}
+          onClick={onDeleteHandler}
+        >
+          {deleteButtonText}
+        </Button>
+      </div>
+    )
+  }
+
+  function getDescription() {
+    if (!description) {
+      return null
+    }
+    return (
+      <P className="dnb-upload__text" top="xx-small" size="small">
+        {description}
+      </P>
+    )
+  }
+
+  function getWarning() {
+    if (!hasWarning) {
+      return null
+    }
+    return <FormStatus top="small" text={errorMessage} stretch />
+  }
+}
+
+export default UploadFileListCell
+
+function useExistsHighlight(id: string, file: File) {
+  const { internalFiles } = useUpload(id)
+  const [exists, updateExists] = useState(false)
+  const timerRef = useRef<NodeJS.Timer>(undefined)
+
+  const clearTimers = () => {
+    clearTimeout(timerRef.current)
+  }
+
+  useEffect(() => {
+    const exists = internalFiles.some(({ exists, file: f }) => {
+      return exists && isFileEqual(file, f)
+    })
+
+    if (exists) {
+      updateExists(true)
+      clearTimers()
+      timerRef.current = setTimeout(() => updateExists(false), 1500) // transition-duration in CSS
+    }
+
+    return clearTimers
+  }, [file, internalFiles])
+
+  return exists
+}
+
+export function getFileIcon(
+  file: File,
+  loading?: {
+    isLoading: UploadFile['isLoading']
+    size?: ProgressIndicatorAllProps['size']
+  },
+  hasWarning?: boolean
+) {
+  if (loading?.isLoading) {
+    return <ProgressIndicator size={loading?.size ?? 'default'} />
+  }
+
+  if (hasWarning) return <Icon icon={ExclamationIcon} />
+
+  let iconFileType = getFileTypeFromExtension(file)
+
+  if (!iconFileType) {
+    const mimeParts = file.type.split('/')
+    iconFileType =
+      fileExtensionImages[mimeParts[0]] ||
+      fileExtensionImages[mimeParts[1]]
+  }
+
+  if (!Object.hasOwn(fileExtensionImages, iconFileType)) {
+    iconFileType = 'file'
+  }
+
+  return <Icon icon={fileExtensionImages[iconFileType]} />
+}

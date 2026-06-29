@@ -1,0 +1,118 @@
+/*
+ * GlobalStatus component
+ *
+ */
+
+.dnb-global-status {
+  &.dnb-section {
+    display: block;
+  }
+
+  &__shell {
+    --global-status-underline-color: var(--token-color-stroke-error);
+
+    width: 100%;
+
+    &.dnb-height-animation--hidden {
+      // Ensure Section is not overflowing with its after/before pseudo elements
+      overflow-y: clip;
+    }
+
+    .dnb-hr {
+      --hr-color: var(--global-status-underline-color);
+    }
+
+    .dnb-hr,
+    .dnb-spacing & .dnb-hr:not([class*='dnb-space__bottom']) {
+      margin: 0 0 0 1rem;
+
+      &::after {
+        top: calc(var(--thickness) * -1);
+      }
+    }
+  }
+
+  &__title {
+    position: relative; // because of the close button
+    cursor: text;
+
+    min-height: 2.5rem;
+
+    display: flex;
+    align-items: center;
+
+    padding: 1.5rem 5rem 1.5rem 2.5rem;
+    font-size: var(--font-size-basis);
+
+    .dnb-p,
+    .dnb-spacing & .dnb-p,
+    .dnb-spacing & .dnb-p:not([class*='dnb-space']) {
+      margin: 0;
+    }
+  }
+
+  &__message {
+    cursor: text;
+    z-index: 1;
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+
+      padding: 0 0 0.5rem 2.5rem;
+      > .dnb-ul:first-child > li:first-child {
+        margin-top: 0;
+      }
+      // stylelint-disable-next-line no-descending-specificity
+      .dnb-p,
+      .dnb-spacing & .dnb-p,
+      .dnb-spacing & .dnb-p:not([class*='dnb-space']) {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    margin-top: 1.5rem;
+  }
+
+  &__close-button,
+  &__close-button.dnb-button--tertiary {
+    position: absolute;
+    z-index: 1;
+    right: 1rem; // also because of the focus-ring
+    left: auto;
+  }
+
+  &__content {
+    width: 100%;
+
+    .dnb-ul,
+    .dnb-spacing & .dnb-ul,
+    .dnb-spacing & .dnb-ul:not([class*='dnb-space']) {
+      margin: 0;
+      padding-left: 1rem;
+
+      .dnb-anchor:last-of-type {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
+  // Underline colors
+  &--information &__shell,
+  // No designs for success state in Figma, treat as information until verified by design team
+  &--success &__shell {
+    --global-status-underline-color: var(--token-color-stroke-info);
+  }
+
+  &--warning &__shell {
+    --global-status-underline-color: var(--token-color-stroke-warning);
+  }
+}

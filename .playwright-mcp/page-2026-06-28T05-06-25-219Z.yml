@@ -1,0 +1,93 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "U Utekos Brand" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e10]: U
+            - generic [ref=e11]: Utekos Brand
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: Grunnlag
+          - list [ref=e16]:
+            - listitem [ref=e17]:
+              - link "Merkevaren Utekos" [ref=e18] [cursor=pointer]:
+                - /url: /
+                - img [ref=e19]
+                - generic [ref=e21]: Merkevaren Utekos
+            - listitem [ref=e22]:
+              - link "Logo" [ref=e23] [cursor=pointer]:
+                - /url: /logo
+                - img [ref=e24]
+                - generic [ref=e28]: Logo
+        - generic [ref=e29]:
+          - generic [ref=e30]: Visuell identitet
+          - list [ref=e32]:
+            - listitem [ref=e33]:
+              - link "Farger" [ref=e34] [cursor=pointer]:
+                - /url: /farger
+                - img [ref=e35]
+                - generic [ref=e41]: Farger
+            - listitem [ref=e42]:
+              - link "Themes" [ref=e43] [cursor=pointer]:
+                - /url: /themes
+                - img [ref=e44]
+                - generic [ref=e48]: Themes
+              - generic: Lab
+            - listitem [ref=e49]:
+              - link "Typografi" [ref=e50] [cursor=pointer]:
+                - /url: /typografi
+                - img [ref=e51]
+                - generic [ref=e53]: Typografi
+            - listitem [ref=e54]:
+              - link "Fotografi" [ref=e55] [cursor=pointer]:
+                - /url: /fotografi
+                - img [ref=e56]
+                - generic [ref=e59]: Fotografi
+            - listitem [ref=e60]:
+              - link "Illustrasjoner" [ref=e61] [cursor=pointer]:
+                - /url: /illustrasjoner
+                - img [ref=e62]
+                - generic [ref=e67]: Illustrasjoner
+            - listitem [ref=e68]:
+              - link "Ikoner" [ref=e69] [cursor=pointer]:
+                - /url: /ikoner
+                - img [ref=e70]
+                - generic [ref=e74]: Ikoner
+            - listitem [ref=e75]:
+              - link "Grafisk element" [ref=e76] [cursor=pointer]:
+                - /url: /grafisk-element
+                - img [ref=e77]
+                - generic [ref=e80]: Grafisk element
+        - generic [ref=e81]:
+          - generic [ref=e82]: Anvendelse
+          - list [ref=e84]:
+            - listitem [ref=e85]:
+              - link "Identiteten i bruk" [ref=e86] [cursor=pointer]:
+                - /url: /identiteten-i-bruk
+                - img [ref=e87]
+                - generic [ref=e90]: Identiteten i bruk
+    - main [ref=e91]:
+      - generic [ref=e92]:
+        - button "Toggle Sidebar" [ref=e93]:
+          - img
+          - generic [ref=e94]: Toggle Sidebar
+        - separator [ref=e95]
+        - generic [ref=e96]:
+          - paragraph [ref=e97]: Utekos Brand
+          - paragraph [ref=e98]: Retningslinjer
+      - generic [ref=e99]:
+        - heading "Utekos Brand" [level=1] [ref=e101]
+        - complementary [ref=e102]:
+          - generic [ref=e103]:
+            - heading "Innhold" [level=2] [ref=e104]
+            - navigation "Innhold" [ref=e105]:
+              - list [ref=e106]:
+                - listitem [ref=e107]:
+                  - link "Startside" [ref=e108] [cursor=pointer]:
+                    - /url: "#startside"
+      - generic [ref=e109]: Utekos Brand Guidelines
+  - button "Open Next.js Dev Tools" [ref=e115] [cursor=pointer]:
+    - img [ref=e116]
+  - alert [ref=e119]

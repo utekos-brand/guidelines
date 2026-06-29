@@ -1,0 +1,238 @@
+import { useContext } from 'react'
+import { render } from '@testing-library/react'
+import { axeComponent } from '../../../core/test-utils/testSetup'
+import Container from '../Container'
+import type { ItemContentProps } from '../ItemContent'
+import ItemContent from '../ItemContent'
+import Context from '../../../shared/Context'
+
+describe('ItemContent', () => {
+  it('renders with props as an object', () => {
+    const props: ItemContentProps = {}
+
+    render(<ItemContent {...props}>Content</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element).toBeInTheDocument()
+    expect(element.classList).toContain('dnb-list__item')
+  })
+
+  it('renders as li element for list semantics', () => {
+    render(<ItemContent>Content</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.tagName).toBe('LI')
+  })
+
+  it('merges custom className', () => {
+    render(
+      <ItemContent className="custom-class">
+        <span>Child</span>
+      </ItemContent>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-list__item')
+    expect(element.classList).toContain('custom-class')
+  })
+
+  it('renders item content', () => {
+    const text = 'List item content'
+
+    render(<ItemContent>{text}</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.textContent).toContain(text)
+  })
+
+  it('inherits the variant modifier from the parent list', () => {
+    render(
+      <Container variant="basic">
+        <ItemContent>Inherited</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-list--variant-basic')
+  })
+
+  it('applies selected modifier class when selected', () => {
+    render(<ItemContent selected>Selected item</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-list__item--selected')
+    expect(element.classList).toContain('dnb-list__item--selection')
+  })
+
+  it('applies selection modifier class when selected is false', () => {
+    render(<ItemContent selected={false}>Selectable item</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).not.toContain('dnb-list__item--selected')
+    expect(element.classList).toContain('dnb-list__item--selection')
+  })
+
+  it('always has dnb-t__size--basis class', () => {
+    render(<ItemContent>Content</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-t__size--basis')
+  })
+
+  it('forwards custom HTML attributes', () => {
+    render(
+      <ItemContent
+        data-testid="list-item"
+        data-foo="bar"
+        aria-label="List item label"
+        id="my-item"
+      >
+        Content
+      </ItemContent>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.getAttribute('data-testid')).toBe('list-item')
+    expect(element.getAttribute('data-foo')).toBe('bar')
+    expect(element.getAttribute('aria-label')).toBe('List item label')
+    expect(element.getAttribute('id')).toBe('my-item')
+  })
+
+  it('supports spacing props and applies spacing classes', () => {
+    render(
+      <ItemContent top="large" bottom="small">
+        Content
+      </ItemContent>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-space__top--large')
+    expect(element.classList).toContain('dnb-space__bottom--small')
+  })
+
+  it('applies pending modifier and pending indicator when pending is true', () => {
+    render(<ItemContent pending>Content</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-list__item--pending')
+    expect(
+      element.querySelector('.dnb-list__item__pending')
+    ).toBeInTheDocument()
+  })
+
+  it('applies skeleton font class when skeleton is true', () => {
+    render(<ItemContent skeleton>Content</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-skeleton')
+    expect(element.classList).toContain('dnb-skeleton--font')
+  })
+
+  it('inherits skeleton from parent container context', () => {
+    render(
+      <Container skeleton>
+        <ItemContent>Content</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-skeleton')
+    expect(element.classList).toContain('dnb-skeleton--font')
+  })
+
+  it('overrides inherited skeleton with own skeleton prop', () => {
+    render(
+      <Container skeleton>
+        <ItemContent skeleton={false}>Content</ItemContent>
+      </Container>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).not.toContain('dnb-skeleton')
+  })
+
+  it('propagates skeleton to children via context', () => {
+    function SkeletonConsumer() {
+      const context = useContext(Context)
+      return <span data-skeleton={String(Boolean(context?.skeleton))} />
+    }
+
+    render(
+      <ItemContent skeleton>
+        <SkeletonConsumer />
+      </ItemContent>
+    )
+
+    const consumer = document.querySelector('[data-skeleton]')
+    expect(consumer.getAttribute('data-skeleton')).toBe('true')
+  })
+
+  it('applies disabled modifier when disabled is true', () => {
+    render(<ItemContent disabled>Content</ItemContent>)
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.classList).toContain('dnb-list__item--disabled')
+  })
+
+  it('declares _supportsSpacingProps for flex layout', () => {
+    expect(ItemContent._supportsSpacingProps).toBe(true)
+  })
+
+  it('has no axe violations', async () => {
+    const { container } = render(
+      <Container>
+        <ItemContent>Content</ItemContent>
+      </Container>
+    )
+
+    expect(await axeComponent(container)).toHaveNoViolations()
+  })
+
+  it('forwards data-* and aria-* attributes to the DOM element', () => {
+    render(
+      <ItemContent
+        data-testid="item-content"
+        data-foo="bar"
+        aria-label="Content item"
+      >
+        Content
+      </ItemContent>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.getAttribute('data-testid')).toBe('item-content')
+    expect(element.getAttribute('data-foo')).toBe('bar')
+    expect(element.getAttribute('aria-label')).toBe('Content item')
+  })
+
+  it('does not forward component-specific props to the DOM', () => {
+    render(
+      <ItemContent variant="basic" selected pending skeleton>
+        Content
+      </ItemContent>
+    )
+
+    const element = document.querySelector('.dnb-list__item')
+
+    expect(element.getAttribute('variant')).toBeNull()
+    expect(element.getAttribute('selected')).toBeNull()
+    expect(element.getAttribute('pending')).toBeNull()
+    expect(element.getAttribute('skeleton')).toBeNull()
+  })
+})

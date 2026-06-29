@@ -1,0 +1,340 @@
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply bg-background text-foreground;
+  }
+
+  body {
+    @apply bg-background text-foreground min-h-dvh antialiased;
+  }
+}
+
+@layer components {
+  .brand-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: clamp(2rem, 4vw, 4rem);
+    inline-size: 100%;
+    padding-inline-start: calc(clamp(1rem, 1.5vw, 1.5rem) + 1cm);
+    padding-inline-end: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .brand-main {
+    min-inline-size: 0;
+  }
+
+  .brand-toc {
+    display: none;
+  }
+
+  .brand-toc-nav {
+    position: sticky;
+    inset-block-start: 6.5rem;
+    max-block-size: calc(100dvh - 8rem);
+    overflow-y: auto;
+    padding-inline-start: 1rem;
+    border-inline-start: 1px solid var(--border);
+    scrollbar-gutter: stable;
+  }
+
+  .brand-toc-title {
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .brand-toc-list {
+    display: grid;
+    gap: 0.15rem;
+    margin-block-start: 0.75rem;
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
+  .brand-toc-link {
+    display: block;
+    border-inline-start: 2px solid transparent;
+    padding-block: 0.32rem;
+    padding-inline: 0.65rem 0;
+    color: var(--muted-foreground);
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    text-decoration: none;
+    transition:
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .brand-toc-link:hover,
+  .brand-toc-link-active {
+    border-inline-start-color: var(--primary);
+    color: var(--foreground);
+  }
+
+  .brand-toc-link-depth-3 {
+    padding-inline-start: 1.25rem;
+    font-size: 0.78rem;
+  }
+
+  .mdx-shell {
+    inline-size: 100%;
+    max-inline-size: none;
+    margin-inline: 0;
+    padding-block: clamp(2.5rem, 7vw, 5rem);
+    padding-inline: 0;
+  }
+
+  .mdx-content {
+    max-inline-size: min(100%, 76rem);
+    color: var(--foreground);
+    font-size: 1.0625rem;
+    line-height: 1.72;
+    text-wrap: pretty;
+  }
+
+  .mdx-content > * {
+    max-inline-size: 74ch;
+    margin-block: 0;
+  }
+
+  .mdx-content > :is(.brand-doc-wide, .theme-color-doc) {
+    max-inline-size: min(100%, 76rem);
+  }
+
+  .mdx-content > * + * {
+    margin-block-start: 1rem;
+  }
+
+  .mdx-content > :is(h1, h2, h3) + * {
+    margin-block-start: 0.85rem;
+  }
+
+  .mdx-h1,
+  .mdx-h2,
+  .mdx-h3 {
+    color: var(--foreground);
+    font-weight: 650;
+    letter-spacing: 0;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .mdx-h1 {
+    font-weight: 700;
+    letter-spacing: 0;
+    font-size: 3rem;
+  }
+
+  .mdx-h2 {
+    margin-block-start: 3rem;
+    font-weight: 600;
+    min-width: 15ch;
+    letter-spacing: 0;
+    width: 100%;
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--border);
+    font-size: 2.25rem;
+  }
+
+  .mdx-content > .mdx-h2:first-child {
+    margin-block-start: 0;
+    padding-block-start: 0;
+    border-block-start: none;
+  }
+
+  .mdx-h3 {
+    margin-block-start: 2rem;
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+
+  .mdx-p {
+    color: var(--foreground);
+  }
+
+  .mdx-content ol {
+    list-style-type: decimal;
+    list-style-position: outside;
+  }
+
+  .mdx-content ul {
+    list-style-type: disc;
+    list-style-position: outside;
+  }
+
+  .mdx-content :is(ul, ol) {
+    padding-inline-start: 1.25rem;
+  }
+
+  .mdx-content li {
+    display: list-item;
+  }
+
+  .mdx-content li + li {
+    margin-block-start: 0.45rem;
+  }
+
+  .mdx-content li::marker {
+    color: var(--muted-foreground);
+  }
+
+  .mdx-a,
+  .mdx-content .heading-anchor {
+    color: var(--primary);
+    text-decoration-color: color-mix(in oklch, var(--primary), transparent 42%);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  .mdx-a:hover {
+    color: var(--foreground);
+    text-decoration-color: currentcolor;
+  }
+
+  .mdx-content .heading-anchor {
+    text-decoration: none;
+  }
+
+  .mdx-content blockquote {
+    padding-block: 0.25rem;
+    padding-inline-start: 1rem;
+    border-inline-start: 3px solid var(--primary);
+    color: var(--muted-foreground);
+  }
+
+  .mdx-content hr {
+    margin-block: 2.5rem;
+    border: 0;
+    border-block-start: 1px solid var(--border);
+  }
+
+  .mdx-code {
+    border-radius: calc(var(--radius) * 0.65);
+    background: var(--muted);
+    color: var(--foreground);
+    font-size: 0.94em;
+  }
+
+  :not(pre) > .mdx-code {
+    padding: 0.1rem 0.32rem;
+  }
+
+  .mdx-pre {
+    overflow-x: auto;
+    max-inline-size: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    color: var(--card-foreground);
+    line-height: 1.6;
+    scrollbar-gutter: stable;
+  }
+
+  .mdx-pre .mdx-code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+
+  .mdx-content table {
+    display: block;
+    overflow-x: auto;
+    inline-size: 100%;
+    border-collapse: collapse;
+    scrollbar-gutter: stable;
+  }
+
+  .mdx-content :is(th, td) {
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  .mdx-content th {
+    background: var(--muted);
+    color: var(--foreground);
+    font-weight: 650;
+  }
+
+  .mdx-content :is(.dnb-badge, [class*="dnb-badge"]) {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    line-height: 1;
+  }
+
+  .typography {
+    color: var(--foreground);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .typography :where(p) {
+    color: var(--foreground);
+  }
+
+  .typography :where(h1, h2, h3) {
+    color: var(--foreground);
+    font-weight: 650;
+    letter-spacing: 0;
+    line-height: 1.1;
+  }
+
+  .typography :where(h1) {
+    font-size: 2.25rem;
+  }
+
+  .typography :where(h2) {
+    font-size: 1.75rem;
+  }
+
+  @media (width >= 82rem) {
+    .brand-content:has(> .brand-toc) {
+      grid-template-columns: minmax(0, 1fr) 16rem;
+    }
+
+    .brand-toc {
+      display: block;
+      min-inline-size: 0;
+      padding-block-start: clamp(2.5rem, 7vw, 5rem);
+    }
+  }
+
+  @media (width < 48rem) {
+    .brand-content {
+      padding-inline-start: clamp(1rem, 5vw, 1.5rem);
+      padding-inline-end: clamp(1rem, 5vw, 1.5rem);
+    }
+
+    .mdx-shell {
+      padding-block: 2rem 3rem;
+    }
+
+    .mdx-content {
+      font-size: 1rem;
+      line-height: 1.68;
+    }
+
+    .mdx-h1 {
+      font-size: 2.125rem;
+    }
+
+    .mdx-h2 {
+      font-size: 1.5rem;
+    }
+  }
+}

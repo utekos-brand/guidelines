@@ -1,0 +1,528 @@
+@use './../../../style/core/utilities.scss' as utilities;
+
+.dnb-list {
+  &--variant-basic {
+    --list-item-padding: 1rem;
+    --list-item-height: 4rem;
+    --list-item-rounded-corner: var(--token-radius-xl);
+    --list-item-row-gap: 0.5rem;
+    --list-item-chevron-margin: 1rem;
+    --list-item-chevron-height: 1.5rem;
+    --list-item-outline-width: 0.0625rem;
+    --list-item-outline-color: var(--token-color-stroke-neutral-subtle);
+    --list-item-navigation-color: var(--token-color-icon-action);
+    --list-item-navigation-outline-color: var(--token-color-stroke-action);
+    --list-item-navigation-outline-color--active: var(
+      --token-color-stroke-action-pressed
+    );
+    --list-item-navigation-icon-color--active: var(
+      --token-color-icon-action-pressed
+    );
+    --list-item-icon-color: var(--list-item-navigation-color);
+    --list-item-pending-color: var(--token-color-stroke-neutral-subtle);
+    --list-item-background-color: var(--token-color-background-neutral);
+    --list-item-selected-background-color: var(
+      --token-color-background-selected-subtle,
+      var(--list-item-background-color)
+    );
+
+    border-radius: var(--list-item-rounded-corner);
+  }
+
+  &__item {
+    position: relative;
+    z-index: 1;
+    row-gap: 0;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: var(
+        --list-item-outline-inset,
+        calc(var(--list-item-outline-width) * -1)
+      );
+      z-index: 10;
+
+      border-radius: inherit;
+      pointer-events: none;
+
+      border: var(--list-item-outline-width) solid
+        var(--list-item-outline-color);
+    }
+
+    // Grid layout: each slot (start, icon, title, center, end) is placed by its
+    // grid-area, so e.g. Item.End always goes in the end area even if "center" is
+    // not used.
+    --list-item-grid-template-columns: auto auto auto minmax(0, 1fr)
+      minmax(0, 1fr) auto auto;
+    --list-item-grid-template-areas: 'chevron-left start icon title center end chevron-right'
+      'footer footer footer footer footer footer footer';
+
+    // On small screens, use 2-row layout so end wraps to a new line
+    @include utilities.allBelow(small) {
+      --list-item-grid-template-areas: 'chevron-left start icon title center . chevron-right'
+        'chevron-left end end end end end chevron-right'
+        'footer footer footer footer footer footer footer';
+      &:has(#{&}__start):has(#{&}__title),
+      &:has(#{&}__icon) {
+        --list-item-grid-template-areas: 'chevron-left start icon title center . chevron-right'
+          'chevron-left . . end end end .'
+          'footer footer footer footer footer footer footer';
+      }
+    }
+
+    // On x-small screens, use 3-row layout so end wraps to a new line
+    @include utilities.allBelow(x-small) {
+      --list-item-grid-template-areas: 'chevron-left start icon title title . chevron-right'
+        'chevron-left center center center center center chevron-right'
+        'chevron-left end end end end end chevron-right'
+        'footer footer footer footer footer footer footer';
+      &:has(#{&}__start):has(#{&}__title),
+      &:has(#{&}__icon) {
+        --list-item-grid-template-areas: 'chevron-left start icon title title . chevron-right'
+          'chevron-left . . center center center .'
+          'chevron-left . . end end end .'
+          'footer footer footer footer footer footer footer';
+      }
+    }
+
+    // If no center is used, adjust the grid columns
+    &:not(:has(#{&}__center)) {
+      --list-item-grid-template-columns: auto auto auto minmax(0, 1fr) 0
+        auto auto;
+    }
+
+    // Deal with the item layout
+    &,
+    &__accordion__header {
+      display: grid;
+      grid-template:
+        var(--list-item-grid-template-areas) /
+        var(--list-item-grid-template-columns);
+      place-content: center; // Center vertically
+      align-items: center; // Center vertically
+
+      min-height: var(--list-item-height);
+      padding: calc(var(--list-item-padding)) 0;
+    }
+    &:has(#{&}__overline) &__center,
+    &:has(#{&}__overline) &__end {
+      @include utilities.allAbove(small) {
+        place-self: end;
+      }
+    }
+    &:has(#{&}__overline) &__icon,
+    &:has(#{&}__overline) &__chevron {
+      place-self: end;
+    }
+    &:has(#{&}__subline) &__center,
+    &:has(#{&}__subline) &__end {
+      @include utilities.allAbove(small) {
+        place-self: start;
+      }
+    }
+    &:has(#{&}__subline) &__title,
+    &:has(#{&}__subline) &__icon,
+    &:has(#{&}__subline) &__chevron {
+      place-self: start;
+    }
+    &:has(#{&}__footer),
+    &:has(#{&}__footer) &__accordion__header {
+      padding-bottom: 0;
+    }
+
+    // On small screens, add row-gap when center or end is used
+    // so we have spacing between the rows
+    &:not(#{&}__accordion):has(#{&}__center),
+    &:not(#{&}__accordion):has(#{&}__end),
+    &__accordion__header:has(#{&}__center),
+    &__accordion__header:has(#{&}__end) {
+      @include utilities.allBelow(small) {
+        row-gap: var(--list-item-row-gap);
+      }
+    }
+
+    // Handle border radius
+    border-radius: 0;
+    .dnb-list--separated & {
+      border-radius: var(--list-item-rounded-corner);
+    }
+    &:first-of-type:not([hidden]) {
+      border-top-left-radius: var(--list-item-rounded-corner);
+      border-top-right-radius: var(--list-item-rounded-corner);
+    }
+    &:not([hidden]):has(+ [hidden]),
+    &:last-of-type:not([hidden]) {
+      border-bottom-left-radius: var(--list-item-rounded-corner);
+      border-bottom-right-radius: var(--list-item-rounded-corner);
+    }
+
+    background-color: var(--list-item-background-color);
+    &--selected:not(#{&}__accordion) {
+      background-color: var(--list-item-selected-background-color);
+    }
+
+    // Expanded accordion: highlight only the header row, not the content
+    &__accordion--open #{&}__accordion__header {
+      background-color: var(--list-item-selected-background-color);
+      border-radius: inherit;
+    }
+
+    &__title,
+    &__icon,
+    &__start,
+    &__center,
+    &__end,
+    &__overline,
+    &__subline,
+    &__footer-separator,
+    &__footer {
+      display: flex;
+      align-items: center;
+
+      z-index: 10; // above checkbox and radio click boundary
+    }
+    &__end &__subline {
+      @include utilities.allAbove(small) {
+        place-self: end;
+      }
+    }
+
+    // Grid areas and specific styles for each slot
+    &__title {
+      grid-area: title;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.125rem;
+    }
+    &__icon {
+      grid-area: icon;
+    }
+    &__start {
+      grid-area: start;
+    }
+    &__center {
+      grid-area: center;
+    }
+    &__end {
+      flex-direction: column;
+      grid-area: end;
+      justify-self: start;
+      align-items: flex-end;
+
+      @include utilities.allBelow(small) {
+        align-items: flex-start;
+      }
+    }
+    &__footer-separator {
+      grid-area: footer;
+      margin-top: var(--list-item-padding);
+      place-self: flex-start;
+
+      &.dnb-space__top--zero {
+        margin-top: var(--list-item-padding);
+      }
+    }
+    &__footer {
+      grid-area: footer;
+      margin-top: var(--list-item-padding);
+      padding: var(--list-item-padding);
+    }
+    &:not([hidden]):has(+ [hidden]):not(#{&}__accordion--open) &__footer,
+    &:last-of-type:not([hidden]):not(#{&}__accordion--open) &__footer {
+      border-bottom-left-radius: var(--list-item-rounded-corner);
+      border-bottom-right-radius: var(--list-item-rounded-corner);
+    }
+    &__subline--description {
+      color: var(--token-color-text-neutral-alternative);
+    }
+
+    // Deal with chevron
+    &__action--href a .dnb-anchor__launch-icon,
+    &__chevron {
+      display: flex;
+      align-items: center;
+      grid-area: chevron-right;
+      height: var(--list-item-chevron-height);
+      margin-right: var(--list-item-chevron-margin);
+    }
+    &--chevron-left &__action--href a .dnb-anchor__launch-icon,
+    &--chevron-left &__chevron {
+      grid-area: chevron-left;
+      margin-right: 0;
+      margin-left: var(--list-item-chevron-margin);
+    }
+
+    // Handle form elements alignment
+    .dnb-checkbox .dnb-form-label,
+    .dnb-radio .dnb-radio__order .dnb-form-label {
+      padding-left: var(--list-item-padding);
+    }
+    // So the __end is aligned with checkbox/radio label on small screens
+    &:has(.dnb-form-label) &__end {
+      @include utilities.allBelow(small) {
+        display: flex;
+        margin-left: calc(var(--list-item-padding) * 2 + 0.5rem);
+      }
+    }
+
+    // Make the whole item clickable
+    &--selection:has(.dnb-checkbox__input),
+    &--selection:has(.dnb-radio__input) {
+      overflow: clip;
+      overflow-clip-margin: var(--list-item-outline-width);
+    }
+    &--selection .dnb-checkbox__input {
+      --checkbox-bounding--medium: 100;
+    }
+    &--selection .dnb-radio__input {
+      --radio-bounding--medium: 100;
+    }
+
+    &:has(.dnb-anchor__launch-icon) &__chevron {
+      display: none;
+    }
+
+    // Accordion chevron
+
+    &__action {
+      cursor: pointer;
+      outline: none;
+
+      .dnb-icon {
+        color: var(--list-item-icon-color);
+      }
+
+      // When href is set, the anchor wraps the slots; make it the grid container
+      // so slots use the same grid as the onClick version. Span all rows so on
+      // small screens the anchor fills both rows and its grid can place end on row 2.
+      &--href a {
+        display: grid;
+        grid-template:
+          var(--list-item-grid-template-areas) /
+          var(--list-item-grid-template-columns);
+        grid-column: 1 / -1; // Span full width
+        grid-row: 1 / -1; // Center vertically
+        text-decoration: none;
+        color: inherit;
+        outline: none;
+      }
+
+      // Button wrapper spans the full grid, similar to the href anchor
+      &__button {
+        display: grid;
+        grid-template:
+          var(--list-item-grid-template-areas) /
+          var(--list-item-grid-template-columns);
+        grid-column: 1 / -1;
+        grid-row: 1 / -1;
+        outline: none;
+      }
+
+      // Full item area, making clicks anywhere trigger the action.
+      &--href a,
+      &__button {
+        &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+        }
+      }
+
+      // Handle action states
+      &:not(.dnb-list__item--disabled):hover,
+      &:not(.dnb-list__item--disabled):has(:focus-visible) {
+        --list-item-outline-color: var(
+          --list-item-navigation-outline-color
+        );
+        --list-item-outline-width: 0.125rem;
+        --list-item-outline-inset: 0;
+        z-index: 2;
+      }
+      &:not(.dnb-list__item--disabled):active {
+        --list-item-outline-color: var(
+          --list-item-navigation-outline-color--active
+        );
+        --list-item-icon-color: var(
+          --list-item-navigation-icon-color--active
+        );
+        --list-item-outline-width: 0.0625rem;
+        z-index: 2;
+      }
+    }
+
+    // Handle accordion states
+    &:not(.dnb-list__item--disabled):has(#{&}__accordion__header:hover),
+    &:not(.dnb-list__item--disabled):has(
+        #{&}__accordion__header:focus-visible
+      ) {
+      --list-item-outline-color: var(--list-item-navigation-outline-color);
+      --list-item-outline-width: 0.125rem;
+      --list-item-outline-inset: 0;
+      z-index: 2;
+    }
+    &:not(.dnb-list__item--disabled):has(#{&}__accordion__header:active) {
+      --list-item-outline-color: var(
+        --list-item-navigation-outline-color--active
+      );
+      --list-item-icon-color: var(
+        --list-item-navigation-icon-color--active
+      );
+      --list-item-outline-width: 0.0625rem;
+      z-index: 2;
+    }
+
+    &__accordion {
+      display: flex;
+      align-items: stretch;
+      padding: 0;
+
+      .dnb-hr::after {
+        left: var(--list-item-outline-width);
+        right: var(--list-item-outline-width);
+      }
+
+      &__header {
+        position: relative;
+
+        cursor: pointer;
+        outline: none;
+
+        .dnb-icon {
+          color: var(--list-item-icon-color);
+        }
+      }
+
+      &__content {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    &.dnb-skeleton .dnb-icon {
+      color: var(--skeleton-color);
+    }
+
+    &--pending {
+      --list-item-outline-inset: 0;
+      pointer-events: none;
+      overflow: clip;
+    }
+    &--disabled {
+      cursor: not-allowed;
+      color: var(--token-color-text-action-disabled);
+
+      --list-item-navigation-color: var(
+        --token-color-icon-action-disabled
+      );
+      --list-item-navigation-outline-color: var(
+        --token-color-stroke-action-disabled
+      );
+      --list-item-navigation-outline-color--active: var(
+        --token-color-stroke-action-disabled
+      );
+      --list-item-navigation-icon-color--active: var(
+        --token-color-icon-action-disabled
+      );
+      --list-item-icon-color: var(--token-color-icon-action-disabled);
+      --list-item-outline-color: var(--token-color-stroke-action-disabled);
+
+      .dnb-list__item__accordion__header {
+        cursor: not-allowed;
+      }
+
+      a {
+        cursor: not-allowed;
+      }
+    }
+
+    &__action--href a:visited {
+      color: inherit;
+    }
+    &__pending {
+      position: absolute;
+      inset: 0;
+      z-index: -1; // Behind icons
+
+      background-image: repeating-linear-gradient(
+        -45deg,
+        var(--list-item-pending-color) 1px 2px,
+        transparent 0 6px
+      );
+    }
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0; // reset UL margin
+    padding: 0;
+
+    list-style: none;
+
+    .dnb-list--inset-outline & .dnb-list__item {
+      &::after {
+        inset: 0;
+        bottom: calc(var(--list-item-outline-width) * -1);
+      }
+      &:not([hidden]):has(+ [hidden])::after,
+      &:last-of-type:not([hidden])::after {
+        bottom: 0;
+      }
+    }
+
+    .dnb-card & {
+      .dnb-list__item {
+        &:first-of-type:not([hidden]),
+        &:not([hidden]):has(+ [hidden]),
+        &:last-of-type:not([hidden]) {
+          border-radius: 0;
+        }
+
+        // Remove borders inside a Card (Card provides the boundary).
+        // Non-interactive items never show these borders.
+        // Interactive items show them only on hover/focus.
+        &:not(:hover):not(:focus-visible),
+        &:not(.dnb-list__item__action):not(.dnb-list__item__accordion) {
+          &::after {
+            border-right: none;
+            border-left: none;
+          }
+
+          &:first-of-type:not([hidden])::after {
+            border-top: none;
+          }
+
+          &:not([hidden]):has(+ [hidden])::after,
+          &:last-of-type:not([hidden])::after {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+
+    // Handle scrollbar
+    .dnb-scroll-view & {
+      padding-right: calc(var(--scrollbar-track-width) * 2);
+    }
+    .dnb-card:has(.dnb-scroll-view &) {
+      padding-right: calc(
+        var(--padding-right) - (var(--scrollbar-track-width) * 2)
+      );
+    }
+
+    // First/last items inherit the card's border radius if not inside a scroll view
+    .dnb-card:not(:has(.dnb-scroll-view)) & {
+      .dnb-list__item:first-of-type:not([hidden]) {
+        border-top-left-radius: var(--rounded-corner, 0);
+        border-top-right-radius: var(--rounded-corner, 0);
+      }
+      .dnb-list__item:not([hidden]):has(+ [hidden]),
+      .dnb-list__item:last-of-type:not([hidden]) {
+        border-bottom-left-radius: var(--rounded-corner, 0);
+        border-bottom-right-radius: var(--rounded-corner, 0);
+      }
+    }
+  }
+}

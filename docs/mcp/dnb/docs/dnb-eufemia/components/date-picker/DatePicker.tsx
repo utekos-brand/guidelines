@@ -1,0 +1,969 @@
+/**
+ * Web DatePicker Component
+ *
+ */
+
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import type {
+  ChangeEvent,
+  FocusEvent,
+  HTMLProps,
+  KeyboardEvent,
+  MouseEvent,
+  ReactNode,
+} from 'react'
+
+import { clsx } from 'clsx'
+import {
+  warn,
+  extendPropsWithContext,
+  getStatusState,
+  combineDescribedBy,
+  validateDOMAttributes,
+} from '../../shared/component-helper'
+import AlignmentHelper from '../../shared/AlignmentHelper'
+import { useSpacing } from '../space/SpacingUtils'
+import { skeletonDOMAttributes } from '../skeleton/SkeletonHelper'
+
+import Context from '../../shared/Context'
+import Suffix from '../../shared/helpers/Suffix'
+import FormLabel from '../form-label/FormLabel'
+import type { FormStatusBaseProps } from '../form-status/FormStatus'
+import FormStatus from '../form-status/FormStatus'
+import DatePickerProvider from './DatePickerProvider'
+import type {
+  DatePickerChangeEvent,
+  DatePickerReturnObject,
+} from './DatePickerProvider'
+import DatePickerRange from './DatePickerRange'
+import DatePickerInput from './DatePickerInput'
+import type { DatePickerAddonProps } from './DatePickerAddon'
+import DatePickerAddon from './DatePickerAddon'
+import DatePickerFooter from './DatePickerFooter'
+import type { SpacingProps } from '../../shared/types'
+import type { InputElement, InputSize } from '../Input'
+import type { SkeletonShow } from '../Skeleton'
+import type { ButtonProps } from '../Button'
+import { pickFormElementProps } from '../../shared/helpers/filterValidProps'
+import type {
+  DatePickerCalendarDay,
+  DatePickerCalendarProps,
+} from './DatePickerCalendar'
+import type {
+  DatePickerContextValue,
+  DatePickerDateType,
+} from './DatePickerContext'
+import type { DatePickerDates } from './hooks/useDates'
+import { useTranslation } from '../../shared'
+import Popover from '../popover/Popover'
+import type { DateFormatOptions } from '../date-format/DateFormatUtils'
+import {
+  formatDate,
+  formatDateRange,
+} from '../date-format/DateFormatUtils'
+import useId from '../../shared/helpers/useId'
+
+export type DatePickerEventAttributes = {
+  day?: string
+  year?: string
+  start?: string
+  end?: string
+} & Record<string, unknown>
+
+// Takes the return object from DatePickerProvider and extends it with the event
+export type DatePickerEvent<T> = DatePickerReturnObject<T>
+
+type FocusOnClose = { focusOnClose?: boolean | string }
+
+export type DisplayPickerEvent = (
+  | MouseEvent<HTMLButtonElement | HTMLAnchorElement | HTMLElement>
+  | MouseEvent
+  | KeyboardEvent
+  | FocusOnClose
+) &
+  DatePickerDates &
+  FocusOnClose & {
+    event?: MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  }
+
+export type DatePickerProps = {
+  /**
+   * Defines the pre-filled date by either a JavaScript `Date` instance or (ISO 8601) like `date="2019-05-05"`.
+   */
+  date?: DatePickerDateType
+  /**
+   * To set the pre-filled starting date. Is used if `range={true}` is set to `true`. Defaults to `null`, showing the `maskPlaceholder`.
+   */
+  startDate?: DatePickerDateType
+  /**
+   * To set the pre-filled ending date. Is used if `range={true}` is set to `true`. Defaults to `null`, showing the `maskPlaceholder`.
+   */
+  endDate?: DatePickerDateType
+  /**
+   * To display what month should be shown in the first calendar by default. Defaults to the `date` respective `startDate`.
+   */
+  month?: DatePickerDateType
+  /**
+   * To display what month should be shown in the first calendar by default. Defaults to the `date` respective `startDate`.
+   */
+  startMonth?: DatePickerDateType
+  /**
+   * To display what month should be shown in the second calendar by default. Defaults to the `date` respective `startDate`.
+   */
+  endMonth?: DatePickerDateType
+  /**
+   * To limit the selectable dates in the calendar view to a minimum date. Dates before this will be disabled. Note: This does not validate dates typed in the input field. Use [Field.Date](/uilib/extensions/forms/feature-fields/Date/) for input validation. Defaults to `null`.
+   */
+  minDate?: DatePickerDateType
+  /**
+   * To limit the selectable dates in the calendar view to a maximum date. Dates after this will be disabled. Note: This does not validate dates typed in the input field. Use [Field.Date](/uilib/extensions/forms/feature-fields/Date/) for input validation. Defaults to `null`.
+   */
+  maxDate?: DatePickerDateType
+  /**
+   * To define the order of the masked placeholder input fields. Defaults to `dd/mm/yyyy`.
+   */
+  maskOrder?: string
+  /**
+   * To display the placeholder on input. Defaults to `dd/mm/åååå`.
+   */
+  maskPlaceholder?: string
+  /**
+   * Defines how the property dates (`date`, `startDate` and `endDate`) should be parsed, e.g. `yyyy/MM/dd`. Defaults to `yyyy-MM-dd`.
+   */
+  dateFormat?: string
+  /**
+   * Defines how the returned date, as a string, should be formatted as. Defaults to `yyyy-MM-dd`.
+   */
+  returnFormat?: string
+  /**
+   * If set to `true`, the navigation will be hidden. Defaults to `false`.
+   */
+  hideNavigation?: boolean
+  /**
+   * If set to `true`, the week days will be hidden. Defaults to `false`.
+   */
+  hideDays?: boolean
+  /**
+   * If set to `true`, the calendar only displays days belonging to the currently displayed month, and month navigation via buttons and keyboard is disabled. The displayed month is determined by the `month` or `startMonth` prop, and ultimately defaults to the current month. Use `'without-label'` to also hide the month label. Defaults to `false`.
+   */
+  onlyMonth?: boolean | 'without-label'
+  /**
+   * Use `true` to only show the last week in the current month if it needs to be shown. The result is that mainly five (5) weeks (rows) will be shown instead of six (6). Defaults to `false`.
+   */
+  hideLastWeek?: boolean
+  /**
+   * Once the date picker gets opened, there is a focus handling to ensure good accessibility. This can be disabled with this property. Defaults to `false`.
+   */
+  disableAutofocus?: boolean
+  enableKeyboardNav?: boolean
+  /**
+   * If the input fields with the mask should be visible. Defaults to `false`.
+   */
+  showInput?: boolean
+  /**
+   * If set to `true`, renders the calendar inline without a button or input. The calendar is always visible and not wrapped in a Popover. Defaults to `false`.
+   */
+  inline?: boolean
+  /**
+   * If set to `true`, a submit button will be shown. You can change the default text by using `submitButtonText="Ok"`. Defaults to `false`. If the `range` property is `true`, then the submit button is shown.
+   */
+  showSubmitButton?: boolean
+  /**
+   * If set to `true`, a cancel button will be shown. You can change the default text by using `cancelButtonText="Avbryt"`. If the `range` property is `true`, then the cancel button is shown. Defaults to `false`.
+   */
+  showCancelButton?: boolean
+  /**
+   * If set to `true`, a reset button will be shown. You can change the default text by using `resetButtonText="Tilbakestill"`. When clicked, the date picker reverts to the value it had when it was first rendered. If no initial value was provided, the date is cleared. Defaults to `false`.
+   */
+  showResetButton?: boolean
+  submitButtonText?: string
+  cancelButtonText?: string
+  resetButtonText?: string
+  resetDate?: boolean
+  /**
+   * To define the first day of the week. Defaults to `monday`.
+   */
+  firstDay?:
+    | 'monday'
+    | 'tuesday'
+    | 'wednesday'
+    | 'thursday'
+    | 'friday'
+    | 'saturday'
+    | 'sunday'
+  /**
+   * If the date picker should support a range of two dates (starting and ending date). Defaults to `false`.
+   */
+  range?: boolean
+  /**
+   * If set to `true`, only one calendar is shown in range mode instead of two side-by-side calendars. Only meant to be used if `range` is set to `true`. Defaults to `false`.
+   */
+  rangeSingleCalendar?: boolean
+  /**
+   * Link both calendars once the user navigates between months. Only meant to use if the range is set to `true`. Defaults to `false`.
+   */
+  link?: boolean
+  /**
+   * Sync input values with the calendars views. Once the input values get changed, the calendar changes its views in sync. Defaults to `true`.
+   */
+  sync?: boolean
+  /**
+   * A prepending label in sync with the date input field.
+   */
+  label?: ReactNode
+  /**
+   *  Use `labelDirection="horizontal"` to change the label layout direction. Defaults to `vertical`.
+   */
+  labelDirection?: 'vertical' | 'horizontal'
+  /**
+   * Use `true` to make the label only readable by screen readers.
+   */
+  labelSrOnly?: boolean
+  /**
+   * Gives you the possibility to use a plain/vanilla `<input />` HTML element by defining it as a string `inputElement="input"`, a React element, or a render function `inputElement={(internalProps) => (<Return />)}`. Can also be used in circumstances where the masked input should not be used, e.g. in testing environments. Defaults to custom masked input.
+   */
+  inputElement?: InputElement
+  /**
+   * Gives you the possibility to inject a React element showing up over the footer. Use it to customize `shortcuts`.
+   */
+  addonElement?: ReactNode
+  /**
+   * Gives you the possibility to set predefined dates and date ranges so the user can select these by one click. Define either a JSON or an object with the defined shortcuts. More info is below.
+   */
+  shortcuts?: DatePickerAddonProps['shortcuts']
+  disabled?: boolean
+  /**
+   * If set to `true`, then the date-picker input field will be 100% in `width`.
+   */
+  stretch?: boolean
+  /**
+   * If set to `true`, an overlaying skeleton with animation will be shown.
+   */
+  skeleton?: SkeletonShow
+  /**
+   * The sizes you can choose are `small` (1.5rem), `default` (2rem), `medium` (2.5rem) and `large` (3rem). Defaults to `default` / `null`.
+   */
+  size?: InputSize
+  /**
+   * Text describing the content of the DatePicker more than the label. You can also send in a React component, so it gets wrapped inside the DatePicker component.
+   */
+  suffix?: ReactNode
+  /**
+   * To open the date-picker by default. Defaults to `false`.
+   */
+  open?: boolean
+  /**
+   * Provide a short Tooltip content that shows up on the picker button.
+   */
+  tooltip?: ReactNode
+  /**
+   * Props to forward to the trigger button. Can be used to change the button `variant`, add a `text` label, or override other button properties such as `icon` and `iconPosition`.
+   */
+  triggerProps?: Partial<
+    Pick<
+      ButtonProps,
+      'variant' | 'text' | 'icon' | 'iconPosition' | 'size'
+    >
+  >
+  tabIndex?: number
+  preventClose?: boolean
+  noAnimation?: boolean
+  direction?: 'auto' | 'top' | 'bottom'
+  /**
+   * Use `right` to change the preferred calendar alignment direction. Defaults to `left`. If the DatePicker is close to the edge of the screen, the alignment of the calendar will change automatically to fit in the viewport.
+   */
+  alignPicker?: 'left' | 'center' | 'right'
+  /**
+   * Sets the alignment of the label. Defaults to `left`.
+   */
+  labelAlignment?: 'left' | 'center' | 'right'
+  /**
+   * If set to `true`, the calendar will not be rendered inside a react portal. Defaults to `false`.
+   */
+  skipPortal?: boolean
+  /**
+   * Will enable year navigation in the calendar if set to `true`. Defaults to `false`.
+   */
+  yearNavigation?: boolean
+  className?: string
+  /**
+   * Will be called right before every new calendar view gets rendered. See the example above.
+   */
+  onDaysRender?: (
+    days: Array<DatePickerCalendarDay>,
+    nr?: DatePickerCalendarProps['nr']
+  ) => void
+  /**
+   * Will be called on a date change event. Returns an object. See Returned Object below.
+   */
+  onChange?: (
+    event: DatePickerEvent<ChangeEvent<HTMLInputElement>>
+  ) => void
+  /**
+   * Will be called on every input and date picker interaction. Returns an `object`. See Returned Object below.
+   */
+  onType?: (event: DatePickerEvent<ChangeEvent<HTMLInputElement>>) => void
+  /**
+   * Will be called once date-picker is visible.
+   */
+  onOpen?: (event: DatePickerEvent<DisplayPickerEvent>) => void
+  /**
+   * Will be called once date-picker is hidden.
+   */
+  onClose?: (event: DatePickerEvent<DisplayPickerEvent>) => void
+  /**
+   * Will be called once a user presses the submit button.
+   */
+  onSubmit?: (
+    event: DatePickerEvent<MouseEvent<HTMLButtonElement>>
+  ) => void
+  /**
+   * Will be called once a user presses the cancel button.
+   */
+  onCancel?: (
+    event: DatePickerEvent<MouseEvent<HTMLButtonElement>>
+  ) => void
+  /**
+   * Will be called once a user presses the reset button. The date picker will revert to the value it had when first rendered. If no initial value was provided, the date is cleared.
+   */
+  onReset?: (event: DatePickerEvent<MouseEvent<HTMLButtonElement>>) => void
+  /**
+   * Will be called once the input gets focus.
+   */
+  onFocus?: (event: DatePickerEvent<FocusEvent<HTMLElement>>) => void
+  /**
+   * Will be called once the input loses focus.
+   */
+  onBlur?: (event: DatePickerEvent<FocusEvent<HTMLElement>>) => void
+  /** @internal */
+  _omitInputShellClass?: boolean
+}
+
+export type DatePickerAllProps = DatePickerProps &
+  FormStatusBaseProps &
+  SpacingProps &
+  Omit<
+    HTMLProps<HTMLElement>,
+    | 'ref'
+    | 'children'
+    | 'label'
+    | 'size'
+    | 'onChange'
+    | 'onBlur'
+    | 'onFocus'
+    | 'onSubmit'
+    | 'onReset'
+    | 'start'
+  >
+
+const defaultProps: Partial<DatePickerAllProps> = {
+  hideNavigation: false,
+  hideDays: false,
+  onlyMonth: false,
+  hideLastWeek: false,
+  disableAutofocus: false,
+  enableKeyboardNav: false,
+  showInput: false,
+  inline: false,
+  resetDate: true,
+  range: false,
+  link: false,
+  sync: true,
+  statusState: 'error',
+  open: false,
+  noAnimation: false,
+  direction: 'auto',
+  skipPortal: false,
+  yearNavigation: false,
+  labelDirection: 'vertical',
+}
+
+function DatePicker(externalProps: DatePickerAllProps) {
+  const props = { ...defaultProps, ...externalProps }
+
+  const {
+    preventClose,
+    onClose,
+    onOpen,
+    onSubmit,
+    onCancel,
+    onReset,
+    noAnimation,
+    showInput,
+    inline,
+    alignPicker,
+    showSubmitButton,
+    showCancelButton,
+    range,
+    hideDays,
+    hideNavigation,
+    open: openProp,
+    endDate: endDateProp,
+  } = props
+
+  const [open, setOpen] = useState<boolean>(inline ? true : openProp)
+  const [hidden, setHidden] = useState(inline ? false : !open)
+  const [dates, setDates] = useState<
+    Pick<DatePickerDates, 'startDate' | 'endDate'>
+  >({})
+
+  const context = useContext(Context)
+  const blurDelay = 201 // some ms more than "dropdownSlideDown 200ms"
+  const id = useId(props.id)
+
+  const shellRef = useRef<HTMLSpanElement>(undefined)
+  const submitButtonRef = useRef<HTMLButtonElement>(undefined)
+  const getReturnObject =
+    useRef<DatePickerContextValue['getReturnObject']>(undefined)
+  const hideTimeout = useRef<NodeJS.Timeout>(undefined)
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(hideTimeout.current)
+    }
+  }, [])
+
+  const calendarContainerRef = useRef<HTMLSpanElement>(null)
+
+  const translation = useTranslation().DatePicker
+
+  const focusCalendarTable = useCallback(
+    () =>
+      calendarContainerRef.current?.querySelector<HTMLElement>(
+        'td[aria-selected="true"] button'
+      ) ||
+      calendarContainerRef.current?.querySelector<HTMLElement>('table'),
+    []
+  )
+
+  if (endDateProp && !range) {
+    warn(
+      `The DatePicker got a "endDate". You have to set range={true} as well!.`
+    )
+  }
+
+  const hidePicker = useCallback(
+    (args?: DisplayPickerEvent) => {
+      if (preventClose) {
+        return // stop here
+      }
+
+      setOpen(false)
+
+      hideTimeout.current = setTimeout(
+        () => {
+          setHidden(true)
+          onClose?.({
+            ...getReturnObject.current(args),
+          })
+          if (args?.['focusOnClose']) {
+            try {
+              submitButtonRef.current?.focus({
+                preventScroll: true,
+              })
+            } catch (e) {
+              warn(
+                'DatePicker: Failed to focus submit button on close:',
+                e
+              )
+            }
+          }
+        },
+        noAnimation ? 1 : blurDelay
+      ) // wait until animation is over
+    },
+    [noAnimation, preventClose, onClose]
+  )
+
+  const showPicker = useCallback(
+    (event?: DisplayPickerEvent) => {
+      if (hideTimeout.current) {
+        clearTimeout(hideTimeout.current)
+      }
+
+      setOpen(true)
+      setHidden(false)
+
+      onOpen?.({ ...getReturnObject.current(event) })
+    },
+    [onOpen]
+  )
+
+  // React to open prop changes (only when not inline)
+  useEffect(() => {
+    if (openProp && !inline) {
+      showPicker()
+    }
+  }, [openProp, showPicker, inline])
+
+  const onPickerChange = useCallback(
+    ({
+      hidePicker: shouldHidePicker = true,
+      ...args
+    }: DatePickerChangeEvent<
+      MouseEvent<HTMLSpanElement> | KeyboardEvent<HTMLTableElement>
+    >) => {
+      if (shouldHidePicker && !showSubmitButton && !showCancelButton) {
+        hidePicker({ focusOnClose: true })
+      }
+
+      setDates({ startDate: args.startDate, endDate: args.endDate })
+    },
+    [hidePicker, showSubmitButton, showCancelButton]
+  )
+
+  const onSubmitHandler = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      if (open) {
+        // If picker is open, close it and call onSubmit
+        hidePicker(event)
+        onSubmit?.({
+          ...getReturnObject.current({ event }),
+        })
+      } else {
+        // If picker is closed, open it (don't call onSubmit)
+        showPicker(event)
+      }
+    },
+    [open, hidePicker, showPicker, onSubmit]
+  )
+
+  const onCancelHandler = useCallback(
+    (event: DatePickerChangeEvent<MouseEvent<HTMLButtonElement>>) => {
+      hidePicker()
+      onCancel?.({ ...getReturnObject.current(event) })
+    },
+    [hidePicker, onCancel]
+  )
+
+  const onResetHandler = useCallback(
+    (event: DatePickerChangeEvent<MouseEvent<HTMLButtonElement>>) => {
+      hidePicker()
+      onReset?.({ ...getReturnObject.current(event) })
+    },
+    [hidePicker, onReset]
+  )
+
+  const togglePicker = useCallback(
+    (args: MouseEvent<HTMLButtonElement>) => {
+      !open ? showPicker(args) : hidePicker(args)
+    },
+    [open, showPicker, hidePicker]
+  )
+
+  // use only the props from context, who are available here anyway
+  const extendedProps = extendPropsWithContext(
+    props,
+    defaultProps,
+    { skeleton: context?.skeleton },
+    context.getTranslation(props).DatePicker,
+    pickFormElementProps(context?.formElement),
+    context.DatePicker
+  )
+
+  const {
+    label,
+    title,
+    labelDirection,
+    labelSrOnly,
+    onlyMonth,
+    hideLastWeek,
+    disableAutofocus,
+    firstDay,
+    resetDate,
+    link,
+    sync,
+    inputElement,
+    addonElement,
+    shortcuts,
+    disabled,
+    stretch,
+    skeleton,
+    size,
+    status,
+    statusState,
+    statusProps,
+    statusNoAnimation,
+    globalStatus,
+    suffix,
+    maskOrder,
+    maskPlaceholder,
+    submitButtonText,
+    cancelButtonText,
+    resetButtonText,
+    showResetButton,
+    className,
+    tooltip,
+    skipPortal,
+    labelAlignment,
+    triggerProps,
+    _omitInputShellClass,
+    ...restProps
+  } = extendedProps
+
+  const resolvedMaskOrder =
+    externalProps.maskOrder ??
+    (context.locale === 'en-US' ? 'mm/dd/yyyy' : maskOrder)
+
+  const resolvedMaskPlaceholder =
+    externalProps.maskPlaceholder ??
+    (context.locale === 'en-US' ? 'mm/dd/yyyy' : maskPlaceholder)
+
+  const attributes = useMemo(
+    () => filterOutNonAttributes(restProps),
+    [restProps]
+  )
+
+  const showStatus = getStatusState(status)
+
+  const pickerParams = {} as HTMLProps<HTMLSpanElement>
+
+  if (showStatus || suffix) {
+    pickerParams['aria-describedby'] = combineDescribedBy(
+      pickerParams,
+      showStatus ? id + '-status' : null,
+      suffix ? id + '-suffix' : null
+    )
+  }
+
+  const submitParams = {
+    ['aria-expanded']: open,
+    ref: submitButtonRef,
+    tabIndex: extendedProps.tabIndex,
+    tooltip,
+  }
+
+  const selectedDateTitle = useMemo(() => {
+    const { selectedDate, selectedDateRange } = translation
+    const { startDate, endDate } = dates
+
+    if (!startDate) {
+      return ''
+    }
+
+    const options: DateFormatOptions = {
+      locale: context.locale,
+      options: {
+        dateStyle: 'full',
+      },
+    }
+
+    return range && endDate
+      ? selectedDateRange.replace(
+          /%s/,
+          formatDateRange({ startDate, endDate }, options)
+        )
+      : selectedDate.replace(/%s/, formatDate(startDate, options))
+  }, [range, translation, dates, context.locale])
+
+  const mainParams = useSpacing(props, {
+    className: clsx(
+      'dnb-date-picker',
+      status && `dnb-date-picker__status--${statusState}`,
+      labelDirection && `dnb-date-picker--${labelDirection}`,
+      open && 'dnb-date-picker--open',
+      hidden && 'dnb-date-picker--hidden',
+      showInput && 'dnb-date-picker--show-input',
+      inline && 'dnb-date-picker--inline',
+      label &&
+        labelAlignment === 'right' &&
+        'dnb-date-picker__input--label-alignment-right',
+      stretch && `dnb-date-picker--stretch`,
+      'dnb-form-component',
+      size && `dnb-date-picker--${size}`,
+      className
+    ),
+    lang: context.locale,
+  }) as HTMLProps<HTMLSpanElement>
+
+  const containerClassNames = clsx(
+    'dnb-date-picker__container',
+    open && 'dnb-date-picker__container--open',
+    !open && 'dnb-date-picker__container--closed',
+    hidden && 'dnb-date-picker__container--hidden',
+    showInput && 'dnb-date-picker__container--show-input',
+    size && `dnb-date-picker--${size}`,
+    ((inline ? false : range) ||
+      showSubmitButton ||
+      showCancelButton ||
+      showResetButton) &&
+      'dnb-date-picker__container--show-footer'
+  )
+
+  const remainingDOMProps = validateDOMAttributes(props, attributes)
+  const remainingSubmitProps = validateDOMAttributes(null, submitParams)
+  const remainingPickerProps = validateDOMAttributes(
+    null,
+    skeletonDOMAttributes(pickerParams, skeleton, context)
+  )
+
+  return (
+    <DatePickerProvider
+      {...props}
+      open={open}
+      attributes={remainingDOMProps}
+      setReturnObject={(fn) => (getReturnObject.current = fn)}
+      hidePicker={hidePicker}
+    >
+      <span {...mainParams}>
+        {label && (
+          <FormLabel
+            id={id + '-label'}
+            forId={id}
+            text={label}
+            labelDirection={labelDirection}
+            srOnly={labelSrOnly}
+            disabled={disabled}
+            skeleton={skeleton}
+          />
+        )}
+
+        <span
+          className="dnb-date-picker__inner"
+          ref={shellRef}
+          {...remainingPickerProps}
+        >
+          <AlignmentHelper />
+
+          <FormStatus
+            show={showStatus}
+            id={id + '-form-status'}
+            globalStatus={globalStatus}
+            label={String(label)}
+            textId={id + '-status'} // used for "aria-describedby"
+            widthSelector={id + '-shell'}
+            text={status}
+            state={statusState}
+            noAnimation={statusNoAnimation}
+            skeleton={skeleton}
+            {...statusProps}
+          />
+
+          <span className="dnb-date-picker__row">
+            {inline ? (
+              <span
+                className={containerClassNames}
+                ref={calendarContainerRef}
+              >
+                <DatePickerRange
+                  id={id}
+                  firstDayOfWeek={firstDay}
+                  resetDate={resetDate}
+                  isRange={range}
+                  isLink={link}
+                  isSync={sync}
+                  hideDays={hideDays}
+                  hideNavigation={hideNavigation}
+                  onlyMonth={Boolean(onlyMonth)}
+                  hideMonthLabel={onlyMonth === 'without-label'}
+                  hideNextMonthWeek={hideLastWeek}
+                  onPickerChange={onPickerChange}
+                  locale={context.locale}
+                />
+                {(addonElement || shortcuts) && (
+                  <DatePickerAddon
+                    renderElement={addonElement}
+                    shortcuts={shortcuts}
+                  />
+                )}
+                <DatePickerFooter
+                  isRange={inline ? false : range}
+                  onSubmit={onSubmitHandler}
+                  onCancel={onCancelHandler}
+                  onReset={onResetHandler}
+                  submitButtonText={submitButtonText}
+                  cancelButtonText={cancelButtonText}
+                  resetButtonText={resetButtonText}
+                />
+              </span>
+            ) : (
+              <span className="dnb-date-picker__shell" id={`${id}-shell`}>
+                <DatePickerInput
+                  id={id}
+                  title={title}
+                  disabled={disabled}
+                  stretch={stretch}
+                  skeleton={skeleton}
+                  maskOrder={resolvedMaskOrder}
+                  maskPlaceholder={resolvedMaskPlaceholder}
+                  isRange={range}
+                  showInput={showInput}
+                  selectedDateTitle={selectedDateTitle}
+                  inputElement={inputElement}
+                  open={open}
+                  hidden={hidden}
+                  size={size}
+                  status={status ? 'error' : null}
+                  statusState={statusState}
+                  lang={context.locale}
+                  _omitInputShellClass={_omitInputShellClass}
+                  {...attributes}
+                  submitProps={remainingSubmitProps}
+                  // @ts-expect-error - strictFunctionTypes
+                  onSubmit={togglePicker}
+                  triggerProps={triggerProps}
+                  {...statusProps}
+                />
+
+                <Popover
+                  open={open}
+                  targetElement={{
+                    verticalRef: submitButtonRef,
+                    horizontalRef: shellRef,
+                  }}
+                  noAnimation={noAnimation}
+                  skipPortal={skipPortal}
+                  keepInDOM={!hidden}
+                  focusOnOpen={!disableAutofocus}
+                  focusOnOpenElement={focusCalendarTable}
+                  alignOnTarget={
+                    alignPicker === 'right' || stretch ? 'right' : 'left'
+                  }
+                  horizontalOffset={showInput ? 16 : 12}
+                  placement={
+                    props.direction === 'auto' ? 'bottom' : props.direction
+                  }
+                  onOpenChange={(isOpen) => !isOpen && hidePicker()}
+                  hideCloseButton
+                  preventClose={preventClose}
+                  triggerOffset={8}
+                  arrowEdgeOffset={4}
+                  hideArrow
+                  noInnerSpace
+                  noMaxWidth
+                  portalRootClass="dnb-date-picker__portal"
+                  arrowPosition={
+                    alignPicker === 'right' ? 'right' : 'left'
+                  }
+                  arrowPositionSelector={`#${id}`}
+                >
+                  <span
+                    className={containerClassNames}
+                    ref={calendarContainerRef}
+                  >
+                    <DatePickerRange
+                      id={id}
+                      firstDayOfWeek={firstDay}
+                      resetDate={resetDate}
+                      isRange={range}
+                      isLink={link}
+                      isSync={sync}
+                      hideDays={hideDays}
+                      hideNavigation={hideNavigation}
+                      onlyMonth={Boolean(onlyMonth)}
+                      hideMonthLabel={onlyMonth === 'without-label'}
+                      hideNextMonthWeek={hideLastWeek}
+                      onPickerChange={onPickerChange}
+                      locale={context.locale}
+                    />
+                    {(addonElement || shortcuts) && (
+                      <DatePickerAddon
+                        renderElement={addonElement}
+                        shortcuts={shortcuts}
+                      />
+                    )}
+                    <DatePickerFooter
+                      isRange={inline ? false : range}
+                      onSubmit={onSubmitHandler}
+                      onCancel={onCancelHandler}
+                      onReset={onResetHandler}
+                      submitButtonText={submitButtonText}
+                      cancelButtonText={cancelButtonText}
+                      resetButtonText={resetButtonText}
+                    />
+                  </span>
+                </Popover>
+              </span>
+            )}
+            {suffix && (
+              <Suffix
+                className="dnb-date-picker__suffix"
+                id={id + '-suffix'} // used for "aria-describedby"
+                context={props}
+              >
+                {suffix}
+              </Suffix>
+            )}
+          </span>
+        </span>
+
+        <p className="dnb-sr-only" aria-live="assertive">
+          {selectedDateTitle}
+        </p>
+      </span>
+    </DatePickerProvider>
+  )
+}
+
+const NonAttributes = [
+  'locale',
+  'id',
+  'day',
+  'month',
+  'year',
+  'date',
+  'start',
+  'end',
+  'startDate',
+  'endDate',
+  'minDate',
+  'maxDate',
+  'hidden',
+  'stretch',
+  'enableKeyboardNav',
+  'hideNavigation',
+  'returnFormat',
+  'dateFormat',
+  'hideDays',
+  'open',
+  'direction',
+  'range',
+  'showInput',
+  'inline',
+  'noAnimation',
+  'onDaysRender',
+  'onOpen',
+  'onType',
+  'onClose',
+  'showSubmitButton',
+  'showCancelButton',
+  'selectedDate',
+  'selectedMonth',
+  'selectedYear',
+  'nextMonth',
+  'nextYear',
+  'openPickerText',
+  'placeholderCharacters',
+  'prevMonth',
+  'prevYear',
+  'endMonth',
+  'startMonth',
+  'alignPicker',
+  'preventClose',
+  'selectedDateRange',
+  'yearNavigation',
+]
+
+function filterOutNonAttributes(props: DatePickerProps) {
+  return Object.keys(props).reduce((attributes, key) => {
+    if (!NonAttributes.includes(key)) {
+      attributes[key] = props[key]
+    }
+    return attributes
+  }, {})
+}
+
+withComponentMarkers(DatePicker, {
+  _formElement: true,
+  _supportsSpacingProps: true,
+})
+
+export default DatePicker

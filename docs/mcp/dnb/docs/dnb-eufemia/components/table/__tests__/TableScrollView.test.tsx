@@ -1,0 +1,86 @@
+import { act } from 'react'
+import type { RefObject } from 'react'
+import { render } from '@testing-library/react'
+import Table from '../Table'
+import type { TableScrollViewAllProps } from '../TableScrollView'
+import ScrollView from '../TableScrollView'
+import { BasicTable } from './TableMocks'
+import { setResizeObserver } from '../../../fragments/scroll-view/__tests__/shared-mocks/ResizeObserver'
+
+describe('Table.ScrollView', () => {
+  it('renders with props as an object', () => {
+    const props: TableScrollViewAllProps = {
+      children: (
+        <Table>
+          <BasicTable />
+        </Table>
+      ),
+    }
+
+    render(<ScrollView {...props} />)
+    expect(
+      document.querySelector('.dnb-table__scroll-view')
+    ).toBeInTheDocument()
+  })
+
+  it('should support spacing props', () => {
+    render(
+      <ScrollView top="large">
+        <Table>
+          <BasicTable />
+        </Table>
+      </ScrollView>
+    )
+
+    const element = document.querySelector('.dnb-table__scroll-view')
+
+    expect(element).toHaveClass(
+      'dnb-scroll-view dnb-table__scroll-view dnb-space__top--large',
+      { exact: true }
+    )
+  })
+
+  it('should have tabindex="0"', () => {
+    let renderResizeObserver = null
+
+    const observe = vi.fn()
+    const init = vi.fn((callback) => {
+      renderResizeObserver = callback
+    })
+    setResizeObserver({ init, observe })
+
+    const ref: RefObject<HTMLDivElement | null> = { current: null }
+
+    render(
+      <ScrollView ref={ref}>
+        <Table>
+          <BasicTable />
+        </Table>
+      </ScrollView>
+    )
+
+    const element = document.querySelector('.dnb-table__scroll-view')
+
+    act(() => {
+      vi.spyOn(ref.current, 'scrollWidth', 'get').mockReturnValue(102)
+      vi.spyOn(ref.current, 'offsetWidth', 'get').mockReturnValue(100)
+
+      renderResizeObserver()
+    })
+
+    expect(element.getAttribute('tabindex')).toBe('0')
+
+    act(() => {
+      vi.spyOn(ref.current, 'scrollWidth', 'get').mockReturnValue(101)
+      vi.spyOn(ref.current, 'offsetWidth', 'get').mockReturnValue(100)
+
+      renderResizeObserver()
+    })
+
+    expect(element).not.toHaveAttribute('tabindex')
+  })
+
+  it('should have constant of _supportsSpacingProps', () => {
+    expect(ScrollView['_supportsSpacingProps']).toBe(true)
+  })
+})

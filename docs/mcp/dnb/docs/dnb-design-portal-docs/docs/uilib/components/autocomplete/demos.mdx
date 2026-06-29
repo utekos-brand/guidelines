@@ -1,0 +1,115 @@
+---
+showTabs: true
+---
+
+import {
+  AutocompleteDefaultExample,
+  AutocompleteNumbersExample,
+  AutocompleteWithCustomTitle,
+  AutocompleteDynamicallyUpdatedData,
+  AutocompleteFirstFocusUpdate,
+  AutocompleteToggleExample,
+  AutocompletePredefinedInput,
+  AutocompleteDifferentSizes,
+  AutocompleteCustomWidth,
+  AutocompleteIconRightWithSubmitButton,
+  AutocompleteSuffix,
+  AutocompleteStatusInfoExample,
+  AutocompleteStatusErrorExample,
+  AutocompleteGroups,
+  AutocompleteNoDivider,
+} from 'Docs/uilib/components/autocomplete/Examples'
+
+## Demos
+
+### Default autocomplete
+
+<AutocompleteDefaultExample />
+
+### Autocomplete with numbers
+
+<AutocompleteNumbersExample />
+
+### Autocomplete with a custom title
+
+- `keepValue` means the input value gets not removed after an input blur happens.
+- `showClearButton` means a clear button will show up when the input field contains a value.
+
+<AutocompleteWithCustomTitle />
+
+### Async usage, dynamically update data during typing
+
+This example simulates server delay with a timeout and - if it gets debounced, we cancel the timeout. Read more about the [debounce method](/uilib/components/autocomplete/methods/#methods).
+
+Also, you may consider using `disableFilter` if you have a backend doing the search operation.
+
+<AutocompleteDynamicallyUpdatedData />
+
+### Update data dynamically on the first focus
+
+<AutocompleteFirstFocusUpdate />
+
+### With a Button to toggle the open / close state
+
+**NB:** Just to show the possibility; the data is given as a function.
+
+<AutocompleteToggleExample />
+
+### With a predefined input/search value
+
+<AutocompletePredefinedInput />
+
+### Different sizes
+
+Four sizes are available: `small`, `default`, `medium` and `large`.
+
+<AutocompleteDifferentSizes />
+
+### Data suffix value
+
+Data is provided as such:
+
+```js
+const { locale } = React.useContext(Context)
+const data = [
+  {
+    suffixValue: (
+      <NumberFormat.Currency srLabel="Total:" locale={locale}>
+        {12345678}
+      </NumberFormat.Currency>
+    ),
+    selectedValue: `Brukskonto (${ban})`,
+    content: ['Brukskonto', ban],
+  },
+]
+```
+
+<AutocompleteSuffix />
+
+### Custom width
+
+<AutocompleteCustomWidth />
+
+<VisibleWhenVisualTest>
+  <AutocompleteIconRightWithSubmitButton />
+</VisibleWhenVisualTest>
+
+### Autocomplete with status message
+
+<AutocompleteStatusInfoExample />
+
+<VisibleWhenVisualTest>
+  <AutocompleteStatusErrorExample />
+</VisibleWhenVisualTest>
+
+### Groups
+
+If an item has a `groupIndex` property, it will use the groups in the `groups` property. Only the first group can be without title, all other groups must have a title.
+
+<AutocompleteGroups />
+
+## No divider
+
+We can remove the divider between items with the `noDivider` prop. Beware that this can make information dense lists difficult to parse.
+
+<AutocompleteNoDivider />

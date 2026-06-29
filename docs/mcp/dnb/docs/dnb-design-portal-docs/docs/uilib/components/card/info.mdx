@@ -1,0 +1,50 @@
+---
+showTabs: true
+---
+
+import * as Examples from './Examples'
+
+## Import
+
+```tsx
+import { Card } from '@dnb/eufemia'
+```
+
+## Description
+
+`Card` is a block section element showing the white box with rounded gray borders, adding spacing automatically.
+
+It uses [Flex.Item](/uilib/layout/flex/item) under the hood. When one of these properties were given, `stack`, `direction` or `spacing` – the [Flex.Container](/uilib/layout/flex/container) will be used.
+
+## Relevant links
+
+- [Source code](https://github.com/dnbexperience/eufemia/tree/main/packages/dnb-eufemia/src/components/card)
+- [Docs code](https://github.com/dnbexperience/eufemia/tree/main/packages/dnb-design-system-portal/src/docs/uilib/components/card)
+
+```jsx
+import { Card } from '@dnb/eufemia'
+import { Form, Field } from '@dnb/eufemia/extensions/forms'
+
+render(
+  <Form.Handler data={existingData} onSubmit={submitHandler}>
+    <Card>
+      <Field.Email path="/dataPath" />
+      <Form.ButtonRow>
+        <Form.SubmitButton />
+      </Form.ButtonRow>
+    </Card>
+  </Form.Handler>
+)
+```
+
+## Accessibility
+
+It uses a `section` element. Which allows you to add an `aria-label` or `aria-labelledby` to provide screen readers with landmarks.
+
+<Examples.WithHeadingsAndAriaLabel />
+
+## Card.List and Card.ListItem
+
+Use `Card.List` and `Card.ListItem` to render a semantic `<ul>` / `<li>` list of cards. `Card.List` provides a responsive flex layout with wrapping. `Card.ListItem` supports a `center` prop to center content vertically — set it to `true` to always center, or `"when-small"` to center only on small screens.
+
+<RelatedComponents />

@@ -1,0 +1,19 @@
+@layer components {
+  .typography {
+    p {
+      font-size: var(--text-base);
+      color: var(--color-gray-700);
+    }
+    h1 {
+      font-size: var(--text-4xl--line-height);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-950);
+      font-family: var(--font-family-heading);
+    }
+    h2 {
+      font-size: var(--text-3xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-cloud-100);
+    }
+  }
+}

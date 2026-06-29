@@ -1,0 +1,65 @@
+/*
+ * NumberFormat Component
+ *
+ */
+
+.dnb-number-format {
+  display: inline-block;
+  position: relative;
+  speak-as: numbers;
+  white-space: nowrap;
+
+  // Use "data-text" so Chrome does not copy the HTML as content, when pasting it in Outlook etc.
+  .dnb-sr-only::before {
+    content: attr(data-text);
+  }
+
+  &__prefix,
+  &__suffix {
+    white-space: normal;
+  }
+
+  &.dnb-anchor {
+    cursor: pointer;
+  }
+
+  &--select-all {
+    cursor: text;
+  }
+
+  &__visible {
+    position: relative;
+    z-index: 2;
+  }
+
+  &--selected &__visible {
+    color: var(--token-color-text-neutral);
+    background-color: var(--token-color-background-action-pressed-subtle);
+  }
+
+  &__selection {
+    position: absolute;
+    z-index: 1;
+
+    top: 0;
+    left: 0;
+
+    opacity: 0;
+
+    user-select: none; // important, so this number does not get copied if only marked/selected
+  }
+
+  &--selected &__selection {
+    z-index: 3;
+    user-select: all; // makes the "copySelection" feature actually work
+  }
+
+  &--monospace {
+    font-family: var(--font-family-monospace);
+  }
+
+  &.dnb-skeleton,
+  .dnb-skeleton & {
+    -webkit-text-fill-color: var(--skeleton-color);
+  }
+}

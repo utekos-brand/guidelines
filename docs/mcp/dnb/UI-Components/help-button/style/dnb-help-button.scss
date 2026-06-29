@@ -1,0 +1,12 @@
+/*
+ * HelpButton component
+ *
+ */
+
+@use './dnb-help-button-inline.scss';
+
+.dnb-help-button {
+  & .dnb-button__bounding {
+    transform: scale(1.5);
+  }
+}

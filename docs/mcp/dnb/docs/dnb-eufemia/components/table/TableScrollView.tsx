@@ -1,0 +1,35 @@
+import type { ReactElement, TableHTMLAttributes } from 'react'
+import { clsx } from 'clsx'
+import type { ScrollViewAllProps } from '../../fragments/scroll-view/ScrollView'
+import ScrollView from '../../fragments/scroll-view/ScrollView'
+
+import type { SpacingProps } from '../../shared/types'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+export type TableScrollViewProps = {
+  /**
+   * The content of the component.
+   */
+  children: ReactElement<HTMLTableElement>
+}
+
+export type TableScrollViewAllProps = TableScrollViewProps &
+  Omit<TableHTMLAttributes<HTMLDivElement>, 'children'> &
+  SpacingProps &
+  ScrollViewAllProps
+
+export default function TableScrollView(props: TableScrollViewAllProps) {
+  const { className, children, ...rest } = props
+
+  return (
+    <ScrollView
+      className={clsx('dnb-table__scroll-view', className)}
+      interactive="auto"
+      {...rest}
+    >
+      {children}
+    </ScrollView>
+  )
+}
+
+withComponentMarkers(TableScrollView, { _supportsSpacingProps: true })

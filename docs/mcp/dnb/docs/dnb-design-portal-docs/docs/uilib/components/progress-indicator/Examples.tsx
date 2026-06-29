@@ -1,0 +1,390 @@
+/**
+ * UI lib Component Example
+ *
+ */
+
+import { useEffect, useState } from 'react'
+import styled from '@emotion/styled'
+import ComponentBox from '../../../../shared/tags/ComponentBox'
+import {
+  ProgressIndicator,
+  Dialog,
+  Flex,
+  IconPrimary,
+  NumberFormat,
+} from '@dnb/eufemia/src'
+
+export const ProgressIndicatorDefaultExample = () => (
+  <ComponentBox>
+    <ProgressIndicator />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCircularLabelHorizontalExample = () => (
+  <ComponentBox>
+    <ProgressIndicator
+      // label="Custom label ..."
+      type="circular"
+      showDefaultLabel={true}
+      labelDirection="horizontal"
+    />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCircularLabelVerticalExample = () => (
+  <ComponentBox>
+    <ProgressIndicator
+      // label="Custom label ..."
+      type="circular"
+      showDefaultLabel={true}
+    />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCircularLabelInsideExample = () => (
+  <ComponentBox>
+    <ProgressIndicator
+      right
+      label={<IconPrimary icon="save" />}
+      type="circular"
+      labelDirection="inside"
+    />
+
+    <ProgressIndicator
+      progress={72}
+      size="large"
+      type="circular"
+      labelDirection="inside"
+      data-visual-test="progress-indicator-label-inside"
+      label={
+        <span className="dnb-p dnb-t__weight--bold dnb-t__size--small">
+          {72}%
+        </span>
+      }
+    />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCircularPrimaryExample = () => (
+  <ComponentBox data-visual-test="progress-indicator-circular--primary">
+    <ProgressIndicator
+      type="circular"
+      progress="50"
+      size="large"
+      noAnimation
+    />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCircularRandomTransitionExample = () => (
+  <ComponentBox>
+    {() => {
+      const Example = () => {
+        const random = (min, max) =>
+          Math.floor(Math.random() * (max - min + 1)) + min
+        const [progress, setProgressIndicator] = useState(random(1, 100))
+        useEffect(() => {
+          const timer = setInterval(
+            () => setProgressIndicator(random(1, 100)),
+            1e3
+          )
+          return () => clearInterval(timer)
+        })
+        return (
+          <ProgressIndicator
+            type="circular"
+            size="large"
+            progress={progress}
+          />
+        )
+      }
+      return <Example />
+    }}
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCircularRandomOnCompleteExample = () => (
+  <ComponentBox>
+    {() => {
+      const Example = () => {
+        const random = (min, max) =>
+          Math.floor(Math.random() * (max - min + 1)) + min
+        const [show, setShow] = useState(true)
+        useEffect(() => {
+          const timer = setInterval(
+            () => setShow(!show),
+            random(2400, 4200)
+          )
+          return () => clearTimeout(timer)
+        })
+        return (
+          <ProgressIndicator
+            type="circular"
+            size="large"
+            show={show}
+            onComplete={() => {
+              console.log('onCompleteCircular')
+            }}
+          />
+        )
+      }
+      return <Example />
+    }}
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCircularDialogExample = () => (
+  <ComponentBox>
+    <Dialog
+      spacing={false}
+      maxWidth="12rem"
+      fullscreen={false}
+      alignContent="centered"
+      hideCloseButton
+      triggerAttributes={{ text: 'Show' }}
+      preventClose={false}
+    >
+      <ProgressIndicator
+        type="circular"
+        showDefaultLabel
+        top="large"
+        bottom="large"
+        size="large"
+      />
+    </Dialog>
+  </ComponentBox>
+)
+
+export const ProgressIndicatorLinearDefaultExample = () => (
+  <ComponentBox>
+    <ProgressIndicator type="linear" />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorLinearLabelHorizontalExample = () => (
+  <ComponentBox>
+    <ProgressIndicator
+      type="linear"
+      // label="Custom label ..."
+      showDefaultLabel={true}
+      labelDirection="horizontal"
+    />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorLinearLabelVerticalExample = () => (
+  <ComponentBox>
+    <ProgressIndicator type="linear" showDefaultLabel={true} />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorLinearLargeExample = () => (
+  <ComponentBox data-visual-test="progress-indicator-linear--primary">
+    <ProgressIndicator
+      type="linear"
+      progress="50"
+      size="large"
+      noAnimation
+    />
+  </ComponentBox>
+)
+
+export const ProgressIndicatorLinearRandomTransitionExample = () => (
+  <ComponentBox>
+    {() => {
+      const Example = () => {
+        const random = (min, max) =>
+          Math.floor(Math.random() * (max - min + 1)) + min
+        const [progress, setProgressIndicator] = useState(random(1, 100))
+        useEffect(() => {
+          const timer = setInterval(
+            () => setProgressIndicator(random(1, 100)),
+            1e3
+          )
+          return () => clearInterval(timer)
+        })
+        return <ProgressIndicator type="linear" progress={progress} />
+      }
+      return <Example />
+    }}
+  </ComponentBox>
+)
+
+export const ProgressIndicatorSizesExample = () => (
+  <ComponentBox data-visual-test="progress-indicator-sizes">
+    <Flex.Horizontal align="center" gap={false}>
+      <ProgressIndicator progress="50" size="small" />
+      <ProgressIndicator progress="50" size="medium" />
+      <ProgressIndicator progress="50" />
+      <ProgressIndicator progress="50" size="large" />
+    </Flex.Horizontal>
+  </ComponentBox>
+)
+
+const StyledLabel = styled.span`
+  display: grid;
+  place-content: center;
+`
+const MyCustomLabel = ({ children, ...rest }) => (
+  <StyledLabel
+    className="dnb-p dnb-t__weight--medium dnb-t__size--small"
+    {...rest}
+  >
+    {children}
+  </StyledLabel>
+)
+
+export const ProgressIndicatorCountdownExample = () => (
+  <ComponentBox scope={{ MyCustomLabel }}>
+    {() => {
+      const ChangeValue = () => {
+        const max = 60
+        const [current, setCurrent] = useState(10)
+
+        useEffect(() => {
+          const timer = setInterval(() => {
+            setCurrent(current === 0 ? max - 1 : current - 1)
+          }, 1000)
+          return () => clearTimeout(timer)
+        })
+
+        return (
+          <ProgressIndicator
+            type="countdown"
+            progress={(current / max) * 100}
+            title={`${current} av ${max}`}
+            size="large"
+            labelDirection="inside"
+            label={<MyCustomLabel aria-hidden>{current}</MyCustomLabel>}
+          />
+        )
+      }
+
+      return <ChangeValue />
+    }}
+  </ComponentBox>
+)
+
+const DarkBackground = styled.div`
+  background-color: var(--color-emerald-green);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+`
+
+export const ProgressIndicatorCustomCountdown = () => (
+  <ComponentBox
+    hideCode
+    data-visual-test="progress-indicator-custom-countdown"
+    scope={{
+      DarkBackground,
+      MyCustomLabel,
+    }}
+  >
+    {() => {
+      const MyProgressIndicator = () => {
+        const StyledText = styled.span`
+          color: var(--color-white);
+          font-size: var(--font-size-small);
+        `
+
+        const StyledTitle = styled.span`
+          display: block;
+          font-weight: var(--font-weight-medium);
+          font-size: var(--font-size-medium);
+        `
+        const daysLeft = 20
+        const daysInMonth = 31
+
+        return (
+          <DarkBackground>
+            <ProgressIndicator
+              type="countdown"
+              progress={(daysLeft / daysInMonth) * 100}
+              size="6rem"
+              labelDirection="inside"
+              customColors={{
+                line: 'var(--color-summer-green)',
+                shaft: 'transparent',
+                background: 'var(--color-sea-green)',
+              }}
+              title={daysLeft + 'days left'}
+              customCircleWidth="0.5rem"
+              label={
+                <StyledText>
+                  <StyledTitle>{daysLeft} d</StyledTitle>
+                  left
+                </StyledText>
+              }
+            />
+          </DarkBackground>
+        )
+      }
+      return <MyProgressIndicator />
+    }}
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCustomHorizontal = () => (
+  <ComponentBox
+    hideCode
+    data-visual-test="progress-indicator-custom-horizontal"
+    scope={{
+      DarkBackground,
+      MyCustomLabel,
+    }}
+  >
+    {() => {
+      const MyProgressIndicator = () => {
+        const StyledText = styled.span`
+          color: white;
+          font-size: var(--font-size-basis);
+        `
+        return (
+          <DarkBackground>
+            <ProgressIndicator
+              type="linear"
+              progress={75}
+              size="1rem"
+              customColors={{
+                line: 'var(--color-summer-green)',
+                shaft: 'var(--color-sea-green)',
+              }}
+              label={
+                <StyledText>
+                  <NumberFormat.Percent value={75} /> done
+                </StyledText>
+              }
+            />
+          </DarkBackground>
+        )
+      }
+
+      return <MyProgressIndicator />
+    }}
+  </ComponentBox>
+)
+
+export const ProgressIndicatorCustomizationExample = () => (
+  <ComponentBox data-visual-test="progress-indicator-customization">
+    <ProgressIndicator
+      type="linear"
+      progress={32}
+      customColors={{
+        line: 'red',
+        shaft: 'green',
+      }}
+      size="4rem"
+    />
+    <ProgressIndicator
+      type="circular"
+      progress={32}
+      customColors={{
+        line: 'red',
+        shaft: 'green',
+        background: 'blue',
+      }}
+      size="4rem"
+    />
+  </ComponentBox>
+)

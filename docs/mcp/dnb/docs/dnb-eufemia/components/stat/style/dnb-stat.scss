@@ -1,0 +1,229 @@
+/*
+ * Stat Component
+ *
+ */
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-stat {
+  &--tone-positive {
+    color: var(--token-color-text-positive);
+  }
+
+  &--tone-negative {
+    color: var(--token-color-text-error);
+  }
+
+  &__content {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    line-height: var(--line-height-basis--em);
+
+    // Ensure numbers are not broken in the middle, but allow breaking between currency and amount, or between prefix/suffix and the amount.
+    word-break: keep-all;
+  }
+  &__content-item {
+    @include utilities.spaceReset();
+
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+
+    &--vertical {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+  }
+
+  &__label {
+    &:not([class*='space__bottom']) {
+      margin-bottom: 0.5rem;
+    }
+
+    &--plain {
+      color: var(--token-color-text-neutral);
+    }
+
+    &--subtle {
+      color: var(--token-color-text-neutral-alternative);
+    }
+
+    [class*='dnb-h--'],
+    .dnb-spacing & [class*='dnb-h--'] {
+      @include utilities.spaceReset();
+
+      font-size: inherit;
+      font-weight: inherit;
+    }
+  }
+
+  &__root {
+    @include utilities.spaceReset();
+
+    display: grid;
+
+    &--content-label {
+      > .dnb-stat__label {
+        order: 2;
+      }
+
+      > .dnb-stat__content-item {
+        order: 1;
+      }
+    }
+  }
+
+  &__info {
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-basis);
+
+    &--plain {
+      color: var(--token-color-text-neutral);
+    }
+
+    &--subtle {
+      color: var(--token-color-text-neutral-alternative);
+    }
+
+    &--prominent {
+      color: var(--token-color-text-neutral);
+      font-weight: var(--font-weight-medium);
+    }
+  }
+
+  &__text {
+    font-size: var(--font-size-basis);
+    line-height: var(--line-height-basis);
+  }
+
+  // Use "data-text" so Chrome does not copy the HTML as content, when pasting it in Outlook etc.
+  .dnb-sr-only::before {
+    content: attr(data-text);
+  }
+
+  &__amount,
+  &__sign {
+    font-weight: inherit;
+  }
+  &__sign {
+    margin-inline-end: 0.2em;
+  }
+  &__currency:has(~ .dnb-stat__amount) {
+    margin-inline-end: 0.2em;
+  }
+  &__amount ~ &__currency {
+    margin-inline-start: 0.2em;
+  }
+  &__prefix,
+  &__suffix {
+    white-space: normal;
+  }
+
+  &__trend {
+    display: inline-flex;
+    padding: 0.25rem 0.5rem;
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-basis);
+    font-weight: var(--font-weight-medium);
+
+    border-radius: var(--token-radius-md);
+
+    &-content {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.125rem;
+    }
+
+    &--positive {
+      color: var(--token-color-text-positive);
+      background-color: var(--token-color-background-positive-subtle);
+    }
+
+    &--negative {
+      color: var(--token-color-text-error);
+      background-color: var(--token-color-background-error-subtle);
+    }
+
+    &--neutral {
+      color: var(--token-color-text-neutral);
+      background-color: var(--token-color-background-neutral-subtle);
+    }
+  }
+
+  &__rating {
+    display: inline-flex;
+    align-items: center;
+
+    &--stars {
+      height: 1.5rem;
+    }
+
+    &--progressive {
+      height: 1.5rem;
+    }
+
+    &-stars {
+      display: inline-flex;
+      gap: 0.125rem;
+      align-items: flex-end;
+    }
+
+    &-star {
+      position: relative;
+
+      display: inline-block;
+      flex-shrink: 0;
+
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+
+    &-fill {
+      position: absolute;
+      inset: 0;
+      width: var(--dnb-stat-rating-fill, 0%);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    &-icon {
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      path {
+        fill: currentcolor;
+      }
+
+      &--base {
+        color: var(--token-color-icon-action-disabled);
+      }
+
+      &--active {
+        color: var(--token-color-icon-neutral);
+      }
+    }
+
+    &-progressive {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 0.125rem;
+    }
+
+    &-progressive-step {
+      display: inline-block;
+      width: 0.25rem;
+      height: var(--dnb-stat-rating-step-height, 0.25rem);
+      border-radius: 0.0625rem;
+      background: linear-gradient(
+        to right,
+        var(--token-color-icon-neutral)
+          var(--dnb-stat-rating-step-fill, 0%),
+        var(--token-color-icon-action-disabled)
+          var(--dnb-stat-rating-step-fill, 0%)
+      );
+    }
+  }
+}

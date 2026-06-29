@@ -1,0 +1,571 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "Utekos Brand" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - img "Utekos Brand" [ref=e11]
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: Grunnlag
+          - list [ref=e16]:
+            - listitem [ref=e17]:
+              - link "Merkevaren Utekos" [ref=e18] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e19]: Merkevaren Utekos
+            - listitem [ref=e20]:
+              - link "Logo" [ref=e21] [cursor=pointer]:
+                - /url: /logo
+                - generic [ref=e22]: Logo
+        - generic [ref=e23]:
+          - generic [ref=e24]: Visuell identitet
+          - list [ref=e26]:
+            - listitem [ref=e27]:
+              - link "Farger" [ref=e28] [cursor=pointer]:
+                - /url: /farger
+                - generic [ref=e29]: Farger
+            - listitem [ref=e30]:
+              - link "Themes" [ref=e31] [cursor=pointer]:
+                - /url: /themes
+                - generic [ref=e32]: Themes
+              - generic: Lab
+            - listitem [ref=e33]:
+              - link "Typografi" [ref=e34] [cursor=pointer]:
+                - /url: /typografi
+                - generic [ref=e35]: Typografi
+            - listitem [ref=e36]:
+              - link "Fotografi" [ref=e37] [cursor=pointer]:
+                - /url: /fotografi
+                - generic [ref=e38]: Fotografi
+            - listitem [ref=e39]:
+              - link "Illustrasjoner" [ref=e40] [cursor=pointer]:
+                - /url: /illustrasjoner
+                - generic [ref=e41]: Illustrasjoner
+            - listitem [ref=e42]:
+              - link "Ikoner" [ref=e43] [cursor=pointer]:
+                - /url: /ikoner
+                - generic [ref=e44]: Ikoner
+            - listitem [ref=e45]:
+              - link "Grafisk element" [ref=e46] [cursor=pointer]:
+                - /url: /grafisk-element
+                - generic [ref=e47]: Grafisk element
+        - separator [ref=e48]
+        - generic [ref=e49]:
+          - generic [ref=e50]: Anvendelse
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - link "Identiteten i bruk" [ref=e54] [cursor=pointer]:
+                - /url: /identiteten-i-bruk
+                - generic [ref=e55]: Identiteten i bruk
+    - main [ref=e56]:
+      - generic [ref=e57]:
+        - button "Toggle Sidebar" [ref=e59]:
+          - img
+          - generic [ref=e60]: Toggle Sidebar
+        - navigation "Hovednavigasjon" [ref=e61]:
+          - list [ref=e62]:
+            - listitem [ref=e63]:
+              - link "Identitet" [ref=e64] [cursor=pointer]:
+                - /url: /identitet
+            - listitem [ref=e65]:
+              - link "Ressurser" [ref=e66] [cursor=pointer]:
+                - /url: /ressurser
+            - listitem [ref=e67]:
+              - button "Søk" [ref=e68]:
+                - img [ref=e69]
+                - text: Søk
+            - listitem [ref=e72]:
+              - button "Utseende" [ref=e73]:
+                - img [ref=e74]
+                - text: Utseende
+      - generic [ref=e77]:
+        - article [ref=e80]:
+          - heading "Lenke til seksjonen" [level=1] [ref=e81]:
+            - link "Lenke til seksjonen" [ref=e82] [cursor=pointer]:
+              - /url: "#custom-palettes"
+              - text: Custom palettes
+          - paragraph [ref=e83]: Denne siden viser Canva-navngitte arbeids-paletter fra PLAN.md. Manglende paletter markeres eksplisitt i stedet for å fylles med antatte farger.
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - paragraph [ref=e86]: PLAN.md
+              - paragraph [ref=e87]: "Canva-navngitte arbeids-paletter basert på verdiene i PLAN.md fra `--color-maritime-50` og nedover."
+              - paragraph [ref=e88]: Siden viser bare verdier som finnes i PLAN.md eller repoets fargedata. Manglende Canva-paletter får statusfelt i stedet for oppdiktede swatches.
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - heading "Maritime Monochromatic" [level=2] [ref=e91]
+                - paragraph [ref=e92]: PLAN.md-skalaen fra --color-maritime-50 til --color-maritime-950.
+                - generic [ref=e93]:
+                  - article [ref=e94]:
+                    - button "Kopier oklch(0.97 0.008 279.42) for Maritime 50" [ref=e96]:
+                      - img [ref=e98]
+                    - generic [ref=e102]:
+                      - heading "Maritime 50" [level=3] [ref=e103]
+                      - paragraph [ref=e104]: "--color-maritime-50"
+                      - generic [ref=e106]:
+                        - term [ref=e107]: Verdi
+                        - definition: oklch(0.97 0.008 279.42)
+                  - article [ref=e108]:
+                    - button "Kopier oklch(0.92 0.015 279.42) for Maritime 100" [ref=e110]:
+                      - img [ref=e112]
+                    - generic [ref=e116]:
+                      - heading "Maritime 100" [level=3] [ref=e117]
+                      - paragraph [ref=e118]: "--color-maritime-100"
+                      - generic [ref=e120]:
+                        - term [ref=e121]: Verdi
+                        - definition: oklch(0.92 0.015 279.42)
+                  - article [ref=e122]:
+                    - button "Kopier oklch(0.84 0.025 279.42) for Maritime 200" [ref=e124]:
+                      - img [ref=e126]
+                    - generic [ref=e130]:
+                      - heading "Maritime 200" [level=3] [ref=e131]
+                      - paragraph [ref=e132]: "--color-maritime-200"
+                      - generic [ref=e134]:
+                        - term [ref=e135]: Verdi
+                        - definition: oklch(0.84 0.025 279.42)
+                  - article [ref=e136]:
+                    - button "Kopier oklch(0.74 0.032 279.42) for Maritime 300" [ref=e138]:
+                      - img [ref=e140]
+                    - generic [ref=e144]:
+                      - heading "Maritime 300" [level=3] [ref=e145]
+                      - paragraph [ref=e146]: "--color-maritime-300"
+                      - generic [ref=e148]:
+                        - term [ref=e149]: Verdi
+                        - definition: oklch(0.74 0.032 279.42)
+                  - article [ref=e150]:
+                    - button "Kopier oklch(0.64 0.036 279.42) for Maritime 400" [ref=e152]:
+                      - img [ref=e154]
+                    - generic [ref=e158]:
+                      - heading "Maritime 400" [level=3] [ref=e159]
+                      - paragraph [ref=e160]: "--color-maritime-400"
+                      - generic [ref=e162]:
+                        - term [ref=e163]: Verdi
+                        - definition: oklch(0.64 0.036 279.42)
+                  - article [ref=e164]:
+                    - button "Kopier oklch(0.54 0.036 279.42) for Maritime 500" [ref=e166]:
+                      - img [ref=e168]
+                    - generic [ref=e172]:
+                      - heading "Maritime 500" [level=3] [ref=e173]
+                      - paragraph [ref=e174]: "--color-maritime-500"
+                      - generic [ref=e176]:
+                        - term [ref=e177]: Verdi
+                        - definition: oklch(0.54 0.036 279.42)
+                  - article [ref=e178]:
+                    - button "Kopier oklch(0.44 0.036 279.42) for Maritime 600" [ref=e180]:
+                      - img [ref=e182]
+                    - generic [ref=e186]:
+                      - heading "Maritime 600" [level=3] [ref=e187]
+                      - paragraph [ref=e188]: "--color-maritime-600"
+                      - generic [ref=e190]:
+                        - term [ref=e191]: Verdi
+                        - definition: oklch(0.44 0.036 279.42)
+                  - article [ref=e192]:
+                    - button "Kopier oklch(0.35 0.036 279.42) for Maritime 700" [ref=e194]:
+                      - img [ref=e196]
+                    - generic [ref=e200]:
+                      - heading "Maritime 700" [level=3] [ref=e201]
+                      - paragraph [ref=e202]: "--color-maritime-700"
+                      - generic [ref=e204]:
+                        - term [ref=e205]: Verdi
+                        - definition: oklch(0.35 0.036 279.42)
+                  - article [ref=e206]:
+                    - button "Kopier oklch(0.2884 0.0366 279.42) for Maritime 800" [ref=e208]:
+                      - img [ref=e210]
+                    - generic [ref=e214]:
+                      - heading "Maritime 800" [level=3] [ref=e215]
+                      - paragraph [ref=e216]: "--color-maritime-800"
+                      - generic [ref=e218]:
+                        - term [ref=e219]: Verdi
+                        - definition: oklch(0.2884 0.0366 279.42)
+                  - article [ref=e220]:
+                    - button "Kopier oklch(0.2 0.03 279.42) for Maritime 900" [ref=e222]:
+                      - img [ref=e224]
+                    - generic [ref=e228]:
+                      - heading "Maritime 900" [level=3] [ref=e229]
+                      - paragraph [ref=e230]: "--color-maritime-900"
+                      - generic [ref=e232]:
+                        - term [ref=e233]: Verdi
+                        - definition: oklch(0.2 0.03 279.42)
+                  - article [ref=e234]:
+                    - button "Kopier oklch(0.12 0.02 279.42) for Maritime 950" [ref=e236]:
+                      - img [ref=e238]
+                    - generic [ref=e242]:
+                      - heading "Maritime 950" [level=3] [ref=e243]
+                      - paragraph [ref=e244]: "--color-maritime-950"
+                      - generic [ref=e246]:
+                        - term [ref=e247]: Verdi
+                        - definition: oklch(0.12 0.02 279.42)
+              - generic [ref=e248]:
+                - heading "Maritime Monochromatic Secondary" [level=2] [ref=e249]
+                - generic [ref=e250]: "Det finnes ingen eksakt `--color-maritime-secondary-*`-skala eller tilsvarende navngitt verdi i PLAN.md. Ingen swatches genereres før verdiene finnes."
+              - generic [ref=e251]:
+                - heading "All Year Pallet - Amber" [level=2] [ref=e252]
+                - paragraph [ref=e253]: Amber-skalaen i PLAN.md.
+                - generic [ref=e254]:
+                  - article [ref=e255]:
+                    - button "Kopier oklch(98.7% 0.022 95.277) for Amber 50" [ref=e257]:
+                      - img [ref=e259]
+                    - generic [ref=e263]:
+                      - heading "Amber 50" [level=3] [ref=e264]
+                      - paragraph [ref=e265]: "--color-amber-50"
+                      - generic [ref=e267]:
+                        - term [ref=e268]: Verdi
+                        - definition: oklch(98.7% 0.022 95.277)
+                  - article [ref=e269]:
+                    - button "Kopier oklch(96.2% 0.059 95.617) for Amber 100" [ref=e271]:
+                      - img [ref=e273]
+                    - generic [ref=e277]:
+                      - heading "Amber 100" [level=3] [ref=e278]
+                      - paragraph [ref=e279]: "--color-amber-100"
+                      - generic [ref=e281]:
+                        - term [ref=e282]: Verdi
+                        - definition: oklch(96.2% 0.059 95.617)
+                  - article [ref=e283]:
+                    - button "Kopier oklch(92.4% 0.12 95.746) for Amber 200" [ref=e285]:
+                      - img [ref=e287]
+                    - generic [ref=e291]:
+                      - heading "Amber 200" [level=3] [ref=e292]
+                      - paragraph [ref=e293]: "--color-amber-200"
+                      - generic [ref=e295]:
+                        - term [ref=e296]: Verdi
+                        - definition: oklch(92.4% 0.12 95.746)
+                  - article [ref=e297]:
+                    - button "Kopier oklch(87.9% 0.169 91.605) for Amber 300" [ref=e299]:
+                      - img [ref=e301]
+                    - generic [ref=e305]:
+                      - heading "Amber 300" [level=3] [ref=e306]
+                      - paragraph [ref=e307]: "--color-amber-300"
+                      - generic [ref=e309]:
+                        - term [ref=e310]: Verdi
+                        - definition: oklch(87.9% 0.169 91.605)
+                  - article [ref=e311]:
+                    - button "Kopier oklch(82.8% 0.189 84.429) for Amber 400" [ref=e313]:
+                      - img [ref=e315]
+                    - generic [ref=e319]:
+                      - heading "Amber 400" [level=3] [ref=e320]
+                      - paragraph [ref=e321]: "--color-amber-400"
+                      - generic [ref=e323]:
+                        - term [ref=e324]: Verdi
+                        - definition: oklch(82.8% 0.189 84.429)
+                  - article [ref=e325]:
+                    - button "Kopier oklch(76.9% 0.188 70.08) for Amber 500" [ref=e327]:
+                      - img [ref=e329]
+                    - generic [ref=e333]:
+                      - heading "Amber 500" [level=3] [ref=e334]
+                      - paragraph [ref=e335]: "--color-amber-500"
+                      - generic [ref=e337]:
+                        - term [ref=e338]: Verdi
+                        - definition: oklch(76.9% 0.188 70.08)
+                  - article [ref=e339]:
+                    - button "Kopier oklch(66.6% 0.179 58.318) for Amber 600" [ref=e341]:
+                      - img [ref=e343]
+                    - generic [ref=e347]:
+                      - heading "Amber 600" [level=3] [ref=e348]
+                      - paragraph [ref=e349]: "--color-amber-600"
+                      - generic [ref=e351]:
+                        - term [ref=e352]: Verdi
+                        - definition: oklch(66.6% 0.179 58.318)
+                  - article [ref=e353]:
+                    - button "Kopier oklch(55.5% 0.163 48.998) for Amber 700" [ref=e355]:
+                      - img [ref=e357]
+                    - generic [ref=e361]:
+                      - heading "Amber 700" [level=3] [ref=e362]
+                      - paragraph [ref=e363]: "--color-amber-700"
+                      - generic [ref=e365]:
+                        - term [ref=e366]: Verdi
+                        - definition: oklch(55.5% 0.163 48.998)
+                  - article [ref=e367]:
+                    - button "Kopier oklch(47.3% 0.137 46.201) for Amber 800" [ref=e369]:
+                      - img [ref=e371]
+                    - generic [ref=e375]:
+                      - heading "Amber 800" [level=3] [ref=e376]
+                      - paragraph [ref=e377]: "--color-amber-800"
+                      - generic [ref=e379]:
+                        - term [ref=e380]: Verdi
+                        - definition: oklch(47.3% 0.137 46.201)
+                  - article [ref=e381]:
+                    - button "Kopier oklch(41.4% 0.112 45.904) for Amber 900" [ref=e383]:
+                      - img [ref=e385]
+                    - generic [ref=e389]:
+                      - heading "Amber 900" [level=3] [ref=e390]
+                      - paragraph [ref=e391]: "--color-amber-900"
+                      - generic [ref=e393]:
+                        - term [ref=e394]: Verdi
+                        - definition: oklch(41.4% 0.112 45.904)
+                  - article [ref=e395]:
+                    - button "Kopier oklch(27.9% 0.077 45.635) for Amber 950" [ref=e397]:
+                      - img [ref=e399]
+                    - generic [ref=e403]:
+                      - heading "Amber 950" [level=3] [ref=e404]
+                      - paragraph [ref=e405]: "--color-amber-950"
+                      - generic [ref=e407]:
+                        - term [ref=e408]: Verdi
+                        - definition: oklch(27.9% 0.077 45.635)
+              - generic [ref=e409]:
+                - heading "All Year Pallet - Yellow" [level=2] [ref=e410]
+                - paragraph [ref=e411]: Yellow-skalaen i PLAN.md.
+                - generic [ref=e412]:
+                  - article [ref=e413]:
+                    - button "Kopier oklch(98.7% 0.026 102.212) for Yellow 50" [ref=e415]:
+                      - img [ref=e417]
+                    - generic [ref=e421]:
+                      - heading "Yellow 50" [level=3] [ref=e422]
+                      - paragraph [ref=e423]: "--color-yellow-50"
+                      - generic [ref=e425]:
+                        - term [ref=e426]: Verdi
+                        - definition: oklch(98.7% 0.026 102.212)
+                  - article [ref=e427]:
+                    - button "Kopier oklch(97.3% 0.071 103.193) for Yellow 100" [ref=e429]:
+                      - img [ref=e431]
+                    - generic [ref=e435]:
+                      - heading "Yellow 100" [level=3] [ref=e436]
+                      - paragraph [ref=e437]: "--color-yellow-100"
+                      - generic [ref=e439]:
+                        - term [ref=e440]: Verdi
+                        - definition: oklch(97.3% 0.071 103.193)
+                  - article [ref=e441]:
+                    - button "Kopier oklch(94.5% 0.129 101.54) for Yellow 200" [ref=e443]:
+                      - img [ref=e445]
+                    - generic [ref=e449]:
+                      - heading "Yellow 200" [level=3] [ref=e450]
+                      - paragraph [ref=e451]: "--color-yellow-200"
+                      - generic [ref=e453]:
+                        - term [ref=e454]: Verdi
+                        - definition: oklch(94.5% 0.129 101.54)
+                  - article [ref=e455]:
+                    - button "Kopier oklch(90.5% 0.182 98.111) for Yellow 300" [ref=e457]:
+                      - img [ref=e459]
+                    - generic [ref=e463]:
+                      - heading "Yellow 300" [level=3] [ref=e464]
+                      - paragraph [ref=e465]: "--color-yellow-300"
+                      - generic [ref=e467]:
+                        - term [ref=e468]: Verdi
+                        - definition: oklch(90.5% 0.182 98.111)
+                  - article [ref=e469]:
+                    - button "Kopier oklch(85.2% 0.199 91.936) for Yellow 400" [ref=e471]:
+                      - img [ref=e473]
+                    - generic [ref=e477]:
+                      - heading "Yellow 400" [level=3] [ref=e478]
+                      - paragraph [ref=e479]: "--color-yellow-400"
+                      - generic [ref=e481]:
+                        - term [ref=e482]: Verdi
+                        - definition: oklch(85.2% 0.199 91.936)
+                  - article [ref=e483]:
+                    - button "Kopier oklch(79.5% 0.184 86.047) for Yellow 500" [ref=e485]:
+                      - img [ref=e487]
+                    - generic [ref=e491]:
+                      - heading "Yellow 500" [level=3] [ref=e492]
+                      - paragraph [ref=e493]: "--color-yellow-500"
+                      - generic [ref=e495]:
+                        - term [ref=e496]: Verdi
+                        - definition: oklch(79.5% 0.184 86.047)
+                  - article [ref=e497]:
+                    - button "Kopier oklch(68.1% 0.162 75.834) for Yellow 600" [ref=e499]:
+                      - img [ref=e501]
+                    - generic [ref=e505]:
+                      - heading "Yellow 600" [level=3] [ref=e506]
+                      - paragraph [ref=e507]: "--color-yellow-600"
+                      - generic [ref=e509]:
+                        - term [ref=e510]: Verdi
+                        - definition: oklch(68.1% 0.162 75.834)
+                  - article [ref=e511]:
+                    - button "Kopier oklch(55.4% 0.135 66.442) for Yellow 700" [ref=e513]:
+                      - img [ref=e515]
+                    - generic [ref=e519]:
+                      - heading "Yellow 700" [level=3] [ref=e520]
+                      - paragraph [ref=e521]: "--color-yellow-700"
+                      - generic [ref=e523]:
+                        - term [ref=e524]: Verdi
+                        - definition: oklch(55.4% 0.135 66.442)
+                  - article [ref=e525]:
+                    - button "Kopier oklch(47.6% 0.114 61.907) for Yellow 800" [ref=e527]:
+                      - img [ref=e529]
+                    - generic [ref=e533]:
+                      - heading "Yellow 800" [level=3] [ref=e534]
+                      - paragraph [ref=e535]: "--color-yellow-800"
+                      - generic [ref=e537]:
+                        - term [ref=e538]: Verdi
+                        - definition: oklch(47.6% 0.114 61.907)
+                  - article [ref=e539]:
+                    - button "Kopier oklch(42.1% 0.095 57.708) for Yellow 900" [ref=e541]:
+                      - img [ref=e543]
+                    - generic [ref=e547]:
+                      - heading "Yellow 900" [level=3] [ref=e548]
+                      - paragraph [ref=e549]: "--color-yellow-900"
+                      - generic [ref=e551]:
+                        - term [ref=e552]: Verdi
+                        - definition: oklch(42.1% 0.095 57.708)
+                  - article [ref=e553]:
+                    - button "Kopier oklch(28.6% 0.066 53.813) for Yellow 950" [ref=e555]:
+                      - img [ref=e557]
+                    - generic [ref=e561]:
+                      - heading "Yellow 950" [level=3] [ref=e562]
+                      - paragraph [ref=e563]: "--color-yellow-950"
+                      - generic [ref=e565]:
+                        - term [ref=e566]: Verdi
+                        - definition: oklch(28.6% 0.066 53.813)
+              - generic [ref=e567]:
+                - heading "Teal" [level=2] [ref=e568]
+                - paragraph [ref=e569]: Teal-skalaen i PLAN.md.
+                - generic [ref=e570]:
+                  - article [ref=e571]:
+                    - button "Kopier oklch(98.4% 0.014 180.72) for Teal 50" [ref=e573]:
+                      - img [ref=e575]
+                    - generic [ref=e579]:
+                      - heading "Teal 50" [level=3] [ref=e580]
+                      - paragraph [ref=e581]: "--color-teal-50"
+                      - generic [ref=e583]:
+                        - term [ref=e584]: Verdi
+                        - definition: oklch(98.4% 0.014 180.72)
+                  - article [ref=e585]:
+                    - button "Kopier oklch(95.3% 0.051 180.801) for Teal 100" [ref=e587]:
+                      - img [ref=e589]
+                    - generic [ref=e593]:
+                      - heading "Teal 100" [level=3] [ref=e594]
+                      - paragraph [ref=e595]: "--color-teal-100"
+                      - generic [ref=e597]:
+                        - term [ref=e598]: Verdi
+                        - definition: oklch(95.3% 0.051 180.801)
+                  - article [ref=e599]:
+                    - button "Kopier oklch(91% 0.096 180.426) for Teal 200" [ref=e601]:
+                      - img [ref=e603]
+                    - generic [ref=e607]:
+                      - heading "Teal 200" [level=3] [ref=e608]
+                      - paragraph [ref=e609]: "--color-teal-200"
+                      - generic [ref=e611]:
+                        - term [ref=e612]: Verdi
+                        - definition: oklch(91% 0.096 180.426)
+                  - article [ref=e613]:
+                    - button "Kopier oklch(85.5% 0.138 181.071) for Teal 300" [ref=e615]:
+                      - img [ref=e617]
+                    - generic [ref=e621]:
+                      - heading "Teal 300" [level=3] [ref=e622]
+                      - paragraph [ref=e623]: "--color-teal-300"
+                      - generic [ref=e625]:
+                        - term [ref=e626]: Verdi
+                        - definition: oklch(85.5% 0.138 181.071)
+                  - article [ref=e627]:
+                    - button "Kopier oklch(77.7% 0.152 181.912) for Teal 400" [ref=e629]:
+                      - img [ref=e631]
+                    - generic [ref=e635]:
+                      - heading "Teal 400" [level=3] [ref=e636]
+                      - paragraph [ref=e637]: "--color-teal-400"
+                      - generic [ref=e639]:
+                        - term [ref=e640]: Verdi
+                        - definition: oklch(77.7% 0.152 181.912)
+                  - article [ref=e641]:
+                    - button "Kopier oklch(70.4% 0.14 182.503) for Teal 500" [ref=e643]:
+                      - img [ref=e645]
+                    - generic [ref=e649]:
+                      - heading "Teal 500" [level=3] [ref=e650]
+                      - paragraph [ref=e651]: "--color-teal-500"
+                      - generic [ref=e653]:
+                        - term [ref=e654]: Verdi
+                        - definition: oklch(70.4% 0.14 182.503)
+                  - article [ref=e655]:
+                    - button "Kopier oklch(60% 0.118 184.704) for Teal 600" [ref=e657]:
+                      - img [ref=e659]
+                    - generic [ref=e663]:
+                      - heading "Teal 600" [level=3] [ref=e664]
+                      - paragraph [ref=e665]: "--color-teal-600"
+                      - generic [ref=e667]:
+                        - term [ref=e668]: Verdi
+                        - definition: oklch(60% 0.118 184.704)
+                  - article [ref=e669]:
+                    - button "Kopier oklch(51.1% 0.096 186.391) for Teal 700" [ref=e671]:
+                      - img [ref=e673]
+                    - generic [ref=e677]:
+                      - heading "Teal 700" [level=3] [ref=e678]
+                      - paragraph [ref=e679]: "--color-teal-700"
+                      - generic [ref=e681]:
+                        - term [ref=e682]: Verdi
+                        - definition: oklch(51.1% 0.096 186.391)
+                  - article [ref=e683]:
+                    - button "Kopier oklch(43.7% 0.078 188.216) for Teal 800" [ref=e685]:
+                      - img [ref=e687]
+                    - generic [ref=e691]:
+                      - heading "Teal 800" [level=3] [ref=e692]
+                      - paragraph [ref=e693]: "--color-teal-800"
+                      - generic [ref=e695]:
+                        - term [ref=e696]: Verdi
+                        - definition: oklch(43.7% 0.078 188.216)
+                  - article [ref=e697]:
+                    - button "Kopier oklch(38.6% 0.063 188.416) for Teal 900" [ref=e699]:
+                      - img [ref=e701]
+                    - generic [ref=e705]:
+                      - heading "Teal 900" [level=3] [ref=e706]
+                      - paragraph [ref=e707]: "--color-teal-900"
+                      - generic [ref=e709]:
+                        - term [ref=e710]: Verdi
+                        - definition: oklch(38.6% 0.063 188.416)
+                  - article [ref=e711]:
+                    - button "Kopier oklch(27.7% 0.046 192.524) for Teal 950" [ref=e713]:
+                      - img [ref=e715]
+                    - generic [ref=e719]:
+                      - heading "Teal 950" [level=3] [ref=e720]
+                      - paragraph [ref=e721]: "--color-teal-950"
+                      - generic [ref=e723]:
+                        - term [ref=e724]: Verdi
+                        - definition: oklch(27.7% 0.046 192.524)
+              - generic [ref=e725]:
+                - heading "PrimaryBlue" [level=2] [ref=e726]
+                - paragraph [ref=e727]: Primærblå verdier som er definert i PLAN.md.
+                - generic [ref=e728]:
+                  - article [ref=e729]:
+                    - 'button "Kopier #00a0d6 for Primary Blue 900" [ref=e731]':
+                      - img [ref=e733]
+                    - generic [ref=e737]:
+                      - heading "Primary Blue 900" [level=3] [ref=e738]
+                      - paragraph [ref=e739]: "--color-primary-blue-900"
+                      - generic [ref=e741]:
+                        - term [ref=e742]: Verdi
+                        - definition: "#00a0d6"
+                  - article [ref=e743]:
+                    - 'button "Kopier #009cde for Primary Blue" [ref=e745]':
+                      - img [ref=e747]
+                    - generic [ref=e751]:
+                      - heading "Primary Blue" [level=3] [ref=e752]
+                      - paragraph [ref=e753]: "--color-primary-blue"
+                      - generic [ref=e755]:
+                        - term [ref=e756]: Verdi
+                        - definition: "#009cde"
+                  - article [ref=e757]:
+                    - 'button "Kopier #7499f7 for Primary 800" [ref=e759]':
+                      - img [ref=e761]
+                    - generic [ref=e765]:
+                      - heading "Primary 800" [level=3] [ref=e766]
+                      - paragraph [ref=e767]: "--color-primary-800"
+                      - generic [ref=e769]:
+                        - term [ref=e770]: Verdi
+                        - definition: "#7499f7"
+              - generic [ref=e771]:
+                - heading "Custom - Orange" [level=2] [ref=e772]
+                - generic [ref=e773]: "PLAN.md nevner Orange, men definerer ingen `--color-orange-*` eller enkel orange-verdi. Ingen swatches genereres før verdiene finnes."
+        - complementary "Innhold på siden" [ref=e774]:
+          - navigation [ref=e775]:
+            - paragraph [ref=e776]: Innhold
+            - list [ref=e777]:
+              - listitem [ref=e778]:
+                - link "Maritime Monochromatic" [ref=e779] [cursor=pointer]:
+                  - /url: "#plan-maritime-monochromatic"
+              - listitem [ref=e780]:
+                - link "Maritime Monochromatic Secondary" [ref=e781] [cursor=pointer]:
+                  - /url: "#plan-maritime-monochromatic-secondary"
+              - listitem [ref=e782]:
+                - link "All Year Pallet - Amber" [ref=e783] [cursor=pointer]:
+                  - /url: "#plan-all-year-amber"
+              - listitem [ref=e784]:
+                - link "All Year Pallet - Yellow" [ref=e785] [cursor=pointer]:
+                  - /url: "#plan-all-year-yellow"
+              - listitem [ref=e786]:
+                - link "Teal" [ref=e787] [cursor=pointer]:
+                  - /url: "#plan-teal"
+              - listitem [ref=e788]:
+                - link "PrimaryBlue" [ref=e789] [cursor=pointer]:
+                  - /url: "#plan-primary-blue"
+              - listitem [ref=e790]:
+                - link "Custom - Orange" [ref=e791] [cursor=pointer]:
+                  - /url: "#plan-custom-orange"
+  - button "Open Next.js Dev Tools" [ref=e797] [cursor=pointer]:
+    - img [ref=e798]
+  - alert [ref=e801]

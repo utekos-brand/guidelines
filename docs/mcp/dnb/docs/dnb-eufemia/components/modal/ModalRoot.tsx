@@ -1,0 +1,47 @@
+import type { ReactNode, RefObject } from 'react'
+import ModalContent from './ModalContent'
+import type { ModalContentProps } from './types'
+import PortalRoot from '../PortalRoot'
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface Window {
+    __modalRoot: HTMLElement
+  }
+}
+
+export type ModalRootProps = {
+  /**
+   * The id used internal in the modal/drawer root element. Defaults to `root`, so the element id will be `dnb-modal-root`.
+   */
+  id?: string
+  directDomReturn?: boolean
+
+  /**
+   * The content which will appear when triggering the modal/drawer.
+   */
+  children?: ReactNode | ((props: ModalContentProps) => ReactNode)
+
+  /** For internal use only */
+  modalContentCloseRef?: RefObject<
+    ((event: Event, options: { triggeredBy?: string }) => void) | null
+  >
+} & ModalContentProps
+
+export default function ModalRoot({
+  children = null,
+  directDomReturn = false,
+  ...props
+}: ModalRootProps) {
+  if (directDomReturn) {
+    return <ModalContent {...props}>{children}</ModalContent>
+  }
+
+  return (
+    <PortalRoot>
+      <div className="dnb-modal-root__inner">
+        <ModalContent {...props}>{children}</ModalContent>
+      </div>
+    </PortalRoot>
+  )
+}

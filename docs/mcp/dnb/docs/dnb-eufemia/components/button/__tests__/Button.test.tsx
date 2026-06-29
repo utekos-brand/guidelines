@@ -1,0 +1,748 @@
+/**
+ * Button Test
+ *
+ */
+
+import type { RefObject } from 'react'
+import { axeComponent, loadScss } from '../../../core/test-utils/testSetup'
+import type { ButtonOnClick, ButtonProps } from '../Button'
+import Button from '../Button'
+import IconPrimary from '../../IconPrimary'
+import Icon from '../../icon/Icon'
+import { chevron_down, chevron_up } from '../../../icons'
+import { fireEvent, render, waitFor } from '@testing-library/react'
+import { Provider, Theme } from '../../../shared'
+import userEvent from '@testing-library/user-event'
+
+const props: ButtonProps = {
+  href: 'href',
+  children: 'children',
+}
+
+beforeAll(() => {
+  vi.spyOn(global.console, 'log')
+})
+
+describe('Button component', () => {
+  it('renders with props as an object', () => {
+    const props: ButtonProps = {}
+
+    render(<Button {...props} />)
+    expect(document.querySelector('button')).toBeInTheDocument()
+  })
+
+  it('has a button tag', () => {
+    const title = 'title'
+    render(<Button {...props} title={title} href={null} />)
+    const button = document.querySelector('button')
+
+    expect(button.getAttribute('title')).toBe(title)
+  })
+
+  it('icon button should set aria-label with title', () => {
+    const title = 'title'
+    render(<Button icon="bell" title={title} />)
+    const button = document.querySelector('button')
+
+    expect(button.getAttribute('title')).toBe(title)
+    expect(button.getAttribute('aria-label')).toBe(title)
+  })
+
+  it('should convert React element title to string', () => {
+    render(
+      <Button
+        {...props}
+        title={<span>Component title</span>}
+        href={null}
+      />
+    )
+    const button = document.querySelector('button')
+
+    expect(button.getAttribute('title')).toBe('Component title')
+  })
+
+  it('should convert React element title to aria-label for icon-only button', () => {
+    render(<Button icon="bell" title={<>Icon label</>} />)
+    const button = document.querySelector('button')
+
+    expect(button.getAttribute('title')).toBe('Icon label')
+    expect(button.getAttribute('aria-label')).toBe('Icon label')
+  })
+
+  it('icon only has to have some extra classes', () => {
+    render(<Button icon="question" />)
+    const button = document.querySelector('button')
+
+    // size "medium" and has icon
+    expect(button.classList).toContain('dnb-button--size-medium')
+    // has icon class, but not has text
+    expect(button.classList).toContain('dnb-button--has-icon')
+    expect(button.classList).not.toContain('dnb-button--has-text')
+  })
+
+  describe('size', () => {
+    it('should support small size', () => {
+      render(<Button icon="question" size="small" />)
+      const button = document.querySelector('button')
+      const icon = document.querySelector('.dnb-icon')
+      expect(button.classList).toContain('dnb-button--size-small')
+      expect(button.classList).not.toContain('dnb-button--icon-size-small')
+      expect(icon.classList).toContain('dnb-icon--default')
+    })
+
+    it('should support medium size', () => {
+      render(<Button icon="question" size="medium" />)
+      const button = document.querySelector('button')
+      const icon = document.querySelector('.dnb-icon')
+      expect(button.classList).toContain('dnb-button--size-medium')
+      expect(button.classList).not.toContain(
+        'dnb-button--icon-size-medium'
+      )
+      expect(icon.classList).toContain('dnb-icon--default')
+    })
+
+    it('has size set to medium when button size is default', () => {
+      render(<Button icon="question" size="default" />)
+      const button = document.querySelector('button')
+      const icon = document.querySelector('.dnb-icon')
+      expect(button.classList).toContain('dnb-button--icon-size-medium')
+      expect(icon.classList).toContain('dnb-icon--medium')
+    })
+
+    it('has medium icon if button size is large', () => {
+      render(<Button text="Button" size="large" icon="question" />)
+      const button = document.querySelector('button')
+      const icon = document.querySelector('.dnb-icon')
+      // size "large
+      expect(button.classList).toContain('dnb-button--size-large')
+      expect(icon.classList).toContain('dnb-icon--default')
+    })
+  })
+
+  it('has to have a bounding tag if property is set', () => {
+    render(<Button bounding={true} />)
+    expect(
+      document.querySelector('.dnb-button__bounding')
+    ).toBeInTheDocument()
+  })
+
+  it('has a disabled attribute, once we set disabled to true', () => {
+    const { rerender } = render(<Button />)
+    expect(document.querySelector('button')).not.toHaveAttribute(
+      'disabled'
+    )
+    rerender(<Button disabled />)
+
+    expect(document.querySelector('button')).toHaveAttribute('disabled')
+  })
+
+  it('uses dark surface styling from Theme context', () => {
+    render(
+      <Theme.Context surface="dark">
+        <Button>Button</Button>
+      </Theme.Context>
+    )
+
+    expect(document.querySelector('.dnb-button')).toHaveClass(
+      'dnb-button--surface-dark'
+    )
+  })
+
+  it('should be able to omit button type', () => {
+    render(<Button type="" />)
+
+    expect(document.querySelector('button')).not.toHaveAttribute('type')
+  })
+
+  it('should use span element if defined', () => {
+    render(<Button element="span" />)
+    expect(document.querySelector('.dnb-button').tagName).toBe('SPAN')
+    expect(
+      document.querySelector('.dnb-button').getAttribute('type')
+    ).toBe('button')
+  })
+
+  it('should support spacing props', () => {
+    render(<Button top="2rem" />)
+
+    const element = document.querySelector('.dnb-button')
+
+    expect(element).toHaveClass(
+      'dnb-button dnb-button--primary dnb-space__top--large',
+      { exact: true }
+    )
+  })
+
+  it('should inherit disabled from formElement', () => {
+    render(
+      <Provider formElement={{ vertical: true, disabled: true }}>
+        <Button text="Button" />
+      </Provider>
+    )
+
+    const element = document.querySelector('.dnb-button')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual([
+      'class',
+      'disabled',
+      'type',
+      'aria-disabled',
+    ])
+    expect(element).toHaveClass(
+      'dnb-button dnb-button--primary dnb-button--has-text',
+      { exact: true }
+    )
+  })
+
+  it('has "onClick" event which will trigger on a click', () => {
+    const myEvent = vi.fn()
+    render(<Button onClick={myEvent} />)
+    const button = document.querySelector('button')
+    fireEvent.click(button)
+    expect(myEvent.mock.calls.length).toBe(1)
+  })
+
+  it('has set ref if ref was given', () => {
+    const ref: RefObject<HTMLButtonElement | null> = {
+      current: null,
+    }
+    expect(ref.current).toBe(null)
+    render(<Button ref={ref} />)
+
+    // ref should be the DOM element, not a class instance
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement)
+    expect(ref.current.tagName).toBe('BUTTON')
+    expect(ref.current).toBe(document.querySelector('.dnb-button'))
+  })
+
+  it('gets valid element when ref is function', () => {
+    const refFn = vi.fn()
+
+    render(<Button id="unique" ref={refFn} />)
+
+    // ref callback receives the DOM element
+    expect(refFn).toHaveBeenCalledTimes(1)
+    const button = document.querySelector('#unique')
+    expect(refFn).toHaveBeenCalledWith(button)
+    expect(button.tagName).toBe('BUTTON')
+  })
+
+  it('has type of button', () => {
+    render(<Button />)
+    const button = document.querySelector('button')
+    expect(button.getAttribute('type')).toBe('button')
+  })
+
+  it('has alignment helper with aria-hidden', () => {
+    const text = 'Button'
+    const { rerender } = render(<Button text={text} />)
+
+    expect(
+      document
+        .querySelector('.dnb-button__alignment')
+        .getAttribute('aria-hidden')
+    ).toBe('true')
+    expect(document.querySelector('.dnb-button__text').textContent).toBe(
+      text
+    )
+
+    rerender(<Button icon="bell" />)
+
+    expect(
+      document
+        .querySelector('.dnb-button__alignment')
+        .getAttribute('aria-hidden')
+    ).toBe('true')
+    expect(
+      document.querySelector('.dnb-button__text')
+    ).not.toBeInTheDocument()
+  })
+
+  it('should validate with ARIA rules as a button', async () => {
+    const Comp = render(<Button {...props} />)
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+
+  describe('href', () => {
+    it('has a anchor tag', () => {
+      render(<Button {...props} href="https://url" icon={null} />)
+      expect(document.querySelector('a')).toBeInTheDocument()
+      expect(document.querySelector('svg')).not.toBeInTheDocument()
+    })
+
+    it('has a anchor tag and includes a launch icon', () => {
+      render(
+        <Button
+          {...props}
+          href="https://url"
+          target="_blank"
+          icon={null}
+        />
+      )
+      expect(document.querySelector('svg')).toBeInTheDocument()
+    })
+
+    it('supports anchor rel property', () => {
+      render(<Button {...props} href="https://url" icon={null} rel="me" />)
+      expect(document.querySelector('a').getAttribute('rel')).toBe('me')
+    })
+
+    it('removes a javascript: href to prevent script execution', () => {
+      render(
+        <Button {...props} href="javascript:alert('XSS')" icon={null} />
+      )
+      expect(document.querySelector('a')).not.toHaveAttribute('href')
+    })
+
+    describe('disabled', () => {
+      it('should validate with ARIA rules as a anchor', async () => {
+        const Comp = render(<Button {...props} href="https://url" />)
+        expect(await axeComponent(Comp)).toHaveNoViolations()
+      })
+
+      it('should validate with ARIA rules when disabled', async () => {
+        const Comp = render(
+          <Button {...props} href="https://url" disabled />
+        )
+        expect(await axeComponent(Comp)).toHaveNoViolations()
+      })
+
+      it('does not navigate when href is set and button is disabled', async () => {
+        render(
+          <Button href="https://url" disabled>
+            Go to example
+          </Button>
+        )
+
+        const anchor = document.querySelector('a')
+
+        const dispatched = fireEvent.click(anchor)
+        expect(dispatched).toBe(false)
+
+        // Also expect proper disabled semantics
+        expect(anchor).toHaveAttribute('aria-disabled', 'true')
+        expect(anchor).toHaveAttribute('tabindex', '-1')
+      })
+
+      it('renders disabled attribute when href is set', async () => {
+        render(
+          <Button href="https://url" disabled>
+            Go to example
+          </Button>
+        )
+
+        const anchor = document.querySelector('a')
+        expect(anchor).toHaveAttribute('disabled')
+      })
+
+      it('removes href from anchor when disabled', () => {
+        render(
+          <Button href="https://example.com" disabled>
+            Disabled link button
+          </Button>
+        )
+
+        const anchor = document.querySelector('a')
+        expect(anchor).toBeInTheDocument()
+        expect(anchor).not.toHaveAttribute('href')
+      })
+    })
+  })
+
+  it('has variant set to primary as default', () => {
+    render(<Button />)
+    const button = document.querySelector('button')
+    expect(button.classList).toContain('dnb-button--primary')
+  })
+
+  it('has variant set to primary when only setting text', () => {
+    render(<Button text="Button" />)
+    const button = document.querySelector('button')
+    expect(button.classList).toContain('dnb-button--primary')
+  })
+
+  it('has variant set to secondary when only setting icon', () => {
+    render(<Button icon="question" />)
+    const button = document.querySelector('button')
+    expect(button.classList).toContain('dnb-button--secondary')
+  })
+
+  it('has variant tertiary', () => {
+    render(<Button text="Button" variant="tertiary" icon="question" />)
+    const button = document.querySelector('button')
+    expect(button.classList).toContain('dnb-button--tertiary')
+  })
+
+  it('has variant unstyled', () => {
+    render(<Button text="Button" variant="unstyled" />)
+    const button = document.querySelector('button')
+    expect(button.classList).toContain('dnb-button--unstyled')
+  })
+
+  it('will replace icon with icon component', () => {
+    const { rerender } = render(
+      <Button icon={<span className="dnb-icon custom-icon">icon</span>} />
+    )
+    expect(document.querySelector('.custom-icon')).toBeInTheDocument()
+
+    rerender(
+      <Button
+        icon={
+          <IconPrimary icon="bell" className="custom-icon-component" />
+        }
+      />
+    )
+
+    expect(document.querySelector('.custom-icon')).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.custom-icon-component')
+    ).toBeInTheDocument()
+  })
+
+  it('will only have attached event listener if one is given', () => {
+    const onClick = vi.fn()
+    const { rerender } = render(<Button text="Button" onClick={onClick} />)
+
+    type Button = HTMLButtonElement & { onClickHandler: ButtonOnClick }
+
+    const button = document.querySelector('button') as Button
+
+    button.onClickHandler = onClick
+
+    fireEvent.click(button)
+    fireEvent.click(button)
+
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(button.onClickHandler).toHaveBeenCalledTimes(2)
+
+    rerender(<Button text="Button" onClick={undefined} />)
+
+    fireEvent.click(button)
+
+    // still 2
+    expect(onClick).toHaveBeenCalledTimes(2)
+    expect(button.onClickHandler).toHaveBeenCalledTimes(2)
+  })
+
+  it('will warn when tertiary is used without an icon', () => {
+    process.env.NODE_ENV = 'development'
+    global.console.log = vi.fn()
+    render(<Button text="Button" variant="tertiary" />)
+    expect(global.console.log).toHaveBeenCalled()
+  })
+
+  it('will warn when icon-only button has no title or aria-label', () => {
+    process.env.NODE_ENV = 'development'
+    global.console.log = vi.fn()
+    render(<Button icon="bell" />)
+    expect(global.console.log).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.stringContaining(
+        'Icon-only Button requires either a "title" or "aria-label"'
+      )
+    )
+  })
+
+  it('will not warn when icon-only button has a title', () => {
+    process.env.NODE_ENV = 'development'
+    global.console.log = vi.fn()
+    render(<Button icon="bell" title="Bell" />)
+    expect(global.console.log).not.toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.stringContaining(
+        'Icon-only Button requires either a "title" or "aria-label"'
+      )
+    )
+  })
+
+  it('will not warn when icon-only button has an aria-label', () => {
+    process.env.NODE_ENV = 'development'
+    global.console.log = vi.fn()
+    render(<Button icon="bell" aria-label="Bell" />)
+    expect(global.console.log).not.toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.stringContaining(
+        'Icon-only Button requires either a "title" or "aria-label"'
+      )
+    )
+  })
+
+  it('has no size when only setting text', () => {
+    render(<Button text="Button" />)
+    expect(
+      document.querySelector('.dnb-button--size-medium')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-button--size-large')
+    ).not.toBeInTheDocument()
+  })
+
+  it('supports inline styling', () => {
+    render(<Button text="text" style={{ color: 'red' }} />)
+
+    expect(document.querySelector('button').getAttribute('style')).toBe(
+      'color: red;'
+    )
+  })
+
+  it('should show tooltip on hover', async () => {
+    render(<Button text="Button" tooltip="Tooltip content" />)
+
+    const button = document.querySelector('button')
+
+    expect(
+      document.querySelector('.dnb-tooltip--active')
+    ).not.toBeInTheDocument()
+
+    await userEvent.hover(button)
+
+    await waitFor(() => {
+      expect(
+        document.querySelector('.dnb-tooltip--active')
+      ).toBeInTheDocument()
+    })
+  })
+})
+
+// React's deprecated .defaultProps would convert undefined values to the
+// declared default. After migrating away from .defaultProps we replicate
+// that behavior with removeUndefinedProps so that context overrides still
+// work when a consumer passes an explicit `undefined`.
+describe('undefined props should fall through to defaults', () => {
+  it('should not forward provider-only props to the DOM', () => {
+    const providerButtonProps: Partial<ButtonProps> & {
+      unexpected?: string
+    } = {
+      unexpected: 'value',
+      iconSize: 'medium',
+    }
+
+    render(
+      <Provider Button={providerButtonProps}>
+        <Button text="Button" icon="bell" />
+      </Provider>
+    )
+
+    const button = document.querySelector('.dnb-button')
+
+    expect(button).not.toHaveAttribute('unexpected')
+    expect(button.classList).toContain('dnb-button--icon-size-medium')
+  })
+
+  it('should let context override a prop that is explicitly undefined', () => {
+    render(
+      <Provider Button={{ iconSize: 'medium' }}>
+        <Button text="Button" icon="bell" iconSize={undefined} />
+      </Provider>
+    )
+
+    const button = document.querySelector('.dnb-button')
+
+    expect(button.classList).toContain('dnb-button--icon-size-medium')
+  })
+
+  it('should use default value when prop is explicitly undefined and no context overrides it', () => {
+    render(<Button text="Button" icon="bell" iconSize={undefined} />)
+
+    const button = document.querySelector('.dnb-button')
+
+    // Default iconSize is null, so no icon-size class should be present
+    expect(button.className).not.toContain('dnb-button--icon-size')
+  })
+
+  it('should use explicit prop value over context when prop differs from default', () => {
+    render(
+      <Provider Button={{ iconSize: 'small' }}>
+        <Button text="Button" icon="bell" iconSize="medium" />
+      </Provider>
+    )
+
+    const button = document.querySelector('.dnb-button')
+
+    // 'medium' differs from the default null, so context cannot override it
+    expect(button.classList).toContain('dnb-button--icon-size-medium')
+  })
+
+  it('should let context override iconSize when using a React element as icon and iconSize is undefined', () => {
+    render(
+      <Provider Button={{ iconSize: 'medium' }}>
+        <Button
+          text="Button"
+          icon={<IconPrimary icon="bell" />}
+          iconSize={undefined}
+        />
+      </Provider>
+    )
+
+    const button = document.querySelector('.dnb-button')
+
+    expect(button.classList).toContain('dnb-button--icon-size-medium')
+  })
+
+  it('should use default iconSize when using a React element as icon and iconSize is undefined', () => {
+    render(
+      <Button
+        text="Button"
+        icon={<IconPrimary icon="bell" />}
+        iconSize={undefined}
+      />
+    )
+
+    const button = document.querySelector('.dnb-button')
+
+    // Default iconSize is null, so no icon-size class should be present
+    expect(button.className).not.toContain('dnb-button--icon-size')
+  })
+
+  it('should preserve explicit iconSize when using a React element as icon', () => {
+    render(
+      <Provider Button={{ iconSize: 'small' }}>
+        <Button
+          text="Button"
+          icon={<IconPrimary icon="bell" />}
+          iconSize="medium"
+        />
+      </Provider>
+    )
+
+    const button = document.querySelector('.dnb-button')
+
+    // 'medium' differs from the default null, so context cannot override it
+    expect(button.classList).toContain('dnb-button--icon-size-medium')
+  })
+})
+
+describe('Button transitionState', () => {
+  it('forwards transitionState to IconPrimary', () => {
+    const icon = Icon.transition({
+      collapsed: chevron_down,
+      expanded: chevron_up,
+    })
+
+    render(<Button text="Toggle" icon={icon} transitionState="expanded" />)
+
+    const wrapper = document.querySelector(
+      '.dnb-icon--transition-fallback'
+    ) as HTMLElement
+
+    expect(wrapper).toBeInTheDocument()
+
+    const svgs = wrapper.querySelectorAll('svg[data-icon-state]')
+    expect(svgs).toHaveLength(2)
+    expect(svgs[0].getAttribute('data-icon-state')).toBe('collapsed')
+    expect(svgs[1].getAttribute('data-icon-state')).toBe('expanded')
+    expect(svgs[1].classList.contains('dnb-icon__state--active')).toBe(
+      true
+    )
+  })
+
+  it('does not leak transitionState onto the DOM element', () => {
+    const icon = Icon.transition({
+      collapsed: chevron_down,
+      expanded: chevron_up,
+    })
+
+    render(<Button text="Toggle" icon={icon} transitionState="expanded" />)
+
+    const button = document.querySelector('.dnb-button')
+    expect(button.getAttribute('transitionState')).toBeNull()
+    expect(button.getAttribute('transitionstate')).toBeNull()
+  })
+})
+
+describe('Button status', () => {
+  it('connects the status message to the button via aria-describedby', () => {
+    render(
+      <Button text="Primary button with text only" status="my error" />
+    )
+
+    const button = document.querySelector('button')
+    const describedBy = button.getAttribute('aria-describedby')
+
+    expect(describedBy).toBeTruthy()
+
+    // The referenced element must exist and contain the status text
+    const statusText = document.getElementById(describedBy)
+    expect(statusText).toBeInTheDocument()
+    expect(statusText).toHaveTextContent('my error')
+    expect(statusText).toHaveClass('dnb-form-status__text')
+  })
+
+  it('derives the button id and the form-status ids from the same id', () => {
+    render(<Button text="With status" status="my error" />)
+
+    const button = document.querySelector('button')
+    const buttonId = button.getAttribute('id')
+
+    expect(buttonId).toBeTruthy()
+    expect(
+      document.querySelector('.dnb-form-status').getAttribute('id')
+    ).toBe(`${buttonId}-form-status`)
+    expect(button.getAttribute('aria-describedby')).toBe(
+      `${buttonId}-status`
+    )
+  })
+
+  it('does not set aria-describedby when no status is given', () => {
+    render(<Button text="No status" />)
+
+    const button = document.querySelector('button')
+    expect(button).not.toHaveAttribute('aria-describedby')
+  })
+
+  it('combines a user provided aria-describedby with the status id', () => {
+    render(
+      <Button
+        text="With custom describedby"
+        status="my error"
+        aria-describedby="custom-id"
+      />
+    )
+
+    const button = document.querySelector('button')
+    const describedBy = button.getAttribute('aria-describedby')
+    const statusId = document
+      .querySelector('.dnb-form-status__text')
+      .getAttribute('id')
+
+    expect(describedBy).toContain('custom-id')
+    expect(describedBy).toContain(statusId)
+  })
+
+  it('keeps the status describedby when a tooltip is also set', () => {
+    render(
+      <Button
+        text="With status and tooltip"
+        status="my error"
+        tooltip="Helpful hint"
+      />
+    )
+
+    const button = document.querySelector('button')
+    const statusId = document
+      .querySelector('.dnb-form-status__text')
+      .getAttribute('id')
+
+    // The tooltip id is only added on hover/focus, but the status link
+    // must already be present and share the same base id.
+    expect(button.getAttribute('aria-describedby')).toBe(statusId)
+  })
+
+  it('should validate with ARIA rules when a status is set', async () => {
+    const Comp = render(<Button text="With status" status="my error" />)
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+})
+
+describe('Button scss', () => {
+  it('has to match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

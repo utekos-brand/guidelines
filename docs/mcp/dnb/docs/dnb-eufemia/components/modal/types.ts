@@ -1,0 +1,340 @@
+import type {
+  ElementType,
+  ReactNode,
+  RefObject,
+  SyntheticEvent,
+} from 'react'
+import type { CloseButtonProps } from './parts/CloseButton'
+import type { ButtonProps } from '../button/Button'
+import type { ModalRootProps } from './ModalRoot'
+
+export type ModalCallbackInstance = {
+  _id: string
+  props: ModalProps
+}
+
+export type ModalFullscreen = 'auto' | boolean
+export type ModalAlignContent = 'left' | 'center' | 'centered' | 'right'
+export type ModalContainerPlacement = 'left' | 'right' | 'top' | 'bottom'
+export type ModalTriggerVariant = 'primary' | 'secondary' | 'tertiary'
+export type ModalTriggerIconPosition = 'left' | 'right'
+export type ModalContentMinWidth = string | number
+export type ModalContentMaxWidth = string | number
+
+export type ModalTriggeredBy =
+  | 'handler'
+  | 'button'
+  | 'overlay'
+  | 'keyboard'
+  | 'unmount'
+export type ModalCloseHandlerParams = {
+  triggeredBy: ModalTriggeredBy
+  triggeredByEvent?: Event
+}
+export type ModalCloseHandler = (params?: ModalCloseHandlerParams) => void
+
+export type ModalProps = ModalRootProps & {
+  /**
+   * The id used internal for the trigger button and Modal component.
+   */
+  id?: string
+
+  /**
+   * Will disable the trigger button.
+   */
+  disabled?: boolean
+
+  /**
+   * Forces the modal to delay the opening. The delay is given in `ms`.
+   */
+  openDelay?: string | number
+
+  /**
+   * If set to `true` (boolean or string), then the user can't close the modal.
+   */
+  preventClose?: boolean
+
+  /**
+   * Duration of animation open/close in ms. Defaults to `300ms`.
+   */
+  animationDuration?: string | number
+
+  /**
+   * If set to `true`, no open/close animation will be shown. Defaults to `false`.
+   */
+  noAnimation?: boolean
+
+  /**
+   * Use this property to control the open/close state by setting `true` / `false`.
+   */
+  open?: boolean
+
+  /**
+   * The content which will appear when triggering open the modal. If a function is given, you get a close method `() => ({ close })` in the arguments.
+   */
+  children?: ReactNode | ((props: ModalProps) => ReactNode)
+
+  /**
+   * Omits the default trigger button.
+   */
+  omitTriggerButton?: boolean
+
+  /**
+   * This event gets triggered once the modal shows up. Returns the modal id: `{ id }`.
+   */
+  onOpen?: ({ id }: { id?: string }) => void
+
+  /**
+   * This event gets triggered once the modal gets closed. Returns the modal id: `{ id, event, triggeredBy }`.
+   */
+  onClose?: ({
+    id,
+    event,
+    triggeredBy,
+  }: {
+    id?: string
+    event?: Event
+    triggeredBy?: string
+  }) => void
+
+  /**
+   * This event gets triggered once the user tries to close the modal, but `preventClose` is set to `true`. Returns a callback `close` you can call to trigger the close mechanism. More details below. Returns the modal id: `{ id, event, close: Method, triggeredBy }`.
+   */
+  onClosePrevent?: ({
+    id,
+    event,
+    triggeredBy,
+    close,
+  }: {
+    id?: string
+    event?: Event
+    triggeredBy?: string
+    close?: ModalCloseHandler
+  }) => void
+
+  /**
+   * Set a function to call the callback function, once the modal should open: `openModal={(open) => open()}`.
+   */
+  openModal?: (
+    open?: (e: Event) => void,
+    instance?: ModalCallbackInstance
+  ) => () => void | void
+
+  /**
+   * Set a function to call the callback function, once the modal should close: `closeModal={(close) => close()}`.
+   */
+  closeModal?: (
+    close?: ModalCloseHandler,
+    instance?: ModalCallbackInstance
+  ) => () => void | void
+
+  /**
+   * Provide a custom trigger component. Like `trigger={<Anchor href="/" />}`. It will set the focus on it when the modal gets closed.
+   */
+  trigger?: ElementType
+
+  /**
+   * Props forwarded to the trigger button.
+   */
+  triggerProps?: ButtonProps
+
+  /**
+   * Deprecated. Use `triggerProps` instead.
+   * @deprecated Use `triggerProps` instead.
+   */
+  triggerAttributes?: ModalTriggerAttributes
+
+  /**
+   * The content which will appear when triggering the modal/drawer. Alternative to `children`.
+   */
+  modalContent?: ReactNode | ((props: ModalProps) => ReactNode)
+
+  /**
+   * If true, the modal will not open in a new DOM but directly in the current DOM. Defaults to `false`. Be aware of the side effects of setting this property to `true`.
+   */
+  directDomReturn?: boolean
+
+  /**
+   * To get the inner content Element, pass in your own React ref.
+   */
+  contentRef?: RefObject<HTMLElement>
+
+  /**
+   * To get the scroll Element, pass in your own React ref.
+   */
+  scrollRef?: RefObject<HTMLElement>
+}
+
+export type ModalContentProps = {
+  /**
+   * The content which will appear when triggering the modal/drawer. Alternative to `children`.
+   */
+  modalContent?: ReactNode | ((props: ModalContentProps) => ReactNode)
+
+  /**
+   * The content which will appear in the bar, above the header, and side-by-side the close button.
+   */
+  barContent?: ReactNode
+
+  /**
+   * The content which will appear in the header of the modal/drawer.
+   */
+  headerContent?: ReactNode
+  hide?: boolean
+
+  /**
+   * The id used internal for the trigger button and Modal component.
+   */
+  id?: string
+
+  /**
+   * The ID of the trigger component, describing the modal content. Defaults to the internal `trigger`, so make sure you define the `title` in `triggerAttributes`.
+   */
+  labelledBy?: string
+
+  /**
+   * The Modal handles the first focus – automatically. However, you can define a custom focus selector that will be used instead `focusSelector=".css-selector"`.
+   */
+  focusSelector?: string
+
+  /**
+   * Defines a unique identifier to a modal. Use it in case you have to refer in some way to the modal content.
+   */
+  contentId?: string
+
+  /**
+   * The modal/drawer title. Displays on the very top of the content.
+   */
+  title?: ReactNode
+
+  /**
+   * The aria label of the dialog when no labelledBy and no title is given. Defaults to `Vindu`.
+   */
+  dialogTitle?: string
+
+  /**
+   * If `true`, the close button will not be shown.
+   */
+  hideCloseButton?: boolean
+
+  /**
+   * Props forwarded to the close button.
+   */
+  closeButtonProps?: CloseButtonProps
+
+  /**
+   * @deprecated Use `closeButtonProps` instead.
+   */
+  closeButtonAttributes?: CloseButtonProps
+
+  /**
+   * If set to `false` then the modal content will be shown without any spacing. Defaults to `true`.
+   */
+  spacing?: boolean
+
+  /**
+   * By default the modal/drawer content gets added the core style class `dnb-core-style`. Use `false` to disable this behavior.
+   */
+  preventCoreStyle?: boolean
+  animationDuration?: string | number
+
+  /**
+   * Disable clicking the background overlay to close the modal. PS! Pressing `esc` key will still close the modal.
+   */
+  preventOverlayClose?: boolean
+
+  /**
+   * If set to `true`, no open/close animation will be shown. Defaults to `false`.
+   */
+  noAnimation?: boolean
+
+  /**
+   * Same as `noAnimation`, but gets triggered only if the viewport width is less than `40em`. Defaults to `false`.
+   */
+  noAnimationOnMobile?: boolean
+
+  /**
+   * The minimum Modal content width, defined by a CSS width value like `50vw` (50% of the viewport). Be careful when using fixed `minWidth` so you don't break responsiveness. Defaults to `30rem`.
+   */
+  minWidth?: ModalContentMinWidth
+
+  /**
+   * The maximum Modal content width, defined by a CSS width value like `20rem`. Defaults to `60rem`.
+   */
+  maxWidth?: ModalContentMaxWidth
+
+  /**
+   * If set to `true` then the modal content will be shown as fullscreen, without showing the original content behind. Can be set to `false` to omit the auto fullscreen. Defaults to `auto`.
+   */
+  fullscreen?: ModalFullscreen
+
+  /**
+   * Define the inner horizontal alignment of the content. Can be set to `left`, `center`, `right` and `centered`. If `centered`, then the content will also be centered vertically. Defaults to `left`.
+   */
+  alignContent?: ModalAlignContent
+
+  /**
+   * For `drawer` mode only. Defines the placement on what side the Drawer should be opened. Defaults to `right`.
+   */
+  containerPlacement?: 'left' | 'right' | 'top' | 'bottom'
+
+  /**
+   * Define the vertical alignment of the container. Defaults to `center`.
+   */
+  verticalAlignment?: 'top' | 'center'
+
+  /**
+   * Give the content wrapper a custom class name (maps to `dnb-modal__content`).
+   */
+  contentClass?: string
+
+  /**
+   * Give the page overlay a custom class name (maps to `dnb-modal__overlay`).
+   */
+  overlayClass?: string
+
+  /**
+   * Define an array with HTML class selectors (`['.element-selector']`) which should not get invalidated when the modal opens/closes. Use this in order to let some parts of your site still be accessible by screen readers.
+   */
+  bypassInvalidationSelectors?: Array<string>
+
+  /**
+   * For internal usage
+   * Will close the modal
+   */
+  close?: (
+    event?: Event | SyntheticEvent,
+    options?: { ifIsLatest?: boolean; triggeredBy?: string }
+  ) => void
+
+  /**
+   * Give the inner Dialog or Drawer component a className (only works with mode)
+   */
+  className?: string
+
+  /**
+   * The content which will appear when triggering open the modal. If a function is given, you get a close method `() => ({ close })` in the arguments.
+   */
+  children?: ReactNode | ((props: ModalContentProps) => ReactNode)
+
+  /**
+   * The title of the close button. Defaults to _Lukk_.
+   */
+  closeTitle?: string
+
+  /**
+   * Internal
+   */
+  dialogRole?: 'dialog' | 'alertdialog'
+  contentRef?: RefObject<HTMLElement>
+  scrollRef?: RefObject<HTMLElement>
+  open?: boolean
+  modalContentCloseRef?: RefObject<
+    ((event: Event, options: { triggeredBy?: string }) => void) | null
+  >
+}
+
+/**
+ * @deprecated Use `ButtonProps` from `@dnb/eufemia` instead.
+ */
+export type ModalTriggerAttributes = ButtonProps

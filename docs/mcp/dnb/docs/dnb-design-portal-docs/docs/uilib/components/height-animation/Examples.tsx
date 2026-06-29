@@ -1,0 +1,181 @@
+/**
+ * UI lib Component Example
+ *
+ */
+
+import { useState } from 'react'
+import styled from '@emotion/styled'
+import ComponentBox from '../../../../shared/tags/ComponentBox'
+import {
+  HeightAnimation,
+  ToggleButton,
+  Section,
+  Button,
+  Anchor,
+  P,
+} from '@dnb/eufemia/src'
+
+export function HeightAnimationDefault() {
+  return (
+    <ComponentBox>
+      {() => {
+        const Example = () => {
+          const [openState, setOpenState] = useState(false)
+          const [contentState, setContentState] = useState(false)
+
+          const onChangeHandler = ({ checked }) => {
+            setOpenState(checked)
+          }
+
+          return (
+            <>
+              <ToggleButton
+                checked={openState}
+                onChange={onChangeHandler}
+                right
+              >
+                Open/close
+              </ToggleButton>
+              <ToggleButton
+                checked={contentState || !openState}
+                disabled={!openState}
+                onChange={({ checked }) => {
+                  setContentState(checked)
+                }}
+                space={{ top: true, bottom: true }}
+              >
+                Change height inside
+              </ToggleButton>
+
+              <Section variant="information" top>
+                <HeightAnimation open={openState}>
+                  <Section
+                    innerSpace={{ block: 'large' }}
+                    variant="information"
+                  >
+                    <P space={0}>Your content</P>
+                  </Section>
+                  {contentState && <P space={0}>More content</P>}
+                </HeightAnimation>
+              </Section>
+
+              <P top>Look at me 👀</P>
+            </>
+          )
+        }
+
+        return <Example />
+      }}
+    </ComponentBox>
+  )
+}
+
+export function HeightAnimationAutosizing() {
+  return (
+    <ComponentBox>
+      {() => {
+        const Example = () => {
+          const [showMe, setShowMe] = useState(true)
+
+          return (
+            <>
+              <HeightAnimation showOverflow>
+                {showMe ? (
+                  <Button
+                    onClick={() => {
+                      setShowMe(!showMe)
+                    }}
+                  >
+                    Click me!
+                  </Button>
+                ) : (
+                  <Anchor
+                    onClick={() => {
+                      setShowMe(!showMe)
+                    }}
+                  >
+                    No, click me!
+                  </Anchor>
+                )}
+              </HeightAnimation>
+
+              <P top>Look at me 👀</P>
+            </>
+          )
+        }
+
+        return <Example />
+      }}
+    </ComponentBox>
+  )
+}
+
+export function HeightAnimationKeepInDOM() {
+  return (
+    <ComponentBox>
+      {() => {
+        const Example = () => {
+          const [openState, setOpenState] = useState(true)
+          const [contentState, setContentState] = useState(false)
+
+          const onChangeHandler = ({ checked }) => {
+            setOpenState(checked)
+          }
+
+          return (
+            <>
+              <ToggleButton
+                checked={openState}
+                onChange={onChangeHandler}
+                right
+              >
+                Open/close
+              </ToggleButton>
+              <ToggleButton
+                checked={contentState || !openState}
+                disabled={!openState}
+                onChange={({ checked }) => {
+                  setContentState(checked)
+                }}
+                space={{ top: true, bottom: true }}
+              >
+                Change height inside
+              </ToggleButton>
+
+              <StyledSection variant="information" top>
+                <HeightAnimation
+                  open={openState}
+                  keepInDOM={true}
+                  duration={1000}
+                >
+                  <Section
+                    innerSpace={{ block: 'large' }}
+                    variant="information"
+                  >
+                    <P space={0}>Your content</P>
+                  </Section>
+                  {contentState && <P space={0}>More content</P>}
+                </HeightAnimation>
+              </StyledSection>
+            </>
+          )
+        }
+
+        const StyledSection = styled(Section)`
+          .content-element {
+            transition: transform 1s var(--easing-default);
+            transform: translateY(-2rem);
+
+            padding: 4rem 0;
+          }
+
+          .dnb-height-animation--parallax .content-element {
+            transform: translateY(0);
+          }
+        `
+
+        return <Example />
+      }}
+    </ComponentBox>
+  )
+}

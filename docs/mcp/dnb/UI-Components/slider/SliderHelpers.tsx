@@ -1,0 +1,123 @@
+import type { NumberFormatReturnValue } from '../number-format/NumberUtils'
+import { formatCurrency, formatNumber } from '../number-format/NumberUtils'
+import { clamp } from '../../shared/helpers/clamp'
+
+import type { SliderNumberFormat, SliderValue } from './types'
+
+export const percentToValue = (
+  percent: number,
+  min: number,
+  max: number,
+  isReverse: boolean
+) => {
+  let num = ((max - min) * percent) / 100 + min
+
+  if (isReverse) {
+    num = max + min - num
+  }
+
+  return num
+}
+
+export const getOffset = (node: HTMLElement) => {
+  const { scrollY, scrollX } =
+    typeof window !== 'undefined' ? window : { scrollY: 0, scrollX: 0 }
+  const { left, top } = node.getBoundingClientRect()
+
+  return {
+    top: top + scrollY,
+    left: left + scrollX,
+  }
+}
+
+export const getMousePosition = (event: MouseEvent & TouchEvent) => {
+  if (event.changedTouches && event.changedTouches[0]) {
+    return {
+      x: event.changedTouches[0].pageX,
+      y: event.changedTouches[0].pageY,
+    }
+  }
+
+  return {
+    x: event.pageX,
+    y: event.pageY,
+  }
+}
+
+export const calculatePercent = (
+  node: HTMLElement,
+  event: MouseEvent | TouchEvent,
+  isVertical: boolean
+) => {
+  const { width, height } = node.getBoundingClientRect()
+  const { top, left } = getOffset(node)
+  const { x, y } = getMousePosition(event as MouseEvent & TouchEvent)
+
+  const value = isVertical ? y - top : x - left
+  const onePercent = (isVertical ? height : width) / 100
+
+  return Math.abs(clamp(value / onePercent))
+}
+
+export { clamp }
+
+export const roundValue = (
+  value: number,
+  { step, min, max }: { step: number; min: number; max: number }
+) => {
+  if (step > 0) {
+    if (value >= max) {
+      return max
+    }
+    if (value <= min) {
+      return min
+    }
+    return Math.round(value / step) * step
+  }
+
+  return parseFloat(parseFloat(String(value)).toFixed(3))
+}
+
+export const getUpdatedValues = (
+  value: Array<number>,
+  index: number,
+  newValue: number
+): SliderValue => {
+  return value.map((val, i) => {
+    if (i === index) {
+      val = newValue
+    }
+    return val
+  })
+}
+
+export const closestIndex = (goal: number, array: Array<number>) => {
+  const res = [...array].sort(
+    (a, b) => Math.abs(goal - a) - Math.abs(goal - b)
+  )[0]
+  return array.findIndex((num) => num === res)
+}
+
+export const getFormattedNumber = (
+  value: number,
+  numberFormat: SliderNumberFormat
+) => {
+  if (numberFormat) {
+    if (typeof numberFormat === 'function') {
+      const number = numberFormat(value as number) as string
+      return { number, aria: number }
+    }
+
+    const options = {
+      ...(numberFormat || {}),
+      returnAria: true as const,
+    }
+    const formatter =
+      options.currency === true || typeof options.currency === 'string'
+        ? formatCurrency
+        : formatNumber
+    return formatter(value as number, options)
+  }
+
+  return { aria: null, number: null } as NumberFormatReturnValue
+}

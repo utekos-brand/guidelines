@@ -1,0 +1,397 @@
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react'
+import type {
+  HTMLProps,
+  KeyboardEvent,
+  MouseEvent,
+  MouseEventHandler,
+  ReactNode,
+  RefObject,
+} from 'react'
+import { clsx } from 'clsx'
+import {
+  validateDOMAttributes,
+  getStatusState,
+  combineDescribedBy,
+  extendPropsWithContext,
+} from '../../shared/component-helper'
+import { pickFormElementProps } from '../../shared/helpers/filterValidProps'
+import AlignmentHelper from '../../shared/AlignmentHelper'
+import { useSpacing } from '../space/SpacingUtils'
+import {
+  skeletonDOMAttributes,
+  createSkeletonClass,
+} from '../skeleton/SkeletonHelper'
+
+import Context from '../../shared/Context'
+import Suffix from '../../shared/helpers/Suffix'
+import FormLabel from '../form-label/FormLabel'
+import type { FormStatusBaseProps } from '../form-status/FormStatus'
+import FormStatus from '../form-status/FormStatus'
+import useId from '../../shared/helpers/useId'
+import type { SkeletonShow } from '../Skeleton'
+import type { SpacingProps } from '../../shared/types'
+
+export type SwitchLabelPosition = 'left' | 'right'
+export type SwitchSize = 'default' | 'medium' | 'large'
+export type SwitchAttributes = string | Record<string, unknown>
+export type SwitchOnChangeParams = {
+  checked: boolean
+  event: MouseEvent | TouchEvent | KeyboardEvent
+}
+export type SwitchOnClickParams = MouseEvent<HTMLInputElement> & {
+  checked: boolean
+  event: MouseEvent<HTMLInputElement>
+}
+export type SwitchOnChange = (args: SwitchOnChangeParams) => void
+
+export type SwitchProps = {
+  /**
+   * Use either the `label` property or provide a custom one.
+   */
+  label?: ReactNode
+  /**
+   * Defines the position of the `label`. Use either `left` or `right`. Defaults to `right`.
+   */
+  labelPosition?: SwitchLabelPosition
+  /**
+   * Use `true` to make the label only readable by screen readers.
+   */
+  labelSrOnly?: boolean
+  /**
+   * The `title` of the input - describing it a bit further for accessibility reasons.
+   */
+  title?: string
+  /**
+   * Determine whether the switch is checked or not. The default will be `false`.
+   */
+  checked?: boolean
+  disabled?: boolean
+  id?: string
+  /**
+   * The size of the switch. For now there are `medium` (default) and `large`.
+   */
+  size?: SwitchSize
+  /**
+   * Text describing the content of the Switch more than the label. You can also send in a React component, so it gets wrapped inside the Switch component.
+   */
+  suffix?: ReactNode
+  value?: string
+  attributes?: SwitchAttributes
+  readOnly?: boolean
+  /**
+   * If set to `true`, an overlaying skeleton with animation will be shown.
+   */
+  skeleton?: SkeletonShow
+  className?: string
+  children?: ReactNode
+  /**
+   * Will be called on state changes made by the user.
+   */
+  onChange?: SwitchOnChange
+  /**
+   * Will be called on state changes made by the user, but with a delay. This way the user sees the animation before e.g. an error will be removed. Returns a boolean `{ checked, event }`.
+   */
+  /**
+   * Will be called on click.
+   */
+  onClick?: (args: SwitchOnClickParams) => void
+  onChangeEnd?: SwitchOnChange
+  /**
+   * By providing a `React.Ref` we can get the internally used input element (DOM), e.g. `ref={myRef}` by using `React.useRef(null)`.
+   */
+  ref?: RefObject<HTMLInputElement> | ((elem: HTMLInputElement) => void)
+} & FormStatusBaseProps &
+  Omit<
+    HTMLProps<HTMLElement>,
+    'ref' | 'size' | 'onChange' | 'onClick' | 'label'
+  > &
+  SpacingProps
+
+const defaultProps: Partial<SwitchProps> = {
+  statusState: 'error',
+}
+
+function Switch(props: SwitchProps) {
+  const context = useContext(Context)
+
+  const allProps = extractPropsFromContext()
+
+  const {
+    value,
+    size,
+    status,
+    statusState,
+    statusProps,
+    globalStatus,
+    statusNoAnimation,
+    suffix,
+    label,
+    labelPosition,
+    labelSrOnly,
+    title,
+    disabled,
+    readOnly,
+    skeleton,
+    className,
+    id: idProp,
+    checked: checkedProp,
+    onChange,
+    onChangeEnd,
+    onClick,
+    ref: refProp,
+    ...rest
+  } = allProps
+
+  const [, forceUpdate] = useReducer(() => ({}), {})
+  const id = useId(idProp)
+  const isFn = typeof refProp === 'function'
+  const refHook = useRef<HTMLInputElement>(undefined)
+  const inputRef = (!isFn && refProp) || refHook
+
+  const preventChangeRef = useRef(false)
+  const isCheckedRef = useRef(checkedProp ?? false)
+  const prevCheckedRef = useRef(checkedProp)
+
+  useEffect(() => {
+    if (isFn) {
+      refProp?.(refHook.current)
+    }
+  }, [refProp, isFn, refHook])
+
+  useEffect(() => {
+    if (checkedProp !== prevCheckedRef.current) {
+      isCheckedRef.current = !!checkedProp
+      prevCheckedRef.current = !!checkedProp
+      forceUpdate()
+    }
+  }, [checkedProp])
+
+  const callOnChange = useCallback(
+    ({ checked, event }) => {
+      onChange?.({ checked, event })
+    },
+    [onChange]
+  )
+
+  const onChangeHandler = useCallback(
+    (event) => {
+      if (preventChangeRef.current) {
+        preventChangeRef.current = false
+
+        // Revert the checked state that was toggled by the browser's
+        // activation behavior, since the change is being prevented
+        if (inputRef.current) {
+          inputRef.current.checked = isCheckedRef.current
+        }
+
+        return // stop here
+      }
+
+      const updatedChecked = !isCheckedRef.current
+
+      isCheckedRef.current = updatedChecked
+      forceUpdate()
+      callOnChange({ checked: updatedChecked, event })
+
+      if (onChangeEnd) {
+        setTimeout(
+          () => onChangeEnd({ checked: updatedChecked, event }),
+          500
+        )
+      }
+
+      // help firefox and safari to have a correct state after a click
+      if (inputRef.current) {
+        inputRef.current.focus()
+      }
+    },
+    [callOnChange, inputRef, onChangeEnd]
+  )
+
+  const onClickHandler: MouseEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      preventChangeRef.current = false
+
+      const preventDefault = () => {
+        preventChangeRef.current = true
+      }
+
+      if (readOnly) {
+        preventChangeRef.current = true
+        return // stop here
+      }
+
+      onClick?.({
+        checked: isCheckedRef.current,
+        event,
+        ...event,
+        preventDefault,
+      })
+    },
+    [onClick, readOnly]
+  )
+
+  const onKeyDownHandler = useCallback(
+    (event: KeyboardEvent) => {
+      switch (event.code) {
+        case 'Enter':
+          onChangeHandler(event)
+          break
+      }
+    },
+    [onChangeHandler]
+  )
+
+  const showStatus = useMemo(() => getStatusState(status), [status])
+
+  const mainParams = useSpacing(props, {
+    className: clsx(
+      'dnb-switch',
+      size && `dnb-switch--${size}`,
+      status && `dnb-switch__status--${statusState}`,
+      `dnb-switch--label-position-${labelPosition || 'right'}`,
+      'dnb-form-component',
+      createSkeletonClass(null, skeleton),
+      className
+    ),
+  })
+
+  const inputParams = {
+    disabled,
+    checked: isCheckedRef.current,
+    ...rest,
+  }
+
+  if (showStatus || suffix) {
+    inputParams['aria-describedby'] = combineDescribedBy(
+      inputParams,
+      showStatus ? id + '-status' : null,
+      suffix ? id + '-suffix' : null
+    )
+  }
+  if (readOnly) {
+    inputParams['aria-readonly'] = readOnly
+  }
+
+  skeletonDOMAttributes(inputParams, skeleton, context)
+  validateDOMAttributes(props, inputParams)
+
+  const helperParams = useMemo(
+    () => ({
+      onMouseDown: (e: MouseEvent<HTMLSpanElement>) => e.preventDefault(),
+    }),
+    []
+  )
+
+  const labelComp = useMemo(
+    () =>
+      label && (
+        <FormLabel
+          id={id + '-label'}
+          forId={id}
+          text={label}
+          disabled={disabled}
+          skeleton={skeleton}
+          srOnly={labelSrOnly}
+          vertical={false}
+        />
+      ),
+    [disabled, id, label, labelSrOnly, skeleton]
+  )
+
+  return (
+    <span {...mainParams}>
+      <span className="dnb-switch__order">
+        {labelPosition === 'left' && labelComp}
+
+        <span className="dnb-switch__inner">
+          <AlignmentHelper />
+
+          <FormStatus
+            show={showStatus}
+            id={id + '-form-status'}
+            globalStatus={globalStatus}
+            label={label}
+            textId={id + '-status'} // used for "aria-describedby"
+            widthSelector={id + ', ' + id + '-label'}
+            text={status}
+            state={statusState}
+            skeleton={skeleton}
+            noAnimation={statusNoAnimation}
+            {...statusProps}
+          />
+
+          <span className="dnb-switch__shell">
+            {(labelPosition === 'right' || !labelPosition) && labelComp}
+
+            <span className="dnb-switch__row">
+              <input
+                id={id}
+                name={id}
+                type="checkbox"
+                role="switch"
+                title={title}
+                aria-checked={isCheckedRef.current}
+                className="dnb-switch__input"
+                value={isCheckedRef.current ? value || '' : ''}
+                ref={inputRef}
+                {...inputParams}
+                onChange={onChangeHandler}
+                onClick={onClickHandler}
+                onKeyDown={onKeyDownHandler}
+              />
+              <span
+                draggable
+                aria-hidden
+                className="dnb-switch__background"
+                onDragStart={onChangeHandler}
+                {...helperParams}
+              />
+              <span
+                className={clsx(
+                  'dnb-switch__button',
+                  createSkeletonClass('shape', skeleton, context)
+                )}
+                aria-hidden
+              />
+            </span>
+
+            {suffix && (
+              <Suffix
+                className="dnb-switch__suffix"
+                id={id + '-suffix'} // used for "aria-describedby"
+                context={props}
+              >
+                {suffix}
+              </Suffix>
+            )}
+          </span>
+        </span>
+      </span>
+    </span>
+  )
+
+  function extractPropsFromContext() {
+    return extendPropsWithContext(
+      props,
+      defaultProps,
+      { skeleton: context?.skeleton },
+      pickFormElementProps(context?.formElement),
+      context.Switch
+    )
+  }
+}
+
+withComponentMarkers(Switch, {
+  _formElement: true,
+})
+
+export default Switch

@@ -1,0 +1,304 @@
+import { render, screen } from '@testing-library/react'
+import { loadScss, axeComponent } from '../../../core/test-utils/testSetup'
+import { BasicTable } from './TableMocks'
+import type { TableAllProps } from '../Table'
+import Table from '../Table'
+
+const NODE_ENV = process.env.NODE_ENV
+const log = globalThis.console.log
+
+beforeEach(() => {
+  window.IntersectionObserver = vi.fn().mockImplementation(() => {
+    return {
+      observe: vi.fn(),
+      disconnect: vi.fn(),
+    }
+  })
+})
+
+afterEach(() => {
+  process.env.NODE_ENV = NODE_ENV
+  globalThis.console.log = log
+
+  delete window.IntersectionObserver
+})
+
+describe('Table', () => {
+  it('renders with props as an object', () => {
+    const props: TableAllProps = { children: null }
+    render(<Table {...props} />)
+
+    expect(document.querySelector('.dnb-table')).toBeInTheDocument()
+  })
+
+  it('should contain basis HTML classes by default', () => {
+    render(
+      <Table>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(screen.queryByRole('table')).toHaveClass(
+      'dnb-table dnb-table__variant--generic dnb-table__size--large',
+      { exact: true }
+    )
+  })
+
+  it('should set variant', () => {
+    render(
+      <Table variant="generic">
+        <BasicTable />
+      </Table>
+    )
+
+    expect(screen.queryByRole('table')).toHaveClass(
+      'dnb-table dnb-table__variant--generic dnb-table__size--large',
+      { exact: true }
+    )
+  })
+
+  it('should set size', () => {
+    render(
+      <Table size="medium">
+        <BasicTable />
+      </Table>
+    )
+
+    expect(screen.queryByRole('table')).toHaveClass(
+      'dnb-table dnb-table__variant--generic dnb-table__size--medium',
+      { exact: true }
+    )
+  })
+
+  it('should include custom className', () => {
+    render(
+      <Table className="custom-class" aria-label="custom-label">
+        <BasicTable />
+      </Table>
+    )
+
+    expect(screen.queryByRole('table')).toHaveClass(
+      'dnb-table',
+      'dnb-table__variant--generic',
+      'dnb-table__size--large',
+      'custom-class'
+    )
+  })
+
+  it('should include custom HTML attributes', () => {
+    render(
+      <Table aria-label="custom-label">
+        <BasicTable />
+      </Table>
+    )
+
+    expect(screen.queryByRole('table').getAttribute('aria-label')).toEqual(
+      'custom-label'
+    )
+  })
+
+  it('should set the fixed class', () => {
+    render(
+      <Table fixed>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(screen.queryByRole('table')).toHaveClass(
+      'dnb-table',
+      'dnb-table__variant--generic',
+      'dnb-table__size--large',
+      'dnb-table--fixed'
+    )
+  })
+
+  it('should forward ref to the table element', () => {
+    const ref = { current: null }
+
+    render(
+      <Table ref={ref}>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(ref.current).toBe(document.querySelector('.dnb-table'))
+    expect(ref.current.tagName).toBe('TABLE')
+  })
+
+  it('should set the border class', () => {
+    render(
+      <Table border>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(Array.from(screen.queryByRole('table').classList)).toContain(
+      'dnb-table--border'
+    )
+  })
+
+  it('should set the border-horizontal class', () => {
+    render(
+      <Table border="horizontal">
+        <BasicTable />
+      </Table>
+    )
+
+    const classList = Array.from(screen.queryByRole('table').classList)
+    expect(classList).toContain('dnb-table--border')
+    expect(classList).toContain('dnb-table--border-horizontal')
+  })
+
+  it('should set the no-border class when border is false', () => {
+    render(
+      <Table border={false}>
+        <BasicTable />
+      </Table>
+    )
+
+    const classList = Array.from(screen.queryByRole('table').classList)
+    expect(classList).toContain('dnb-table--no-border')
+    expect(classList).not.toContain('dnb-table--border')
+  })
+
+  it('should not set border classes when border is undefined', () => {
+    render(
+      <Table>
+        <BasicTable />
+      </Table>
+    )
+
+    const classList = Array.from(screen.queryByRole('table').classList)
+    expect(classList).not.toContain('dnb-table--no-border')
+    expect(classList).not.toContain('dnb-table--border')
+  })
+
+  it('should set the outline class', () => {
+    render(
+      <Table outline>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(Array.from(screen.queryByRole('table').classList)).toContain(
+      'dnb-table--outline'
+    )
+  })
+
+  it('should set the no-striped class when striped is false', () => {
+    render(
+      <Table striped={false}>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(Array.from(screen.queryByRole('table').classList)).toContain(
+      'dnb-table--no-striped'
+    )
+  })
+
+  it('should not set the no-striped class by default', () => {
+    render(
+      <Table>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(
+      Array.from(screen.queryByRole('table').classList)
+    ).not.toContain('dnb-table--no-striped')
+  })
+
+  it('should support spacing props', () => {
+    render(
+      <Table top="2rem">
+        <BasicTable />
+      </Table>
+    )
+
+    const element = screen.queryByRole('table')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(element).toHaveClass(
+      'dnb-table',
+      'dnb-table__variant--generic',
+      'dnb-table__size--large',
+      'dnb-space__top--large'
+    )
+  })
+
+  it('should support skeleton props', () => {
+    render(
+      <Table skeleton>
+        <BasicTable />
+      </Table>
+    )
+
+    const element = screen.queryByRole('table')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['class'])
+    expect(element).toHaveClass(
+      'dnb-table',
+      'dnb-table__variant--generic',
+      'dnb-table__size--large',
+      'dnb-skeleton',
+      'dnb-skeleton--font'
+    )
+  })
+
+  it('supports inline styling', () => {
+    render(
+      <Table style={{ color: 'red' }}>
+        <BasicTable />
+      </Table>
+    )
+
+    expect(
+      document.querySelector('.dnb-table').getAttribute('style')
+    ).toBe('color: red;')
+  })
+
+  it('should apply spacing classes and innerSpace style on the root', () => {
+    render(
+      <Table top="large" innerSpace="small">
+        <BasicTable />
+      </Table>
+    )
+
+    const element = document.querySelector('.dnb-table')
+
+    expect(element.className).toContain('dnb-space__top--large')
+    expect(element.getAttribute('style')).toContain('--padding-t-s')
+  })
+})
+
+describe('Table aria', () => {
+  it('should validate', async () => {
+    const Component = render(
+      <Table>
+        <BasicTable />
+      </Table>
+    )
+    expect(await axeComponent(Component)).toHaveNoViolations()
+  })
+})
+
+describe('Table scss', () => {
+  it('should inherit card rounded corners when used inside Card', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toContain(
+      '.dnb-card .dnb-table {\n  --table-outline-radius: var(--rounded-corner, var(--token-radius-md));'
+    )
+  })
+
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

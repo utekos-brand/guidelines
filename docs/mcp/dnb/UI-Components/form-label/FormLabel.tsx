@@ -1,0 +1,244 @@
+/**
+ * Web FormLabel Component
+ *
+ */
+
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+import {
+  createElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react'
+import type { HTMLAttributes, ReactNode, Ref, RefObject } from 'react'
+import { clsx } from 'clsx'
+import {
+  extendPropsWithContext,
+  validateDOMAttributes,
+} from '../../shared/component-helper'
+import { useSpacing } from '../space/SpacingUtils'
+import {
+  createSkeletonClass,
+  skeletonDOMAttributes,
+} from '../skeleton/SkeletonHelper'
+import type { FormElementProps } from '../../shared/helpers/filterValidProps'
+import { pickFormElementProps } from '../../shared/helpers/filterValidProps'
+import { omitSpacingProps } from '../flex/utils'
+import Context from '../../shared/Context'
+import type {
+  DynamicElement,
+  DynamicElementParams,
+  SpacingProps,
+} from '../../shared/types'
+
+export type FormLabelProps = {
+  forId?: string
+  element?: DynamicElement<HTMLLabelElement>
+  text?: ReactNode
+  size?: 'basis' | 'medium' | 'large'
+  id?: string
+  skeleton?: boolean
+  label?: ReactNode
+  vertical?: boolean
+  srOnly?: boolean
+  ref?: Ref<HTMLElement>
+
+  /**
+   * If set to `true`, the label will behave as not interactive.
+   */
+  disabled?: boolean
+
+  /**
+   * For internal use only
+   */
+  labelDirection?: FormElementProps['labelDirection']
+}
+
+export type FormLabelAllProps = FormLabelProps &
+  HTMLAttributes<HTMLLabelElement> &
+  SpacingProps
+
+function FormLabel(localProps: FormLabelAllProps) {
+  const context = useContext(Context)
+
+  // use only the props from context, who are available here anyway
+  const props = extendPropsWithContext(
+    localProps,
+    null,
+    { skeleton: context?.skeleton },
+    pickFormElementProps(context?.formElement),
+    context?.FormLabel
+  )
+
+  const nestedContent = props?.text || props?.children
+  const nestedNode =
+    nestedContent?.['type'] === FormLabel ? nestedContent?.['type'] : null
+  const nestedElement = nestedNode
+    ? () => createElement(nestedNode, nestedContent['props'])
+    : null
+
+  const {
+    forId,
+    text,
+    srOnly,
+    vertical,
+    labelDirection,
+    size,
+    skeleton,
+    element: Element = nestedElement || 'label',
+    ref: refProp,
+    className,
+    children,
+    ...attributes
+  } = props
+
+  const content = text || children
+
+  const isInteractive = Boolean(
+    !props.disabled &&
+    !srOnly &&
+    (typeof props.onClick === 'function' || forId)
+  )
+
+  const params = useSpacing(
+    content ? { right: 'small', ...props } : omitSpacingProps(props),
+    {
+      className: clsx(
+        'dnb-form-label',
+        context?.theme?.surface === 'dark' &&
+          'dnb-form-label--surface-dark',
+        (vertical ||
+          (vertical !== false && labelDirection !== 'horizontal')) &&
+          `dnb-form-label--vertical`,
+        srOnly && 'dnb-sr-only',
+        size && `dnb-h--${size}`,
+        isInteractive && 'dnb-form-label--interactive',
+        createSkeletonClass('font', skeleton, context),
+        className
+      ),
+      htmlFor: forId,
+      ...(attributes as DynamicElementParams),
+    }
+  )
+
+  const labelRef = useRef<HTMLLabelElement>(null)
+
+  const combinedRef = useCallback(
+    (node: HTMLLabelElement | null) => {
+      labelRef.current = node
+
+      if (typeof refProp === 'function') {
+        refProp(node)
+      } else if (refProp) {
+        ;(refProp as RefObject<HTMLLabelElement | null>).current = node
+      }
+    },
+    [refProp]
+  )
+
+  if (!nestedNode) {
+    params['ref'] = combinedRef
+  }
+
+  useEffect(() => {
+    if (!forId) {
+      return undefined
+    }
+
+    const forElem = document.querySelector(`#${forId}`)
+    const target =
+      forElem?.closest('.dnb-input__border--root') ||
+      forElem?.closest('.dnb-input__border')
+
+    if (target && labelRef.current) {
+      const elem = labelRef.current
+
+      const buttonEnter = () => {
+        target.classList.add('no-hover')
+        target.classList.remove('hover')
+      }
+      const buttonLeave = () => {
+        target.classList.remove('no-hover')
+        enter()
+      }
+
+      const enter = () => {
+        target.classList.add('hover')
+
+        // Remove the style from interactive elements (e.g. HelpButton, TermDefinition)
+        const button = elem.querySelector('button')
+        button?.addEventListener?.('mouseenter', buttonEnter, {
+          once: true,
+        })
+        button?.addEventListener?.('mouseleave', buttonLeave, {
+          once: true,
+        })
+
+        // Also handle elements with role="button" (e.g. TermDefinition)
+        const interactiveElements = elem.querySelectorAll(
+          '[role="button"]:not(button)'
+        )
+        interactiveElements.forEach((interactiveElem) => {
+          interactiveElem.addEventListener('mouseenter', buttonEnter, {
+            once: true,
+          })
+          interactiveElem.addEventListener('mouseleave', buttonLeave, {
+            once: true,
+          })
+        })
+      }
+      const leave = () => {
+        target.classList.remove('hover')
+
+        const button = elem.querySelector('button')
+        button?.removeEventListener?.('mouseenter', buttonEnter)
+
+        // Also remove listeners from elements with role="button"
+        const interactiveElements = elem.querySelectorAll(
+          '[role="button"]:not(button)'
+        )
+        interactiveElements.forEach((interactiveElem) => {
+          interactiveElem.removeEventListener('mouseenter', buttonEnter)
+          interactiveElem.removeEventListener('mouseleave', buttonLeave)
+        })
+      }
+
+      elem.addEventListener('mouseenter', enter)
+      elem.addEventListener('mouseleave', leave)
+
+      return () => {
+        if (elem) {
+          elem.removeEventListener('mouseenter', enter)
+          elem.removeEventListener('mouseleave', leave)
+
+          const button = elem.querySelector('button')
+          button?.removeEventListener?.('mouseleave', buttonLeave)
+
+          // Also clean up listeners from elements with role="button"
+          const interactiveElements = elem.querySelectorAll(
+            '[role="button"]:not(button)'
+          )
+          interactiveElements.forEach((interactiveElem) => {
+            interactiveElem.removeEventListener('mouseenter', buttonEnter)
+            interactiveElem.removeEventListener('mouseleave', buttonLeave)
+          })
+        }
+      }
+    }
+
+    return undefined
+  }, [forId, labelRef])
+
+  skeletonDOMAttributes(params, skeleton, context)
+  validateDOMAttributes(localProps, params)
+
+  return <Element {...params}>{content}</Element>
+}
+
+withComponentMarkers(FormLabel, {
+  _formElement: true,
+  _supportsSpacingProps: true,
+})
+
+export default FormLabel

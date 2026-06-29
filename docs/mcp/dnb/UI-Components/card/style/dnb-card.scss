@@ -1,0 +1,237 @@
+@use '../../../style/core/utilities.scss' as utilities;
+
+:root {
+  // Keep these outside of the .dnb-card class so they can be used globally (dnb-help-button-inline)
+  --card-outline-width: 0.0625rem;
+}
+
+.dnb-card {
+  --card-outline-color: var(
+    --border-color,
+    var(--token-color-stroke-neutral-subtle)
+  );
+  --card-background-color: var(--token-color-background-neutral);
+
+  &__title {
+    padding-bottom: 1rem;
+    font-size: var(--font-size-basis);
+    font-weight: var(--font-weight-medium);
+  }
+  &:not([style*='--padding-']) &__title {
+    padding: 1rem;
+  }
+
+  &.dnb-section {
+    // Fallback
+    background-color: var(--background-color);
+  }
+
+  & .dnb-section {
+    z-index: 1;
+  }
+
+  // Prevent inherited drop shadow from parent cards.
+  // Nested cards should only show shadow when they explicitly set dropShadow.
+  & .dnb-card {
+    --rounded-corner: var(--token-radius-lg);
+    --drop-shadow--small: var(--drop-shadow-none);
+    --drop-shadow--medium: var(--drop-shadow-none);
+    --drop-shadow--large: var(--drop-shadow-none);
+
+    // Third level and deeper nested Cards
+    & .dnb-card {
+      --rounded-corner: var(--token-radius-md);
+    }
+  }
+
+  @include utilities.allAbove(small) {
+    // These vars needs to be declared outside of the nested .dnb-section
+    --nested-space-l: calc(var(--padding-left, 0px) * -1);
+    --nested-space-r: calc(var(--padding-right, 0px) * -1);
+    & .dnb-section::after {
+      --left: var(--nested-space-l);
+      --width: calc(100% - var(--nested-space-r) * 2);
+    }
+  }
+
+  &--filled#{&}.dnb-section {
+    --background-color: var(--outline-color);
+  }
+
+  &--responsive {
+    @include utilities.allBelow(small) {
+      &.dnb-section::before {
+        left: var(--left);
+
+        --outline:
+          99vw 0 0 0 var(--background-color),
+          198vw 0 0 0 var(--background-color),
+          297vw 0 0 0 var(--background-color),
+          396vw 0 0 0 var(--background-color),
+          0 var(--outline-width) 0 0 var(--outline-color),
+          99vw var(--outline-width) 0 0 var(--outline-color),
+          0 calc(var(--outline-width) * -1) 0 0 var(--outline-color),
+          99vw calc(var(--outline-width) * -1) 0 0 var(--outline-color),
+          198vw var(--outline-width) 0 0 var(--outline-color),
+          198vw calc(var(--outline-width) * -1) 0 0 var(--outline-color);
+      }
+
+      // Disable drop shadow when borders are stretched across the viewport
+      // to avoid right-edge clipping artifacts.
+      &.dnb-section[style*='--drop-shadow'] {
+        --drop-shadow: var(--drop-shadow-none);
+      }
+    }
+  }
+
+  // Show only one border (combined) when stacked
+  & + .dnb-card--responsive:not([class*='space__top']) {
+    @include utilities.allBelow(small) {
+      &::before {
+        top: var(--outline-width);
+      }
+      background: linear-gradient(
+          to left,
+          var(--background-color),
+          var(--background-color)
+        )
+        no-repeat 0 var(--outline-width); // with an offset
+    }
+  }
+
+  // Combine the two borders to one
+  .dnb-flex-container.dnb-flex-container--divider-space
+    &
+    + .dnb-card--responsive {
+    @include utilities.allBelow(small) {
+      margin-top: 0;
+
+      &::before {
+        top: var(--outline-width); // align background and outline
+        z-index: 0;
+        background-color: transparent; // because we inherit the background-color when "outset" is set – but we don't want that in this case
+      }
+    }
+  }
+
+  // Make the ScrollView scrollable
+  & .dnb-flex-container:has(> .dnb-card__title + .dnb-scroll-view) {
+    align-items: stretch;
+    flex-wrap: nowrap;
+  }
+
+  // Make the ScrollView look nice
+  &--filled .dnb-scroll-view {
+    clip-path: inset(
+      0 0 0 0 round var(--rounded-corner) var(--rounded-corner)
+        var(--rounded-corner) var(--rounded-corner)
+    );
+  }
+
+  & > .dnb-flex-container > .dnb-space:has(> .dnb-scroll-view) {
+    width: 100%;
+  }
+
+  & > .dnb-flex-container--align-stretch > .dnb-button {
+    align-self: flex-start;
+  }
+
+  &[style*='--outset'] {
+    &.dnb-space[style]:not(.dnb-card) {
+      padding-left: calc(var(--padding-left) * calc(1 - var(--outset)));
+      padding-right: calc(var(--padding-right) * calc(1 - var(--outset)));
+    }
+    &.dnb-card > .dnb-flex-container {
+      margin-left: calc(var(--padding-left, 1rem) * -1 * var(--outset));
+      margin-right: calc(var(--padding-right, 1rem) * -1 * var(--outset));
+    }
+  }
+}
+
+.dnb-card-action {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+  cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &:hover .dnb-card {
+    --card-outline-color: var(--token-color-stroke-action-hover);
+    --outline-color: var(--token-color-stroke-action-hover);
+    --outline-width: 0.125rem;
+  }
+
+  &:active .dnb-card {
+    --card-outline-color: var(--token-color-stroke-action-pressed);
+    --outline-color: var(--token-color-stroke-action-pressed);
+    --outline-width: 0.0625rem;
+  }
+
+  &:focus-visible .dnb-card {
+    --card-outline-color: var(--token-color-stroke-action-focus);
+    --outline-color: var(--token-color-stroke-action-focus);
+    --outline-width: var(--focus-ring-width);
+  }
+}
+
+.dnb-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include utilities.allAbove(small) {
+    gap: 1rem;
+  }
+
+  &__item {
+    @include utilities.allAbove(small) {
+      flex: 1;
+    }
+
+    /* stylelint-disable-next-line no-descending-specificity */
+    .dnb-card,
+    .dnb-card-action {
+      height: 100%;
+
+      &:hover {
+        z-index: 1;
+      }
+    }
+
+    &--center {
+      align-items: center;
+      text-align: center;
+
+      /* stylelint-disable-next-line no-descending-specificity */
+      .dnb-card {
+        .dnb-button {
+          align-self: center;
+        }
+      }
+    }
+
+    &--center-when-small {
+      @include utilities.allBelow(small) {
+        width: 100%;
+
+        .dnb-flex-container {
+          align-items: center;
+          text-align: center;
+
+          .dnb-button {
+            align-self: center;
+          }
+        }
+      }
+    }
+  }
+}

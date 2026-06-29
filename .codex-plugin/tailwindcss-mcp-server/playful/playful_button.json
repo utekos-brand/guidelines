@@ -1,0 +1,39 @@
+{
+  "html": "<button class=\"inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg px-6 py-3 text-base dark:from-purple-600 dark:to-pink-600 sm:px-6 sm:py-3 sm:text-base\">\n  Click me\n</button>",
+  "description": "A playful style button component with dark mode support and responsive design",
+  "utilities": [
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "rounded-md",
+    "text-sm",
+    "font-medium",
+    "transition-colors",
+    "focus-visible:outline-none",
+    "focus-visible:ring-1",
+    "focus-visible:ring-ring",
+    "disabled:pointer-events-none",
+    "disabled:opacity-50",
+    "bg-gradient-to-r",
+    "from-purple-400",
+    "to-pink-400",
+    "hover:from-purple-500",
+    "hover:to-pink-500",
+    "text-white",
+    "shadow-lg",
+    "px-6",
+    "py-3",
+    "text-base",
+    "dark:from-purple-600",
+    "dark:to-pink-600",
+    "sm:px-6",
+    "sm:py-3",
+    "sm:text-base"
+  ],
+  "customizations": [
+    "Change button text",
+    "Adjust padding with px-* py-* classes",
+    "Modify colors using bg-* and text-* utilities",
+    "Add icons using flex and space-x-* utilities"
+  ]
+}

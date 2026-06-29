@@ -1,0 +1,548 @@
+import type { ElementType, ReactNode, Ref, RefObject } from 'react'
+import {
+  fireEvent,
+  render,
+  screen,
+  act,
+  waitFor,
+} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import type { BreadcrumbProps } from '../Breadcrumb'
+import Breadcrumb, { BreadcrumbItem } from '../Breadcrumb'
+import { Provider } from '../../../shared'
+import IconPrimary from '../../icon-primary/IconPrimary'
+import { loadScss, axeComponent } from '../../../core/test-utils/testSetup'
+import type { BreadcrumbItemProps } from '../BreadcrumbItem'
+import type { AnchorAllProps } from '../../Anchor'
+import '../../../core/vitest/mockMatchMediaSetup'
+import { setMedia } from 'mock-match-media'
+
+describe('Breadcrumb', () => {
+  it('renders without properties', () => {
+    const props: BreadcrumbProps = {}
+    render(<Breadcrumb {...props} />)
+
+    expect(screen.queryByRole('button')).toBeInTheDocument()
+  })
+
+  it('renders a breadcrumb with multiple items by data prop', () => {
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/', text: 'Home' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+      />
+    )
+
+    expect(screen.queryByText('Home')).toBeInTheDocument()
+    expect(screen.queryByText('Page 1')).toBeInTheDocument()
+    expect(screen.queryByText('Page 2')).toBeInTheDocument()
+
+    expect(screen.queryAllByRole('link')).toHaveLength(2)
+  })
+
+  it('renders a breadcrumb with a single item by data prop', () => {
+    render(
+      <Breadcrumb data={[{ href: '/page1/page2', text: 'Page 2' }]} />
+    )
+
+    expect(screen.queryByText('Page 2')).toBeInTheDocument()
+    expect(screen.queryAllByRole('link')).toHaveLength(1)
+  })
+
+  it('forwards rest props like data-testid, etc, to the breadcrumb item button when interactive', () => {
+    const dataTestId = 'my-test-id'
+    render(
+      <Breadcrumb
+        data={[
+          {
+            href: '/page1/page2',
+            text: 'Page 2',
+            'data-testid': dataTestId,
+          },
+        ]}
+      />
+    )
+
+    expect(screen.queryByTestId(dataTestId)).toBeInTheDocument()
+    expect(screen.queryByTestId(dataTestId)).toHaveClass('dnb-anchor')
+  })
+
+  it('renders a breadcrumb with multiple items by children', () => {
+    render(
+      <Breadcrumb>
+        <Breadcrumb.Item href="/" text="Home" />
+        <Breadcrumb.Item href="/page1" text="Page 1" />
+        <Breadcrumb.Item href="/page1/page2" text="Page 2" />
+      </Breadcrumb>
+    )
+
+    expect(screen.queryByText('Home')).toBeInTheDocument()
+    expect(screen.queryByText('Page 1')).toBeInTheDocument()
+    expect(screen.queryByText('Page 2')).toBeInTheDocument()
+
+    expect(screen.queryAllByRole('link')).toHaveLength(3)
+  })
+
+  it('renders a breadcrumb with a single item by children', () => {
+    render(
+      <Breadcrumb>
+        <Breadcrumb.Item text="Page item #1" href="/page1" />
+      </Breadcrumb>
+    )
+
+    expect(screen.queryByText('Page item #1')).toBeInTheDocument()
+    expect(screen.queryAllByRole('link')).toHaveLength(1)
+  })
+
+  it('should handle a breadcrumb with a single null as children', () => {
+    render(<Breadcrumb>{null}</Breadcrumb>)
+
+    expect(screen.queryAllByRole('link')).toHaveLength(0)
+  })
+
+  it('should handle children as null', () => {
+    render(
+      <Breadcrumb>
+        {null}
+        <Breadcrumb.Item text="Page item #1" href="/page1" />
+        {null}
+        {null}
+        <Breadcrumb.Item text="Page item #2" href="/page2" />
+        {null}
+        {null}
+        {null}
+        <Breadcrumb.Item text="Page item #3" href="/page3" />
+        {null}
+        {null}
+        <Breadcrumb.Item text="Page item #4" href="/page4" />
+      </Breadcrumb>
+    )
+
+    expect(screen.queryByText('Page item #1')).toBeInTheDocument()
+    expect(screen.queryByText('Page item #2')).toBeInTheDocument()
+    expect(screen.queryByText('Page item #3')).toBeInTheDocument()
+    expect(screen.queryByText('Page item #4')).toBeInTheDocument()
+
+    expect(screen.queryAllByRole('link')).toHaveLength(4)
+  })
+
+  it('renders a breadcrumb with one item', () => {
+    render(
+      <Provider locale="en-GB">
+        <Breadcrumb href="/url" />
+      </Provider>
+    )
+
+    expect(screen.queryAllByRole('link')).toHaveLength(1)
+
+    expect(screen.queryByRole('link').getAttribute('href')).toBe('/url')
+
+    expect(screen.getByText('Back')).toBeDefined()
+  })
+
+  it('overrides collapse value', () => {
+    const overrideCollapse = true
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+        variant="collapse"
+        collapsed={overrideCollapse}
+      />
+    )
+
+    // The Accordion should start in collapsed state
+    expect(document.querySelector('[aria-expanded]')).toHaveAttribute(
+      'aria-expanded',
+      'false'
+    )
+  })
+
+  it('will handle last item as current', () => {
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Last Item' },
+        ]}
+      />
+    )
+
+    const lastElem = screen.getByText('Last Item')
+    expect(
+      lastElem.parentElement.parentElement.getAttribute('aria-current')
+    ).toBe('page')
+  })
+
+  it('current item will have aria-current="page', () => {
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Current Item', variant: 'current' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+      />
+    )
+
+    const currentItem = screen.getByText('Current Item')
+
+    expect(
+      currentItem.parentElement.parentElement.getAttribute('aria-current')
+    ).toBe('page')
+  })
+
+  it('variant collapse opens the collapsed content on click', () => {
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+      />
+    )
+
+    fireEvent.click(document.querySelector('a'))
+
+    expect(
+      document.querySelector('.dnb-breadcrumb__multiple')
+    ).toBeDefined()
+  })
+
+  it('inherits skeleton prop from provider', () => {
+    render(
+      <Provider skeleton>
+        <Breadcrumb data={[{ onClick: vi.fn(), text: 'Page 1' }]} />
+      </Provider>
+    )
+
+    expect(screen.getAllByRole('button')[0]).toHaveClass('dnb-skeleton')
+  })
+
+  it('should support spacing props', () => {
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+        top="2rem"
+      />
+    )
+
+    const element = document.querySelector('.dnb-breadcrumb')
+    const attributes = Array.from(element.attributes).map(
+      (attr) => attr.name
+    )
+
+    expect(attributes).toEqual(['aria-label', 'class'])
+    expect(element).toHaveClass(
+      'dnb-breadcrumb dnb-breadcrumb--variant-responsive dnb-space__top--large',
+      { exact: true }
+    )
+  })
+
+  it('should automatically collapse when screen changes to larger than medium', async () => {
+    setMedia({ width: '40em' })
+
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+      />
+    )
+
+    const toggleButton = () =>
+      document.querySelector('.dnb-breadcrumb__toggle')
+
+    const collapseSection = () =>
+      document.querySelector(
+        '.dnb-breadcrumb__collapse .dnb-breadcrumb__multiple'
+      )
+
+    // Collapsible menu should not be visible before toggle click
+    expect(collapseSection()).toBeNull()
+
+    await userEvent.click(toggleButton())
+
+    // Collapsible should be visible now
+    expect(collapseSection()).toBeInTheDocument()
+
+    act(() => {
+      setMedia({ width: '80em' })
+    })
+
+    // Collapsible menu should auto-close when screen goes large
+    await waitFor(() => {
+      expect(collapseSection()).toBeNull()
+    })
+  })
+
+  it('should fire onToggle when breadcrumb expands and collapses', async () => {
+    const onToggle = vi.fn()
+
+    render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+        onToggle={onToggle}
+      />
+    )
+
+    const toggleButton = () =>
+      document.querySelector('.dnb-breadcrumb__toggle')
+
+    expect(onToggle).toHaveBeenCalledTimes(0)
+
+    // Expand
+    await userEvent.click(toggleButton())
+    expect(onToggle).toHaveBeenCalledTimes(1)
+    expect(onToggle).toHaveBeenCalledWith(false)
+
+    // Collapse
+    await userEvent.click(toggleButton())
+    expect(onToggle).toHaveBeenCalledTimes(2)
+    expect(onToggle).toHaveBeenCalledWith(true)
+
+    // Set screen to small size
+    act(() => {
+      setMedia({ width: '40em' })
+    })
+    // Click to expand breadcrumbs
+    await userEvent.click(toggleButton())
+    expect(onToggle).toHaveBeenCalledTimes(3)
+    expect(onToggle).toHaveBeenCalledWith(false)
+
+    // Resize to large screen to trigger auto-collapse
+    act(() => {
+      setMedia({ width: '80em' })
+    })
+    expect(onToggle).toHaveBeenCalledTimes(4)
+    expect(onToggle).toHaveBeenCalledWith(true)
+  })
+
+  describe('BreadcrumbItem', () => {
+    it('renders without properties', () => {
+      const props: BreadcrumbItemProps = {}
+      render(<BreadcrumbItem {...props} />)
+
+      expect(screen.queryByRole('listitem')).toBeInTheDocument()
+    })
+
+    it('renders breadcrumbitem as a link', () => {
+      render(<BreadcrumbItem href="/url" text="Page" />)
+
+      expect(screen.queryByRole('link')).toBeDefined()
+      expect(screen.queryByRole('link').getAttribute('href')).toBe('/url')
+    })
+
+    it('renders breadcrumbitem as a button', () => {
+      render(<BreadcrumbItem onClick={vi.fn()} text="Page" />)
+
+      expect(screen.queryByRole('button')).toBeDefined()
+    })
+
+    it('will use given element', () => {
+      const CustomElement = ({
+        ref,
+        ...props
+      }: AnchorAllProps & { ref?: Ref<HTMLAnchorElement> }) => {
+        return (
+          <span
+            {...props}
+            ref={ref as RefObject<HTMLAnchorElement>}
+            className="custom-element"
+          />
+        )
+      }
+
+      render(
+        <BreadcrumbItem
+          element={CustomElement as ElementType}
+          text="Page"
+          href="/"
+        />
+      )
+
+      expect(
+        document.querySelector('span.custom-element')
+      ).toBeInTheDocument()
+    })
+
+    it('renders breadcrumbitem as a link if the to prop is given and element is a router link', () => {
+      const MockLink = ({
+        ref,
+        ...props
+      }: {
+        to: string
+        children: ReactNode
+        ref?: Ref<HTMLAnchorElement>
+      }) => (
+        <a href={props.to} ref={ref as RefObject<HTMLAnchorElement>}>
+          {props.children}
+        </a>
+      )
+
+      render(
+        <BreadcrumbItem
+          to={'/url'}
+          element={MockLink as ElementType}
+          text="Page"
+        />
+      )
+
+      expect(screen.getByRole('link')).toHaveAttribute('href', '/url')
+    })
+
+    it('fires onClick event', () => {
+      const onClick = vi.fn()
+      render(<BreadcrumbItem onClick={onClick} text="Page" />)
+
+      fireEvent.click(document.querySelector('a'))
+      expect(onClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('renders breadcrumbitem as text, not button or link', () => {
+      const text = 'Just text'
+      render(<BreadcrumbItem text={text} />)
+
+      expect(screen.queryByRole('link')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      expect(screen.queryByText(text)).toBeInTheDocument()
+    })
+
+    it('will render custom icon', () => {
+      const CustomIcon = <IconPrimary icon="bell" />
+      render(<BreadcrumbItem text="Just text" icon={CustomIcon} />)
+
+      const element = screen.queryByTestId('bell icon')
+      expect(element).toBeInTheDocument()
+    })
+
+    it('renders a skeleton if skeleton is true', () => {
+      render(<BreadcrumbItem skeleton onClick={vi.fn()} text="skeleton" />)
+
+      expect(document.querySelector('a')).toHaveClass('dnb-skeleton')
+    })
+
+    it('inherits skeleton prop from provider', () => {
+      render(
+        <Provider skeleton>
+          <BreadcrumbItem onClick={vi.fn()} text="skeleton" />
+        </Provider>
+      )
+
+      expect(document.querySelector('a')).toHaveClass('dnb-skeleton')
+    })
+
+    it('forwards rest props like data-testid, etc, to the breadcrumb item anchor when interactive', () => {
+      const dataTestId = 'my-test-id'
+      render(
+        <BreadcrumbItem href="/" text="Home" data-testid={dataTestId} />
+      )
+
+      expect(screen.queryByTestId(dataTestId)).toBeInTheDocument()
+
+      expect(screen.queryByTestId(dataTestId)).toHaveClass('dnb-anchor')
+    })
+
+    describe('will set animation style', () => {
+      render(
+        <Breadcrumb
+          data={[
+            { href: '/' },
+            { href: '/page1', text: 'Page 1' },
+            { href: '/page1/page2', text: 'Page 2' },
+          ]}
+          variant="collapse"
+          collapsed={false}
+        />
+      )
+
+      const items = document.querySelectorAll('.dnb-breadcrumb__item')
+
+      it.each([0, 1, 2])('--delay=%s', (item) => {
+        expect(items[item].getAttribute('style')).toBe(`--delay: ${item};`)
+      })
+    })
+  })
+
+  it('should forward ref', () => {
+    const ref: RefObject<HTMLElement | null> = { current: null }
+
+    render(
+      <Breadcrumb
+        ref={ref}
+        data={[{ href: '/' }, { href: '/page1', text: 'Page 1' }]}
+      />
+    )
+
+    const element = document.querySelector('.dnb-breadcrumb')
+    expect(ref.current).toBe(element)
+  })
+
+  it('should forward ref as a function', () => {
+    let refElement: HTMLElement | null = null
+    const refFn = (elem: HTMLElement) => {
+      refElement = elem
+    }
+
+    render(
+      <Breadcrumb
+        ref={refFn}
+        data={[{ href: '/' }, { href: '/page1', text: 'Page 1' }]}
+      />
+    )
+
+    const element = document.querySelector('.dnb-breadcrumb')
+    expect(refElement).toBe(element)
+  })
+
+  it('should apply spacing classes and innerSpace style on the root', () => {
+    render(<Breadcrumb top="large" innerSpace="small" />)
+
+    const element = document.querySelector('.dnb-breadcrumb')
+
+    expect(element.className).toContain('dnb-space__top--large')
+    expect(element.getAttribute('style')).toContain('--padding-t-s')
+  })
+})
+
+describe('Breadcrumb aria', () => {
+  it('should validate', async () => {
+    const Component = render(
+      <Breadcrumb
+        data={[
+          { href: '/' },
+          { href: '/page1', text: 'Page 1' },
+          { href: '/page1/page2', text: 'Page 2' },
+        ]}
+        variant="collapse"
+        collapsed={false}
+      />
+    )
+    expect(await axeComponent(Component)).toHaveNoViolations()
+  })
+})
+
+describe('Breadcrumb scss', () => {
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

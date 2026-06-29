@@ -1,0 +1,169 @@
+/**
+ * Web Dialog Component
+ *
+ */
+import { useContext } from 'react'
+import Modal from '../modal/Modal'
+import DialogContent from './DialogContent'
+import DialogBody from './parts/DialogBody'
+import DialogHeader from './parts/DialogHeader'
+import DialogNavigation from './parts/DialogNavigation'
+import type { DialogProps, DialogContentProps } from './types'
+import { clsx } from 'clsx'
+import Context from '../../shared/Context'
+import DialogAction from './parts/DialogAction'
+import { extendPropsWithContext } from '../../shared/component-helper'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+const defaultProps: Partial<DialogProps & DialogContentProps> = {
+  variant: 'information',
+  spacing: true,
+}
+
+function Dialog(localProps: DialogProps & DialogContentProps) {
+  const context = useContext(Context)
+
+  const propsWithContext = extendPropsWithContext(
+    localProps,
+    defaultProps,
+    context?.Dialog
+  )
+
+  const {
+    id,
+    contentId,
+    focusSelector,
+    labelledBy,
+    directDomReturn,
+    disabled,
+
+    variant,
+    title,
+    dialogTitle,
+    closeTitle,
+    spacing,
+    verticalAlignment,
+    noAnimation,
+    noAnimationOnMobile,
+    animationDuration,
+    triggerProps,
+    triggerAttributes,
+    hideCloseButton,
+    fullscreen,
+
+    onOpen,
+    onClose,
+    onClosePrevent,
+    openModal,
+    closeModal,
+    preventClose,
+    preventOverlayClose,
+    open,
+    openDelay,
+
+    trigger,
+    omitTriggerButton = false,
+    overlayClass,
+    contentClass,
+    contentRef,
+    scrollRef,
+
+    top,
+    bottom,
+    left,
+    right,
+    space,
+
+    ...props
+  } = propsWithContext
+
+  let currentHideCloseButton = hideCloseButton
+  let currentOmitTriggerButton = omitTriggerButton
+  let currentFullscreen = fullscreen
+  let currentPreventOverlayClose = preventOverlayClose
+
+  if (variant === 'confirmation') {
+    currentHideCloseButton =
+      hideCloseButton !== undefined ? hideCloseButton : true
+    currentOmitTriggerButton =
+      (triggerProps || triggerAttributes) !== undefined
+        ? omitTriggerButton
+        : true
+    currentPreventOverlayClose =
+      preventOverlayClose !== undefined ? preventOverlayClose : true
+  }
+
+  if (fullscreen === undefined && fullscreen !== false) {
+    currentFullscreen = variant === 'information' ? 'auto' : false
+  }
+
+  const modalProps = {
+    title,
+    id,
+    focusSelector,
+    labelledBy,
+    disabled,
+    spacing,
+    verticalAlignment,
+    openDelay,
+    contentId,
+    dialogTitle,
+    closeTitle,
+    hideCloseButton: currentHideCloseButton,
+    preventClose,
+    preventOverlayClose: currentPreventOverlayClose,
+    animationDuration,
+    noAnimation,
+    noAnimationOnMobile,
+    fullscreen: currentFullscreen,
+    open,
+    directDomReturn,
+    onOpen,
+    onClose,
+    onClosePrevent,
+    openModal,
+    closeModal,
+    omitTriggerButton: currentOmitTriggerButton,
+    trigger,
+    triggerProps,
+    triggerAttributes,
+    overlayClass,
+    top,
+    bottom,
+    left,
+    right,
+    space,
+    contentRef,
+    scrollRef,
+  }
+
+  const dialogProps = {
+    ...props,
+    noAnimation,
+    noAnimationOnMobile,
+    fullscreen: currentFullscreen,
+    spacing,
+    variant,
+  }
+
+  return (
+    <Modal
+      {...modalProps}
+      dialogRole={variant === 'information' ? 'dialog' : 'alertdialog'}
+      contentClass={clsx('dnb-dialog__root', contentClass)}
+    >
+      <DialogContent {...dialogProps} />
+    </Modal>
+  )
+}
+
+Dialog.Body = DialogBody
+Dialog.Header = DialogHeader
+Dialog.Navigation = DialogNavigation
+Dialog.Action = DialogAction
+
+withComponentMarkers(Dialog, {
+  _supportsSpacingProps: true,
+})
+
+export default Dialog

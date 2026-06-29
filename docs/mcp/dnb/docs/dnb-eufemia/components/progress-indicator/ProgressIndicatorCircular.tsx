@@ -1,0 +1,259 @@
+/**
+ * Web ProgressIndicator Component
+ *
+ */
+
+import { useEffect, useRef } from 'react'
+import type { HTMLProps, RefObject } from 'react'
+import type * as CSS from 'csstype'
+import { clsx } from 'clsx'
+import { validateDOMAttributes } from '../../shared/component-helper'
+import type { ProgressIndicatorCircularAllProps } from './types'
+
+function ProgressIndicatorCircular(
+  props: ProgressIndicatorCircularAllProps
+) {
+  const {
+    size,
+    show,
+    progress,
+    onComplete,
+    callOnCompleteHandler,
+    title,
+    customColors,
+    customCircleWidth,
+    counterClockwise = false,
+    ...rest
+  } = props
+  const keepAnimatingRef = useRef(true)
+  const showRef = useRef(false)
+  const useAnimationFrame = typeof onComplete === 'function'
+  const _refDark = useRef<SVGSVGElement>(null)
+  const _refLight = useRef<SVGSVGElement>(null)
+  const _startupTimeout = useRef<NodeJS.Timeout>(undefined)
+
+  useEffect(() => {
+    if (useAnimationFrame) {
+      _startupTimeout.current = setTimeout(() => {
+        if (_refDark.current) {
+          doAnimation(_refDark.current, true, callOnCompleteHandler)
+        }
+        if (_refLight.current) {
+          doAnimation(_refLight.current, false)
+        }
+      }, 300)
+    }
+
+    return () => {
+      keepAnimatingRef.current = false
+      if (_startupTimeout.current) {
+        clearTimeout(_startupTimeout.current)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    showRef.current = show
+  }, [show])
+
+  const doAnimation = (
+    element: SVGSVGElement,
+    animateOnStart = true,
+    callback = null
+  ) => {
+    const min = 1
+    const max = Math.PI * 100
+    let start = 0,
+      ms = 0,
+      prog = max,
+      setProg = animateOnStart,
+      animate1 = true,
+      completeCalled = false,
+      stopNextRound = false
+
+    const step = (timestamp) => {
+      if (!start) {
+        start = timestamp
+      }
+
+      // milliseconds
+      ms = timestamp - start
+
+      if (animate1) {
+        if (!showRef.current && prog < 20) {
+          prog = min
+        }
+        if (setProg) {
+          element.style['stroke-dashoffset'] = `${prog}%`
+        } else if (!animateOnStart) {
+          element.style['stroke-dashoffset'] = `${max}%`
+        }
+      }
+
+      // if complete
+      if (stopNextRound) {
+        animate1 = false
+        if (!completeCalled) {
+          completeCalled = true
+          if (animateOnStart && typeof callback === 'function') {
+            callback()
+          }
+        } else if (showRef.current && ms % 1e3 > 950) {
+          // startAnimationFirstTime() // will not start completely from scratch
+          stopNextRound = false
+        }
+      } else {
+        // make sure we stop next round
+        stopNextRound = !showRef.current && prog === min
+        animate1 = true
+        completeCalled = false
+      }
+
+      // since we have 1sec as duration, and we want always a max of 1000ms
+      prog = Math.round(max - (max / 1e3) * (ms % 1e3))
+
+      // calc if we want to animate
+      setProg = animateOnStart
+        ? Math.ceil(ms / 1e3) % 2 === 1 || ms === 0
+        : Math.ceil(ms / 1e3) % 2 === 0 && ms !== 0
+
+      if (keepAnimatingRef.current) {
+        window.requestAnimationFrame(step)
+      }
+    }
+    if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+      window.requestAnimationFrame(step)
+    }
+  }
+
+  const progressIsControlled = progress > -1
+
+  if (progressIsControlled) {
+    rest.role = 'progressbar'
+    rest['aria-label'] = title
+    rest['title'] = title
+  } else {
+    rest.role = 'alert'
+    rest['aria-busy'] = true
+  }
+
+  const remainingDOMAttributes = validateDOMAttributes(props, { ...rest })
+
+  return (
+    <span
+      className={clsx(
+        'dnb-progress-indicator__circular',
+        size && `dnb-progress-indicator__circular--${size}`,
+        progressIsControlled &&
+          'dnb-progress-indicator__circular--has-progress-value'
+      )}
+      {...remainingDOMAttributes}
+    >
+      <span className="dnb-progress-indicator__circular__background-padding">
+        <span
+          className="dnb-progress-indicator__circular__background"
+          style={{ backgroundColor: customColors?.background }}
+        />
+      </span>
+
+      {/* The first one is the background line */}
+      <Circle
+        className={clsx('light', 'paused')}
+        customColor={customColors?.shaft}
+        customWidth={customCircleWidth}
+      />
+      <Circle
+        className={clsx(
+          'dark',
+          'dark',
+          progressIsControlled || useAnimationFrame ? 'paused' : null
+        )}
+        style={
+          progressIsControlled
+            ? {
+                strokeDashoffset: getOffset(progress, counterClockwise),
+              }
+            : {}
+        }
+        customColor={customColors?.line}
+        customWidth={customCircleWidth}
+        ref={_refDark}
+      />
+      {!progressIsControlled && (
+        <Circle
+          className={clsx('light', useAnimationFrame ? 'paused' : null)}
+          customColor={customColors?.shaft}
+          customWidth={customCircleWidth}
+          ref={_refLight}
+        />
+      )}
+    </span>
+  )
+}
+
+function Circle({
+  customColor,
+  customWidth,
+  className,
+  ref,
+  ...rest
+}: HTMLProps<SVGSVGElement> & {
+  customColor?: CSS.Property.BackgroundColor
+  customWidth?: CSS.Property.StrokeWidth
+  ref?: RefObject<SVGSVGElement>
+}) {
+  const correctedCustomWidth = correctPercentageStrokeWidth(customWidth)
+  return (
+    <svg
+      className={clsx('dnb-progress-indicator__circular__line', className)}
+      shapeRendering="geometricPrecision"
+      ref={ref}
+      {...rest}
+    >
+      <circle
+        className="dnb-progress-indicator__circular__circle"
+        fill="none"
+        cx="50%"
+        cy="50%"
+        r="50%"
+        style={{
+          stroke: customColor,
+          ...(correctedCustomWidth
+            ? {
+                '--progress-indicator-circular-stroke-width':
+                  correctedCustomWidth,
+              }
+            : undefined),
+        }}
+      />
+    </svg>
+  )
+}
+/**
+ *
+ * @param progress number between 0-100
+ * @param counterClockwise decides direction of movement. Default: `false`
+ * @returns
+ */
+
+function getOffset(progress: number, counterClockwise = false) {
+  const offset = Math.PI * (100 - progress)
+  return `${counterClockwise ? -offset : offset}%`
+}
+
+/**
+ * If the custom stroke width is a percentage, returns a corrected width
+ * relative to the parent SVG
+ * @param strokeWidth
+ * @returns
+ */
+function correctPercentageStrokeWidth(
+  strokeWidth: CSS.Property.StrokeWidth
+) {
+  if (typeof strokeWidth === 'string' && strokeWidth.endsWith('%')) {
+    const number = parseFloat(strokeWidth.slice(0, strokeWidth.length - 1))
+    return `${(100 * number) / (100 - number)}%`
+  }
+  return undefined
+}
+export default ProgressIndicatorCircular

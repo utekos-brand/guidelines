@@ -1,0 +1,187 @@
+/*
+* Upload component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+
+.dnb-upload {
+  --upload-background: var(--token-color-background-page-background);
+  --upload-background--active: var(--token-color-decorative-third-muted);
+  --upload-border: var(--token-color-stroke-action);
+  --upload-border--active: var(--token-color-stroke-action-pressed);
+  --upload-border-width: 0.125rem;
+  --upload-list-border: var(--token-color-stroke-neutral-subtle);
+  --upload-icon--default: var(--token-color-icon-neutral);
+  --upload-icon--warning: var(--token-color-icon-error);
+  --upload-highlight: var(--token-color-background-warning-subtle);
+  --upload-text--secondary: var(--token-color-text-neutral-alternative);
+
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+
+  padding: 1.5rem;
+
+  @include utilities.allBelow(small) {
+    padding: 1.5rem 1rem;
+  }
+
+  background-color: var(--upload-background);
+  border-radius: var(--token-radius-md);
+
+  // svg border element
+  &__outline {
+    content: '';
+
+    pointer-events: none;
+
+    position: absolute;
+    inset: 0;
+
+    height: 100%;
+    width: 100%;
+
+    border-radius: var(--token-radius-md);
+    stroke: var(--upload-border);
+    stroke-width: 0.1875rem;
+  }
+
+  &--active &__outline {
+    inset: -1px;
+    width: calc(100% + var(--upload-border-width));
+    height: calc(100% + var(--upload-border-width));
+
+    stroke: var(--upload-border--active);
+
+    rect {
+      stroke-width: 0.25rem;
+      stroke-dasharray: 0;
+    }
+  }
+
+  &--active {
+    background-color: var(--upload-background--active);
+  }
+
+  &__file-input {
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+  }
+
+  &__file-list {
+    position: relative;
+
+    padding: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+
+    list-style: none;
+  }
+
+  // Border on top/bottom of list items
+  &__file-list::before,
+  &__file-cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    height: 1px;
+    background-color: var(--upload-list-border);
+  }
+
+  &__file-cell {
+    position: relative;
+    padding: 1rem 0;
+
+    /** Highlight Animation */
+    transition: background-color;
+    transition-duration: 1.5s;
+    transition-timing-function: var(--easing-default);
+
+    @include utilities.reducedMotion() {
+      transition-duration: 0.01ms;
+    }
+
+    // Align border to bottom
+    &::after {
+      top: auto;
+    }
+
+    &__content {
+      display: flex;
+      column-gap: 1rem;
+
+      justify-content: space-between;
+      align-items: center;
+
+      &__left {
+        display: flex;
+        column-gap: 1rem;
+        align-items: center;
+
+        .dnb-icon {
+          color: var(--upload-icon--default);
+        }
+      }
+    }
+
+    &--warning &__content__left .dnb-icon {
+      color: var(--upload-icon--warning);
+    }
+
+    &--highlight {
+      background-color: var(--upload-highlight);
+    }
+
+    &__text-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      &--loading {
+        font-size: var(--font-size-basis);
+      }
+      .dnb-button {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &__text.dnb-p {
+    color: var(--upload-text--secondary);
+  }
+
+  &__accepted-file-types-table {
+    &.dnb-table {
+      width: fit-content;
+      & thead th {
+        font-weight: var(--font-weight-medium);
+        font-size: var(--font-size-basis);
+        padding-top: 0;
+        &:first-child {
+          padding-left: 0;
+        }
+      }
+      & tbody td:first-child {
+        padding-left: 0;
+      }
+    }
+  }
+
+  &--compact {
+    padding: 0;
+    border-radius: 0;
+    .dnb-upload__text {
+      color: var(--upload-text--secondary);
+      font-size: var(--font-size-small);
+    }
+    .dnb-help-button__content {
+      .dnb-section {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "next-devtools": {
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"]
+    },
+    "tailwindcss-server": {
+      "command": "npx",
+      "args": ["-y", "tailwindcss-mcp-server"]
+    },
+    "a11y-color-contrast": {
+      "command": "npx",
+      "args": ["-y", "a11y-color-contrast-mcp"]
+    },
+    "vercel": {
+      "url": "https://mcp.vercel.com"
+    },
+    "mdn": {
+      "url": "https://mcp.mdn.mozilla.net/",
+      "headers": {
+        "X-Moz-1st-Party-Data-Opt-Out": "1"
+      }
+    },
+    "apify": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.apify.com/?tools=pattonholdings/color-contrast-auditor",
+        "--header",
+        "Authorization:${APIFY_AUTH_HEADER}",
+        "--silent"
+      ],
+      "env": {
+        "APIFY_AUTH_HEADER": "Bearer ${env.local:APIFY_TOKEN}"
+      }
+    },
+    "canva-dev": {
+      "command": "npx",
+      "args": ["-y", "@canva/cli@latest", "mcp"]
+    },
+    "canva": {
+      "command": "npx",
+      "args": ["-y", "@canva/cli@latest", "mcp"]
+    },
+    "spor": {
+      "command": "npx",
+      "args": ["-y", "@vygruppen/spor-mcp-server"]
+    },
+    "eufemia": {
+      "url": "https://eufemia-mcp.eufemia.workers.dev/mcp"
+    }
+  }
+}

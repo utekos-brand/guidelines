@@ -1,0 +1,752 @@
+import type { ReactNode, RefObject } from 'react'
+import type { DrawerAllProps } from '../Drawer'
+import Drawer from '../Drawer'
+import Button from '../../button/Button'
+import Provider from '../../../shared/Provider'
+
+import { loadScss, axeComponent } from '../../../core/test-utils/testSetup'
+import { render, fireEvent, waitFor } from '@testing-library/react'
+
+const props: DrawerAllProps = {
+  noAnimation: true,
+}
+
+beforeAll(() => {
+  const button = document.createElement('BUTTON')
+  document.body.appendChild(button)
+})
+
+beforeEach(() => {
+  document.body.removeAttribute('style')
+  document.documentElement.removeAttribute('style')
+  document.getElementById('dnb-modal-root')?.remove()
+  window.__modalStack = undefined
+})
+
+const log = global.console.log
+beforeEach(() => {
+  global.console.log = vi.fn((...args) => {
+    if (
+      !String(args[1]).includes(
+        'A Dialog or Drawer needs an h1 as its first element!'
+      )
+    ) {
+      log(...args)
+    }
+  })
+})
+afterEach(() => {
+  global.console.log = log
+  vi.resetAllMocks()
+})
+
+describe('Drawer', () => {
+  it('will run bodyScrollLock with disableBodyScroll', () => {
+    render(
+      <Drawer {...props}>
+        <button>button</button>
+      </Drawer>
+    )
+
+    expect(document.body.getAttribute('style')).toBe(null)
+
+    fireEvent.click(document.querySelector('button.dnb-modal__trigger'))
+
+    expect(document.body.getAttribute('style')).toContain(
+      'overflow: hidden;'
+    )
+  })
+
+  it('appears on trigger click', () => {
+    render(
+      <Drawer {...props}>
+        <button>button</button>
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button.dnb-modal__trigger'))
+
+    expect(
+      document.querySelector('button.dnb-modal__close-button')
+    ).toBeInTheDocument()
+  })
+
+  it('omits trigger button once we set omitTriggerButton', () => {
+    render(<Drawer {...props} omitTriggerButton />)
+
+    expect(
+      document.querySelector('button.dnb-modal__trigger')
+    ).not.toBeInTheDocument()
+  })
+
+  it('will close by using callback method', () => {
+    const onClose = vi.fn()
+    const onOpen = vi.fn()
+    render(
+      <Drawer
+        noAnimation={true}
+        onOpen={onOpen}
+        onClose={onClose}
+        hideCloseButton
+      >
+        {
+          (({ close }) => (
+            <>
+              <h1>title</h1>
+              <Button id="close-me" text="close" onClick={close} />
+            </>
+          )) as (...args: unknown[]) => ReactNode
+        }
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button'))
+    expect(onOpen).toHaveBeenCalledTimes(1)
+
+    fireEvent.click(document.querySelector('button#close-me'))
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('will render Navigation, Header and Body even when hideCloseButton is true', () => {
+    const onClose = vi.fn()
+    const onOpen = vi.fn()
+
+    render(
+      <Drawer
+        noAnimation={true}
+        onOpen={onOpen}
+        onClose={onClose}
+        hideCloseButton
+      >
+        {
+          (({ close }) => (
+            <>
+              <Drawer.Navigation>Drawer.Navigation</Drawer.Navigation>
+              <Drawer.Header>
+                <h1>Drawer.Header</h1>
+                <Button id="close-me" onClick={close} />
+              </Drawer.Header>
+              <Drawer.Body>Drawer.Body</Drawer.Body>
+            </>
+          )) as (...args: unknown[]) => ReactNode
+        }
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button'))
+    expect(onOpen).toHaveBeenCalledTimes(1)
+
+    expect(document.querySelectorAll('.dnb-drawer button')).toHaveLength(1)
+
+    expect(
+      document.querySelector('.dnb-drawer__header')
+    ).toBeInTheDocument()
+    expect(document.querySelector('.dnb-drawer__header').textContent).toBe(
+      'Drawer.Header'
+    )
+
+    expect(document.querySelector('.dnb-drawer__body')).toBeInTheDocument()
+    expect(document.querySelector('.dnb-drawer__body').textContent).toBe(
+      'Drawer.Body'
+    )
+
+    expect(
+      document.querySelector('.dnb-drawer__navigation')
+    ).toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-drawer__navigation').textContent
+    ).toBe('Drawer.Navigation')
+
+    fireEvent.click(document.querySelector('button#close-me'))
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  // Deprecated: closeButtonAttributes – remove this test in v13
+  it('sends along closeButtonAttributes to close button', () => {
+    render(
+      <Drawer
+        open
+        noAnimation
+        closeButtonAttributes={{ text: 'Custom text' }}
+      >
+        Content
+      </Drawer>
+    )
+
+    expect(
+      document.querySelectorAll('.dnb-modal__close-button')
+    ).toHaveLength(1)
+    expect(
+      document
+        .querySelector('.dnb-modal__close-button')
+        ?.textContent?.replace(/\u200C/g, '')
+    ).toBe('Custom text')
+  })
+
+  it('sends along closeButtonProps to close button', () => {
+    render(
+      <Drawer open noAnimation closeButtonProps={{ text: 'Custom text' }}>
+        Content
+      </Drawer>
+    )
+
+    expect(
+      document.querySelectorAll('.dnb-modal__close-button')
+    ).toHaveLength(1)
+    expect(
+      document
+        .querySelector('.dnb-modal__close-button')
+        ?.textContent?.replace(/\u200C/g, '')
+    ).toBe('Custom text')
+  })
+
+  it('closeButtonProps takes precedence over closeButtonAttributes', () => {
+    render(
+      <Drawer
+        open
+        noAnimation
+        closeButtonProps={{ text: 'New prop' }}
+        closeButtonAttributes={{ text: 'Old prop' }}
+      >
+        Content
+      </Drawer>
+    )
+
+    expect(
+      document
+        .querySelector('.dnb-modal__close-button')
+        ?.textContent?.replace(/\u200C/g, '')
+    ).toBe('New prop')
+  })
+
+  it('will use props from global context', () => {
+    const contextTitle = 'Custom title'
+    render(
+      <Provider
+        value={{
+          Drawer: { title: contextTitle },
+        }}
+      >
+        <Drawer />
+      </Provider>
+    )
+
+    fireEvent.click(document.querySelector('button'))
+
+    expect(document.querySelector('.dnb-drawer__title').textContent).toBe(
+      contextTitle
+    )
+  })
+
+  it('is closed by keyboardevent esc', () => {
+    let testTriggeredBy = null
+    const onClose = vi.fn(
+      ({ triggeredBy }) => (testTriggeredBy = triggeredBy)
+    )
+
+    const props: DrawerAllProps = {
+      directDomReturn: false,
+      noAnimation: true,
+    }
+    render(<Drawer {...props} id="modal-drawer" onClose={onClose} />)
+
+    fireEvent.click(document.querySelector('button#modal-drawer'))
+    fireEvent.keyDown(document.querySelector('div.dnb-drawer'), {
+      key: 'Escape',
+    })
+
+    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(testTriggeredBy).toBe('keyboard')
+  })
+
+  it('is closed by keyboardevent esc by window listener', async () => {
+    const onClose = vi.fn()
+
+    const props: DrawerAllProps = {
+      directDomReturn: false,
+      noAnimation: true,
+    }
+    render(<Drawer {...props} id="modal-drawer" onClose={onClose} />)
+
+    fireEvent.click(document.querySelector('button#modal-drawer'))
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await waitFor(() => {
+      expect(onClose).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('moves focus to content by default when opened', async () => {
+    render(<Drawer noAnimation open title="Title" />)
+
+    await waitFor(() => {
+      const title = document.querySelector(
+        '.dnb-modal__title'
+      ) as HTMLHeadingElement
+      expect(title).toBeInTheDocument()
+      // Focus remains on body element - this appears to be the expected behavior for Drawer
+      expect(document.activeElement).toBe(document.body)
+    })
+  })
+
+  it('respects focusSelector over close button', async () => {
+    render(
+      <Drawer noAnimation open title="Title" focusSelector="#focus-me">
+        <Drawer.Body>
+          <input id="focus-me" />
+        </Drawer.Body>
+      </Drawer>
+    )
+
+    await waitFor(() => {
+      expect(document.activeElement?.id).toBe('focus-me')
+    })
+
+    const closeBtn = document.querySelector(
+      'button.dnb-modal__close-button'
+    ) as HTMLButtonElement
+    expect(closeBtn).toBeInTheDocument()
+    expect(document.activeElement).not.toBe(closeBtn)
+  })
+
+  it('returns focus to trigger with data-autofocus after close', async () => {
+    render(<Drawer noAnimation animationDuration={3} title="Title" />)
+
+    // Open via trigger
+    const trigger = document.querySelector(
+      'button.dnb-modal__trigger'
+    ) as HTMLButtonElement
+    fireEvent.click(trigger)
+
+    // Close with ESC
+    fireEvent.keyDown(document.querySelector('div.dnb-drawer'), {
+      key: 'Escape',
+    })
+
+    // Trigger gets focus with data-autofocus set
+    await waitFor(() => {
+      expect(document.activeElement).toBe(trigger)
+      expect(trigger).toHaveAttribute('data-autofocus', 'true')
+    })
+
+    // Attribute is removed afterwards
+    await waitFor(() => {
+      expect(trigger).not.toHaveAttribute('data-autofocus')
+    })
+  })
+
+  it('has support for nested Drawers', async () => {
+    const onOpen = {
+      first: vi.fn(),
+      second: vi.fn(),
+      third: vi.fn(),
+    }
+    const onClose = {
+      first: vi.fn(),
+      second: vi.fn(),
+      third: vi.fn(),
+    }
+
+    const props: DrawerAllProps = {
+      directDomReturn: false,
+      noAnimation: true,
+    }
+
+    render(
+      <Drawer
+        {...props}
+        id="modal-first"
+        title="modal-first"
+        onOpen={onOpen.first}
+        onClose={onClose.first}
+      >
+        <button id="content-first">first</button>
+        <Drawer
+          {...props}
+          id="modal-second"
+          title="modal-second"
+          onOpen={onOpen.second}
+          onClose={onClose.second}
+        >
+          <button id="content-second">second</button>
+          <Drawer
+            {...props}
+            id="modal-third"
+            title="modal-third"
+            onOpen={onOpen.third}
+            onClose={onClose.third}
+          >
+            <button id="content-third">third</button>
+          </Drawer>
+        </Drawer>
+      </Drawer>
+    )
+
+    expect(
+      document.querySelector('#content-third')
+    ).not.toBeInTheDocument()
+
+    fireEvent.click(document.querySelector('button#modal-first'))
+    expect(
+      document.documentElement.getAttribute('data-dnb-modal-active')
+    ).toBe('modal-first')
+    fireEvent.click(document.querySelector('button#modal-second'))
+    expect(
+      document.documentElement.getAttribute('data-dnb-modal-active')
+    ).toBe('modal-second')
+    fireEvent.click(document.querySelector('button#modal-third'))
+    expect(
+      document.documentElement.getAttribute('data-dnb-modal-active')
+    ).toBe('modal-third')
+
+    expect(onOpen.first).toHaveBeenCalledTimes(1)
+    expect(onOpen.second).toHaveBeenCalledTimes(1)
+    expect(onOpen.third).toHaveBeenCalledTimes(1)
+
+    expect(
+      document.querySelectorAll('button.dnb-modal__close-button').length
+    ).toBe(3)
+    expect(document.querySelector('#content-first')).toHaveAttribute(
+      'aria-hidden'
+    )
+    expect(document.querySelector('#content-second')).toHaveAttribute(
+      'aria-hidden'
+    )
+    expect(document.querySelector('#content-third')).not.toHaveAttribute(
+      'aria-hidden'
+    )
+
+    expect(
+      document.querySelector(
+        '#dnb-modal-modal-first button.dnb-modal__close-button'
+      )
+    ).toHaveAttribute('aria-hidden')
+    expect(
+      document.querySelector(
+        '#dnb-modal-modal-second button.dnb-modal__close-button'
+      )
+    ).toHaveAttribute('aria-hidden')
+    expect(
+      document.querySelector(
+        '#dnb-modal-modal-third button.dnb-modal__close-button'
+      )
+    ).not.toHaveAttribute('aria-hidden')
+
+    // Close the third one
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await waitFor(() => {
+      expect(onClose.first).toHaveBeenCalledTimes(0)
+      expect(onClose.second).toHaveBeenCalledTimes(0)
+      expect(onClose.third).toHaveBeenCalledTimes(1)
+    })
+
+    expect(
+      document.documentElement.getAttribute('data-dnb-modal-active')
+    ).toBe('modal-second')
+    expect(
+      document.querySelector('#content-third')
+    ).not.toBeInTheDocument()
+    expect(document.querySelector('#content-second')).not.toHaveAttribute(
+      'aria-hidden'
+    )
+    expect(
+      document.querySelector(
+        '#dnb-modal-modal-first button.dnb-modal__close-button'
+      )
+    ).toHaveAttribute('aria-hidden')
+    expect(
+      document.querySelector(
+        '#dnb-modal-modal-second button.dnb-modal__close-button'
+      )
+    ).not.toHaveAttribute('aria-hidden')
+
+    // Close the second one
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await waitFor(() => {
+      expect(onClose.first).toHaveBeenCalledTimes(0)
+      expect(onClose.second).toHaveBeenCalledTimes(1)
+      expect(onClose.third).toHaveBeenCalledTimes(1)
+    })
+
+    expect(
+      document.documentElement.getAttribute('data-dnb-modal-active')
+    ).toBe('modal-first')
+    expect(
+      document.querySelector('#content-second')
+    ).not.toBeInTheDocument()
+    expect(document.querySelector('#content-first')).not.toHaveAttribute(
+      'aria-hidden'
+    )
+    expect(
+      document.querySelectorAll('button.dnb-modal__close-button')[0]
+    ).not.toHaveAttribute('aria-hidden')
+
+    // Close the first one
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await waitFor(() => {
+      expect(onClose.first).toHaveBeenCalledTimes(1)
+      expect(onClose.second).toHaveBeenCalledTimes(1)
+      expect(onClose.third).toHaveBeenCalledTimes(1)
+    })
+
+    expect(
+      document.querySelector('#content-first')
+    ).not.toBeInTheDocument()
+    expect(document.documentElement).not.toHaveAttribute(
+      'data-dnb-modal-active'
+    )
+  })
+
+  it('will accept custom refs', () => {
+    const contentRef: RefObject<HTMLElement | null> = {
+      current: null,
+    }
+    const scrollRef: RefObject<HTMLElement | null> = {
+      current: null,
+    }
+
+    const MockComponent = () => {
+      return (
+        <Drawer
+          open
+          noAnimation
+          contentRef={contentRef}
+          scrollRef={scrollRef}
+        >
+          content
+        </Drawer>
+      )
+    }
+
+    render(<MockComponent />)
+
+    expect(contentRef.current).toBeTruthy()
+    expect(scrollRef.current).toBeTruthy()
+  })
+
+  it('will close drawer by using callback method', () => {
+    const onClose = vi.fn()
+    const onOpen = vi.fn()
+
+    render(
+      <Drawer
+        noAnimation={true}
+        onOpen={onOpen}
+        onClose={onClose}
+        hideCloseButton
+      >
+        {
+          (({ close }) => (
+            <Button id="close-button" text="close" onClick={close} />
+          )) as (...args: unknown[]) => ReactNode
+        }
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button.dnb-modal__trigger'))
+    expect(onOpen).toHaveBeenCalledTimes(1)
+
+    fireEvent.click(document.querySelector('button#close-button'))
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('can contain drawer parts', () => {
+    render(
+      <Drawer noAnimation directDomReturn={false}>
+        <Drawer.Navigation>navigation</Drawer.Navigation>
+        <Drawer.Header>header</Drawer.Header>
+        <Drawer.Body>body</Drawer.Body>
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button'))
+
+    {
+      const elements = document.querySelectorAll(
+        '.dnb-drawer.dnb-scroll-view > .dnb-section'
+      )
+      expect(elements[0].textContent).toContain('navigation')
+      expect(elements[1].textContent).toContain('header')
+    }
+
+    {
+      const elements = document.querySelectorAll(
+        '.dnb-drawer__content > .dnb-section'
+      )
+      expect(elements[0].textContent).toContain('body')
+    }
+
+    expect(
+      document.querySelectorAll('button.dnb-modal__close-button').length
+    ).toBe(1)
+  })
+
+  it('sets default fullscreen to auto', () => {
+    render(
+      <Drawer {...props}>
+        <button>button</button>
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button.dnb-modal__trigger'))
+
+    expect(
+      document.querySelector('.dnb-modal__content--fullscreen')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-modal__content--auto-fullscreen')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-drawer--auto-fullscreen')
+    ).toBeInTheDocument()
+  })
+
+  it('sets fullscreen to true', () => {
+    render(
+      <Drawer {...props} fullscreen>
+        <button>button</button>
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button.dnb-modal__trigger'))
+
+    expect(
+      document.querySelector('.dnb-modal__content--fullscreen')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-modal__content--auto-fullscreen')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-drawer--fullscreen')
+    ).toBeInTheDocument()
+  })
+
+  it('sets fullscreen to false', () => {
+    render(
+      <Drawer {...props} fullscreen={false}>
+        <button>button</button>
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button.dnb-modal__trigger'))
+
+    expect(
+      document.querySelector('.dnb-modal__content--fullscreen')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-modal__content--auto-fullscreen')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-drawer--auto-fullscreen')
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('.dnb-drawer--fullscreen')
+    ).not.toBeInTheDocument()
+  })
+})
+
+describe('Drawer aria', () => {
+  it('should validate with ARIA rules as a drawer', async () => {
+    const Comp = render(<Drawer {...props} open={true} title="title" />)
+    expect(await axeComponent(Comp)).toHaveNoViolations()
+  })
+})
+
+describe('scrollbarGutter', () => {
+  it('should add scrollbar-gutter class by default', () => {
+    render(
+      <Drawer {...props} open>
+        content
+      </Drawer>
+    )
+
+    const scrollView = document.querySelector('.dnb-scroll-view')
+    expect(scrollView).toHaveClass(
+      'dnb-scroll-view--scrollbar-gutter-stable'
+    )
+  })
+
+  it('should not add scrollbar-gutter class when spacing is false', () => {
+    render(
+      <Drawer {...props} open spacing={false}>
+        content
+      </Drawer>
+    )
+
+    const scrollView = document.querySelector('.dnb-scroll-view')
+    expect(scrollView).not.toHaveClass(
+      'dnb-scroll-view--scrollbar-gutter-stable'
+    )
+  })
+
+  it('should always add scrollbar-gutter class when set to stable', () => {
+    render(
+      <Drawer {...props} open spacing={false} scrollbarGutter="stable">
+        content
+      </Drawer>
+    )
+
+    const scrollView = document.querySelector('.dnb-scroll-view')
+    expect(scrollView).toHaveClass(
+      'dnb-scroll-view--scrollbar-gutter-stable'
+    )
+  })
+
+  it('should not add scrollbar-gutter class when set to false', () => {
+    render(
+      <Drawer {...props} open scrollbarGutter={false}>
+        content
+      </Drawer>
+    )
+
+    const scrollView = document.querySelector('.dnb-scroll-view')
+    expect(scrollView).not.toHaveClass(
+      'dnb-scroll-view--scrollbar-gutter-stable'
+    )
+  })
+})
+
+describe('Drawer triggerProps', () => {
+  it('should forward text to the trigger button', () => {
+    render(<Drawer triggerProps={{ text: 'Open Drawer' }} {...props} />)
+
+    expect(
+      document
+        .querySelector('button.dnb-modal__trigger')
+        .querySelector('.dnb-button__text').textContent
+    ).toBe('Open Drawer')
+  })
+
+  it('should forward variant to the trigger button', () => {
+    render(
+      <Drawer
+        triggerProps={{ text: 'Open Drawer', variant: 'primary' }}
+        {...props}
+      />
+    )
+
+    expect(
+      document.querySelector('button.dnb-modal__trigger')
+    ).toHaveClass('dnb-button--primary')
+  })
+
+  it('should call triggerProps onClick', () => {
+    const onClick = vi.fn()
+
+    render(
+      <Drawer triggerProps={{ onClick }} {...props}>
+        Drawer content
+      </Drawer>
+    )
+
+    fireEvent.click(document.querySelector('button.dnb-modal__trigger'))
+
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('Drawer scss', () => {
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

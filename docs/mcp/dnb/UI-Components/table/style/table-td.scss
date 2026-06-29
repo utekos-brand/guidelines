@@ -1,0 +1,293 @@
+/*
+* Table component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+@use './table-mixins.scss' as table-mixins;
+
+.dnb-table {
+  &__td {
+    position: relative;
+    background-color: var(--table-td-background);
+  }
+
+  // Table border
+  &--border {
+    tbody {
+      .dnb-table__td,
+      .dnb-table__th {
+        @include table-mixins.tableBorder() {
+          border-left: var(--table-border-left, var(--table-border));
+          border-right: var(--table-border-right, var(--table-border));
+          border-top: var(--table-border-top, var(--table-border));
+          border-bottom: var(--table-border-bottom, none);
+        }
+        &:first-child::after {
+          border-left: none;
+        }
+        &:last-child::after {
+          border-right: none;
+        }
+      }
+
+      .dnb-table__tr:first-child {
+        .dnb-table__td,
+        .dnb-table__th {
+          &::after {
+            border-top: none;
+          }
+        }
+      }
+    }
+  }
+
+  // Header underline
+  &--border,
+  &--no-striped {
+    thead + tbody {
+      .dnb-table__tr:first-child {
+        .dnb-table__td,
+        .dnb-table__th {
+          @include table-mixins.tableBorder() {
+            border-top: var(--table-border-top, var(--table-border));
+          }
+        }
+      }
+    }
+  }
+
+  // Horizontal-only border: remove vertical (left/right) borders
+  &--border-horizontal {
+    --table-border-left: none;
+    --table-border-right: none;
+  }
+
+  // Header underline when header row has even variant
+  thead:has(.dnb-table__tr--even) + tbody {
+    .dnb-table__tr:first-child {
+      .dnb-table__td,
+      .dnb-table__th {
+        @include table-mixins.tableBorder() {
+          border-top: var(--table-border-top, var(--table-border));
+        }
+      }
+    }
+  }
+
+  // Navigable (clickable) cell
+  &__td--clickable {
+    padding: 0;
+
+    &:active {
+      --table-td-background: var(--table-accordion-background--active);
+    }
+  }
+
+  // Clickable cell with button
+  &__td__button {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    background: none;
+
+    color: inherit;
+    text-align: inherit;
+    font: inherit;
+    cursor: pointer;
+
+    &__icon {
+      flex: none;
+      color: var(--table-accordion-icon-color);
+      opacity: 0;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: 6; // to be above the table outline/border
+      inset: 0;
+      right: calc(var(--table-accordion-outline-width--active) * -1);
+      border: var(--border-width, 0) solid var(--border-color, transparent);
+    }
+
+    @include utilities.hover() {
+      &::before {
+        --border-width: var(--table-accordion-outline-width);
+        --border-color: var(--table-accordion-outline-color);
+      }
+
+      .dnb-table__td__button__icon {
+        color: var(--table-accordion-icon-color--active);
+        opacity: 1;
+      }
+    }
+
+    &:active {
+      &::before {
+        --border-width: var(--table-accordion-outline-width--active);
+        --border-color: var(--table-accordion-outline-color);
+      }
+
+      .dnb-table__td__button__icon {
+        color: var(--table-accordion-icon-color--active);
+        opacity: 1;
+      }
+    }
+
+    .dnb-table__td:last-child > &::before {
+      right: 0;
+    }
+
+    &:not(:active):not(:hover):focus-visible {
+      &::before {
+        --border-width: var(--focus-ring-width);
+        --border-color: var(--token-color-stroke-action-focus);
+      }
+
+      .dnb-table__td__button__icon {
+        opacity: 1;
+      }
+    }
+
+    &__content {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  // Highlighted cell — transparent borders by default
+  &__td--highlight,
+  &__th--highlight {
+    --table-border-left: var(--table-border-width) solid transparent;
+    --table-border-right: var(--table-border-width) solid transparent;
+    --table-border-top: var(--table-border-width) solid transparent;
+    --table-border-bottom: var(--table-border-width) solid transparent;
+  }
+  &__td--highlight {
+    --table-td-background: var(--table-highlight-background);
+  }
+
+  // Adjacent highlighted cells — highlight border color between them
+  &__td--highlight-border {
+    --table-border-top: var(--table-border-width) solid
+      var(--table-th-highlight-border);
+  }
+  &__th--highlight + &__th--highlight,
+  &__th--highlight + &__td--highlight,
+  &__td--highlight + &__td--highlight {
+    --table-border-left: var(--table-border-width) solid
+      var(--table-th-highlight-border);
+  }
+
+  // Non-highlighted neighbors of highlighted cells
+  &--highlight-neighbor-left {
+    --table-border-left: var(--table-border-width) solid transparent;
+  }
+  &--highlight-neighbor-right {
+    --table-border-right: var(--table-border-width) solid transparent;
+  }
+  &--highlight-neighbor-top {
+    --table-border-top: var(--table-border-width) solid transparent;
+  }
+
+  // Selected cell
+  &__td--selected {
+    --table-td-background: var(
+      --table-td-background--selected,
+      var(--token-color-background-selected-subtle)
+    );
+
+    /* stylelint-disable */
+    .dnb-table__td__button__icon {
+      opacity: 1;
+      color: var(--token-color-icon-selected);
+    }
+    /* stylelint-enable */
+
+    .dnb-table__td__button:not(:hover):not(:active)::before {
+      --border-width: var(--table-accordion-outline-width--active);
+      --border-color: var(--token-color-stroke-selected);
+    }
+  }
+
+  /* stylelint-disable */
+  &--outline {
+    // first row must be rounded
+    thead:first-of-type,
+    tbody:first-child,
+    caption:first-child + tbody {
+      .dnb-table__tr:first-of-type {
+        .dnb-table__th,
+        .dnb-table__td {
+          &:first-child,
+          &:first-child::before,
+          &:first-child::after {
+            border-top-left-radius: var(--table-outline-radius);
+          }
+          &:last-child,
+          &:last-child::before,
+          &:last-child::after {
+            border-top-right-radius: var(--table-outline-radius);
+          }
+        }
+      }
+    }
+  }
+
+  // last row must be rounded
+  &--outline tbody:last-child {
+    .dnb-table__tr:last-child,
+    .dnb-table__tr--clickable:not(
+        .dnb-table__tr--expanded
+      ).dnb-table__tr--last {
+      .dnb-table__th,
+      .dnb-table__td {
+        &:first-child {
+          &,
+          &::before,
+          &::after {
+            border-bottom-left-radius: var(--table-outline-radius);
+          }
+
+          .dnb-table__td__button::before {
+            border-bottom-left-radius: var(--table-outline-radius);
+          }
+        }
+        &:last-child {
+          &,
+          &::before,
+          &::after {
+            border-bottom-right-radius: var(--table-outline-radius);
+          }
+
+          .dnb-table__td__button::before {
+            border-bottom-right-radius: var(--table-outline-radius);
+          }
+        }
+      }
+    }
+  }
+  /* stylelint-enable */
+
+  // spacing
+  &__td--no-spacing,
+  td#{&}__td--no-spacing {
+    padding: 0;
+  }
+  &__td--spacing-horizontal,
+  td#{&}__td--spacing-horizontal {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}

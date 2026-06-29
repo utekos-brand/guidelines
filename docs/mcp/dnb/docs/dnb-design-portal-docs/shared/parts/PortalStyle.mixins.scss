@@ -1,0 +1,56 @@
+@mixin gridStyle {
+  --grid-rgb: 204 80 72;
+  --grid-opacity: 0.3;
+  --grid-opacity-bold: 0.65;
+  --grid-background: transparent;
+  --grid-gutter: 0.5rem;
+  --grid-gutter-bold: 2rem;
+  --grid-color: rgb(var(--grid-rgb) / var(--grid-opacity));
+  --grid-color-bold: rgb(var(--grid-rgb) / var(--grid-opacity-bold));
+  --grid-line-thickness: 1px;
+  --grid-columns: repeating-linear-gradient(
+    to right,
+    var(--grid-color),
+    var(--grid-color) var(--grid-line-thickness),
+    transparent var(--grid-line-thickness),
+    transparent var(--grid-gutter)
+  );
+  --grid-columns-bold: repeating-linear-gradient(
+    to right,
+    var(--grid-color-bold),
+    var(--grid-color-bold) var(--grid-line-thickness),
+    transparent var(--grid-line-thickness),
+    transparent var(--grid-gutter-bold)
+  );
+  --grid-rows: repeating-linear-gradient(
+    to bottom,
+    var(--grid-color),
+    var(--grid-color) var(--grid-line-thickness),
+    transparent var(--grid-line-thickness),
+    transparent var(--grid-gutter)
+  );
+  --grid-rows-bold: repeating-linear-gradient(
+    to bottom,
+    var(--grid-color-bold),
+    var(--grid-color-bold) var(--grid-line-thickness),
+    transparent var(--grid-line-thickness),
+    transparent var(--grid-gutter-bold)
+  );
+
+  &::after {
+    content: '';
+
+    position: absolute;
+    z-index: -100;
+    inset: 0;
+
+    background-image:
+      var(--grid-columns), var(--grid-columns-bold), var(--grid-rows),
+      var(--grid-rows-bold);
+
+    border-bottom: solid var(--grid-line-thickness) var(--grid-color-bold);
+    border-right: solid var(--grid-line-thickness) var(--grid-color-bold);
+
+    background-color: var(--grid-background);
+  }
+}

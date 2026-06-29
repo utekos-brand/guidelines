@@ -1,0 +1,2014 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "Utekos Brand" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - img "Utekos Brand" [ref=e11]
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: Grunnlag
+          - list [ref=e16]:
+            - listitem [ref=e17]:
+              - link "Merkevaren Utekos" [ref=e18] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e19]: Merkevaren Utekos
+            - listitem [ref=e20]:
+              - link "Logo" [ref=e21] [cursor=pointer]:
+                - /url: /logo
+                - generic [ref=e22]: Logo
+        - generic [ref=e23]:
+          - generic [ref=e24]: Visuell identitet
+          - list [ref=e26]:
+            - listitem [ref=e27]:
+              - link "Farger" [ref=e28] [cursor=pointer]:
+                - /url: /farger
+                - generic [ref=e29]: Farger
+            - listitem [ref=e30]:
+              - link "Themes" [ref=e31] [cursor=pointer]:
+                - /url: /themes
+                - generic [ref=e32]: Themes
+              - generic: Lab
+            - listitem [ref=e33]:
+              - link "Typografi" [ref=e34] [cursor=pointer]:
+                - /url: /typografi
+                - generic [ref=e35]: Typografi
+            - listitem [ref=e36]:
+              - link "Fotografi" [ref=e37] [cursor=pointer]:
+                - /url: /fotografi
+                - generic [ref=e38]: Fotografi
+            - listitem [ref=e39]:
+              - link "Illustrasjoner" [ref=e40] [cursor=pointer]:
+                - /url: /illustrasjoner
+                - generic [ref=e41]: Illustrasjoner
+            - listitem [ref=e42]:
+              - link "Ikoner" [ref=e43] [cursor=pointer]:
+                - /url: /ikoner
+                - generic [ref=e44]: Ikoner
+            - listitem [ref=e45]:
+              - link "Grafisk element" [ref=e46] [cursor=pointer]:
+                - /url: /grafisk-element
+                - generic [ref=e47]: Grafisk element
+        - separator [ref=e48]
+        - generic [ref=e49]:
+          - generic [ref=e50]: Anvendelse
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - link "Identiteten i bruk" [ref=e54] [cursor=pointer]:
+                - /url: /identiteten-i-bruk
+                - generic [ref=e55]: Identiteten i bruk
+    - main [ref=e56]:
+      - generic [ref=e57]:
+        - button "Toggle Sidebar" [ref=e59]:
+          - img
+          - generic [ref=e60]: Toggle Sidebar
+        - navigation "Hovednavigasjon" [ref=e61]:
+          - list [ref=e62]:
+            - listitem [ref=e63]:
+              - link "Identitet" [ref=e64] [cursor=pointer]:
+                - /url: /identitet
+            - listitem [ref=e65]:
+              - link "Ressurser" [ref=e66] [cursor=pointer]:
+                - /url: /ressurser
+            - listitem [ref=e67]:
+              - button "Søk" [ref=e68]:
+                - img [ref=e69]
+                - text: Søk
+            - listitem [ref=e72]:
+              - button "Utseende" [ref=e73]:
+                - img [ref=e74]
+                - text: Utseende
+      - generic [ref=e77]:
+        - article [ref=e80]:
+          - heading "Lenke til seksjonen" [level=1] [ref=e81]:
+            - link "Lenke til seksjonen" [ref=e82] [cursor=pointer]:
+              - /url: "#vy-theme"
+              - text: Vy theme
+          - paragraph [ref=e83]: Vy-siden viser den eksakte Spor/Vy-paletten som ligger i theme-CSS-en, med hovedpalett først og deretter semantikk, shades og alpha-toner.
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - paragraph [ref=e86]: Spor MCP snapshot + styles/themes/vy.css
+              - paragraph [ref=e87]: Eksakt Spor/Vy digitalpalett, med hovedpalett først og full skala for grå, grønn, blå, gul, oransje, rød og alpha-toner.
+              - paragraph [ref=e88]: Vy-verdiene er hentet fra Spor vyDigital-paletten i repoets theme-CSS. Semantiske tokens vises med hvilken rå Vy-verdi de peker på.
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - heading "Hovedpalett" [level=2] [ref=e91]
+                - paragraph [ref=e92]: Fargene som bærer Vy-opplevelsen og de primære semantiske rollene.
+                - generic [ref=e93]:
+                  - article [ref=e94]:
+                    - 'button "Kopier #00685e for Green 700" [ref=e96]':
+                      - img [ref=e98]
+                    - generic [ref=e102]:
+                      - heading "Green 700" [level=3] [ref=e103]
+                      - paragraph [ref=e104]: "--vy-green-700"
+                      - generic [ref=e106]:
+                        - term [ref=e107]: Verdi
+                        - definition: "#00685e"
+                  - article [ref=e108]:
+                    - 'button "Kopier #b2dfd7 for Green 200" [ref=e110]':
+                      - img [ref=e112]
+                    - generic [ref=e116]:
+                      - heading "Green 200" [level=3] [ref=e117]
+                      - paragraph [ref=e118]: "--vy-green-200"
+                      - generic [ref=e120]:
+                        - term [ref=e121]: Verdi
+                        - definition: "#b2dfd7"
+                  - article [ref=e122]:
+                    - 'button "Kopier #001211 for Green 1100" [ref=e124]':
+                      - img [ref=e126]
+                    - generic [ref=e130]:
+                      - heading "Green 1100" [level=3] [ref=e131]
+                      - paragraph [ref=e132]: "--vy-green-1100"
+                      - generic [ref=e134]:
+                        - term [ref=e135]: Verdi
+                        - definition: "#001211"
+                  - article [ref=e136]:
+                    - 'button "Kopier #2b2b2c for Grey 800" [ref=e138]':
+                      - img [ref=e140]
+                    - generic [ref=e144]:
+                      - heading "Grey 800" [level=3] [ref=e145]
+                      - paragraph [ref=e146]: "--vy-grey-800"
+                      - generic [ref=e148]:
+                        - term [ref=e149]: Verdi
+                        - definition: "#2b2b2c"
+                  - article [ref=e150]:
+                    - 'button "Kopier #ffffff for White" [ref=e152]':
+                      - img [ref=e154]
+                    - generic [ref=e158]:
+                      - heading "White" [level=3] [ref=e159]
+                      - paragraph [ref=e160]: "--vy-white"
+                      - generic [ref=e162]:
+                        - term [ref=e163]: Verdi
+                        - definition: "#ffffff"
+                  - article [ref=e164]:
+                    - 'button "Kopier #003a70 for Blue 800" [ref=e166]':
+                      - img [ref=e168]
+                    - generic [ref=e172]:
+                      - heading "Blue 800" [level=3] [ref=e173]
+                      - paragraph [ref=e174]: "--vy-blue-800"
+                      - generic [ref=e176]:
+                        - term [ref=e177]: Verdi
+                        - definition: "#003a70"
+                  - article [ref=e178]:
+                    - 'button "Kopier #f1c400 for Yellow 400" [ref=e180]':
+                      - img [ref=e182]
+                    - generic [ref=e186]:
+                      - heading "Yellow 400" [level=3] [ref=e187]
+                      - paragraph [ref=e188]: "--vy-yellow-400"
+                      - generic [ref=e190]:
+                        - term [ref=e191]: Verdi
+                        - definition: "#f1c400"
+                  - article [ref=e192]:
+                    - 'button "Kopier #df8200 for Orange 500" [ref=e194]':
+                      - img [ref=e196]
+                    - generic [ref=e200]:
+                      - heading "Orange 500" [level=3] [ref=e201]
+                      - paragraph [ref=e202]: "--vy-orange-500"
+                      - generic [ref=e204]:
+                        - term [ref=e205]: Verdi
+                        - definition: "#df8200"
+                  - article [ref=e206]:
+                    - 'button "Kopier #d71818 for Red 600" [ref=e208]':
+                      - img [ref=e210]
+                    - generic [ref=e214]:
+                      - heading "Red 600" [level=3] [ref=e215]
+                      - paragraph [ref=e216]: "--vy-red-600"
+                      - generic [ref=e218]:
+                        - term [ref=e219]: Verdi
+                        - definition: "#d71818"
+              - generic [ref=e220]:
+                - heading "Semantikk - light" [level=2] [ref=e221]
+                - paragraph [ref=e222]: Semantiske shadcn-variabler med faktisk fargeverdi og kilde-token.
+                - generic [ref=e223]:
+                  - article [ref=e224]:
+                    - 'button "Kopier #ffffff for Background" [ref=e226]':
+                      - img [ref=e228]
+                    - generic [ref=e232]:
+                      - heading "Background" [level=3] [ref=e233]
+                      - paragraph [ref=e234]: "--background"
+                      - generic [ref=e235]:
+                        - generic [ref=e236]:
+                          - term [ref=e237]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e238]:
+                          - term [ref=e239]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e240]:
+                    - 'button "Kopier #2b2b2c for Foreground" [ref=e242]':
+                      - img [ref=e244]
+                    - generic [ref=e248]:
+                      - heading "Foreground" [level=3] [ref=e249]
+                      - paragraph [ref=e250]: "--foreground"
+                      - generic [ref=e251]:
+                        - generic [ref=e252]:
+                          - term [ref=e253]: Verdi
+                          - definition: "#2b2b2c"
+                        - generic [ref=e254]:
+                          - term [ref=e255]: Kilde
+                          - definition: var(--vy-grey-800)
+                  - article [ref=e256]:
+                    - 'button "Kopier #ffffff for Card" [ref=e258]':
+                      - img [ref=e260]
+                    - generic [ref=e264]:
+                      - heading "Card" [level=3] [ref=e265]
+                      - paragraph [ref=e266]: "--card"
+                      - generic [ref=e267]:
+                        - generic [ref=e268]:
+                          - term [ref=e269]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e270]:
+                          - term [ref=e271]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e272]:
+                    - 'button "Kopier #2b2b2c for Card Foreground" [ref=e274]':
+                      - img [ref=e276]
+                    - generic [ref=e280]:
+                      - heading "Card Foreground" [level=3] [ref=e281]
+                      - paragraph [ref=e282]: "--card-foreground"
+                      - generic [ref=e283]:
+                        - generic [ref=e284]:
+                          - term [ref=e285]: Verdi
+                          - definition: "#2b2b2c"
+                        - generic [ref=e286]:
+                          - term [ref=e287]: Kilde
+                          - definition: var(--vy-grey-800)
+                  - article [ref=e288]:
+                    - 'button "Kopier #ffffff for Popover" [ref=e290]':
+                      - img [ref=e292]
+                    - generic [ref=e296]:
+                      - heading "Popover" [level=3] [ref=e297]
+                      - paragraph [ref=e298]: "--popover"
+                      - generic [ref=e299]:
+                        - generic [ref=e300]:
+                          - term [ref=e301]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e302]:
+                          - term [ref=e303]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e304]:
+                    - 'button "Kopier #2b2b2c for Popover Foreground" [ref=e306]':
+                      - img [ref=e308]
+                    - generic [ref=e312]:
+                      - heading "Popover Foreground" [level=3] [ref=e313]
+                      - paragraph [ref=e314]: "--popover-foreground"
+                      - generic [ref=e315]:
+                        - generic [ref=e316]:
+                          - term [ref=e317]: Verdi
+                          - definition: "#2b2b2c"
+                        - generic [ref=e318]:
+                          - term [ref=e319]: Kilde
+                          - definition: var(--vy-grey-800)
+                  - article [ref=e320]:
+                    - 'button "Kopier #00685e for Primary" [ref=e322]':
+                      - img [ref=e324]
+                    - generic [ref=e328]:
+                      - heading "Primary" [level=3] [ref=e329]
+                      - paragraph [ref=e330]: "--primary"
+                      - generic [ref=e331]:
+                        - generic [ref=e332]:
+                          - term [ref=e333]: Verdi
+                          - definition: "#00685e"
+                        - generic [ref=e334]:
+                          - term [ref=e335]: Kilde
+                          - definition: var(--vy-green-700)
+                  - article [ref=e336]:
+                    - 'button "Kopier #ffffff for Primary Foreground" [ref=e338]':
+                      - img [ref=e340]
+                    - generic [ref=e344]:
+                      - heading "Primary Foreground" [level=3] [ref=e345]
+                      - paragraph [ref=e346]: "--primary-foreground"
+                      - generic [ref=e347]:
+                        - generic [ref=e348]:
+                          - term [ref=e349]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e350]:
+                          - term [ref=e351]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e352]:
+                    - 'button "Kopier #ebebec for Secondary" [ref=e354]':
+                      - img [ref=e356]
+                    - generic [ref=e360]:
+                      - heading "Secondary" [level=3] [ref=e361]
+                      - paragraph [ref=e362]: "--secondary"
+                      - generic [ref=e363]:
+                        - generic [ref=e364]:
+                          - term [ref=e365]: Verdi
+                          - definition: "#ebebec"
+                        - generic [ref=e366]:
+                          - term [ref=e367]: Kilde
+                          - definition: var(--vy-grey-100)
+                  - article [ref=e368]:
+                    - 'button "Kopier #2b2b2c for Secondary Foreground" [ref=e370]':
+                      - img [ref=e372]
+                    - generic [ref=e376]:
+                      - heading "Secondary Foreground" [level=3] [ref=e377]
+                      - paragraph [ref=e378]: "--secondary-foreground"
+                      - generic [ref=e379]:
+                        - generic [ref=e380]:
+                          - term [ref=e381]: Verdi
+                          - definition: "#2b2b2c"
+                        - generic [ref=e382]:
+                          - term [ref=e383]: Kilde
+                          - definition: var(--vy-grey-800)
+                  - article [ref=e384]:
+                    - 'button "Kopier #f5f5f5 for Muted" [ref=e386]':
+                      - img [ref=e388]
+                    - generic [ref=e392]:
+                      - heading "Muted" [level=3] [ref=e393]
+                      - paragraph [ref=e394]: "--muted"
+                      - generic [ref=e395]:
+                        - generic [ref=e396]:
+                          - term [ref=e397]: Verdi
+                          - definition: "#f5f5f5"
+                        - generic [ref=e398]:
+                          - term [ref=e399]: Kilde
+                          - definition: var(--vy-grey-50)
+                  - article [ref=e400]:
+                    - 'button "Kopier #606568 for Muted Foreground" [ref=e402]':
+                      - img [ref=e404]
+                    - generic [ref=e408]:
+                      - heading "Muted Foreground" [level=3] [ref=e409]
+                      - paragraph [ref=e410]: "--muted-foreground"
+                      - generic [ref=e411]:
+                        - generic [ref=e412]:
+                          - term [ref=e413]: Verdi
+                          - definition: "#606568"
+                        - generic [ref=e414]:
+                          - term [ref=e415]: Kilde
+                          - definition: var(--vy-grey-500)
+                  - article [ref=e416]:
+                    - 'button "Kopier #cceae4 for Accent" [ref=e418]':
+                      - img [ref=e420]
+                    - generic [ref=e424]:
+                      - heading "Accent" [level=3] [ref=e425]
+                      - paragraph [ref=e426]: "--accent"
+                      - generic [ref=e427]:
+                        - generic [ref=e428]:
+                          - term [ref=e429]: Verdi
+                          - definition: "#cceae4"
+                        - generic [ref=e430]:
+                          - term [ref=e431]: Kilde
+                          - definition: var(--vy-green-100)
+                  - article [ref=e432]:
+                    - 'button "Kopier #00453e for Accent Foreground" [ref=e434]':
+                      - img [ref=e436]
+                    - generic [ref=e440]:
+                      - heading "Accent Foreground" [level=3] [ref=e441]
+                      - paragraph [ref=e442]: "--accent-foreground"
+                      - generic [ref=e443]:
+                        - generic [ref=e444]:
+                          - term [ref=e445]: Verdi
+                          - definition: "#00453e"
+                        - generic [ref=e446]:
+                          - term [ref=e447]: Kilde
+                          - definition: var(--vy-green-800)
+                  - article [ref=e448]:
+                    - 'button "Kopier #d71818 for Destructive" [ref=e450]':
+                      - img [ref=e452]
+                    - generic [ref=e456]:
+                      - heading "Destructive" [level=3] [ref=e457]
+                      - paragraph [ref=e458]: "--destructive"
+                      - generic [ref=e459]:
+                        - generic [ref=e460]:
+                          - term [ref=e461]: Verdi
+                          - definition: "#d71818"
+                        - generic [ref=e462]:
+                          - term [ref=e463]: Kilde
+                          - definition: var(--vy-red-600)
+                  - article [ref=e464]:
+                    - 'button "Kopier #ffffff for Destructive Foreground" [ref=e466]':
+                      - img [ref=e468]
+                    - generic [ref=e472]:
+                      - heading "Destructive Foreground" [level=3] [ref=e473]
+                      - paragraph [ref=e474]: "--destructive-foreground"
+                      - generic [ref=e475]:
+                        - generic [ref=e476]:
+                          - term [ref=e477]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e478]:
+                          - term [ref=e479]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e480]:
+                    - 'button "Kopier #ebebec for Border" [ref=e482]':
+                      - img [ref=e484]
+                    - generic [ref=e488]:
+                      - heading "Border" [level=3] [ref=e489]
+                      - paragraph [ref=e490]: "--border"
+                      - generic [ref=e491]:
+                        - generic [ref=e492]:
+                          - term [ref=e493]: Verdi
+                          - definition: "#ebebec"
+                        - generic [ref=e494]:
+                          - term [ref=e495]: Kilde
+                          - definition: var(--vy-grey-100)
+                  - article [ref=e496]:
+                    - 'button "Kopier #d7d8d9 for Input" [ref=e498]':
+                      - img [ref=e500]
+                    - generic [ref=e504]:
+                      - heading "Input" [level=3] [ref=e505]
+                      - paragraph [ref=e506]: "--input"
+                      - generic [ref=e507]:
+                        - generic [ref=e508]:
+                          - term [ref=e509]: Verdi
+                          - definition: "#d7d8d9"
+                        - generic [ref=e510]:
+                          - term [ref=e511]: Kilde
+                          - definition: var(--vy-grey-200)
+                  - article [ref=e512]:
+                    - 'button "Kopier #00957a for Ring" [ref=e514]':
+                      - img [ref=e516]
+                    - generic [ref=e520]:
+                      - heading "Ring" [level=3] [ref=e521]
+                      - paragraph [ref=e522]: "--ring"
+                      - generic [ref=e523]:
+                        - generic [ref=e524]:
+                          - term [ref=e525]: Verdi
+                          - definition: "#00957a"
+                        - generic [ref=e526]:
+                          - term [ref=e527]: Kilde
+                          - definition: var(--vy-green-500)
+                  - article [ref=e528]:
+                    - 'button "Kopier #e5f4f1 for Header Nav Active" [ref=e530]':
+                      - img [ref=e532]
+                    - generic [ref=e536]:
+                      - heading "Header Nav Active" [level=3] [ref=e537]
+                      - paragraph [ref=e538]: "--header-nav-active"
+                      - generic [ref=e539]:
+                        - generic [ref=e540]:
+                          - term [ref=e541]: Verdi
+                          - definition: "#e5f4f1"
+                        - generic [ref=e542]:
+                          - term [ref=e543]: Kilde
+                          - definition: var(--vy-green-50)
+                  - article [ref=e544]:
+                    - 'button "Kopier #2b2b2c for Header Nav Active Foreground" [ref=e546]':
+                      - img [ref=e548]
+                    - generic [ref=e552]:
+                      - heading "Header Nav Active Foreground" [level=3] [ref=e553]
+                      - paragraph [ref=e554]: "--header-nav-active-foreground"
+                      - generic [ref=e555]:
+                        - generic [ref=e556]:
+                          - term [ref=e557]: Verdi
+                          - definition: "#2b2b2c"
+                        - generic [ref=e558]:
+                          - term [ref=e559]: Kilde
+                          - definition: var(--vy-grey-800)
+                  - article [ref=e560]:
+                    - 'button "Kopier #00685e for Chart 1" [ref=e562]':
+                      - img [ref=e564]
+                    - generic [ref=e568]:
+                      - heading "Chart 1" [level=3] [ref=e569]
+                      - paragraph [ref=e570]: "--chart-1"
+                      - generic [ref=e571]:
+                        - generic [ref=e572]:
+                          - term [ref=e573]: Verdi
+                          - definition: "#00685e"
+                        - generic [ref=e574]:
+                          - term [ref=e575]: Kilde
+                          - definition: var(--vy-green-700)
+                  - article [ref=e576]:
+                    - 'button "Kopier #325d93 for Chart 2" [ref=e578]':
+                      - img [ref=e580]
+                    - generic [ref=e584]:
+                      - heading "Chart 2" [level=3] [ref=e585]
+                      - paragraph [ref=e586]: "--chart-2"
+                      - generic [ref=e587]:
+                        - generic [ref=e588]:
+                          - term [ref=e589]: Verdi
+                          - definition: "#325d93"
+                        - generic [ref=e590]:
+                          - term [ref=e591]: Kilde
+                          - definition: var(--vy-blue-700)
+                  - article [ref=e592]:
+                    - 'button "Kopier #d7a700 for Chart 3" [ref=e594]':
+                      - img [ref=e596]
+                    - generic [ref=e600]:
+                      - heading "Chart 3" [level=3] [ref=e601]
+                      - paragraph [ref=e602]: "--chart-3"
+                      - generic [ref=e603]:
+                        - generic [ref=e604]:
+                          - term [ref=e605]: Verdi
+                          - definition: "#d7a700"
+                        - generic [ref=e606]:
+                          - term [ref=e607]: Kilde
+                          - definition: var(--vy-yellow-500)
+                  - article [ref=e608]:
+                    - 'button "Kopier #df8200 for Chart 4" [ref=e610]':
+                      - img [ref=e612]
+                    - generic [ref=e616]:
+                      - heading "Chart 4" [level=3] [ref=e617]
+                      - paragraph [ref=e618]: "--chart-4"
+                      - generic [ref=e619]:
+                        - generic [ref=e620]:
+                          - term [ref=e621]: Verdi
+                          - definition: "#df8200"
+                        - generic [ref=e622]:
+                          - term [ref=e623]: Kilde
+                          - definition: var(--vy-orange-500)
+                  - article [ref=e624]:
+                    - 'button "Kopier #c34c4c for Chart 5" [ref=e626]':
+                      - img [ref=e628]
+                    - generic [ref=e632]:
+                      - heading "Chart 5" [level=3] [ref=e633]
+                      - paragraph [ref=e634]: "--chart-5"
+                      - generic [ref=e635]:
+                        - generic [ref=e636]:
+                          - term [ref=e637]: Verdi
+                          - definition: "#c34c4c"
+                        - generic [ref=e638]:
+                          - term [ref=e639]: Kilde
+                          - definition: var(--vy-red-500)
+                  - article [ref=e640]:
+                    - 'button "Kopier #ffffff for Sidebar" [ref=e642]':
+                      - img [ref=e644]
+                    - generic [ref=e648]:
+                      - heading "Sidebar" [level=3] [ref=e649]
+                      - paragraph [ref=e650]: "--sidebar"
+                      - generic [ref=e651]:
+                        - generic [ref=e652]:
+                          - term [ref=e653]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e654]:
+                          - term [ref=e655]: Kilde
+                          - definition: var(--background)
+                  - article [ref=e656]:
+                    - 'button "Kopier #2b2b2c for Sidebar Foreground" [ref=e658]':
+                      - img [ref=e660]
+                    - generic [ref=e664]:
+                      - heading "Sidebar Foreground" [level=3] [ref=e665]
+                      - paragraph [ref=e666]: "--sidebar-foreground"
+                      - generic [ref=e667]:
+                        - generic [ref=e668]:
+                          - term [ref=e669]: Verdi
+                          - definition: "#2b2b2c"
+                        - generic [ref=e670]:
+                          - term [ref=e671]: Kilde
+                          - definition: var(--foreground)
+                  - article [ref=e672]:
+                    - 'button "Kopier #00685e for Sidebar Primary" [ref=e674]':
+                      - img [ref=e676]
+                    - generic [ref=e680]:
+                      - heading "Sidebar Primary" [level=3] [ref=e681]
+                      - paragraph [ref=e682]: "--sidebar-primary"
+                      - generic [ref=e683]:
+                        - generic [ref=e684]:
+                          - term [ref=e685]: Verdi
+                          - definition: "#00685e"
+                        - generic [ref=e686]:
+                          - term [ref=e687]: Kilde
+                          - definition: var(--primary)
+                  - article [ref=e688]:
+                    - 'button "Kopier #ffffff for Sidebar Primary Foreground" [ref=e690]':
+                      - img [ref=e692]
+                    - generic [ref=e696]:
+                      - heading "Sidebar Primary Foreground" [level=3] [ref=e697]
+                      - paragraph [ref=e698]: "--sidebar-primary-foreground"
+                      - generic [ref=e699]:
+                        - generic [ref=e700]:
+                          - term [ref=e701]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e702]:
+                          - term [ref=e703]: Kilde
+                          - definition: var(--primary-foreground)
+                  - article [ref=e704]:
+                    - 'button "Kopier #cceae4 for Sidebar Accent" [ref=e706]':
+                      - img [ref=e708]
+                    - generic [ref=e712]:
+                      - heading "Sidebar Accent" [level=3] [ref=e713]
+                      - paragraph [ref=e714]: "--sidebar-accent"
+                      - generic [ref=e715]:
+                        - generic [ref=e716]:
+                          - term [ref=e717]: Verdi
+                          - definition: "#cceae4"
+                        - generic [ref=e718]:
+                          - term [ref=e719]: Kilde
+                          - definition: var(--accent)
+                  - article [ref=e720]:
+                    - 'button "Kopier #00453e for Sidebar Accent Foreground" [ref=e722]':
+                      - img [ref=e724]
+                    - generic [ref=e728]:
+                      - heading "Sidebar Accent Foreground" [level=3] [ref=e729]
+                      - paragraph [ref=e730]: "--sidebar-accent-foreground"
+                      - generic [ref=e731]:
+                        - generic [ref=e732]:
+                          - term [ref=e733]: Verdi
+                          - definition: "#00453e"
+                        - generic [ref=e734]:
+                          - term [ref=e735]: Kilde
+                          - definition: var(--accent-foreground)
+                  - article [ref=e736]:
+                    - 'button "Kopier #ebebec for Sidebar Border" [ref=e738]':
+                      - img [ref=e740]
+                    - generic [ref=e744]:
+                      - heading "Sidebar Border" [level=3] [ref=e745]
+                      - paragraph [ref=e746]: "--sidebar-border"
+                      - generic [ref=e747]:
+                        - generic [ref=e748]:
+                          - term [ref=e749]: Verdi
+                          - definition: "#ebebec"
+                        - generic [ref=e750]:
+                          - term [ref=e751]: Kilde
+                          - definition: var(--border)
+                  - article [ref=e752]:
+                    - 'button "Kopier #00957a for Sidebar Ring" [ref=e754]':
+                      - img [ref=e756]
+                    - generic [ref=e760]:
+                      - heading "Sidebar Ring" [level=3] [ref=e761]
+                      - paragraph [ref=e762]: "--sidebar-ring"
+                      - generic [ref=e763]:
+                        - generic [ref=e764]:
+                          - term [ref=e765]: Verdi
+                          - definition: "#00957a"
+                        - generic [ref=e766]:
+                          - term [ref=e767]: Kilde
+                          - definition: var(--ring)
+              - generic [ref=e768]:
+                - heading "Semantikk - dark" [level=2] [ref=e769]
+                - paragraph [ref=e770]: Semantiske shadcn-variabler med faktisk fargeverdi og kilde-token.
+                - generic [ref=e771]:
+                  - article [ref=e772]:
+                    - 'button "Kopier #001211 for Background" [ref=e774]':
+                      - img [ref=e776]
+                    - generic [ref=e780]:
+                      - heading "Background" [level=3] [ref=e781]
+                      - paragraph [ref=e782]: "--background"
+                      - generic [ref=e783]:
+                        - generic [ref=e784]:
+                          - term [ref=e785]: Verdi
+                          - definition: "#001211"
+                        - generic [ref=e786]:
+                          - term [ref=e787]: Kilde
+                          - definition: var(--vy-green-1100)
+                  - article [ref=e788]:
+                    - 'button "Kopier #ffffff for Foreground" [ref=e790]':
+                      - img [ref=e792]
+                    - generic [ref=e796]:
+                      - heading "Foreground" [level=3] [ref=e797]
+                      - paragraph [ref=e798]: "--foreground"
+                      - generic [ref=e799]:
+                        - generic [ref=e800]:
+                          - term [ref=e801]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e802]:
+                          - term [ref=e803]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e804]:
+                    - 'button "Kopier #012622 for Card" [ref=e806]':
+                      - img [ref=e808]
+                    - generic [ref=e812]:
+                      - heading "Card" [level=3] [ref=e813]
+                      - paragraph [ref=e814]: "--card"
+                      - generic [ref=e815]:
+                        - generic [ref=e816]:
+                          - term [ref=e817]: Verdi
+                          - definition: "#012622"
+                        - generic [ref=e818]:
+                          - term [ref=e819]: Kilde
+                          - definition: var(--vy-green-900)
+                  - article [ref=e820]:
+                    - 'button "Kopier #ffffff for Card Foreground" [ref=e822]':
+                      - img [ref=e824]
+                    - generic [ref=e828]:
+                      - heading "Card Foreground" [level=3] [ref=e829]
+                      - paragraph [ref=e830]: "--card-foreground"
+                      - generic [ref=e831]:
+                        - generic [ref=e832]:
+                          - term [ref=e833]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e834]:
+                          - term [ref=e835]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e836]:
+                    - 'button "Kopier #012622 for Popover" [ref=e838]':
+                      - img [ref=e840]
+                    - generic [ref=e844]:
+                      - heading "Popover" [level=3] [ref=e845]
+                      - paragraph [ref=e846]: "--popover"
+                      - generic [ref=e847]:
+                        - generic [ref=e848]:
+                          - term [ref=e849]: Verdi
+                          - definition: "#012622"
+                        - generic [ref=e850]:
+                          - term [ref=e851]: Kilde
+                          - definition: var(--vy-green-900)
+                  - article [ref=e852]:
+                    - 'button "Kopier #ffffff for Popover Foreground" [ref=e854]':
+                      - img [ref=e856]
+                    - generic [ref=e860]:
+                      - heading "Popover Foreground" [level=3] [ref=e861]
+                      - paragraph [ref=e862]: "--popover-foreground"
+                      - generic [ref=e863]:
+                        - generic [ref=e864]:
+                          - term [ref=e865]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e866]:
+                          - term [ref=e867]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e868]:
+                    - 'button "Kopier #b2dfd7 for Primary" [ref=e870]':
+                      - img [ref=e872]
+                    - generic [ref=e876]:
+                      - heading "Primary" [level=3] [ref=e877]
+                      - paragraph [ref=e878]: "--primary"
+                      - generic [ref=e879]:
+                        - generic [ref=e880]:
+                          - term [ref=e881]: Verdi
+                          - definition: "#b2dfd7"
+                        - generic [ref=e882]:
+                          - term [ref=e883]: Kilde
+                          - definition: var(--vy-green-200)
+                  - article [ref=e884]:
+                    - 'button "Kopier #00453e for Primary Foreground" [ref=e886]':
+                      - img [ref=e888]
+                    - generic [ref=e892]:
+                      - heading "Primary Foreground" [level=3] [ref=e893]
+                      - paragraph [ref=e894]: "--primary-foreground"
+                      - generic [ref=e895]:
+                        - generic [ref=e896]:
+                          - term [ref=e897]: Verdi
+                          - definition: "#00453e"
+                        - generic [ref=e898]:
+                          - term [ref=e899]: Kilde
+                          - definition: var(--vy-green-800)
+                  - article [ref=e900]:
+                    - 'button "Kopier #363638 for Secondary" [ref=e902]':
+                      - img [ref=e904]
+                    - generic [ref=e908]:
+                      - heading "Secondary" [level=3] [ref=e909]
+                      - paragraph [ref=e910]: "--secondary"
+                      - generic [ref=e911]:
+                        - generic [ref=e912]:
+                          - term [ref=e913]: Verdi
+                          - definition: "#363638"
+                        - generic [ref=e914]:
+                          - term [ref=e915]: Kilde
+                          - definition: var(--vy-grey-700)
+                  - article [ref=e916]:
+                    - 'button "Kopier #ffffff for Secondary Foreground" [ref=e918]':
+                      - img [ref=e920]
+                    - generic [ref=e924]:
+                      - heading "Secondary Foreground" [level=3] [ref=e925]
+                      - paragraph [ref=e926]: "--secondary-foreground"
+                      - generic [ref=e927]:
+                        - generic [ref=e928]:
+                          - term [ref=e929]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e930]:
+                          - term [ref=e931]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e932]:
+                    - 'button "Kopier #00685e for Muted" [ref=e934]':
+                      - img [ref=e936]
+                    - generic [ref=e940]:
+                      - heading "Muted" [level=3] [ref=e941]
+                      - paragraph [ref=e942]: "--muted"
+                      - generic [ref=e943]:
+                        - generic [ref=e944]:
+                          - term [ref=e945]: Verdi
+                          - definition: "#00685e"
+                        - generic [ref=e946]:
+                          - term [ref=e947]: Kilde
+                          - definition: var(--vy-green-700)
+                  - article [ref=e948]:
+                    - 'button "Kopier #d7d8d9 for Muted Foreground" [ref=e950]':
+                      - img [ref=e952]
+                    - generic [ref=e956]:
+                      - heading "Muted Foreground" [level=3] [ref=e957]
+                      - paragraph [ref=e958]: "--muted-foreground"
+                      - generic [ref=e959]:
+                        - generic [ref=e960]:
+                          - term [ref=e961]: Verdi
+                          - definition: "#d7d8d9"
+                        - generic [ref=e962]:
+                          - term [ref=e963]: Kilde
+                          - definition: var(--vy-grey-200)
+                  - article [ref=e964]:
+                    - 'button "Kopier #b2dfd7 for Accent" [ref=e966]':
+                      - img [ref=e968]
+                    - generic [ref=e972]:
+                      - heading "Accent" [level=3] [ref=e973]
+                      - paragraph [ref=e974]: "--accent"
+                      - generic [ref=e975]:
+                        - generic [ref=e976]:
+                          - term [ref=e977]: Verdi
+                          - definition: "#b2dfd7"
+                        - generic [ref=e978]:
+                          - term [ref=e979]: Kilde
+                          - definition: var(--vy-green-200)
+                  - article [ref=e980]:
+                    - 'button "Kopier #001211 for Accent Foreground" [ref=e982]':
+                      - img [ref=e984]
+                    - generic [ref=e988]:
+                      - heading "Accent Foreground" [level=3] [ref=e989]
+                      - paragraph [ref=e990]: "--accent-foreground"
+                      - generic [ref=e991]:
+                        - generic [ref=e992]:
+                          - term [ref=e993]: Verdi
+                          - definition: "#001211"
+                        - generic [ref=e994]:
+                          - term [ref=e995]: Kilde
+                          - definition: var(--vy-green-1100)
+                  - article [ref=e996]:
+                    - 'button "Kopier #d71818 for Destructive" [ref=e998]':
+                      - img [ref=e1000]
+                    - generic [ref=e1004]:
+                      - heading "Destructive" [level=3] [ref=e1005]
+                      - paragraph [ref=e1006]: "--destructive"
+                      - generic [ref=e1007]:
+                        - generic [ref=e1008]:
+                          - term [ref=e1009]: Verdi
+                          - definition: "#d71818"
+                        - generic [ref=e1010]:
+                          - term [ref=e1011]: Kilde
+                          - definition: var(--vy-red-600)
+                  - article [ref=e1012]:
+                    - 'button "Kopier #ffffff for Destructive Foreground" [ref=e1014]':
+                      - img [ref=e1016]
+                    - generic [ref=e1020]:
+                      - heading "Destructive Foreground" [level=3] [ref=e1021]
+                      - paragraph [ref=e1022]: "--destructive-foreground"
+                      - generic [ref=e1023]:
+                        - generic [ref=e1024]:
+                          - term [ref=e1025]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e1026]:
+                          - term [ref=e1027]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e1028]:
+                    - button "Kopier rgb(255 255 255 / 30%) for Border" [ref=e1030]:
+                      - img [ref=e1032]
+                    - generic [ref=e1036]:
+                      - heading "Border" [level=3] [ref=e1037]
+                      - paragraph [ref=e1038]: "--border"
+                      - generic [ref=e1039]:
+                        - generic [ref=e1040]:
+                          - term [ref=e1041]: Verdi
+                          - definition: rgb(255 255 255 / 30%)
+                        - generic [ref=e1042]:
+                          - term [ref=e1043]: Kilde
+                          - definition: var(--vy-white-alpha-300)
+                  - article [ref=e1044]:
+                    - button "Kopier rgb(255 255 255 / 20%) for Input" [ref=e1046]:
+                      - img [ref=e1048]
+                    - generic [ref=e1052]:
+                      - heading "Input" [level=3] [ref=e1053]
+                      - paragraph [ref=e1054]: "--input"
+                      - generic [ref=e1055]:
+                        - generic [ref=e1056]:
+                          - term [ref=e1057]: Verdi
+                          - definition: rgb(255 255 255 / 20%)
+                        - generic [ref=e1058]:
+                          - term [ref=e1059]: Kilde
+                          - definition: var(--vy-white-alpha-200)
+                  - article [ref=e1060]:
+                    - 'button "Kopier #38b49e for Ring" [ref=e1062]':
+                      - img [ref=e1064]
+                    - generic [ref=e1068]:
+                      - heading "Ring" [level=3] [ref=e1069]
+                      - paragraph [ref=e1070]: "--ring"
+                      - generic [ref=e1071]:
+                        - generic [ref=e1072]:
+                          - term [ref=e1073]: Verdi
+                          - definition: "#38b49e"
+                        - generic [ref=e1074]:
+                          - term [ref=e1075]: Kilde
+                          - definition: var(--vy-green-400)
+                  - article [ref=e1076]:
+                    - 'button "Kopier #00453e for Header Nav Active" [ref=e1078]':
+                      - img [ref=e1080]
+                    - generic [ref=e1084]:
+                      - heading "Header Nav Active" [level=3] [ref=e1085]
+                      - paragraph [ref=e1086]: "--header-nav-active"
+                      - generic [ref=e1087]:
+                        - generic [ref=e1088]:
+                          - term [ref=e1089]: Verdi
+                          - definition: "#00453e"
+                        - generic [ref=e1090]:
+                          - term [ref=e1091]: Kilde
+                          - definition: var(--vy-green-800)
+                  - article [ref=e1092]:
+                    - 'button "Kopier #ffffff for Header Nav Active Foreground" [ref=e1094]':
+                      - img [ref=e1096]
+                    - generic [ref=e1100]:
+                      - heading "Header Nav Active Foreground" [level=3] [ref=e1101]
+                      - paragraph [ref=e1102]: "--header-nav-active-foreground"
+                      - generic [ref=e1103]:
+                        - generic [ref=e1104]:
+                          - term [ref=e1105]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e1106]:
+                          - term [ref=e1107]: Kilde
+                          - definition: var(--vy-white)
+                  - article [ref=e1108]:
+                    - 'button "Kopier #38b49e for Chart 1" [ref=e1110]':
+                      - img [ref=e1112]
+                    - generic [ref=e1116]:
+                      - heading "Chart 1" [level=3] [ref=e1117]
+                      - paragraph [ref=e1118]: "--chart-1"
+                      - generic [ref=e1119]:
+                        - generic [ref=e1120]:
+                          - term [ref=e1121]: Verdi
+                          - definition: "#38b49e"
+                        - generic [ref=e1122]:
+                          - term [ref=e1123]: Kilde
+                          - definition: var(--vy-green-400)
+                  - article [ref=e1124]:
+                    - 'button "Kopier #688cba for Chart 2" [ref=e1126]':
+                      - img [ref=e1128]
+                    - generic [ref=e1132]:
+                      - heading "Chart 2" [level=3] [ref=e1133]
+                      - paragraph [ref=e1134]: "--chart-2"
+                      - generic [ref=e1135]:
+                        - generic [ref=e1136]:
+                          - term [ref=e1137]: Verdi
+                          - definition: "#688cba"
+                        - generic [ref=e1138]:
+                          - term [ref=e1139]: Kilde
+                          - definition: var(--vy-blue-500)
+                  - article [ref=e1140]:
+                    - 'button "Kopier #f1c400 for Chart 3" [ref=e1142]':
+                      - img [ref=e1144]
+                    - generic [ref=e1148]:
+                      - heading "Chart 3" [level=3] [ref=e1149]
+                      - paragraph [ref=e1150]: "--chart-3"
+                      - generic [ref=e1151]:
+                        - generic [ref=e1152]:
+                          - term [ref=e1153]: Verdi
+                          - definition: "#f1c400"
+                        - generic [ref=e1154]:
+                          - term [ref=e1155]: Kilde
+                          - definition: var(--vy-yellow-400)
+                  - article [ref=e1156]:
+                    - 'button "Kopier #ee8a14 for Chart 4" [ref=e1158]':
+                      - img [ref=e1160]
+                    - generic [ref=e1164]:
+                      - heading "Chart 4" [level=3] [ref=e1165]
+                      - paragraph [ref=e1166]: "--chart-4"
+                      - generic [ref=e1167]:
+                        - generic [ref=e1168]:
+                          - term [ref=e1169]: Verdi
+                          - definition: "#ee8a14"
+                        - generic [ref=e1170]:
+                          - term [ref=e1171]: Kilde
+                          - definition: var(--vy-orange-400)
+                  - article [ref=e1172]:
+                    - 'button "Kopier #c34c4c for Chart 5" [ref=e1174]':
+                      - img [ref=e1176]
+                    - generic [ref=e1180]:
+                      - heading "Chart 5" [level=3] [ref=e1181]
+                      - paragraph [ref=e1182]: "--chart-5"
+                      - generic [ref=e1183]:
+                        - generic [ref=e1184]:
+                          - term [ref=e1185]: Verdi
+                          - definition: "#c34c4c"
+                        - generic [ref=e1186]:
+                          - term [ref=e1187]: Kilde
+                          - definition: var(--vy-red-500)
+                  - article [ref=e1188]:
+                    - 'button "Kopier #001211 for Sidebar" [ref=e1190]':
+                      - img [ref=e1192]
+                    - generic [ref=e1196]:
+                      - heading "Sidebar" [level=3] [ref=e1197]
+                      - paragraph [ref=e1198]: "--sidebar"
+                      - generic [ref=e1199]:
+                        - generic [ref=e1200]:
+                          - term [ref=e1201]: Verdi
+                          - definition: "#001211"
+                        - generic [ref=e1202]:
+                          - term [ref=e1203]: Kilde
+                          - definition: var(--background)
+                  - article [ref=e1204]:
+                    - 'button "Kopier #ffffff for Sidebar Foreground" [ref=e1206]':
+                      - img [ref=e1208]
+                    - generic [ref=e1212]:
+                      - heading "Sidebar Foreground" [level=3] [ref=e1213]
+                      - paragraph [ref=e1214]: "--sidebar-foreground"
+                      - generic [ref=e1215]:
+                        - generic [ref=e1216]:
+                          - term [ref=e1217]: Verdi
+                          - definition: "#ffffff"
+                        - generic [ref=e1218]:
+                          - term [ref=e1219]: Kilde
+                          - definition: var(--foreground)
+                  - article [ref=e1220]:
+                    - 'button "Kopier #b2dfd7 for Sidebar Primary" [ref=e1222]':
+                      - img [ref=e1224]
+                    - generic [ref=e1228]:
+                      - heading "Sidebar Primary" [level=3] [ref=e1229]
+                      - paragraph [ref=e1230]: "--sidebar-primary"
+                      - generic [ref=e1231]:
+                        - generic [ref=e1232]:
+                          - term [ref=e1233]: Verdi
+                          - definition: "#b2dfd7"
+                        - generic [ref=e1234]:
+                          - term [ref=e1235]: Kilde
+                          - definition: var(--primary)
+                  - article [ref=e1236]:
+                    - 'button "Kopier #00453e for Sidebar Primary Foreground" [ref=e1238]':
+                      - img [ref=e1240]
+                    - generic [ref=e1244]:
+                      - heading "Sidebar Primary Foreground" [level=3] [ref=e1245]
+                      - paragraph [ref=e1246]: "--sidebar-primary-foreground"
+                      - generic [ref=e1247]:
+                        - generic [ref=e1248]:
+                          - term [ref=e1249]: Verdi
+                          - definition: "#00453e"
+                        - generic [ref=e1250]:
+                          - term [ref=e1251]: Kilde
+                          - definition: var(--primary-foreground)
+                  - article [ref=e1252]:
+                    - 'button "Kopier #b2dfd7 for Sidebar Accent" [ref=e1254]':
+                      - img [ref=e1256]
+                    - generic [ref=e1260]:
+                      - heading "Sidebar Accent" [level=3] [ref=e1261]
+                      - paragraph [ref=e1262]: "--sidebar-accent"
+                      - generic [ref=e1263]:
+                        - generic [ref=e1264]:
+                          - term [ref=e1265]: Verdi
+                          - definition: "#b2dfd7"
+                        - generic [ref=e1266]:
+                          - term [ref=e1267]: Kilde
+                          - definition: var(--accent)
+                  - article [ref=e1268]:
+                    - 'button "Kopier #001211 for Sidebar Accent Foreground" [ref=e1270]':
+                      - img [ref=e1272]
+                    - generic [ref=e1276]:
+                      - heading "Sidebar Accent Foreground" [level=3] [ref=e1277]
+                      - paragraph [ref=e1278]: "--sidebar-accent-foreground"
+                      - generic [ref=e1279]:
+                        - generic [ref=e1280]:
+                          - term [ref=e1281]: Verdi
+                          - definition: "#001211"
+                        - generic [ref=e1282]:
+                          - term [ref=e1283]: Kilde
+                          - definition: var(--accent-foreground)
+                  - article [ref=e1284]:
+                    - button "Kopier rgb(255 255 255 / 30%) for Sidebar Border" [ref=e1286]:
+                      - img [ref=e1288]
+                    - generic [ref=e1292]:
+                      - heading "Sidebar Border" [level=3] [ref=e1293]
+                      - paragraph [ref=e1294]: "--sidebar-border"
+                      - generic [ref=e1295]:
+                        - generic [ref=e1296]:
+                          - term [ref=e1297]: Verdi
+                          - definition: rgb(255 255 255 / 30%)
+                        - generic [ref=e1298]:
+                          - term [ref=e1299]: Kilde
+                          - definition: var(--border)
+                  - article [ref=e1300]:
+                    - 'button "Kopier #38b49e for Sidebar Ring" [ref=e1302]':
+                      - img [ref=e1304]
+                    - generic [ref=e1308]:
+                      - heading "Sidebar Ring" [level=3] [ref=e1309]
+                      - paragraph [ref=e1310]: "--sidebar-ring"
+                      - generic [ref=e1311]:
+                        - generic [ref=e1312]:
+                          - term [ref=e1313]: Verdi
+                          - definition: "#38b49e"
+                        - generic [ref=e1314]:
+                          - term [ref=e1315]: Kilde
+                          - definition: var(--ring)
+              - generic [ref=e1316]:
+                - heading "Grey" [level=2] [ref=e1317]
+                - paragraph [ref=e1318]: Vy gråskala fra 50 til 1100.
+                - generic [ref=e1319]:
+                  - article [ref=e1320]:
+                    - 'button "Kopier #f5f5f5 for Grey 50" [ref=e1322]':
+                      - img [ref=e1324]
+                    - generic [ref=e1328]:
+                      - heading "Grey 50" [level=3] [ref=e1329]
+                      - paragraph [ref=e1330]: "--vy-grey-50"
+                      - generic [ref=e1332]:
+                        - term [ref=e1333]: Verdi
+                        - definition: "#f5f5f5"
+                  - article [ref=e1334]:
+                    - 'button "Kopier #ebebec for Grey 100" [ref=e1336]':
+                      - img [ref=e1338]
+                    - generic [ref=e1342]:
+                      - heading "Grey 100" [level=3] [ref=e1343]
+                      - paragraph [ref=e1344]: "--vy-grey-100"
+                      - generic [ref=e1346]:
+                        - term [ref=e1347]: Verdi
+                        - definition: "#ebebec"
+                  - article [ref=e1348]:
+                    - 'button "Kopier #d7d8d9 for Grey 200" [ref=e1350]':
+                      - img [ref=e1352]
+                    - generic [ref=e1356]:
+                      - heading "Grey 200" [level=3] [ref=e1357]
+                      - paragraph [ref=e1358]: "--vy-grey-200"
+                      - generic [ref=e1360]:
+                        - term [ref=e1361]: Verdi
+                        - definition: "#d7d8d9"
+                  - article [ref=e1362]:
+                    - 'button "Kopier #afb2b3 for Grey 300" [ref=e1364]':
+                      - img [ref=e1366]
+                    - generic [ref=e1370]:
+                      - heading "Grey 300" [level=3] [ref=e1371]
+                      - paragraph [ref=e1372]: "--vy-grey-300"
+                      - generic [ref=e1374]:
+                        - term [ref=e1375]: Verdi
+                        - definition: "#afb2b3"
+                  - article [ref=e1376]:
+                    - 'button "Kopier #888b8e for Grey 400" [ref=e1378]':
+                      - img [ref=e1380]
+                    - generic [ref=e1384]:
+                      - heading "Grey 400" [level=3] [ref=e1385]
+                      - paragraph [ref=e1386]: "--vy-grey-400"
+                      - generic [ref=e1388]:
+                        - term [ref=e1389]: Verdi
+                        - definition: "#888b8e"
+                  - article [ref=e1390]:
+                    - 'button "Kopier #606568 for Grey 500" [ref=e1392]':
+                      - img [ref=e1394]
+                    - generic [ref=e1398]:
+                      - heading "Grey 500" [level=3] [ref=e1399]
+                      - paragraph [ref=e1400]: "--vy-grey-500"
+                      - generic [ref=e1402]:
+                        - term [ref=e1403]: Verdi
+                        - definition: "#606568"
+                  - article [ref=e1404]:
+                    - 'button "Kopier #4f5054 for Grey 600" [ref=e1406]':
+                      - img [ref=e1408]
+                    - generic [ref=e1412]:
+                      - heading "Grey 600" [level=3] [ref=e1413]
+                      - paragraph [ref=e1414]: "--vy-grey-600"
+                      - generic [ref=e1416]:
+                        - term [ref=e1417]: Verdi
+                        - definition: "#4f5054"
+                  - article [ref=e1418]:
+                    - 'button "Kopier #363638 for Grey 700" [ref=e1420]':
+                      - img [ref=e1422]
+                    - generic [ref=e1426]:
+                      - heading "Grey 700" [level=3] [ref=e1427]
+                      - paragraph [ref=e1428]: "--vy-grey-700"
+                      - generic [ref=e1430]:
+                        - term [ref=e1431]: Verdi
+                        - definition: "#363638"
+                  - article [ref=e1432]:
+                    - 'button "Kopier #2b2b2c for Grey 800" [ref=e1434]':
+                      - img [ref=e1436]
+                    - generic [ref=e1440]:
+                      - heading "Grey 800" [level=3] [ref=e1441]
+                      - paragraph [ref=e1442]: "--vy-grey-800"
+                      - generic [ref=e1444]:
+                        - term [ref=e1445]: Verdi
+                        - definition: "#2b2b2c"
+                  - article [ref=e1446]:
+                    - 'button "Kopier #1c1c1d for Grey 900" [ref=e1448]':
+                      - img [ref=e1450]
+                    - generic [ref=e1454]:
+                      - heading "Grey 900" [level=3] [ref=e1455]
+                      - paragraph [ref=e1456]: "--vy-grey-900"
+                      - generic [ref=e1458]:
+                        - term [ref=e1459]: Verdi
+                        - definition: "#1c1c1d"
+                  - article [ref=e1460]:
+                    - 'button "Kopier #131314 for Grey 1000" [ref=e1462]':
+                      - img [ref=e1464]
+                    - generic [ref=e1468]:
+                      - heading "Grey 1000" [level=3] [ref=e1469]
+                      - paragraph [ref=e1470]: "--vy-grey-1000"
+                      - generic [ref=e1472]:
+                        - term [ref=e1473]: Verdi
+                        - definition: "#131314"
+                  - article [ref=e1474]:
+                    - 'button "Kopier #0b0b0b for Grey 1100" [ref=e1476]':
+                      - img [ref=e1478]
+                    - generic [ref=e1482]:
+                      - heading "Grey 1100" [level=3] [ref=e1483]
+                      - paragraph [ref=e1484]: "--vy-grey-1100"
+                      - generic [ref=e1486]:
+                        - term [ref=e1487]: Verdi
+                        - definition: "#0b0b0b"
+              - generic [ref=e1488]:
+                - heading "Green" [level=2] [ref=e1489]
+                - paragraph [ref=e1490]: Vy grønnskala fra 50 til 1100.
+                - generic [ref=e1491]:
+                  - article [ref=e1492]:
+                    - 'button "Kopier #e5f4f1 for Green 50" [ref=e1494]':
+                      - img [ref=e1496]
+                    - generic [ref=e1500]:
+                      - heading "Green 50" [level=3] [ref=e1501]
+                      - paragraph [ref=e1502]: "--vy-green-50"
+                      - generic [ref=e1504]:
+                        - term [ref=e1505]: Verdi
+                        - definition: "#e5f4f1"
+                  - article [ref=e1506]:
+                    - 'button "Kopier #cceae4 for Green 100" [ref=e1508]':
+                      - img [ref=e1510]
+                    - generic [ref=e1514]:
+                      - heading "Green 100" [level=3] [ref=e1515]
+                      - paragraph [ref=e1516]: "--vy-green-100"
+                      - generic [ref=e1518]:
+                        - term [ref=e1519]: Verdi
+                        - definition: "#cceae4"
+                  - article [ref=e1520]:
+                    - 'button "Kopier #b2dfd7 for Green 200" [ref=e1522]':
+                      - img [ref=e1524]
+                    - generic [ref=e1528]:
+                      - heading "Green 200" [level=3] [ref=e1529]
+                      - paragraph [ref=e1530]: "--vy-green-200"
+                      - generic [ref=e1532]:
+                        - term [ref=e1533]: Verdi
+                        - definition: "#b2dfd7"
+                  - article [ref=e1534]:
+                    - 'button "Kopier #84cfc2 for Green 300" [ref=e1536]':
+                      - img [ref=e1538]
+                    - generic [ref=e1542]:
+                      - heading "Green 300" [level=3] [ref=e1543]
+                      - paragraph [ref=e1544]: "--vy-green-300"
+                      - generic [ref=e1546]:
+                        - term [ref=e1547]: Verdi
+                        - definition: "#84cfc2"
+                  - article [ref=e1548]:
+                    - 'button "Kopier #38b49e for Green 400" [ref=e1550]':
+                      - img [ref=e1552]
+                    - generic [ref=e1556]:
+                      - heading "Green 400" [level=3] [ref=e1557]
+                      - paragraph [ref=e1558]: "--vy-green-400"
+                      - generic [ref=e1560]:
+                        - term [ref=e1561]: Verdi
+                        - definition: "#38b49e"
+                  - article [ref=e1562]:
+                    - 'button "Kopier #00957a for Green 500" [ref=e1564]':
+                      - img [ref=e1566]
+                    - generic [ref=e1570]:
+                      - heading "Green 500" [level=3] [ref=e1571]
+                      - paragraph [ref=e1572]: "--vy-green-500"
+                      - generic [ref=e1574]:
+                        - term [ref=e1575]: Verdi
+                        - definition: "#00957a"
+                  - article [ref=e1576]:
+                    - 'button "Kopier #037d67 for Green 600" [ref=e1578]':
+                      - img [ref=e1580]
+                    - generic [ref=e1584]:
+                      - heading "Green 600" [level=3] [ref=e1585]
+                      - paragraph [ref=e1586]: "--vy-green-600"
+                      - generic [ref=e1588]:
+                        - term [ref=e1589]: Verdi
+                        - definition: "#037d67"
+                  - article [ref=e1590]:
+                    - 'button "Kopier #00685e for Green 700" [ref=e1592]':
+                      - img [ref=e1594]
+                    - generic [ref=e1598]:
+                      - heading "Green 700" [level=3] [ref=e1599]
+                      - paragraph [ref=e1600]: "--vy-green-700"
+                      - generic [ref=e1602]:
+                        - term [ref=e1603]: Verdi
+                        - definition: "#00685e"
+                  - article [ref=e1604]:
+                    - 'button "Kopier #00453e for Green 800" [ref=e1606]':
+                      - img [ref=e1608]
+                    - generic [ref=e1612]:
+                      - heading "Green 800" [level=3] [ref=e1613]
+                      - paragraph [ref=e1614]: "--vy-green-800"
+                      - generic [ref=e1616]:
+                        - term [ref=e1617]: Verdi
+                        - definition: "#00453e"
+                  - article [ref=e1618]:
+                    - 'button "Kopier #012622 for Green 900" [ref=e1620]':
+                      - img [ref=e1622]
+                    - generic [ref=e1626]:
+                      - heading "Green 900" [level=3] [ref=e1627]
+                      - paragraph [ref=e1628]: "--vy-green-900"
+                      - generic [ref=e1630]:
+                        - term [ref=e1631]: Verdi
+                        - definition: "#012622"
+                  - article [ref=e1632]:
+                    - 'button "Kopier #001a18 for Green 1000" [ref=e1634]':
+                      - img [ref=e1636]
+                    - generic [ref=e1640]:
+                      - heading "Green 1000" [level=3] [ref=e1641]
+                      - paragraph [ref=e1642]: "--vy-green-1000"
+                      - generic [ref=e1644]:
+                        - term [ref=e1645]: Verdi
+                        - definition: "#001a18"
+                  - article [ref=e1646]:
+                    - 'button "Kopier #001211 for Green 1100" [ref=e1648]':
+                      - img [ref=e1650]
+                    - generic [ref=e1654]:
+                      - heading "Green 1100" [level=3] [ref=e1655]
+                      - paragraph [ref=e1656]: "--vy-green-1100"
+                      - generic [ref=e1658]:
+                        - term [ref=e1659]: Verdi
+                        - definition: "#001211"
+              - generic [ref=e1660]:
+                - heading "Blue" [level=2] [ref=e1661]
+                - paragraph [ref=e1662]: Vy blåskala fra 50 til 1100.
+                - generic [ref=e1663]:
+                  - article [ref=e1664]:
+                    - 'button "Kopier #edf1f7 for Blue 50" [ref=e1666]':
+                      - img [ref=e1668]
+                    - generic [ref=e1672]:
+                      - heading "Blue 50" [level=3] [ref=e1673]
+                      - paragraph [ref=e1674]: "--vy-blue-50"
+                      - generic [ref=e1676]:
+                        - term [ref=e1677]: Verdi
+                        - definition: "#edf1f7"
+                  - article [ref=e1678]:
+                    - 'button "Kopier #dce4ef for Blue 100" [ref=e1680]':
+                      - img [ref=e1682]
+                    - generic [ref=e1686]:
+                      - heading "Blue 100" [level=3] [ref=e1687]
+                      - paragraph [ref=e1688]: "--vy-blue-100"
+                      - generic [ref=e1690]:
+                        - term [ref=e1691]: Verdi
+                        - definition: "#dce4ef"
+                  - article [ref=e1692]:
+                    - 'button "Kopier #b9c9de for Blue 200" [ref=e1694]':
+                      - img [ref=e1696]
+                    - generic [ref=e1700]:
+                      - heading "Blue 200" [level=3] [ref=e1701]
+                      - paragraph [ref=e1702]: "--vy-blue-200"
+                      - generic [ref=e1704]:
+                        - term [ref=e1705]: Verdi
+                        - definition: "#b9c9de"
+                  - article [ref=e1706]:
+                    - 'button "Kopier #a7bcd6 for Blue 300" [ref=e1708]':
+                      - img [ref=e1710]
+                    - generic [ref=e1714]:
+                      - heading "Blue 300" [level=3] [ref=e1715]
+                      - paragraph [ref=e1716]: "--vy-blue-300"
+                      - generic [ref=e1718]:
+                        - term [ref=e1719]: Verdi
+                        - definition: "#a7bcd6"
+                  - article [ref=e1720]:
+                    - 'button "Kopier #8ba7ca for Blue 400" [ref=e1722]':
+                      - img [ref=e1724]
+                    - generic [ref=e1728]:
+                      - heading "Blue 400" [level=3] [ref=e1729]
+                      - paragraph [ref=e1730]: "--vy-blue-400"
+                      - generic [ref=e1732]:
+                        - term [ref=e1733]: Verdi
+                        - definition: "#8ba7ca"
+                  - article [ref=e1734]:
+                    - 'button "Kopier #688cba for Blue 500" [ref=e1736]':
+                      - img [ref=e1738]
+                    - generic [ref=e1742]:
+                      - heading "Blue 500" [level=3] [ref=e1743]
+                      - paragraph [ref=e1744]: "--vy-blue-500"
+                      - generic [ref=e1746]:
+                        - term [ref=e1747]: Verdi
+                        - definition: "#688cba"
+                  - article [ref=e1748]:
+                    - 'button "Kopier #4b78b0 for Blue 600" [ref=e1750]':
+                      - img [ref=e1752]
+                    - generic [ref=e1756]:
+                      - heading "Blue 600" [level=3] [ref=e1757]
+                      - paragraph [ref=e1758]: "--vy-blue-600"
+                      - generic [ref=e1760]:
+                        - term [ref=e1761]: Verdi
+                        - definition: "#4b78b0"
+                  - article [ref=e1762]:
+                    - 'button "Kopier #325d93 for Blue 700" [ref=e1764]':
+                      - img [ref=e1766]
+                    - generic [ref=e1770]:
+                      - heading "Blue 700" [level=3] [ref=e1771]
+                      - paragraph [ref=e1772]: "--vy-blue-700"
+                      - generic [ref=e1774]:
+                        - term [ref=e1775]: Verdi
+                        - definition: "#325d93"
+                  - article [ref=e1776]:
+                    - 'button "Kopier #003a70 for Blue 800" [ref=e1778]':
+                      - img [ref=e1780]
+                    - generic [ref=e1784]:
+                      - heading "Blue 800" [level=3] [ref=e1785]
+                      - paragraph [ref=e1786]: "--vy-blue-800"
+                      - generic [ref=e1788]:
+                        - term [ref=e1789]: Verdi
+                        - definition: "#003a70"
+                  - article [ref=e1790]:
+                    - 'button "Kopier #032647 for Blue 900" [ref=e1792]':
+                      - img [ref=e1794]
+                    - generic [ref=e1798]:
+                      - heading "Blue 900" [level=3] [ref=e1799]
+                      - paragraph [ref=e1800]: "--vy-blue-900"
+                      - generic [ref=e1802]:
+                        - term [ref=e1803]: Verdi
+                        - definition: "#032647"
+                  - article [ref=e1804]:
+                    - 'button "Kopier #041a2f for Blue 1000" [ref=e1806]':
+                      - img [ref=e1808]
+                    - generic [ref=e1812]:
+                      - heading "Blue 1000" [level=3] [ref=e1813]
+                      - paragraph [ref=e1814]: "--vy-blue-1000"
+                      - generic [ref=e1816]:
+                        - term [ref=e1817]: Verdi
+                        - definition: "#041a2f"
+                  - article [ref=e1818]:
+                    - 'button "Kopier #01101d for Blue 1100" [ref=e1820]':
+                      - img [ref=e1822]
+                    - generic [ref=e1826]:
+                      - heading "Blue 1100" [level=3] [ref=e1827]
+                      - paragraph [ref=e1828]: "--vy-blue-1100"
+                      - generic [ref=e1830]:
+                        - term [ref=e1831]: Verdi
+                        - definition: "#01101d"
+              - generic [ref=e1832]:
+                - heading "Yellow" [level=2] [ref=e1833]
+                - paragraph [ref=e1834]: Vy gulskala fra 50 til 1100.
+                - generic [ref=e1835]:
+                  - article [ref=e1836]:
+                    - 'button "Kopier #fef9dd for Yellow 50" [ref=e1838]':
+                      - img [ref=e1840]
+                    - generic [ref=e1844]:
+                      - heading "Yellow 50" [level=3] [ref=e1845]
+                      - paragraph [ref=e1846]: "--vy-yellow-50"
+                      - generic [ref=e1848]:
+                        - term [ref=e1849]: Verdi
+                        - definition: "#fef9dd"
+                  - article [ref=e1850]:
+                    - 'button "Kopier #fdf3ba for Yellow 100" [ref=e1852]':
+                      - img [ref=e1854]
+                    - generic [ref=e1858]:
+                      - heading "Yellow 100" [level=3] [ref=e1859]
+                      - paragraph [ref=e1860]: "--vy-yellow-100"
+                      - generic [ref=e1862]:
+                        - term [ref=e1863]: Verdi
+                        - definition: "#fdf3ba"
+                  - article [ref=e1864]:
+                    - 'button "Kopier #fcec98 for Yellow 200" [ref=e1866]':
+                      - img [ref=e1868]
+                    - generic [ref=e1872]:
+                      - heading "Yellow 200" [level=3] [ref=e1873]
+                      - paragraph [ref=e1874]: "--vy-yellow-200"
+                      - generic [ref=e1876]:
+                        - term [ref=e1877]: Verdi
+                        - definition: "#fcec98"
+                  - article [ref=e1878]:
+                    - 'button "Kopier #fae053 for Yellow 300" [ref=e1880]':
+                      - img [ref=e1882]
+                    - generic [ref=e1886]:
+                      - heading "Yellow 300" [level=3] [ref=e1887]
+                      - paragraph [ref=e1888]: "--vy-yellow-300"
+                      - generic [ref=e1890]:
+                        - term [ref=e1891]: Verdi
+                        - definition: "#fae053"
+                  - article [ref=e1892]:
+                    - 'button "Kopier #f1c400 for Yellow 400" [ref=e1894]':
+                      - img [ref=e1896]
+                    - generic [ref=e1900]:
+                      - heading "Yellow 400" [level=3] [ref=e1901]
+                      - paragraph [ref=e1902]: "--vy-yellow-400"
+                      - generic [ref=e1904]:
+                        - term [ref=e1905]: Verdi
+                        - definition: "#f1c400"
+                  - article [ref=e1906]:
+                    - 'button "Kopier #d7a700 for Yellow 500" [ref=e1908]':
+                      - img [ref=e1910]
+                    - generic [ref=e1914]:
+                      - heading "Yellow 500" [level=3] [ref=e1915]
+                      - paragraph [ref=e1916]: "--vy-yellow-500"
+                      - generic [ref=e1918]:
+                        - term [ref=e1919]: Verdi
+                        - definition: "#d7a700"
+                  - article [ref=e1920]:
+                    - 'button "Kopier #b38307 for Yellow 600" [ref=e1922]':
+                      - img [ref=e1924]
+                    - generic [ref=e1928]:
+                      - heading "Yellow 600" [level=3] [ref=e1929]
+                      - paragraph [ref=e1930]: "--vy-yellow-600"
+                      - generic [ref=e1932]:
+                        - term [ref=e1933]: Verdi
+                        - definition: "#b38307"
+                  - article [ref=e1934]:
+                    - 'button "Kopier #8a6404 for Yellow 700" [ref=e1936]':
+                      - img [ref=e1938]
+                    - generic [ref=e1942]:
+                      - heading "Yellow 700" [level=3] [ref=e1943]
+                      - paragraph [ref=e1944]: "--vy-yellow-700"
+                      - generic [ref=e1946]:
+                        - term [ref=e1947]: Verdi
+                        - definition: "#8a6404"
+                  - article [ref=e1948]:
+                    - 'button "Kopier #634803 for Yellow 800" [ref=e1950]':
+                      - img [ref=e1952]
+                    - generic [ref=e1956]:
+                      - heading "Yellow 800" [level=3] [ref=e1957]
+                      - paragraph [ref=e1958]: "--vy-yellow-800"
+                      - generic [ref=e1960]:
+                        - term [ref=e1961]: Verdi
+                        - definition: "#634803"
+                  - article [ref=e1962]:
+                    - 'button "Kopier #413300 for Yellow 900" [ref=e1964]':
+                      - img [ref=e1966]
+                    - generic [ref=e1970]:
+                      - heading "Yellow 900" [level=3] [ref=e1971]
+                      - paragraph [ref=e1972]: "--vy-yellow-900"
+                      - generic [ref=e1974]:
+                        - term [ref=e1975]: Verdi
+                        - definition: "#413300"
+                  - article [ref=e1976]:
+                    - 'button "Kopier #2a2203 for Yellow 1000" [ref=e1978]':
+                      - img [ref=e1980]
+                    - generic [ref=e1984]:
+                      - heading "Yellow 1000" [level=3] [ref=e1985]
+                      - paragraph [ref=e1986]: "--vy-yellow-1000"
+                      - generic [ref=e1988]:
+                        - term [ref=e1989]: Verdi
+                        - definition: "#2a2203"
+                  - article [ref=e1990]:
+                    - 'button "Kopier #1c1600 for Yellow 1100" [ref=e1992]':
+                      - img [ref=e1994]
+                    - generic [ref=e1998]:
+                      - heading "Yellow 1100" [level=3] [ref=e1999]
+                      - paragraph [ref=e2000]: "--vy-yellow-1100"
+                      - generic [ref=e2002]:
+                        - term [ref=e2003]: Verdi
+                        - definition: "#1c1600"
+              - generic [ref=e2004]:
+                - heading "Orange" [level=2] [ref=e2005]
+                - paragraph [ref=e2006]: Vy oransjeskala fra 50 til 1100.
+                - generic [ref=e2007]:
+                  - article [ref=e2008]:
+                    - 'button "Kopier #ffe6cc for Orange 50" [ref=e2010]':
+                      - img [ref=e2012]
+                    - generic [ref=e2016]:
+                      - heading "Orange 50" [level=3] [ref=e2017]
+                      - paragraph [ref=e2018]: "--vy-orange-50"
+                      - generic [ref=e2020]:
+                        - term [ref=e2021]: Verdi
+                        - definition: "#ffe6cc"
+                  - article [ref=e2022]:
+                    - 'button "Kopier #ffcd99 for Orange 100" [ref=e2024]':
+                      - img [ref=e2026]
+                    - generic [ref=e2030]:
+                      - heading "Orange 100" [level=3] [ref=e2031]
+                      - paragraph [ref=e2032]: "--vy-orange-100"
+                      - generic [ref=e2034]:
+                        - term [ref=e2035]: Verdi
+                        - definition: "#ffcd99"
+                  - article [ref=e2036]:
+                    - 'button "Kopier #ffb466 for Orange 200" [ref=e2038]':
+                      - img [ref=e2040]
+                    - generic [ref=e2044]:
+                      - heading "Orange 200" [level=3] [ref=e2045]
+                      - paragraph [ref=e2046]: "--vy-orange-200"
+                      - generic [ref=e2048]:
+                        - term [ref=e2049]: Verdi
+                        - definition: "#ffb466"
+                  - article [ref=e2050]:
+                    - 'button "Kopier #ff9b33 for Orange 300" [ref=e2052]':
+                      - img [ref=e2054]
+                    - generic [ref=e2058]:
+                      - heading "Orange 300" [level=3] [ref=e2059]
+                      - paragraph [ref=e2060]: "--vy-orange-300"
+                      - generic [ref=e2062]:
+                        - term [ref=e2063]: Verdi
+                        - definition: "#ff9b33"
+                  - article [ref=e2064]:
+                    - 'button "Kopier #ee8a14 for Orange 400" [ref=e2066]':
+                      - img [ref=e2068]
+                    - generic [ref=e2072]:
+                      - heading "Orange 400" [level=3] [ref=e2073]
+                      - paragraph [ref=e2074]: "--vy-orange-400"
+                      - generic [ref=e2076]:
+                        - term [ref=e2077]: Verdi
+                        - definition: "#ee8a14"
+                  - article [ref=e2078]:
+                    - 'button "Kopier #df8200 for Orange 500" [ref=e2080]':
+                      - img [ref=e2082]
+                    - generic [ref=e2086]:
+                      - heading "Orange 500" [level=3] [ref=e2087]
+                      - paragraph [ref=e2088]: "--vy-orange-500"
+                      - generic [ref=e2090]:
+                        - term [ref=e2091]: Verdi
+                        - definition: "#df8200"
+                  - article [ref=e2092]:
+                    - 'button "Kopier #bb4d0f for Orange 600" [ref=e2094]':
+                      - img [ref=e2096]
+                    - generic [ref=e2100]:
+                      - heading "Orange 600" [level=3] [ref=e2101]
+                      - paragraph [ref=e2102]: "--vy-orange-600"
+                      - generic [ref=e2104]:
+                        - term [ref=e2105]: Verdi
+                        - definition: "#bb4d0f"
+                  - article [ref=e2106]:
+                    - 'button "Kopier #84441f for Orange 700" [ref=e2108]':
+                      - img [ref=e2110]
+                    - generic [ref=e2114]:
+                      - heading "Orange 700" [level=3] [ref=e2115]
+                      - paragraph [ref=e2116]: "--vy-orange-700"
+                      - generic [ref=e2118]:
+                        - term [ref=e2119]: Verdi
+                        - definition: "#84441f"
+                  - article [ref=e2120]:
+                    - 'button "Kopier #572f0f for Orange 800" [ref=e2122]':
+                      - img [ref=e2124]
+                    - generic [ref=e2128]:
+                      - heading "Orange 800" [level=3] [ref=e2129]
+                      - paragraph [ref=e2130]: "--vy-orange-800"
+                      - generic [ref=e2132]:
+                        - term [ref=e2133]: Verdi
+                        - definition: "#572f0f"
+                  - article [ref=e2134]:
+                    - 'button "Kopier #3a1e0e for Orange 900" [ref=e2136]':
+                      - img [ref=e2138]
+                    - generic [ref=e2142]:
+                      - heading "Orange 900" [level=3] [ref=e2143]
+                      - paragraph [ref=e2144]: "--vy-orange-900"
+                      - generic [ref=e2146]:
+                        - term [ref=e2147]: Verdi
+                        - definition: "#3a1e0e"
+                  - article [ref=e2148]:
+                    - 'button "Kopier #28160a for Orange 1000" [ref=e2150]':
+                      - img [ref=e2152]
+                    - generic [ref=e2156]:
+                      - heading "Orange 1000" [level=3] [ref=e2157]
+                      - paragraph [ref=e2158]: "--vy-orange-1000"
+                      - generic [ref=e2160]:
+                        - term [ref=e2161]: Verdi
+                        - definition: "#28160a"
+                  - article [ref=e2162]:
+                    - 'button "Kopier #1a0f07 for Orange 1100" [ref=e2164]':
+                      - img [ref=e2166]
+                    - generic [ref=e2170]:
+                      - heading "Orange 1100" [level=3] [ref=e2171]
+                      - paragraph [ref=e2172]: "--vy-orange-1100"
+                      - generic [ref=e2174]:
+                        - term [ref=e2175]: Verdi
+                        - definition: "#1a0f07"
+              - generic [ref=e2176]:
+                - heading "Red" [level=2] [ref=e2177]
+                - paragraph [ref=e2178]: Vy rødskala fra 50 til 1100.
+                - generic [ref=e2179]:
+                  - article [ref=e2180]:
+                    - 'button "Kopier #ffebeb for Red 50" [ref=e2182]':
+                      - img [ref=e2184]
+                    - generic [ref=e2188]:
+                      - heading "Red 50" [level=3] [ref=e2189]
+                      - paragraph [ref=e2190]: "--vy-red-50"
+                      - generic [ref=e2192]:
+                        - term [ref=e2193]: Verdi
+                        - definition: "#ffebeb"
+                  - article [ref=e2194]:
+                    - 'button "Kopier #fbcccc for Red 100" [ref=e2196]':
+                      - img [ref=e2198]
+                    - generic [ref=e2202]:
+                      - heading "Red 100" [level=3] [ref=e2203]
+                      - paragraph [ref=e2204]: "--vy-red-100"
+                      - generic [ref=e2206]:
+                        - term [ref=e2207]: Verdi
+                        - definition: "#fbcccc"
+                  - article [ref=e2208]:
+                    - 'button "Kopier #f8a6a6 for Red 200" [ref=e2210]':
+                      - img [ref=e2212]
+                    - generic [ref=e2216]:
+                      - heading "Red 200" [level=3] [ref=e2217]
+                      - paragraph [ref=e2218]: "--vy-red-200"
+                      - generic [ref=e2220]:
+                        - term [ref=e2221]: Verdi
+                        - definition: "#f8a6a6"
+                  - article [ref=e2222]:
+                    - 'button "Kopier #ef7e7e for Red 300" [ref=e2224]':
+                      - img [ref=e2226]
+                    - generic [ref=e2230]:
+                      - heading "Red 300" [level=3] [ref=e2231]
+                      - paragraph [ref=e2232]: "--vy-red-300"
+                      - generic [ref=e2234]:
+                        - term [ref=e2235]: Verdi
+                        - definition: "#ef7e7e"
+                  - article [ref=e2236]:
+                    - 'button "Kopier #e26767 for Red 400" [ref=e2238]':
+                      - img [ref=e2240]
+                    - generic [ref=e2244]:
+                      - heading "Red 400" [level=3] [ref=e2245]
+                      - paragraph [ref=e2246]: "--vy-red-400"
+                      - generic [ref=e2248]:
+                        - term [ref=e2249]: Verdi
+                        - definition: "#e26767"
+                  - article [ref=e2250]:
+                    - 'button "Kopier #c34c4c for Red 500" [ref=e2252]':
+                      - img [ref=e2254]
+                    - generic [ref=e2258]:
+                      - heading "Red 500" [level=3] [ref=e2259]
+                      - paragraph [ref=e2260]: "--vy-red-500"
+                      - generic [ref=e2262]:
+                        - term [ref=e2263]: Verdi
+                        - definition: "#c34c4c"
+                  - article [ref=e2264]:
+                    - 'button "Kopier #d71818 for Red 600" [ref=e2266]':
+                      - img [ref=e2268]
+                    - generic [ref=e2272]:
+                      - heading "Red 600" [level=3] [ref=e2273]
+                      - paragraph [ref=e2274]: "--vy-red-600"
+                      - generic [ref=e2276]:
+                        - term [ref=e2277]: Verdi
+                        - definition: "#d71818"
+                  - article [ref=e2278]:
+                    - 'button "Kopier #932b2b for Red 700" [ref=e2280]':
+                      - img [ref=e2282]
+                    - generic [ref=e2286]:
+                      - heading "Red 700" [level=3] [ref=e2287]
+                      - paragraph [ref=e2288]: "--vy-red-700"
+                      - generic [ref=e2290]:
+                        - term [ref=e2291]: Verdi
+                        - definition: "#932b2b"
+                  - article [ref=e2292]:
+                    - 'button "Kopier #581f1f for Red 800" [ref=e2294]':
+                      - img [ref=e2296]
+                    - generic [ref=e2300]:
+                      - heading "Red 800" [level=3] [ref=e2301]
+                      - paragraph [ref=e2302]: "--vy-red-800"
+                      - generic [ref=e2304]:
+                        - term [ref=e2305]: Verdi
+                        - definition: "#581f1f"
+                  - article [ref=e2306]:
+                    - 'button "Kopier #371818 for Red 900" [ref=e2308]':
+                      - img [ref=e2310]
+                    - generic [ref=e2314]:
+                      - heading "Red 900" [level=3] [ref=e2315]
+                      - paragraph [ref=e2316]: "--vy-red-900"
+                      - generic [ref=e2318]:
+                        - term [ref=e2319]: Verdi
+                        - definition: "#371818"
+                  - article [ref=e2320]:
+                    - 'button "Kopier #240d0d for Red 1000" [ref=e2322]':
+                      - img [ref=e2324]
+                    - generic [ref=e2328]:
+                      - heading "Red 1000" [level=3] [ref=e2329]
+                      - paragraph [ref=e2330]: "--vy-red-1000"
+                      - generic [ref=e2332]:
+                        - term [ref=e2333]: Verdi
+                        - definition: "#240d0d"
+                  - article [ref=e2334]:
+                    - 'button "Kopier #120404 for Red 1100" [ref=e2336]':
+                      - img [ref=e2338]
+                    - generic [ref=e2342]:
+                      - heading "Red 1100" [level=3] [ref=e2343]
+                      - paragraph [ref=e2344]: "--vy-red-1100"
+                      - generic [ref=e2346]:
+                        - term [ref=e2347]: Verdi
+                        - definition: "#120404"
+              - generic [ref=e2348]:
+                - heading "Base" [level=2] [ref=e2349]
+                - paragraph [ref=e2350]: Hvitt og sort i Vy-paletten.
+                - generic [ref=e2351]:
+                  - article [ref=e2352]:
+                    - 'button "Kopier #ffffff for White" [ref=e2354]':
+                      - img [ref=e2356]
+                    - generic [ref=e2360]:
+                      - heading "White" [level=3] [ref=e2361]
+                      - paragraph [ref=e2362]: "--vy-white"
+                      - generic [ref=e2364]:
+                        - term [ref=e2365]: Verdi
+                        - definition: "#ffffff"
+                  - article [ref=e2366]:
+                    - 'button "Kopier #000000 for Black" [ref=e2368]':
+                      - img [ref=e2370]
+                    - generic [ref=e2374]:
+                      - heading "Black" [level=3] [ref=e2375]
+                      - paragraph [ref=e2376]: "--vy-black"
+                      - generic [ref=e2378]:
+                        - term [ref=e2379]: Verdi
+                        - definition: "#000000"
+              - generic [ref=e2380]:
+                - heading "White alpha" [level=2] [ref=e2381]
+                - paragraph [ref=e2382]: Transparente hvitverdier for mørke flater.
+                - generic [ref=e2383]:
+                  - article [ref=e2384]:
+                    - button "Kopier rgb(255 255 255 / 2.5%) for White Alpha 25" [ref=e2386]:
+                      - img [ref=e2388]
+                    - generic [ref=e2392]:
+                      - heading "White Alpha 25" [level=3] [ref=e2393]
+                      - paragraph [ref=e2394]: "--vy-white-alpha-25"
+                      - generic [ref=e2396]:
+                        - term [ref=e2397]: Verdi
+                        - definition: rgb(255 255 255 / 2.5%)
+                  - article [ref=e2398]:
+                    - button "Kopier rgb(255 255 255 / 5%) for White Alpha 50" [ref=e2400]:
+                      - img [ref=e2402]
+                    - generic [ref=e2406]:
+                      - heading "White Alpha 50" [level=3] [ref=e2407]
+                      - paragraph [ref=e2408]: "--vy-white-alpha-50"
+                      - generic [ref=e2410]:
+                        - term [ref=e2411]: Verdi
+                        - definition: rgb(255 255 255 / 5%)
+                  - article [ref=e2412]:
+                    - button "Kopier rgb(255 255 255 / 10%) for White Alpha 100" [ref=e2414]:
+                      - img [ref=e2416]
+                    - generic [ref=e2420]:
+                      - heading "White Alpha 100" [level=3] [ref=e2421]
+                      - paragraph [ref=e2422]: "--vy-white-alpha-100"
+                      - generic [ref=e2424]:
+                        - term [ref=e2425]: Verdi
+                        - definition: rgb(255 255 255 / 10%)
+                  - article [ref=e2426]:
+                    - button "Kopier rgb(255 255 255 / 20%) for White Alpha 200" [ref=e2428]:
+                      - img [ref=e2430]
+                    - generic [ref=e2434]:
+                      - heading "White Alpha 200" [level=3] [ref=e2435]
+                      - paragraph [ref=e2436]: "--vy-white-alpha-200"
+                      - generic [ref=e2438]:
+                        - term [ref=e2439]: Verdi
+                        - definition: rgb(255 255 255 / 20%)
+                  - article [ref=e2440]:
+                    - button "Kopier rgb(255 255 255 / 30%) for White Alpha 300" [ref=e2442]:
+                      - img [ref=e2444]
+                    - generic [ref=e2448]:
+                      - heading "White Alpha 300" [level=3] [ref=e2449]
+                      - paragraph [ref=e2450]: "--vy-white-alpha-300"
+                      - generic [ref=e2452]:
+                        - term [ref=e2453]: Verdi
+                        - definition: rgb(255 255 255 / 30%)
+                  - article [ref=e2454]:
+                    - button "Kopier rgb(255 255 255 / 40%) for White Alpha 400" [ref=e2456]:
+                      - img [ref=e2458]
+                    - generic [ref=e2462]:
+                      - heading "White Alpha 400" [level=3] [ref=e2463]
+                      - paragraph [ref=e2464]: "--vy-white-alpha-400"
+                      - generic [ref=e2466]:
+                        - term [ref=e2467]: Verdi
+                        - definition: rgb(255 255 255 / 40%)
+                  - article [ref=e2468]:
+                    - button "Kopier rgb(255 255 255 / 50%) for White Alpha 500" [ref=e2470]:
+                      - img [ref=e2472]
+                    - generic [ref=e2476]:
+                      - heading "White Alpha 500" [level=3] [ref=e2477]
+                      - paragraph [ref=e2478]: "--vy-white-alpha-500"
+                      - generic [ref=e2480]:
+                        - term [ref=e2481]: Verdi
+                        - definition: rgb(255 255 255 / 50%)
+                  - article [ref=e2482]:
+                    - button "Kopier rgb(255 255 255 / 60%) for White Alpha 600" [ref=e2484]:
+                      - img [ref=e2486]
+                    - generic [ref=e2490]:
+                      - heading "White Alpha 600" [level=3] [ref=e2491]
+                      - paragraph [ref=e2492]: "--vy-white-alpha-600"
+                      - generic [ref=e2494]:
+                        - term [ref=e2495]: Verdi
+                        - definition: rgb(255 255 255 / 60%)
+                  - article [ref=e2496]:
+                    - button "Kopier rgb(255 255 255 / 70%) for White Alpha 700" [ref=e2498]:
+                      - img [ref=e2500]
+                    - generic [ref=e2504]:
+                      - heading "White Alpha 700" [level=3] [ref=e2505]
+                      - paragraph [ref=e2506]: "--vy-white-alpha-700"
+                      - generic [ref=e2508]:
+                        - term [ref=e2509]: Verdi
+                        - definition: rgb(255 255 255 / 70%)
+                  - article [ref=e2510]:
+                    - button "Kopier rgb(255 255 255 / 80%) for White Alpha 800" [ref=e2512]:
+                      - img [ref=e2514]
+                    - generic [ref=e2518]:
+                      - heading "White Alpha 800" [level=3] [ref=e2519]
+                      - paragraph [ref=e2520]: "--vy-white-alpha-800"
+                      - generic [ref=e2522]:
+                        - term [ref=e2523]: Verdi
+                        - definition: rgb(255 255 255 / 80%)
+                  - article [ref=e2524]:
+                    - button "Kopier rgb(255 255 255 / 90%) for White Alpha 900" [ref=e2526]:
+                      - img [ref=e2528]
+                    - generic [ref=e2532]:
+                      - heading "White Alpha 900" [level=3] [ref=e2533]
+                      - paragraph [ref=e2534]: "--vy-white-alpha-900"
+                      - generic [ref=e2536]:
+                        - term [ref=e2537]: Verdi
+                        - definition: rgb(255 255 255 / 90%)
+              - generic [ref=e2538]:
+                - heading "Black alpha" [level=2] [ref=e2539]
+                - paragraph [ref=e2540]: Transparente sortverdier for lyse flater.
+                - generic [ref=e2541]:
+                  - article [ref=e2542]:
+                    - button "Kopier rgb(0 0 0 / 2.5%) for Black Alpha 25" [ref=e2544]:
+                      - img [ref=e2546]
+                    - generic [ref=e2550]:
+                      - heading "Black Alpha 25" [level=3] [ref=e2551]
+                      - paragraph [ref=e2552]: "--vy-black-alpha-25"
+                      - generic [ref=e2554]:
+                        - term [ref=e2555]: Verdi
+                        - definition: rgb(0 0 0 / 2.5%)
+                  - article [ref=e2556]:
+                    - button "Kopier rgb(0 0 0 / 5%) for Black Alpha 50" [ref=e2558]:
+                      - img [ref=e2560]
+                    - generic [ref=e2564]:
+                      - heading "Black Alpha 50" [level=3] [ref=e2565]
+                      - paragraph [ref=e2566]: "--vy-black-alpha-50"
+                      - generic [ref=e2568]:
+                        - term [ref=e2569]: Verdi
+                        - definition: rgb(0 0 0 / 5%)
+                  - article [ref=e2570]:
+                    - button "Kopier rgb(0 0 0 / 10%) for Black Alpha 100" [ref=e2572]:
+                      - img [ref=e2574]
+                    - generic [ref=e2578]:
+                      - heading "Black Alpha 100" [level=3] [ref=e2579]
+                      - paragraph [ref=e2580]: "--vy-black-alpha-100"
+                      - generic [ref=e2582]:
+                        - term [ref=e2583]: Verdi
+                        - definition: rgb(0 0 0 / 10%)
+                  - article [ref=e2584]:
+                    - button "Kopier rgb(0 0 0 / 20%) for Black Alpha 200" [ref=e2586]:
+                      - img [ref=e2588]
+                    - generic [ref=e2592]:
+                      - heading "Black Alpha 200" [level=3] [ref=e2593]
+                      - paragraph [ref=e2594]: "--vy-black-alpha-200"
+                      - generic [ref=e2596]:
+                        - term [ref=e2597]: Verdi
+                        - definition: rgb(0 0 0 / 20%)
+                  - article [ref=e2598]:
+                    - button "Kopier rgb(0 0 0 / 30%) for Black Alpha 300" [ref=e2600]:
+                      - img [ref=e2602]
+                    - generic [ref=e2606]:
+                      - heading "Black Alpha 300" [level=3] [ref=e2607]
+                      - paragraph [ref=e2608]: "--vy-black-alpha-300"
+                      - generic [ref=e2610]:
+                        - term [ref=e2611]: Verdi
+                        - definition: rgb(0 0 0 / 30%)
+                  - article [ref=e2612]:
+                    - button "Kopier rgb(0 0 0 / 40%) for Black Alpha 400" [ref=e2614]:
+                      - img [ref=e2616]
+                    - generic [ref=e2620]:
+                      - heading "Black Alpha 400" [level=3] [ref=e2621]
+                      - paragraph [ref=e2622]: "--vy-black-alpha-400"
+                      - generic [ref=e2624]:
+                        - term [ref=e2625]: Verdi
+                        - definition: rgb(0 0 0 / 40%)
+                  - article [ref=e2626]:
+                    - button "Kopier rgb(0 0 0 / 50%) for Black Alpha 500" [ref=e2628]:
+                      - img [ref=e2630]
+                    - generic [ref=e2634]:
+                      - heading "Black Alpha 500" [level=3] [ref=e2635]
+                      - paragraph [ref=e2636]: "--vy-black-alpha-500"
+                      - generic [ref=e2638]:
+                        - term [ref=e2639]: Verdi
+                        - definition: rgb(0 0 0 / 50%)
+                  - article [ref=e2640]:
+                    - button "Kopier rgb(0 0 0 / 60%) for Black Alpha 600" [ref=e2642]:
+                      - img [ref=e2644]
+                    - generic [ref=e2648]:
+                      - heading "Black Alpha 600" [level=3] [ref=e2649]
+                      - paragraph [ref=e2650]: "--vy-black-alpha-600"
+                      - generic [ref=e2652]:
+                        - term [ref=e2653]: Verdi
+                        - definition: rgb(0 0 0 / 60%)
+                  - article [ref=e2654]:
+                    - button "Kopier rgb(0 0 0 / 70%) for Black Alpha 700" [ref=e2656]:
+                      - img [ref=e2658]
+                    - generic [ref=e2662]:
+                      - heading "Black Alpha 700" [level=3] [ref=e2663]
+                      - paragraph [ref=e2664]: "--vy-black-alpha-700"
+                      - generic [ref=e2666]:
+                        - term [ref=e2667]: Verdi
+                        - definition: rgb(0 0 0 / 70%)
+                  - article [ref=e2668]:
+                    - button "Kopier rgb(0 0 0 / 80%) for Black Alpha 800" [ref=e2670]:
+                      - img [ref=e2672]
+                    - generic [ref=e2676]:
+                      - heading "Black Alpha 800" [level=3] [ref=e2677]
+                      - paragraph [ref=e2678]: "--vy-black-alpha-800"
+                      - generic [ref=e2680]:
+                        - term [ref=e2681]: Verdi
+                        - definition: rgb(0 0 0 / 80%)
+                  - article [ref=e2682]:
+                    - button "Kopier rgb(0 0 0 / 90%) for Black Alpha 900" [ref=e2684]:
+                      - img [ref=e2686]
+                    - generic [ref=e2690]:
+                      - heading "Black Alpha 900" [level=3] [ref=e2691]
+                      - paragraph [ref=e2692]: "--vy-black-alpha-900"
+                      - generic [ref=e2694]:
+                        - term [ref=e2695]: Verdi
+                        - definition: rgb(0 0 0 / 90%)
+        - complementary "Innhold på siden" [ref=e2696]:
+          - navigation [ref=e2697]:
+            - paragraph [ref=e2698]: Innhold
+            - list [ref=e2699]:
+              - listitem [ref=e2700]:
+                - link "Hovedpalett" [ref=e2701] [cursor=pointer]:
+                  - /url: "#vy-main"
+              - listitem [ref=e2702]:
+                - link "Semantikk - light" [ref=e2703] [cursor=pointer]:
+                  - /url: "#vy-light-semantic"
+              - listitem [ref=e2704]:
+                - link "Semantikk - dark" [ref=e2705] [cursor=pointer]:
+                  - /url: "#vy-dark-semantic"
+              - listitem [ref=e2706]:
+                - link "Grey" [ref=e2707] [cursor=pointer]:
+                  - /url: "#vy-grey"
+              - listitem [ref=e2708]:
+                - link "Green" [ref=e2709] [cursor=pointer]:
+                  - /url: "#vy-green"
+              - listitem [ref=e2710]:
+                - link "Blue" [ref=e2711] [cursor=pointer]:
+                  - /url: "#vy-blue"
+              - listitem [ref=e2712]:
+                - link "Yellow" [ref=e2713] [cursor=pointer]:
+                  - /url: "#vy-yellow"
+              - listitem [ref=e2714]:
+                - link "Orange" [ref=e2715] [cursor=pointer]:
+                  - /url: "#vy-orange"
+              - listitem [ref=e2716]:
+                - link "Red" [ref=e2717] [cursor=pointer]:
+                  - /url: "#vy-red"
+              - listitem [ref=e2718]:
+                - link "Base" [ref=e2719] [cursor=pointer]:
+                  - /url: "#vy-base"
+              - listitem [ref=e2720]:
+                - link "White alpha" [ref=e2721] [cursor=pointer]:
+                  - /url: "#vy-white-alpha"
+              - listitem [ref=e2722]:
+                - link "Black alpha" [ref=e2723] [cursor=pointer]:
+                  - /url: "#vy-black-alpha"
+  - button "Open Next.js Dev Tools" [ref=e2729] [cursor=pointer]:
+    - img [ref=e2730]
+  - alert [ref=e2733]

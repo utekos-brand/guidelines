@@ -1,0 +1,432 @@
+/**
+ * Web Accordion Component
+ *
+ */
+
+import { isValidElement, useContext, useState } from 'react'
+import type {
+  HTMLProps,
+  KeyboardEvent,
+  MouseEvent,
+  ReactNode,
+} from 'react'
+import type { SpacingProps } from '../../shared/types'
+
+import {
+  validateDOMAttributes,
+  extendPropsWithContext,
+} from '../../shared/component-helper'
+import IconPrimary from '../icon-primary/IconPrimary'
+import Icon from '../icon/Icon'
+import { chevron_down, chevron_up } from '../../icons'
+import { clsx } from 'clsx'
+import AccordionContext from './AccordionContext'
+import { useSpacing } from '../space/SpacingUtils'
+import {
+  skeletonDOMAttributes,
+  createSkeletonClass,
+} from '../skeleton/SkeletonHelper'
+
+import type { HeadingLevel } from '../Heading'
+import type { IconIcon, IconSize } from '../Icon'
+import type { SkeletonShow } from '../Skeleton'
+import type {
+  AccordionIcon,
+  AccordionIconPosition,
+  AccordionVariant,
+} from './Accordion'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+const defaultAccordionIcon = Icon.transition({
+  collapsed: chevron_down,
+  expanded: chevron_up,
+})
+
+export type AccordionHeaderTitleProps = SpacingProps & {
+  children?: ReactNode
+}
+
+function AccordionHeaderTitle({
+  children = null,
+  ...rest
+}: AccordionHeaderTitleProps) {
+  return (
+    <span
+      {...useSpacing(rest, {
+        className: 'dnb-accordion__header__title',
+      })}
+    >
+      {children}
+    </span>
+  )
+}
+
+export type AccordionHeaderDescriptionProps = SpacingProps & {
+  children?: ReactNode
+}
+
+function AccordionHeaderDescription({
+  children = null,
+  ...rest
+}: AccordionHeaderDescriptionProps) {
+  const spacingProps = useSpacing(rest, {
+    className: 'dnb-accordion__header__description',
+  })
+
+  return children ? <span {...spacingProps}>{children}</span> : null
+}
+
+export type AccordionHeaderContainerProps = SpacingProps & {
+  children?: ReactNode
+}
+
+function AccordionHeaderContainer({
+  children = null,
+  ...rest
+}: AccordionHeaderContainerProps) {
+  const spacingProps = useSpacing(rest, {
+    className: 'dnb-accordion__header__container',
+  })
+
+  return children ? <span {...spacingProps}>{children}</span> : null
+}
+
+type AccordionHeaderIconIcon =
+  | IconIcon
+  | {
+      closed?: IconIcon
+      expanded?: IconIcon
+    }
+
+export type AccordionHeaderIconProps = {
+  icon?: AccordionHeaderIconIcon
+  size?: IconSize
+  expanded?: boolean
+  iconPosition?: AccordionIconPosition
+}
+
+function AccordionHeaderIcon({
+  icon: iconProp,
+  expanded,
+  size = 'medium',
+  iconPosition,
+}: AccordionHeaderIconProps) {
+  const hasExplicitExpandedIcon =
+    iconProp &&
+    typeof iconProp === 'object' &&
+    'expanded' in iconProp &&
+    typeof iconProp?.expanded !== 'undefined'
+
+  const icon = (
+    hasExplicitExpandedIcon
+      ? iconProp[expanded ? 'expanded' : 'closed']
+      : iconProp || defaultAccordionIcon
+  ) as IconIcon
+
+  return (
+    <span
+      className={clsx(
+        'dnb-accordion__header__icon',
+        iconPosition && `dnb-accordion__header__icon--${iconPosition}`
+      )}
+    >
+      <IconPrimary
+        size={size}
+        icon={icon}
+        transitionState={
+          hasExplicitExpandedIcon
+            ? undefined
+            : expanded
+              ? 'expanded'
+              : 'collapsed'
+        }
+        aria-hidden
+      />
+    </span>
+  )
+}
+
+export type AccordionHeaderTitle = string | ReactNode | (() => ReactNode)
+export type AccordionHeaderDescription =
+  | string
+  | ReactNode
+  | (() => ReactNode)
+export type AccordionHeaderLeftComponent =
+  | string
+  | ReactNode
+  | (() => ReactNode)
+export type AccordionHeaderElement = string | ReactNode | (() => ReactNode)
+export type AccordionHeaderHeading =
+  | boolean
+  | string
+  | ReactNode
+  | (() => ReactNode)
+export type AccordionHeaderIcon =
+  | ReactNode
+  | (() => ReactNode)
+  | {
+      closed?: ReactNode | (() => ReactNode)
+      expanded?: ReactNode | (() => ReactNode)
+    }
+
+export type AccordionHeaderProps = HTMLProps<HTMLElement> &
+  SpacingProps & {
+    title?: AccordionHeaderTitle
+    expanded?: boolean
+    description?: AccordionHeaderDescription
+    leftComponent?: AccordionHeaderLeftComponent
+    element?: AccordionHeaderElement
+    heading?: AccordionHeaderHeading
+    headingLevel?: HeadingLevel
+    icon?: AccordionIcon
+    iconPosition?: AccordionIconPosition
+    iconSize?: IconSize
+    disabled?: boolean
+    skeleton?: SkeletonShow
+    noAnimation?: boolean
+    className?: string
+    children?: string | ReactNode | (() => ReactNode)
+    variant?: AccordionVariant
+  }
+
+const accordionHeaderDefaultProps = {
+  iconSize: 'medium',
+}
+
+export const AccordionHeader = ({
+  iconSize: iconSizeDefault = 'medium',
+  ...restOfProps
+}: AccordionHeaderProps) => {
+  const props = { iconSize: iconSizeDefault, ...restOfProps }
+
+  const [isHovering, setIsHovering] = useState<boolean>(false)
+  const [hasClicked, setHasClicked] = useState<boolean>(false)
+
+  const context = useContext(AccordionContext)
+
+  function onKeyDownHandler(event: KeyboardEvent<HTMLElement>) {
+    const keyPressed = event.key
+
+    if (keyPressed === 'Enter' || keyPressed === ' ') {
+      event.preventDefault()
+      onClickHandler(event)
+    }
+  }
+
+  function onClickHandler(
+    event: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>
+  ) {
+    const { id, group } = context
+
+    if (canClick()) {
+      const expanded = !context.expanded
+      context.callOnChange({ id, group, expanded, event })
+
+      setHasClicked(true)
+    }
+  }
+
+  function onMouseOverHandler() {
+    setIsHovering(true)
+  }
+
+  function onMouseOutHandler() {
+    setIsHovering(false)
+    setHasClicked(false)
+  }
+
+  function canClick() {
+    const { expanded, allowCloseAll, group } = context
+    return !group || (group && !expanded) || allowCloseAll
+  }
+
+  const extendedProps = extendPropsWithContext(
+    props,
+    accordionHeaderDefaultProps,
+    context as Record<string, unknown>
+  )
+
+  const {
+    id,
+
+    // 1. these props should be the same as ...
+    leftComponent,
+    expanded, // eslint-disable-line
+    title,
+    description,
+    element,
+    heading,
+    headingLevel,
+    icon,
+    iconSize,
+    disabled,
+    skeleton,
+    noAnimation,
+    variant,
+  } = extendedProps
+
+  let { iconPosition } = extendedProps
+
+  const {
+    children,
+    className,
+
+    // 2. ... these
+    leftComponent: _leftComponent,
+    expanded: _expanded,
+    title: _title,
+    description: _description,
+    icon: _icon,
+    iconSize: _iconSize,
+    disabled: _disabled,
+
+    ...rest
+  } = props
+
+  const defaultParts = [
+    <AccordionHeaderIcon
+      key="icon"
+      icon={icon}
+      size={iconSize}
+      expanded={context.expanded}
+      iconPosition={iconPosition}
+    />,
+    <AccordionHeaderContainer key="container">
+      {leftComponent as ReactNode}
+    </AccordionHeaderContainer>,
+    <AccordionHeaderTitle key="title">
+      {title ||
+        (Array.isArray(children)
+          ? children.filter((cur) => !isValidElement(cur))
+          : children)}
+    </AccordionHeaderTitle>,
+    <AccordionHeaderDescription key="description">
+      {description as ReactNode}
+    </AccordionHeaderDescription>,
+  ]
+
+  if (Array.isArray(children)) {
+    const removeParts = []
+    children.forEach((cur) => {
+      if (isValidElement(cur)) {
+        const part = defaultParts.find((c) => c.type === cur.type)
+        if (part) {
+          removeParts.push(part)
+        }
+
+        defaultParts.push(cur)
+      }
+    })
+    removeParts.forEach((part) => {
+      const index = defaultParts.findIndex((c) => c === part)
+      if (index > -1) {
+        defaultParts.splice(index, 1)
+      }
+    })
+  }
+
+  const partsToRender = []
+  const wrapperParts = []
+  const wrapperComp = (
+    <span className="dnb-accordion__header__wrapper" key="wrapper">
+      {wrapperParts}
+    </span>
+  )
+
+  defaultParts.forEach((part) => {
+    if (
+      isValidElement(part) &&
+      (part.type === AccordionHeaderTitle ||
+        part.type === AccordionHeaderDescription)
+    ) {
+      wrapperParts.push(part)
+      if (partsToRender.findIndex((c) => c === wrapperComp) === -1) {
+        partsToRender.push(wrapperComp)
+      }
+    } else {
+      partsToRender.push(part)
+    }
+  })
+
+  // position the icon to the right, if the element is not in the beginning
+  if (iconPosition === undefined) {
+    const iconIndex = partsToRender.findIndex(
+      (c) => c.type === AccordionHeaderIcon
+    )
+    // because of the container at the beginning, we use 1
+    if (iconIndex > 1) {
+      iconPosition = 'right'
+    }
+
+    if (leftComponent) {
+      iconPosition = 'right'
+    }
+  }
+
+  const headerParams = useSpacing(rest, {
+    id: `${id}-header`,
+    'aria-controls': `${id}-content`,
+    'aria-expanded': context.expanded,
+    role: 'button',
+    tabIndex: 0,
+    className: clsx(
+      'dnb-accordion__header',
+      variant && `dnb-accordion__header--${variant}`,
+      context.expanded && 'dnb-accordion__header--expanded',
+      iconPosition && `dnb-accordion__header--icon-${iconPosition}`,
+      isHovering &&
+        hasClicked &&
+        context.expanded &&
+        'dnb-accordion__header--after-click',
+      !canClick() && 'dnb-accordion__header--prevent-click',
+      description && 'dnb-accordion__header--description',
+      noAnimation && 'dnb-accordion__header--no-animation',
+      createSkeletonClass('font', skeleton, context),
+      className
+    ),
+    disabled,
+    ...rest,
+  }) satisfies HTMLProps<HTMLElement>
+
+  if (disabled || skeleton) {
+    headerParams.tabIndex = -1
+    headerParams.disabled = true
+    headerParams['aria-disabled'] = true
+  } else {
+    headerParams.onClick = onClickHandler
+    headerParams.onKeyDown = onKeyDownHandler
+    headerParams.onMouseOver = onMouseOverHandler
+    headerParams.onMouseOut = onMouseOutHandler
+  }
+
+  skeletonDOMAttributes(headerParams, skeleton, context)
+
+  validateDOMAttributes(props, headerParams)
+
+  let Element = 'div'
+
+  // Check if heading is set to true (use default heading element)
+  if (heading === true) {
+    headerParams.role = 'heading'
+    headerParams['aria-level'] = headingLevel ? Number(headingLevel) : 2
+  } else if (heading) {
+    headerParams.role = null
+    Element = heading as string
+  } else if (element) {
+    headerParams.role = null
+    Element = element as string
+  }
+
+  return <Element {...headerParams}>{partsToRender}</Element>
+}
+
+AccordionHeader.Container = AccordionHeaderContainer
+AccordionHeader.Icon = AccordionHeaderIcon
+AccordionHeader.Title = AccordionHeaderTitle
+AccordionHeader.Description = AccordionHeaderDescription
+
+withComponentMarkers(AccordionHeader, {
+  _supportsSpacingProps: true,
+})
+
+export default AccordionHeader

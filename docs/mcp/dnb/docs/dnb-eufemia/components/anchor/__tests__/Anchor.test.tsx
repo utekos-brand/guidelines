@@ -1,0 +1,860 @@
+/**
+ * Element Test
+ *
+ */
+
+import { useState } from 'react'
+import type { AnchorHTMLAttributes, Ref, RefObject } from 'react'
+import { axeComponent, loadScss } from '../../../core/test-utils/testSetup'
+import { fireEvent, render, waitFor } from '@testing-library/react'
+import type { AnchorAllProps } from '../Anchor'
+import Anchor, { isDangerousHref } from '../Anchor'
+import { bell } from '../../../icons'
+import IconPrimary from '../../IconPrimary'
+import locales from '../../../shared/locales'
+import Theme from '../../../shared/Theme'
+
+const nb = locales['nb-NO'].Anchor
+const en = locales['en-GB'].Anchor
+
+const props: AnchorAllProps = {
+  element: 'a',
+  lang: 'nb-NO',
+}
+
+describe('Anchor element', () => {
+  describe('_blank', () => {
+    it('should have tooltip', async () => {
+      render(
+        <Anchor href="/url" target="_blank" id="unique-id" lang="nb-NO">
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+
+      // Activate the tooltip
+      fireEvent.mouseEnter(anchorElement)
+
+      // Wait for tooltip to become active
+      await waitFor(() => {
+        const describedById =
+          anchorElement.getAttribute('aria-describedby')
+        expect(describedById).toBeTruthy()
+        // aria-describedby should point to the tooltip id
+        const tooltipElement = document.getElementById(describedById)
+        expect(tooltipElement).toBeInTheDocument()
+        expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+        // Verify tooltip content matches locale
+        expect(tooltipElement).toHaveTextContent(nb.targetBlankTitle)
+      })
+    })
+
+    it('should still have tooltip with "dnb-anchor--no-icon" class', async () => {
+      render(
+        <Anchor
+          href="/url"
+          target="_blank"
+          id="unique-id"
+          className="dnb-anchor--no-icon"
+          lang="nb-NO"
+        >
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+
+      // Activate the tooltip
+      fireEvent.mouseEnter(anchorElement)
+
+      // Wait for tooltip to become active
+      await waitFor(() => {
+        const describedById =
+          anchorElement.getAttribute('aria-describedby')
+        expect(describedById).toBeTruthy()
+        // aria-describedby should point to the tooltip id
+        const tooltipElement = document.getElementById(describedById)
+        expect(tooltipElement).toBeInTheDocument()
+        expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+        // Verify tooltip content matches locale
+        expect(tooltipElement).toHaveTextContent(nb.targetBlankTitle)
+      })
+    })
+
+    it('should still have tooltip when omitClass prop is true', async () => {
+      render(
+        <Anchor
+          href="/url"
+          target="_blank"
+          id="unique-id"
+          omitClass
+          lang="nb-NO"
+        >
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+
+      // Activate the tooltip
+      fireEvent.mouseEnter(anchorElement)
+
+      // Wait for tooltip to become active
+      await waitFor(() => {
+        const describedById =
+          anchorElement.getAttribute('aria-describedby')
+        expect(describedById).toBeTruthy()
+        // aria-describedby should point to the tooltip id
+        const tooltipElement = document.getElementById(describedById)
+        expect(tooltipElement).toBeInTheDocument()
+        expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+        // Verify tooltip content matches locale
+        expect(tooltipElement).toHaveTextContent(nb.targetBlankTitle)
+      })
+    })
+
+    it('has "__launch-icon" class', () => {
+      render(
+        <Anchor href="/url" target="_blank">
+          <span>text</span>
+        </Anchor>
+      )
+      expect(
+        document.querySelector(
+          '.dnb-anchor .dnb-anchor__launch-icon.dnb-icon.dnb-icon--default'
+        )
+      ).toBeInTheDocument()
+    })
+
+    it('has no "__launch-icon" class when href was mailto, tel or sms', () => {
+      const { rerender } = render(
+        <Anchor href="mailto:" target="_blank">
+          <span>text</span>
+        </Anchor>
+      )
+      expect(
+        document.querySelector('.dnb-anchor--launch-icon')
+      ).not.toBeInTheDocument()
+
+      rerender(
+        <Anchor href="tel:" target="_blank">
+          <span>text</span>
+        </Anchor>
+      )
+      expect(
+        document.querySelector('.dnb-anchor--launch-icon')
+      ).not.toBeInTheDocument()
+
+      rerender(
+        <Anchor href="sms:" target="_blank">
+          <span>text</span>
+        </Anchor>
+      )
+      expect(
+        document.querySelector('.dnb-anchor--launch-icon')
+      ).not.toBeInTheDocument()
+    })
+
+    it('should automatically add rel="noopener noreferrer" when target="_blank" for security', () => {
+      render(
+        <Anchor href="/url" target="_blank">
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement).toHaveAttribute('rel', 'noopener noreferrer')
+    })
+
+    it('should not override custom rel attribute when target="_blank"', () => {
+      render(
+        <Anchor href="/url" target="_blank" rel="custom-rel">
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement).toHaveAttribute('rel', 'custom-rel')
+    })
+
+    it('should remove a javascript: href to prevent script execution', () => {
+      render(<Anchor href="javascript:alert('XSS')">text</Anchor>)
+
+      expect(document.querySelector('a')).not.toHaveAttribute('href')
+    })
+
+    it('should remove a vbscript: href to prevent script execution', () => {
+      render(<Anchor href="vbscript:msgbox(1)">text</Anchor>)
+
+      expect(document.querySelector('a')).not.toHaveAttribute('href')
+    })
+
+    it('should remove an obfuscated javascript: href with control characters', () => {
+      render(<Anchor href={'  java\tscript:alert(1)'}>text</Anchor>)
+
+      expect(document.querySelector('a')).not.toHaveAttribute('href')
+    })
+
+    it('should remove a javascript: "to" prop to prevent script execution', () => {
+      render(<Anchor to="javascript:alert('XSS')">text</Anchor>)
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement).not.toHaveAttribute('to')
+      expect(anchorElement).not.toHaveAttribute('href')
+    })
+
+    it('should remove an uppercase JavaScript: href', () => {
+      render(<Anchor href="JavaScript:alert(1)">text</Anchor>)
+
+      expect(document.querySelector('a')).not.toHaveAttribute('href')
+    })
+
+    it('should keep a safe http href untouched', () => {
+      render(<Anchor href="https://www.dnb.no">text</Anchor>)
+
+      expect(document.querySelector('a')).toHaveAttribute(
+        'href',
+        'https://www.dnb.no'
+      )
+    })
+
+    it('should keep a relative href untouched', () => {
+      render(<Anchor href="/uilib/components">text</Anchor>)
+
+      expect(document.querySelector('a')).toHaveAttribute(
+        'href',
+        '/uilib/components'
+      )
+    })
+
+    it('should keep mailto and tel hrefs untouched', () => {
+      const { rerender } = render(
+        <Anchor href="mailto:test@dnb.no">text</Anchor>
+      )
+      expect(document.querySelector('a')).toHaveAttribute(
+        'href',
+        'mailto:test@dnb.no'
+      )
+
+      rerender(<Anchor href="tel:+4712345678">text</Anchor>)
+      expect(document.querySelector('a')).toHaveAttribute(
+        'href',
+        'tel:+4712345678'
+      )
+    })
+
+    it('isDangerousHref flags script-executing protocols only', () => {
+      expect(isDangerousHref('javascript:alert(1)')).toBe(true)
+      expect(isDangerousHref('JAVASCRIPT:alert(1)')).toBe(true)
+      expect(isDangerousHref('vbscript:msgbox(1)')).toBe(true)
+      expect(isDangerousHref('  java\tscript:alert(1)')).toBe(true)
+      expect(isDangerousHref('https://www.dnb.no')).toBe(false)
+      expect(isDangerousHref('/relative/path')).toBe(false)
+      expect(isDangerousHref('mailto:test@dnb.no')).toBe(false)
+      expect(isDangerousHref(undefined)).toBe(false)
+      expect(isDangerousHref(123)).toBe(false)
+    })
+
+    it('has no "__launch-icon" class when adding class dnb-anchor--no-launch-icon', () => {
+      render(
+        <Anchor
+          href="/url"
+          target="_blank"
+          className="dnb-anchor--no-launch-icon"
+        >
+          <span>text</span>
+        </Anchor>
+      )
+      expect(
+        document.querySelector('.dnb-anchor--launch-icon')
+      ).not.toBeInTheDocument()
+    })
+
+    it('has no tooltip when title was given', () => {
+      render(
+        <Anchor href="/url" target="_blank" title="Title">
+          <span>text</span>
+        </Anchor>
+      )
+      expect(
+        document.querySelector('.dnb-tooltip')
+      ).not.toBeInTheDocument()
+      expect(
+        document.querySelector('.dnb-tooltip__sr-description')
+      ).not.toBeInTheDocument()
+    })
+
+    it('has aria-describedby', async () => {
+      const { rerender } = render(
+        <Anchor href="/url" target="_blank" lang="en-GB">
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+
+      // Activate the tooltip
+      fireEvent.mouseEnter(anchorElement)
+
+      // Wait for tooltip to become active
+      await waitFor(() => {
+        const id = anchorElement.getAttribute('aria-describedby')
+        expect(id).toBeTruthy()
+        // aria-describedby should point to the tooltip id
+        const tooltipElement = document.getElementById(id)
+        expect(tooltipElement).toBeInTheDocument()
+        expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+        // Verify tooltip content matches locale
+        expect(tooltipElement).toHaveTextContent(en.targetBlankTitle)
+      })
+
+      const title = 'External site'
+
+      rerender(
+        <Anchor href="/url" target="_blank" lang="en-GB" title={title}>
+          text
+        </Anchor>
+      )
+
+      expect(
+        (document.querySelector('a') as HTMLAnchorElement).getAttribute(
+          'title'
+        )
+      ).toBe(title)
+      // When title is provided, tooltip should not be rendered
+      expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+    })
+
+    it('icon right overrides launch icon', () => {
+      const { rerender } = render(
+        <Anchor
+          href="/url"
+          target="_blank"
+          icon={bell}
+          iconPosition="right"
+        >
+          text
+        </Anchor>
+      )
+
+      expect(document.querySelectorAll('.dnb-icon')).toHaveLength(1)
+      expect(
+        document.querySelector('.dnb-icon').getAttribute('data-testid')
+      ).toBe('bell icon')
+
+      rerender(
+        <Anchor
+          href="/url"
+          target="_blank"
+          icon={<IconPrimary icon={bell} />}
+          iconPosition="right"
+        >
+          text
+        </Anchor>
+      )
+
+      expect(document.querySelectorAll('.dnb-icon')).toHaveLength(1)
+      expect(
+        document.querySelector('.dnb-icon').getAttribute('data-testid')
+      ).toBe('bell icon')
+    })
+
+    it('icon left does not override launch icon', () => {
+      const { rerender } = render(
+        <Anchor
+          href="/url"
+          target="_blank"
+          icon={bell}
+          iconPosition="left"
+        >
+          text
+        </Anchor>
+      )
+
+      expect(document.querySelectorAll('.dnb-icon')).toHaveLength(2)
+      expect(
+        document
+          .querySelector('.dnb-anchor .dnb-icon:first-child')
+          .getAttribute('data-testid')
+      ).toBe('bell icon')
+      expect(
+        document.querySelector('.dnb-anchor .dnb-icon:last-child')
+          .classList
+      ).toContain('dnb-anchor__launch-icon')
+
+      rerender(
+        <Anchor
+          href="/url"
+          target="_blank"
+          icon={<IconPrimary icon={bell} />}
+          iconPosition="left"
+        >
+          text
+        </Anchor>
+      )
+
+      expect(document.querySelectorAll('.dnb-icon')).toHaveLength(2)
+      expect(
+        document
+          .querySelector('.dnb-anchor .dnb-icon:first-child')
+          .getAttribute('data-testid')
+      ).toBe('bell icon')
+      expect(
+        document.querySelector('.dnb-anchor .dnb-icon:last-child')
+          .classList
+      ).toContain('dnb-anchor__launch-icon')
+    })
+  })
+
+  it('has dnb-a class', () => {
+    render(<Anchor>text</Anchor>)
+    expect(document.querySelector('.dnb-a')).toBeInTheDocument()
+  })
+
+  it('has href', () => {
+    render(<Anchor href="/url">text</Anchor>)
+    expect(document.querySelector('[href]')).toBeInTheDocument()
+  })
+
+  it('should forward id', () => {
+    render(
+      <Anchor href="/url" id="unique-id">
+        text
+      </Anchor>
+    )
+    expect(document.querySelector('a').getAttribute('id')).toBe(
+      'unique-id'
+    )
+  })
+
+  it('should have tooltip markup in DOM', async () => {
+    render(
+      <Anchor href="/url" id="unique-id" tooltip="Tooltip">
+        text
+      </Anchor>
+    )
+
+    const anchorElement = document.querySelector('a')
+    expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+
+    // Activate the tooltip
+    fireEvent.mouseEnter(anchorElement)
+
+    // Wait for tooltip to become active
+    await waitFor(() => {
+      const describedById = anchorElement.getAttribute('aria-describedby')
+      expect(describedById).toBeTruthy()
+      // aria-describedby should point to the tooltip id
+      const tooltipElement = document.getElementById(describedById)
+      expect(tooltipElement).toBeInTheDocument()
+      expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+      expect(tooltipElement).toHaveTextContent('Tooltip')
+    })
+  })
+
+  it('should aria-describedby set by tooltip', async () => {
+    render(
+      <Anchor href="/url" id="unique-id" tooltip="Tooltip">
+        text
+      </Anchor>
+    )
+
+    const element = document.getElementById('unique-id')
+    expect(element.getAttribute('aria-describedby')).toBeNull()
+
+    // Activate the tooltip
+    fireEvent.mouseEnter(element)
+
+    // Wait for tooltip to become active
+    await waitFor(() => {
+      const describedById = element.getAttribute('aria-describedby')
+      expect(describedById).toBeTruthy()
+      // aria-describedby should point to the tooltip id
+      const tooltipElement = document.getElementById(describedById)
+      expect(tooltipElement).toBeInTheDocument()
+      expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+    })
+  })
+
+  it('should show tooltip on mouseover', () => {
+    globalThis.IS_TEST = true
+
+    render(
+      <Anchor href="/url" id="unique-id" tooltip="Tooltip">
+        text
+      </Anchor>
+    )
+
+    const element = document.getElementById('unique-id')
+    fireEvent.mouseEnter(element)
+
+    expect(
+      document.querySelector('#unique-id-tooltip.dnb-tooltip__content')
+        .parentElement.classList
+    ).toContain('dnb-tooltip--active')
+
+    globalThis.IS_TEST = false
+  })
+
+  it('has "--was-node" class when child was not a string', () => {
+    render(
+      <Anchor href="/url">
+        <span>text</span>
+      </Anchor>
+    )
+    expect(
+      document.querySelector('.dnb-anchor--was-node')
+    ).toBeInTheDocument()
+  })
+
+  it('should forward ref', () => {
+    const ref: RefObject<HTMLAnchorElement | null> = {
+      current: null,
+    }
+
+    render(
+      <Anchor ref={ref} to="/url">
+        text
+      </Anchor>
+    )
+
+    const element = document.querySelector('.dnb-anchor')
+    expect(ref.current).toBe(element)
+  })
+
+  it('should keep a stable ref across re-renders when no ref is provided', () => {
+    const refValues: Array<HTMLAnchorElement | null> = []
+
+    const Wrapper = () => {
+      const [, setState] = useState(0)
+
+      return (
+        <Anchor
+          href="/url"
+          ref={(el) => {
+            refValues.push(el)
+          }}
+          onClick={(e) => {
+            e.preventDefault()
+            setState((s) => s + 1)
+          }}
+        >
+          text
+        </Anchor>
+      )
+    }
+
+    const { container } = render(<Wrapper />)
+
+    const anchorElement = container.querySelector('.dnb-anchor')
+    expect(anchorElement).toBeInTheDocument()
+
+    // Trigger a re-render
+    fireEvent.click(anchorElement!)
+
+    // The ref should receive the same DOM element across renders
+    const nonNullRefs = refValues.filter(Boolean)
+    expect(nonNullRefs.length).toBeGreaterThanOrEqual(1)
+    expect(nonNullRefs.every((r) => r === anchorElement)).toBe(true)
+  })
+
+  it('should render correctly without a ref prop', () => {
+    const { container } = render(<Anchor href="/url">text</Anchor>)
+
+    const element = container.querySelector('.dnb-anchor')
+    expect(element).toBeInTheDocument()
+    expect(element?.tagName).toBe('A')
+  })
+
+  it('gets valid element when ref is function', () => {
+    const ref: RefObject<HTMLAnchorElement | null> = {
+      current: null,
+    }
+
+    const refFn = (elem: HTMLAnchorElement) => {
+      ref.current = elem
+    }
+
+    render(<Anchor id="unique" ref={refFn} />)
+
+    expect(ref.current.getAttribute('id')).toBe('unique')
+    expect(ref.current.tagName).toBe('A')
+  })
+
+  it('supports rel', () => {
+    render(
+      <Anchor rel="external" href="http://www.externallink.com/">
+        text
+      </Anchor>
+    )
+    expect(document.querySelector('[rel="external"]')).toBeInTheDocument()
+  })
+
+  it('should validate with ARIA rules as a Anchor element', async () => {
+    const Component = render(<Anchor {...props} />)
+    expect(await axeComponent(Component)).toHaveNoViolations()
+  })
+
+  it('has left icon class when using left icon prop', () => {
+    render(
+      <Anchor href="/url" icon="bell" iconPosition="left">
+        text
+      </Anchor>
+    )
+    expect(
+      document.querySelector('.dnb-anchor--icon-left')
+    ).toBeInTheDocument()
+  })
+
+  it('has right icon class when using right icon prop', () => {
+    render(
+      <Anchor href="/url" icon="bell" iconPosition="right">
+        text
+      </Anchor>
+    )
+    expect(
+      document.querySelector('.dnb-anchor--icon-right')
+    ).toBeInTheDocument()
+  })
+
+  it('defaults to left icon when using icon prop', () => {
+    render(
+      <Anchor href="/url" icon="bell">
+        text
+      </Anchor>
+    )
+    expect(
+      document.querySelector('.dnb-anchor--icon-left')
+    ).toBeInTheDocument()
+  })
+
+  it('should support "to" prop type without forwarding to href', () => {
+    render(<Anchor to="/url">text</Anchor>)
+
+    expect(document.querySelector('a')).not.toHaveAttribute('href')
+  })
+
+  it('should support custom Link component with "to" prop', () => {
+    const Link = ({
+      children,
+      to,
+      ...rest
+    }: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
+      to: string | Record<string, string>
+      ref?: Ref<HTMLAnchorElement>
+    }) => {
+      return (
+        <a {...rest} href={String(to)}>
+          {children}
+        </a>
+      )
+    }
+
+    render(
+      <Anchor to="/url" element={Link}>
+        text
+      </Anchor>
+    )
+
+    expect(document.querySelector('a')).toHaveAttribute('href', '/url')
+  })
+
+  it('should not add `dnb-button` class as button element', () => {
+    render(<Anchor element="button">text</Anchor>)
+
+    expect(document.querySelector('.dnb-anchor').className).not.toContain(
+      'dnb-button'
+    )
+  })
+
+  it('should have no-animation class if "noAnimation" props is true', () => {
+    const { rerender } = render(<Anchor />)
+
+    const anchor = document.querySelector('.dnb-anchor')
+
+    expect(anchor.className).not.toContain('dnb-anchor--no-animation')
+
+    rerender(<Anchor noAnimation />)
+
+    expect(anchor.className).toContain('dnb-anchor--no-animation')
+  })
+
+  it('should have no-hover class if "noHover" props is true', () => {
+    const { rerender } = render(<Anchor />)
+
+    const anchor = document.querySelector('.dnb-anchor')
+
+    expect(anchor.className).not.toContain('dnb-anchor--no-hover')
+
+    rerender(<Anchor noHover />)
+
+    expect(anchor.className).toContain('dnb-anchor--no-hover')
+  })
+
+  it('should have no-style class if "noStyle" props is true', () => {
+    const { rerender } = render(<Anchor />)
+
+    const anchor = document.querySelector('.dnb-anchor')
+
+    expect(anchor.className).not.toContain('dnb-anchor--no-style')
+
+    rerender(<Anchor noStyle />)
+
+    expect(anchor.className).toContain('dnb-anchor--no-style')
+  })
+
+  it('should have no-underline class if "noUnderline" props is true', () => {
+    const { rerender } = render(<Anchor />)
+
+    const anchor = document.querySelector('.dnb-anchor')
+
+    expect(anchor.className).not.toContain('dnb-anchor--no-underline')
+
+    rerender(<Anchor noUnderline />)
+
+    expect(anchor.className).toContain('dnb-anchor--no-underline')
+  })
+
+  it('should have no-icon class if "noIcon" prop is true', () => {
+    render(<Anchor noIcon icon="bell" />)
+
+    const anchor = document.querySelector('.dnb-anchor')
+
+    expect(anchor).toHaveClass('dnb-anchor--no-icon')
+  })
+
+  it('should have no-launch-icon class if "noLaunchIcon" prop is true', () => {
+    render(<Anchor noLaunchIcon />)
+
+    const anchor = document.querySelector('.dnb-anchor')
+
+    expect(anchor).toHaveClass('dnb-anchor--no-launch-icon')
+    expect(
+      document.querySelector('.dnb-anchor__launch-icon')
+    ).not.toBeInTheDocument()
+  })
+
+  describe('surface', () => {
+    it('should inherit surface from Theme context', () => {
+      render(
+        <Theme.Context surface="dark">
+          <Anchor href="/url">text</Anchor>
+        </Theme.Context>
+      )
+
+      const anchor = document.querySelector('.dnb-anchor')
+      expect(anchor).toHaveClass('dnb-anchor--surface-dark')
+    })
+  })
+
+  describe('disabled', () => {
+    it('should show tooltip when disabled with target blank', async () => {
+      render(
+        <Anchor href="/url" target="_blank" disabled lang="nb-NO">
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+
+      fireEvent.mouseEnter(anchorElement)
+
+      await waitFor(() => {
+        const describedById =
+          anchorElement.getAttribute('aria-describedby')
+        expect(describedById).toBeTruthy()
+        const tooltipElement = document.getElementById(describedById)
+        expect(tooltipElement).toBeInTheDocument()
+        expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+        expect(tooltipElement).toHaveTextContent(nb.targetBlankTitle)
+      })
+    })
+
+    it('should show tooltip when disabled with tooltip prop', async () => {
+      render(
+        <Anchor href="/url" tooltip="Tooltip" disabled>
+          text
+        </Anchor>
+      )
+
+      const anchorElement = document.querySelector('a')
+      expect(anchorElement.getAttribute('aria-describedby')).toBeNull()
+
+      fireEvent.mouseEnter(anchorElement)
+
+      await waitFor(() => {
+        const describedById =
+          anchorElement.getAttribute('aria-describedby')
+        expect(describedById).toBeTruthy()
+        const tooltipElement = document.getElementById(describedById)
+        expect(tooltipElement).toBeInTheDocument()
+        expect(tooltipElement?.parentElement).toHaveClass('dnb-tooltip')
+        expect(tooltipElement).toHaveTextContent('Tooltip')
+      })
+    })
+
+    it('should disable anchor interactions', () => {
+      const onClick = vi.fn()
+
+      render(
+        <Anchor href="/url" disabled onClick={onClick}>
+          text
+        </Anchor>
+      )
+
+      const anchor = document.querySelector('a')
+
+      expect(anchor).toHaveAttribute('aria-disabled', 'true')
+      expect(anchor).toHaveAttribute('tabindex', '-1')
+      expect(anchor).not.toHaveAttribute('href')
+
+      fireEvent.click(anchor)
+      expect(onClick).not.toHaveBeenCalled()
+    })
+
+    it('should pass disabled to button elements', () => {
+      render(
+        <Anchor element="button" disabled>
+          text
+        </Anchor>
+      )
+
+      const button = document.querySelector('button')
+      expect(button).toHaveAttribute('disabled')
+    })
+
+    it('should not show launch icon when disabled', () => {
+      render(
+        <Anchor href="/url" target="_blank" disabled>
+          text
+        </Anchor>
+      )
+
+      expect(
+        document.querySelector('.dnb-anchor__launch-icon')
+      ).not.toBeInTheDocument()
+    })
+
+    it('should validate with ARIA rules when disabled', async () => {
+      const Component = render(
+        <Anchor href="/url" disabled>
+          text
+        </Anchor>
+      )
+      expect(await axeComponent(Component)).toHaveNoViolations()
+    })
+  })
+})
+
+describe('Anchor scss', () => {
+  it('should match style dependencies css', () => {
+    const css = loadScss(require.resolve('../style/deps.scss'))
+    expect(css).toMatchSnapshot()
+  })
+})

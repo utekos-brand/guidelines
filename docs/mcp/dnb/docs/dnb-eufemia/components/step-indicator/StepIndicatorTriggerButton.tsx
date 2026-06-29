@@ -1,0 +1,157 @@
+/**
+ * Web StepIndicator Component
+ *
+ */
+
+import { clsx } from 'clsx'
+import { useContext } from 'react'
+import type { HTMLProps } from 'react'
+import type { ButtonProps } from '../button/Button'
+import Button from '../button/Button'
+import Section from '../section/Section'
+import HeightAnimation from '../height-animation/HeightAnimation'
+import { chevron_down, chevron_up } from '../../icons'
+import Icon from '../icon/Icon'
+import IconPrimary from '../icon-primary/IconPrimary'
+import {
+  validateDOMAttributes,
+  combineDescribedBy,
+} from '../../shared/component-helper'
+import useId from '../../shared/helpers/useId'
+import FormLabel from '../form-label/FormLabel'
+import StepIndicatorContext from './StepIndicatorContext'
+import {
+  skeletonDOMAttributes,
+  createSkeletonClass,
+} from '../skeleton/SkeletonHelper'
+
+const chevronIcon = Icon.transition({
+  collapsed: chevron_down,
+  expanded: chevron_up,
+})
+
+type StepIndicatorTriggerButtonProps = ButtonProps & {
+  isNested?: boolean
+  className?: string
+}
+function StepIndicatorTriggerButton({
+  className,
+  isNested,
+  ...rest
+}: StepIndicatorTriggerButtonProps) {
+  const { data, ...contextWithoutData } = useContext(StepIndicatorContext)
+
+  const {
+    stepsLabel,
+    activeStep,
+    overviewTitle,
+    open,
+    closeHandler,
+    openHandler,
+    skeleton,
+    filterAttributes,
+    noAnimation,
+    stepTitle,
+    ...contextWithoutDataRest
+  } = contextWithoutData
+
+  const item = data[activeStep || 0]
+  const label = stepsLabel
+  const id = useId()
+
+  const triggerParams = {
+    ...contextWithoutDataRest,
+    className: clsx(
+      'dnb-step-indicator__trigger',
+      createSkeletonClass('font', skeleton)
+    ),
+    'aria-live': 'polite',
+  } as Omit<HTMLProps<HTMLElement>, 'onChange' | 'onClick'>
+
+  const buttonParams = {
+    ...rest,
+    className: clsx(
+      'dnb-step-indicator__trigger__button',
+      `dnb-step-indicator__trigger__button--${
+        open ? 'expanded' : 'collapsed'
+      }`,
+      className
+    ),
+  }
+
+  buttonParams['aria-describedby'] = combineDescribedBy(
+    buttonParams,
+    id + '-overview'
+  )
+
+  // Cache Object.keys() result for performance
+  const triggerParamKeys = Object.keys(triggerParams)
+  triggerParamKeys.forEach((key) => {
+    if (filterAttributes.includes(key)) {
+      delete triggerParams[key]
+    }
+  })
+
+  skeletonDOMAttributes(triggerParams, skeleton)
+
+  // also used for code markup simulation
+  validateDOMAttributes(contextWithoutDataRest, triggerParams)
+
+  return (
+    <Section
+      backgroundColor="var(--step-indicator-trigger-background)"
+      outline="transparent"
+      innerSpace={{
+        top: 'small',
+        bottom: 'small',
+      }}
+      roundedCorner={{
+        small: false,
+        medium: [true, true, !open, !open],
+        large: [true, true, !open, !open],
+      }}
+      outset={isNested ? true : undefined}
+      aria-label={overviewTitle}
+    >
+      <HeightAnimation animate={!noAnimation}>
+        <div {...(triggerParams as HTMLProps<HTMLDivElement>)}>
+          <FormLabel
+            element="span"
+            aria-describedby={id}
+            aria-hidden // In order to not duplicate information for screen readers
+            className="dnb-step-indicator__label"
+            vertical={false}
+            right="x-small"
+          >
+            {label}
+          </FormLabel>
+          <Button
+            {...buttonParams}
+            onClick={() => {
+              if (open) {
+                closeHandler()
+              } else {
+                openHandler()
+              }
+            }}
+            aria-expanded={open}
+            aria-label={label} // To support NVDA properly
+            wrap
+            variant="tertiary"
+            icon={
+              <IconPrimary
+                icon={chevronIcon}
+                transitionState={open ? 'expanded' : 'collapsed'}
+              />
+            }
+            iconPosition="right"
+          >
+            {(typeof item === 'string' ? item : item && item.title) || ''}
+          </Button>
+        </div>
+      </HeightAnimation>
+    </Section>
+  )
+}
+
+export default StepIndicatorTriggerButton

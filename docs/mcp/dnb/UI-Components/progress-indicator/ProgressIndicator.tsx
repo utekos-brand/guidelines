@@ -1,0 +1,185 @@
+/**
+ * Web ProgressIndicator Component
+ *
+ */
+
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import type { CSSProperties } from 'react'
+import { clsx } from 'clsx'
+import type { ContextProps } from '../../shared/Context'
+import Context from '../../shared/Context'
+import {
+  validateDOMAttributes,
+  dispatchCustomElementEvent,
+  extendPropsWithContext,
+} from '../../shared/component-helper'
+import { useSpacing } from '../space/SpacingUtils'
+import ProgressIndicatorCircular from './ProgressIndicatorCircular'
+import ProgressIndicatorLinear from './ProgressIndicatorLinear'
+import { formatPercent } from '../number-format/NumberUtils'
+
+import type {
+  ProgressIndicatorAllProps,
+  ProgressIndicatorAnimationProps,
+  ProgressIndicatorCustomSize,
+} from './types'
+import { isValidSize } from './types'
+import withComponentMarkers from '../../shared/helpers/withComponentMarkers'
+
+function ProgressIndicator(props: ProgressIndicatorAllProps) {
+  const allProps = updatePropsWithContext(props, useContext(Context))
+
+  const {
+    type = 'circular',
+    size = 'default',
+    noAnimation = false,
+    onComplete,
+    label,
+    indicatorLabel,
+    labelDirection = 'vertical',
+    showDefaultLabel = false,
+    className,
+    title,
+    progress,
+    show = true,
+    customColors,
+    customCircleWidth,
+    style,
+    ...rest
+  } = allProps
+
+  const remainingDOMProps = validateDOMAttributes(allProps, { ...rest })
+
+  const [sizeVariant, customSize]: [
+    ProgressIndicatorAnimationProps['size'],
+    ProgressIndicatorCustomSize,
+  ] = isValidSize(size) ? [size, undefined] : ['custom-size', size]
+
+  const completeTimeout = useRef<NodeJS.Timeout>(undefined)
+  const fadeOutTimeout = useRef<NodeJS.Timeout>(undefined)
+  const [complete, setCompleteState] = useState(false)
+
+  const progressNumber =
+    typeof progress === 'string'
+      ? parseFloat(progress)
+      : typeof progress === 'number'
+        ? progress
+        : undefined
+
+  const usedIndicatorLabel = label || (showDefaultLabel && indicatorLabel)
+  const progressTitle = title || formatProgress(progressNumber)
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(completeTimeout.current)
+      clearTimeout(fadeOutTimeout.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (show) {
+      setCompleteState(false)
+    }
+  }, [show])
+
+  const callOnCompleteHandler = useCallback(() => {
+    completeTimeout.current = setTimeout(() => {
+      setCompleteState(true)
+      if (onComplete) {
+        fadeOutTimeout.current = setTimeout(() => {
+          dispatchCustomElementEvent({ onComplete }, 'onComplete')
+        }, 600) // wait for CSS fade out, defined in "progress-indicator-fade-out"
+      }
+    }, 200)
+  }, [onComplete])
+
+  return (
+    <span
+      {...useSpacing(allProps, {
+        className: clsx(
+          'dnb-progress-indicator',
+          show && 'dnb-progress-indicator--show',
+          complete && 'dnb-progress-indicator--complete',
+          type === 'linear' && 'dnb-progress-indicator--full-width',
+          labelDirection && `dnb-progress-indicator--${labelDirection}`,
+          sizeVariant && `dnb-progress-indicator--${sizeVariant}`,
+          noAnimation && 'dnb-progress-indicator--no-animation',
+          className
+        ),
+        style: {
+          ...style,
+          '--progress-indicator-circular-size': customSize,
+          '--progress-indicator-circular-stroke-width': customCircleWidth,
+          '--progress-indicator-linear-size': customSize,
+        } as CSSProperties,
+        ...remainingDOMProps,
+      })}
+    >
+      {(type === 'circular' || type === 'countdown') && (
+        <ProgressIndicatorCircular
+          size={sizeVariant}
+          progress={progressNumber}
+          show={show}
+          onComplete={onComplete}
+          callOnCompleteHandler={callOnCompleteHandler}
+          title={progressTitle?.toString()}
+          customColors={customColors}
+          customCircleWidth={customCircleWidth}
+          counterClockwise={type === 'countdown'}
+        />
+      )}
+      {type === 'linear' && (
+        <ProgressIndicatorLinear
+          size={sizeVariant}
+          progress={progressNumber}
+          show={show}
+          onComplete={onComplete}
+          callOnCompleteHandler={callOnCompleteHandler}
+          title={progressTitle?.toString()}
+          customColors={customColors}
+        />
+      )}
+      {usedIndicatorLabel && (
+        <span className="dnb-progress-indicator__label dnb-p">
+          {usedIndicatorLabel}
+        </span>
+      )}
+    </span>
+  )
+}
+
+function updatePropsWithContext(
+  props: ProgressIndicatorAllProps,
+  context: ContextProps
+) {
+  const localPropsFromContext =
+    context?.getTranslation(props).ProgressIndicator
+  const componentPropsFromContext = context?.ProgressIndicator
+  return extendPropsWithContext(
+    props,
+    {},
+    localPropsFromContext,
+    componentPropsFromContext
+  )
+}
+
+function formatProgress(progress) {
+  if (parseFloat(progress) > -1) {
+    return formatPercent(progress, {
+      decimals: 2,
+    })
+  }
+  return null
+}
+
+ProgressIndicator.displayName = 'ProgressIndicator'
+
+export default ProgressIndicator
+
+withComponentMarkers(ProgressIndicator, { _supportsSpacingProps: true })

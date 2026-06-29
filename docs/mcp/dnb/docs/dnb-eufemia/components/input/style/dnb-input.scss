@@ -1,0 +1,647 @@
+/*
+* Input component
+*
+*/
+
+@use '../../../style/core/utilities.scss' as utilities;
+.dnb-input__border--tokens {
+  // Border
+  --input-border-color: var(--token-color-stroke-action);
+  --input-border-color--hover: var(--token-color-stroke-action-hover);
+  --input-border-color--active: var(--token-color-stroke-action-pressed);
+  --input-border-color--focus: var(--token-color-stroke-action-pressed);
+  --input-border-color--disabled: var(
+    --token-color-stroke-action-disabled
+  );
+  --input-border-color__error: var(--token-color-stroke-error);
+  --input-border-color__error--active: var(--token-color-stroke-error);
+  --input-border-color__error--focus: var(--token-color-stroke-error);
+  --input-border-width: var(--input-border-width--default);
+  --input-border-width--default: 0.0625rem;
+  --input-border-width--hover: 0.125rem;
+  --input-border-width--active: 0.125rem;
+  --input-border-width--focus: 0.125rem;
+  --input-border-width--disabled: 0.0625rem;
+  --input-border-width__error: 0.0625rem;
+  --input-border-width__error--hover: 0.125rem;
+  --input-border-width__error--active: 0.125rem;
+  --input-border-inset: inset;
+  --input-border-inset--hover: ;
+  --input-border-inset--active: ;
+  --input-border-inset--focus: ;
+  --input-border-inset--disabled: inset;
+  --input-border-radius: var(--input-border-radius--default);
+  --input-border-radius--default: var(--token-radius-sm);
+}
+
+.dnb-input {
+  --input-font-size: var(--font-size-basis);
+  --input-font-size--small: var(--font-size-basis);
+  --input-font-size--medium: var(--font-size-basis);
+  --input-font-size--large: var(--font-size-medium);
+  --input-padding: 1rem;
+  --input-padding--small: 1rem;
+  --input-padding--medium: 1rem;
+  --input-padding--large: 1rem;
+  --input-height: 2rem;
+  --input-height--small: 1.5rem;
+  --input-height--medium: 2.5rem;
+  --input-height--large: 3rem;
+  --input-height-current: var(--input-height);
+  --input-background-color: var(--token-color-background-neutral);
+  --input-background-color--disabled: var(
+    --token-color-background-neutral-subtle
+  );
+  --input-color-text: var(--token-color-text-neutral);
+  --input-color-text--disabled: var(
+    --token-color-text-neutral-alternative
+  ); // TODO: not defined in figma: Designs only define placeholder disabled text color.
+
+  --input-color-placeholder: var(--token-color-text-neutral-alternative);
+  --input-color-placeholder--disabled: var(
+    --token-color-text-action-disabled
+  );
+
+  color: var(--input-color-text);
+
+  display: inline-flex;
+  align-items: center;
+
+  font-size: var(--input-font-size--small);
+  line-height: var(--input-height);
+  text-align: left;
+
+  &__inner {
+    display: inline-flex;
+    flex-direction: column;
+
+    width: auto;
+
+    color: inherit;
+  }
+
+  &__shell {
+    position: relative;
+    background-color: var(--input-background-color);
+
+    display: flex;
+    align-items: center;
+
+    color: inherit;
+    border: none;
+  }
+
+  &__row {
+    display: inline-flex;
+    align-items: center; // Safari gets wired if we use "baseline"
+  }
+
+  &__input {
+    border: none;
+    outline: none;
+    word-break: normal;
+
+    position: relative;
+    z-index: 2; // to make sure we are over the placeholder
+
+    // hide the clear button on input type="search"
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+
+    // change file type appearance on type="file"
+    &::-webkit-file-upload-button {
+      outline: none;
+      margin-left: calc(var(--input-padding) * -1);
+      margin-right: calc(var(--input-padding) / 4);
+      padding-left: var(--input-padding);
+      padding-right: calc(var(--input-padding) / 4);
+    }
+
+    // change file type appearance on type="file"
+    &:not([disabled])::-webkit-file-upload-button {
+      color: var(--token-color-component-button-text-action);
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(
+          --token-color-background-action-hover-subtle
+        );
+        color: var(--token-color-component-button-text-action-hover);
+      }
+      &:active {
+        background-color: var(
+          --token-color-background-action-pressed-subtle
+        );
+        color: var(--token-color-text-action-pressed);
+      }
+    }
+  }
+
+  &__input[disabled] {
+    user-select: none; // Safari / Touch fix
+    opacity: 1; // iOS fix
+  }
+
+  &__shell,
+  &__input {
+    height: var(--input-height);
+    border-radius: var(--input-border-radius);
+  }
+
+  &__placeholder,
+  &__input {
+    width: 100%; // to get overflow working properly
+    padding-left: var(--input-padding);
+    padding-right: var(
+      --input-padding
+    ); // we may expand things because of the ellipsis
+  }
+
+  &__placeholder,
+  &__input,
+  input#{&}__input // Safari fix
+  {
+    // reset browser styling
+    padding-top: 0; // Safari fix
+    padding-bottom: 0; // Safari fix
+
+    color: inherit;
+    background-color: transparent;
+
+    // because we inherit the size on the input (reset.css)
+    font-size: var(--input-font-size);
+
+    // because we inherit the size on the input (reset.css)
+    line-height: inherit; // Safari fix
+  }
+
+  &__placeholder {
+    pointer-events: none;
+
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+
+    // NB: We may consider moving this part to include &__input
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--input-color-placeholder);
+  }
+
+  // - Border outline handling
+  &__border {
+    display: flex;
+
+    border-radius: var(--input-border-radius);
+
+    @include utilities.fakeBorder(
+      var(--b-color, var(--input-border-color)),
+      var(
+        --b-width,
+        var(--input-border-width, var(--input-border-width--default))
+      ),
+      var(--b-inset, var(--input-border-inset, inset))
+    );
+  }
+  &--disabled &__border {
+    // Overwrite the border
+    @include utilities.fakeBorder(
+      var(--input-border-color--disabled),
+      var(--input-border-width--disabled),
+      var(--input-border-inset--disabled, inset)
+    );
+  }
+  &__border:focus-within {
+    --b-color: var(--input-border-color--active);
+    --b-width: var(--input-border-width--active);
+    --b-inset: var(--input-border-inset--active);
+  }
+  &__border:hover,
+  &__border.hover {
+    --b-color: var(--input-border-color--hover);
+    --b-width: var(--input-border-width--hover);
+    --b-inset: var(--input-border-inset--hover);
+  }
+
+  &__border:has(#{&}__input:autofill) {
+    --b-color: var(--input-border-color);
+    --b-inset: var(--input-border-inset--active);
+  }
+  &__status--error &__border:has(#{&}__input:autofill) {
+    --b-color: var(--input-border-color__error);
+  }
+
+  &__status--error &__border {
+    --b-color: var(--input-border-color__error);
+    --b-width: var(--input-border-width__error);
+  }
+  &__status--error &__border:focus-within {
+    --b-color: var(--input-border-color__error--active);
+    --b-width: var(--input-border-width__error--active);
+    --b-inset: var(--input-border-inset--active);
+  }
+  &__status--error &__border:hover,
+  &__status--error &__border:hover:has(#{&}__input:autofill),
+  &__status--error &__border.hover {
+    --b-color: var(--input-border-color__error);
+    --b-width: var(--input-border-width__error--hover);
+    --b-inset: var(--input-border-inset--hover);
+  }
+  html[data-whatinput='keyboard'] &__border:focus-within {
+    --b-color: var(--input-border-color--focus);
+    --b-width: var(--input-border-width--focus);
+    --b-inset: var(--input-border-inset--focus);
+  }
+  html[data-whatinput='keyboard'] &__status--error &__border:focus-within {
+    --b-color: var(--input-border-color__error--focus);
+    --b-width: var(--input-border-width--focus);
+    --b-inset: var(--input-border-inset--focus);
+  }
+
+  // centering type="file" - here we can actually keep it as pixels
+  input#{&}__input[type='file'] {
+    line-height: calc(var(--input-height) - 2px);
+  }
+
+  &--has-submit-element &__placeholder,
+  &--has-submit-element &__input,
+  &--has-clear-button &__placeholder,
+  &--has-clear-button &__input {
+    padding-right: calc(var(--input-padding) * 2.5);
+  }
+
+  // Because of password managers
+  &--password &__placeholder,
+  &--password &__input {
+    margin-right: 2.5rem;
+    padding-right: 0;
+  }
+
+  &--password &__placeholder {
+    padding-right: 4rem;
+  }
+
+  &--password &__input {
+    font-family: var(--font-family-monospace);
+  }
+
+  &__suffix {
+    color: inherit;
+  }
+
+  &__submit-element {
+    z-index: 3; // over placeholder
+
+    margin-left: calc(var(--input-height) * -1);
+    line-height: var(--line-height-basis);
+
+    .dnb-button--input-button {
+      width: var(--input-height);
+      height: var(--input-height);
+      line-height: var(--input-height);
+    }
+  }
+
+  &__submit-button {
+    position: relative;
+
+    &__button {
+      // For now we don't support a button on the left side
+      border-radius: 0 var(--input-border-radius--default)
+        var(--input-border-radius--default) 0;
+    }
+  }
+
+  > .dnb-form-label {
+    line-height: var(--line-height-basis);
+  }
+
+  @include utilities.formLabelWrap();
+
+  &:not(&--vertical)[class*='__status'] {
+    align-items: flex-start;
+
+    & > .dnb-form-label {
+      // vertical align the current font
+      margin-top: 0.25rem;
+    }
+  }
+
+  &--small {
+    --input-height-current: var(--input-height--small);
+
+    line-height: var(--input-height--small);
+
+    .dnb-input__shell,
+    .dnb-input__input {
+      height: var(--input-height--small);
+    }
+
+    .dnb-input__placeholder,
+    .dnb-input__input {
+      padding-left: var(--input-padding--small);
+      padding-right: var(--input-padding--small);
+      font-size: var(--input-font-size--small);
+    }
+
+    .dnb-input__submit-element {
+      margin-left: calc(var(--input-height--small) * -1);
+
+      .dnb-button--input-button {
+        width: var(--input-height--small);
+        height: var(--input-height--small);
+        line-height: var(--input-height--small);
+      }
+    }
+  }
+  &--small#{&}--has-submit-element &__placeholder,
+  &--small#{&}--has-submit-element &__input,
+  &--small#{&}--has-clear-button &__placeholder,
+  &--small#{&}--has-clear-button &__input {
+    padding-right: calc(var(--input-padding--small) * 2);
+  }
+
+  &--medium {
+    --input-height-current: var(--input-height--medium);
+
+    line-height: var(--input-height--medium);
+
+    .dnb-input__shell,
+    .dnb-input__input {
+      height: var(--input-height--medium);
+    }
+
+    .dnb-input__placeholder,
+    .dnb-input__input {
+      padding-left: var(--input-padding--medium);
+      padding-right: var(--input-padding--medium);
+      font-size: var(--input-font-size--medium);
+    }
+
+    .dnb-input__submit-element {
+      margin-left: calc(var(--input-height--medium) * -1);
+
+      .dnb-button--input-button {
+        width: var(--input-height--medium);
+        height: var(--input-height--medium);
+        line-height: var(--input-height--medium);
+      }
+    }
+  }
+  &--medium#{&}--has-submit-element &__placeholder,
+  &--medium#{&}--has-submit-element &__input,
+  &--medium#{&}--has-clear-button &__placeholder,
+  &--medium#{&}--has-clear-button &__input {
+    padding-right: calc(var(--input-padding--medium) * 3);
+  }
+
+  &--large {
+    --input-height-current: var(--input-height--large);
+
+    line-height: var(--input-height--large);
+
+    .dnb-input__shell,
+    .dnb-input__input {
+      height: var(--input-height--large);
+    }
+
+    .dnb-input__placeholder,
+    .dnb-input__input {
+      padding-left: var(--input-padding--large);
+      padding-right: var(--input-padding--large);
+      font-size: var(--input-font-size--large);
+    }
+
+    .dnb-input__submit-element {
+      margin-left: calc(var(--input-height--large) * -1);
+
+      .dnb-button--input-button {
+        width: var(--input-height--large);
+        height: var(--input-height--large);
+        line-height: var(--input-height--large);
+      }
+    }
+  }
+  &--large#{&}--has-submit-element &__placeholder,
+  &--large#{&}--has-submit-element &__input,
+  &--large#{&}--has-clear-button &__placeholder,
+  &--large#{&}--has-clear-button &__input {
+    padding-right: calc(var(--input-padding--large) * 3.5);
+  }
+  &--large#{&}--has-clear-button:not(#{&}--has-submit-element)
+    .dnb-input__submit-element {
+    margin-left: calc(var(--input-height--large) + 0.5rem * -1);
+  }
+
+  &__align--center &__placeholder,
+  &__align--center &__input {
+    text-align: center;
+  }
+
+  &__align--right &__placeholder,
+  &__align--right &__input {
+    text-align: right;
+  }
+
+  // Input clear button styles
+  &--clear.dnb-input__submit-element {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease-in-out;
+
+    .dnb-button {
+      width: var(--input-height--small);
+      height: var(--input-height--small);
+
+      .dnb-button__icon {
+        margin: auto;
+      }
+
+      html:not([data-whatintent='touch'])
+        &:not(.dnb-button--has-text):hover[disabled] {
+        cursor: default;
+      }
+    }
+  }
+
+  &--small &--clear.dnb-input__submit-element {
+    .dnb-button {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &--medium &--clear,
+  &--large &--clear {
+    &.dnb-input__submit-element {
+      .dnb-button {
+        width: var(--input-height--small);
+        height: var(--input-height--small);
+      }
+    }
+  }
+  &[data-has-content='false'] {
+    --input-border-color__error--active: var(--input-border-color--active);
+    --input-border-color__error--focus: var(--input-border-color--focus);
+  }
+
+  &[data-has-content='true'] &--clear {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &--has-submit-element &--clear.dnb-input__submit-element {
+    margin-right: 2.5rem;
+  }
+  &--small#{&}--has-submit-element &--clear.dnb-input__submit-element {
+    margin-right: 2rem;
+  }
+  &--medium#{&}--has-submit-element &--clear.dnb-input__submit-element {
+    margin-right: 3rem;
+  }
+  &--large#{&}--has-submit-element &--clear.dnb-input__submit-element {
+    margin-right: 3.5rem;
+  }
+
+  &__inner > .dnb-form-status {
+    order: 2;
+    margin-top: 0.5rem;
+  }
+
+  &--vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  // make full width
+  &--stretch {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  &--stretch & {
+    &__inner {
+      flex-grow: 1;
+    }
+
+    &__inner,
+    &__shell {
+      width: 100%;
+    }
+  }
+
+  // With disabled state
+  &[data-input-state='disabled'] {
+    --input-color-text: var(--input-color-text--disabled);
+    --input-color-placeholder: var(--input-color-placeholder--disabled);
+
+    .dnb-input__shell {
+      &,
+      .dnb-icon {
+        color: var(--input-color-text--disabled);
+      }
+      -webkit-text-fill-color: currentcolor;
+
+      background-color: var(--input-background-color--disabled);
+    }
+  }
+
+  &--stretch .dnb-form-label + &__inner {
+    width: auto;
+  }
+  &--vertical#{&}--stretch &__inner {
+    width: 100%;
+  }
+
+  // Icon
+  &__icon {
+    order: 0;
+    position: absolute;
+    z-index: 2; // to ensure its still visible on autofill
+    left: 1rem;
+    right: auto;
+
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
+    color: var(--token-color-icon-action);
+  }
+
+  &__status--error &__icon {
+    color: var(--token-color-icon-error);
+  }
+
+  &--icon-position-right &__icon {
+    order: 1;
+    left: auto;
+    right: 1rem;
+  }
+  &--icon-position-left#{&}--has-icon &__input,
+  &--icon-position-left#{&}--has-icon &__placeholder {
+    padding-left: 2.5rem;
+  }
+  &--icon-position-right#{&}--has-icon &__input,
+  &--icon-position-right#{&}--has-icon &__placeholder {
+    padding-right: 2.5rem;
+  }
+  &--icon-size-medium#{&}--icon-position-left#{&}--has-icon &__input,
+  &--icon-size-medium#{&}--icon-position-left#{&}--has-icon
+    &__placeholder {
+    padding-left: 3rem;
+  }
+  &--icon-size-medium#{&}--icon-position-right#{&}--has-icon &__input,
+  &--icon-size-medium#{&}--icon-position-right#{&}--has-icon
+    &__placeholder {
+    padding-right: 3rem;
+  }
+
+  // When an icon is positioned to the right together with a submit button,
+  // place the icon to the left of the button so they don't overlap.
+  &--icon-position-right#{&}--has-submit-element &__icon {
+    right: calc(var(--input-height-current) + 1rem);
+  }
+
+  // Make room for both the icon and the submit button
+  &--icon-position-right#{&}--has-icon#{&}--has-submit-element &__input,
+  &--icon-position-right#{&}--has-icon#{&}--has-submit-element
+    &__placeholder {
+    padding-right: calc(var(--input-height-current) + 2.5rem);
+  }
+
+  html[data-visual-test] &__input {
+    caret-color: var(--token-color-background-neutral);
+  }
+
+  &[data-input-state='focus'] &__placeholder {
+    display: none;
+  }
+
+  &--keep-placeholder[data-input-state='focus'] &__placeholder {
+    display: block;
+    color: var(--input-color-placeholder);
+  }
+
+  .dnb-responsive-component & {
+    @include utilities.allBelow(small) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      margin-bottom: 0.5rem;
+
+      // helps to stay in alignment with suffix
+      &__row {
+        align-items: flex-start;
+      }
+
+      & > .dnb-form-label {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}

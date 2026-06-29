@@ -1,0 +1,87 @@
+---
+showTabs: true
+---
+
+import * as Examples from './Examples'
+
+## Demos
+
+### Default border
+
+<Examples.Default />
+
+### Stack
+
+When `stack` is set to `true`, the Card will add a gap between its children and stretch them to the full.
+
+For [form components](/uilib/extensions/forms/), you should use [Form.Card](/uilib/extensions/forms/Form/Card/) instead of the original Card component.
+
+When `stack` is set to `true`, the Card will add a gap between its children and stretch them to the full.
+
+<Examples.Stack />
+
+### With form fields
+
+When using Eufemia Forms, you may want to use [Form.Card](/uilib/extensions/forms/Form/Card/) instead of the original Card component.
+
+<Examples.WithFormFields />
+
+### Nested Cards
+
+Nested cards have `responsive={false}` by default and will not behave responsive.
+
+<Examples.NestedCards />
+
+### With drop shadow
+
+<Examples.WithDropShadow />
+
+## With `outset`
+
+When using `outset`, the Card will break out of the layout container.
+On small screens (mobile) the outset is removed.
+
+<Examples.WithOutset />
+
+### Without padding
+
+<Examples.WithoutPadding />
+
+### With nested Section
+
+Card components need to have `stack={true}` or `align="stretch"` in order to stretch its children components.
+
+<Examples.WithNestedSection />
+
+### With Table
+
+<Examples.WithTable />
+
+### With Grid
+
+Grid wraps the Cards nicely on smaller screens.
+
+<Examples.WithGrid />
+
+### With Flex
+
+While Flex has the horizontal direction, it uses rowGap when wrapping. So it's the container spacing the Cards then. This is not ideal, because the Cards should ideally have no gap, like in the Grid example above.
+
+<Examples.WithFlex />
+
+<VisibleWhenVisualTest>
+  <Examples.WithTableOutline />
+  <Examples.InColoredSection />
+</VisibleWhenVisualTest>
+
+## With `backgroundColor` and `outline`
+
+<Examples.CustomBackgroundColorAndOutline />
+
+### Interactive Cards
+
+Use `Card.Action` to make a Card clickable or a link. Pass `onClick` for a button-like card, or `href`/`to` for a link card. Both variants get hover, focus, and keyboard styles automatically.
+
+For custom routing (e.g. react-router), pass a router `Link` via the `element` prop on `Card.Action`.
+
+<Examples.InteractiveCards />
