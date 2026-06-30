@@ -180,29 +180,15 @@ Custom:
 -
 
 ```css
---color-amber-50: oklch(98.7% 0.022 95.277);
---color-amber-100: oklch(96.2% 0.059 95.617);
---color-amber-200: oklch(92.4% 0.12 95.746);
---color-amber-300: oklch(87.9% 0.169 91.605);
---color-amber-400: oklch(82.8% 0.189 84.429);
---color-amber-500: oklch(76.9% 0.188 70.08);
---color-amber-600: oklch(66.6% 0.179 58.318);
---color-amber-700: oklch(55.5% 0.163 48.998);
---color-amber-800: oklch(47.3% 0.137 46.201);
---color-amber-900: oklch(41.4% 0.112 45.904);
---color-amber-950: oklch(27.9% 0.077 45.635);
-
---color-yellow-50: oklch(98.7% 0.026 102.212);
---color-yellow-100: oklch(97.3% 0.071 103.193);
---color-yellow-200: oklch(94.5% 0.129 101.54);
---color-yellow-300: oklch(90.5% 0.182 98.111);
---color-yellow-400: oklch(85.2% 0.199 91.936);
---color-yellow-500: oklch(79.5% 0.184 86.047);
---color-yellow-600: oklch(68.1% 0.162 75.834);
---color-yellow-700: oklch(55.4% 0.135 66.442);
---color-yellow-800: oklch(47.6% 0.114 61.907);
---color-yellow-900: oklch(42.1% 0.095 57.708);
---color-yellow-950: oklch(28.6% 0.066 53.813);
+--color-all-year-deep-navy: #042540;
+--color-all-year-blue-mist: #6e97ab;
+--color-all-year-terracotta: #b75e3d;
+--color-all-year-teal: #2e7275;
+--color-all-year-white: #ffffff;
+--color-all-year-clay: #b77050;
+--color-all-year-pine: #26453a;
+--color-all-year-moss: #516f55;
+--color-all-year-linen: #e6ddcd;
 
 --color-maritime-50: oklch(0.97 0.008 279.42);
 --color-maritime-100: oklch(0.92 0.015 279.42);
@@ -212,7 +198,7 @@ Custom:
 --color-maritime-500: oklch(0.54 0.036 279.42);
 --color-maritime-600: oklch(0.44 0.036 279.42);
 --color-maritime-700: oklch(0.35 0.036 279.42);
---color-maritime-800: oklch(0.2884 0.0366 279.42);
+--color-maritime-800: #27283d;
 --color-maritime-900: oklch(0.2 0.03 279.42);
 --color-maritime-950: oklch(0.12 0.02 279.42);
 

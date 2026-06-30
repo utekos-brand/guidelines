@@ -401,6 +401,7 @@ function buildCustomPalette(): ThemePalette {
 
 function createPlanPaletteGroups({ includeMissing }: { includeMissing: boolean }) {
   const planVars = parseCustomProperties(readRepoFile("PLAN.md"));
+  const paletteVars = parseCustomProperties(readRepoFile("styles/tokens/palette.css"));
 
   const groups: ThemePaletteGroup[] = [
     createGroupFromNames(
@@ -423,16 +424,20 @@ function createPlanPaletteGroups({ includeMissing }: { includeMissing: boolean }
 
   groups.push(
     createGroupFromNames(
-      "plan-all-year-amber",
-      "All Year Pallet - Amber",
-      planScaleNames("--color-amber"),
-      planVars,
-    ),
-    createGroupFromNames(
-      "plan-all-year-yellow",
-      "All Year Pallet - Yellow",
-      planScaleNames("--color-yellow"),
-      planVars,
+      "plan-all-year-palette",
+      "All Year Palette",
+      [
+        "--color-all-year-deep-navy",
+        "--color-all-year-blue-mist",
+        "--color-all-year-terracotta",
+        "--color-all-year-teal",
+        "--color-all-year-white",
+        "--color-all-year-clay",
+        "--color-all-year-pine",
+        "--color-all-year-moss",
+        "--color-all-year-linen",
+      ],
+      paletteVars,
     ),
     createGroupFromNames("plan-teal", "Teal", planScaleNames("--color-teal"), planVars),
     createGroupFromNames(

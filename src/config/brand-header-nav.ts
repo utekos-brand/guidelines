@@ -4,6 +4,7 @@ export type BrandHeaderNavItem = {
   label: string;
   href: Route;
   matchPrefix: string;
+  variant?: "identity";
 };
 
 export const brandHeaderNavItems: BrandHeaderNavItem[] = [
@@ -11,6 +12,7 @@ export const brandHeaderNavItems: BrandHeaderNavItem[] = [
     label: "Identitet",
     href: "/identitet",
     matchPrefix: "/identitet",
+    variant: "identity",
   },
   {
     label: "Ressurser",

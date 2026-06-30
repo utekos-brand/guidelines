@@ -24,7 +24,7 @@
   --color-maritime-500: oklch(0.54 0.036 279.42);
   --color-maritime-600: oklch(0.44 0.036 279.42);
   --color-maritime-700: oklch(0.35 0.036 279.42);
-  --color-maritime-800: oklch(0.2884 0.0366 279.42);
+  --color-maritime-800: #27283d;
   --color-maritime-900: oklch(0.2 0.03 279.42);
   --color-maritime-950: oklch(0.12 0.02 279.42);
 
@@ -41,7 +41,18 @@
   --color-maritime-secondary-900: #073f3f;
   --color-maritime-secondary-950: #042525;
 
-  /* All Year Palette — Amber */
+  /* All Year Palette */
+  --color-all-year-deep-navy: #042540;
+  --color-all-year-blue-mist: #6e97ab;
+  --color-all-year-terracotta: #b75e3d;
+  --color-all-year-teal: #2e7275;
+  --color-all-year-white: #ffffff;
+  --color-all-year-clay: #b77050;
+  --color-all-year-pine: #26453a;
+  --color-all-year-moss: #516f55;
+  --color-all-year-linen: #e6ddcd;
+
+  /* Warm signal accents */
   --color-amber-50: oklch(98.7% 0.022 95.277);
   --color-amber-100: oklch(96.2% 0.059 95.617);
   --color-amber-200: oklch(92.4% 0.12 95.746);

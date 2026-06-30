@@ -89,22 +89,20 @@ function ThemeColorGroup({ theme, group }: { theme: ThemeDocId; group: ThemePale
 }
 
 function ThemeColorTile({ color }: { color: ThemePaletteColor }) {
+  const displayValue = extractHex(color.displayValue) ?? color.displayValue;
+
   return (
     <a
       href={`#${color.id}-details`}
       className="border-border bg-panel text-foreground hover:border-primary focus-visible:ring-ring group block min-w-0 overflow-hidden border no-underline transition focus-visible:ring-2 focus-visible:outline-none"
+      aria-label={`${color.label}, ${displayValue}`}
     >
       <span
         aria-hidden="true"
         className="block aspect-4/3 w-full"
         style={{ backgroundColor: color.color }}
       />
-      <span className="block px-3 py-3">
-        <span className="block truncate text-sm font-semibold">{color.label}</span>
-        <span className="text-muted-foreground mt-1 block truncate font-mono text-xs">
-          {extractHex(color.displayValue) ?? color.displayValue}
-        </span>
-      </span>
+      <span className="sr-only">{`${color.label}, ${displayValue}`}</span>
     </a>
   );
 }
@@ -123,12 +121,12 @@ function ThemeTokenDetails({ group }: { group: ThemePaletteGroup }) {
           <article
             key={color.id}
             id={`${color.id}-details`}
-            className="border-border bg-panel scroll-mt-28 border px-4 py-4"
+            className="border-border bg-panel scroll-mt-28 rounded-xl border px-4 py-4"
           >
-            <div className="grid gap-4 sm:grid-cols-[5rem_minmax(0,1fr)]">
+            <div className="grid gap-4 rounded-lg sm:grid-cols-[5rem_minmax(0,1fr)]">
               <span
                 aria-hidden="true"
-                className="border-border block aspect-square w-20 border"
+                className="border-border block aspect-square w-20 rounded-lg border"
                 style={{ backgroundColor: color.color }}
               />
               <div className="min-w-0">

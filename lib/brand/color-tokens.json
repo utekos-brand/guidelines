@@ -1432,16 +1432,16 @@
           "cssVar": "--color-maritime-800",
           "name": "maritime-800",
           "label": "Maritime 800",
-          "value": "oklch(0.2884 0.0366 279.42)",
-          "resolvedValue": "oklch(0.2884 0.0366 279.42)",
-          "hex": "#27293d",
+          "value": "#27283d",
+          "resolvedValue": "#27283d",
+          "hex": "#27283d",
           "hexVar": null,
-          "rgb": "rgb(39 41 61)",
+          "rgb": "rgb(39 40 61)",
           "oklab": "oklab(0.29 0.01 -0.04)",
-          "oklch": "oklch(0.29 0.04 279.42)",
+          "oklch": "oklch(0.2859 0.0384 281.57)",
           "lab": "lab(17.1 3.43 -13.18)",
           "lch": "lch(17.1 13.62 284.59)",
-          "hsl": "hsl(234.5 22% 19.6%)",
+          "hsl": "hsl(237.3 22% 19.6%)",
           "cmyk": {
             "value": "cmyk(36.1% 32.8% 0% 76.1%)",
             "source": "converted_colors.csv"
@@ -1455,7 +1455,7 @@
           "matchedCsv": true,
           "source": {
             "file": "src/color-3.css",
-            "rawValue": "oklch(0.2884 0.0366 279.42)"
+            "rawValue": "#27283d"
           },
           "relationships": [
             {
@@ -8650,16 +8650,16 @@
           "cssVar": "--color-maritime-800",
           "name": "maritime-800",
           "label": "Maritime 800",
-          "value": "oklch(0.2884 0.0366 279.42)",
-          "resolvedValue": "oklch(0.2884 0.0366 279.42)",
-          "hex": "#27293d",
+          "value": "#27283d",
+          "resolvedValue": "#27283d",
+          "hex": "#27283d",
           "hexVar": null,
-          "rgb": "rgb(39 41 61)",
+          "rgb": "rgb(39 40 61)",
           "oklab": "oklab(0.29 0.01 -0.04)",
-          "oklch": "oklch(0.29 0.04 279.42)",
+          "oklch": "oklch(0.2859 0.0384 281.57)",
           "lab": "lab(17.1 3.43 -13.18)",
           "lch": "lch(17.1 13.62 284.59)",
-          "hsl": "hsl(234.5 22% 19.6%)",
+          "hsl": "hsl(237.3 22% 19.6%)",
           "cmyk": {
             "value": "cmyk(36.1% 32.8% 0% 76.1%)",
             "source": "converted_colors.csv"
@@ -8673,7 +8673,7 @@
           "matchedCsv": true,
           "source": {
             "file": "src/color-3.css",
-            "rawValue": "oklch(0.2884 0.0366 279.42)"
+            "rawValue": "#27283d"
           },
           "relationships": [
             {

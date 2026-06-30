@@ -62,7 +62,7 @@ export function BrandColorCopySwatch({
       <button
         type="button"
         className={cn(
-          "group border-border/80 focus-visible:ring-ring focus-visible:ring-offset-background relative block border transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+          "group border-border/80 focus-visible:ring-ring focus-visible:ring-offset-background relative block rounded-lg border transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
           valueToCopy ? "hover:border-foreground/55 cursor-copy" : "cursor-not-allowed opacity-70",
           sizeClassName[size],
           className,

@@ -3,7 +3,7 @@
 import { Fragment, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Grid2X2, X } from "lucide-react";
+import { ChevronRight, Grid2X2, X } from "lucide-react";
 
 import { Sidebar, SidebarContent, useSidebar } from "@/components/ui/sidebar";
 import {
@@ -129,7 +129,7 @@ export function BrandSidebar() {
                         onClick={() => toggleAccordion(id, isOpen)}
                       >
                         <span>{accordion.title}</span>
-                        <ChevronDown
+                        <ChevronRight
                           className="brand-sidebar-chevron"
                           data-open={isOpen ? "" : undefined}
                           aria-hidden="true"

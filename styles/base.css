@@ -65,6 +65,21 @@
     object-fit: contain;
   }
 
+  .brand-header-button-identity {
+    border: 1px solid color-mix(in oklab, var(--foreground) 18%, transparent) !important;
+    background: var(--foreground) !important;
+    color: var(--background) !important;
+    box-shadow:
+      0 1px 0 color-mix(in oklab, var(--background) 28%, transparent) inset,
+      0 0.75rem 1.75rem color-mix(in oklab, var(--foreground) 12%, transparent);
+  }
+
+  .brand-header-button-identity:hover,
+  .brand-header-button-identity[data-active] {
+    background: color-mix(in oklab, var(--foreground) 88%, var(--background)) !important;
+    color: var(--background) !important;
+  }
+
   .brand-sidebar-container {
     inset-block-start: var(--brand-header-height) !important;
     block-size: calc(100svh - var(--brand-header-height)) !important;
@@ -160,7 +175,7 @@
   }
 
   .brand-sidebar-chevron[data-open] {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
   }
 
   .brand-sidebar-list {

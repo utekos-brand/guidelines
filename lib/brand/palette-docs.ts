@@ -61,7 +61,7 @@ const maritimeScale: ScaleColorInput[] = [
   { step: 500, value: "oklch(0.54 0.036 279.42)" },
   { step: 600, value: "oklch(0.44 0.036 279.42)" },
   { step: 700, value: "oklch(0.35 0.036 279.42)" },
-  { step: 800, value: "oklch(0.2884 0.0366 279.42)" },
+  { step: 800, value: "#27283d" },
   { step: 900, value: "oklch(0.2 0.03 279.42)" },
   { step: 950, value: "oklch(0.12 0.02 279.42)" },
 ];
@@ -80,32 +80,88 @@ const maritimeSecondaryScale: ScaleColorInput[] = [
   { step: 950, value: "#042525" },
 ];
 
-const amberScale: ScaleColorInput[] = [
-  { step: 50, value: "oklch(98.7% 0.022 95.277)" },
-  { step: 100, value: "oklch(96.2% 0.059 95.617)" },
-  { step: 200, value: "oklch(92.4% 0.12 95.746)" },
-  { step: 300, value: "oklch(87.9% 0.169 91.605)" },
-  { step: 400, value: "oklch(82.8% 0.189 84.429)" },
-  { step: 500, value: "oklch(76.9% 0.188 70.08)" },
-  { step: 600, value: "oklch(66.6% 0.179 58.318)" },
-  { step: 700, value: "oklch(55.5% 0.163 48.998)" },
-  { step: 800, value: "oklch(47.3% 0.137 46.201)" },
-  { step: 900, value: "oklch(41.4% 0.112 45.904)" },
-  { step: 950, value: "oklch(27.9% 0.077 45.635)" },
-];
-
-const yellowScale: ScaleColorInput[] = [
-  { step: 50, value: "oklch(98.7% 0.026 102.212)" },
-  { step: 100, value: "oklch(97.3% 0.071 103.193)" },
-  { step: 200, value: "oklch(94.5% 0.129 101.54)" },
-  { step: 300, value: "oklch(90.5% 0.182 98.111)" },
-  { step: 400, value: "oklch(85.2% 0.199 91.936)" },
-  { step: 500, value: "oklch(79.5% 0.184 86.047)" },
-  { step: 600, value: "oklch(68.1% 0.162 75.834)" },
-  { step: 700, value: "oklch(55.4% 0.135 66.442)" },
-  { step: 800, value: "oklch(47.6% 0.114 61.907)" },
-  { step: 900, value: "oklch(42.1% 0.095 57.708)" },
-  { step: 950, value: "oklch(28.6% 0.066 53.813)" },
+const allYearColors: PaletteDocColor[] = [
+  color({
+    id: "all-year-deep-navy",
+    label: "Deep Navy",
+    token: "--color-all-year-deep-navy",
+    value: "#042540",
+    description: "Dyp, stabil grunnfarge for mørke flater, hierarki og premium tyngde.",
+    psychology:
+      "Navy gir autoritet og ro uten å bli sort. Den passer som bærende kontrast mot de varmere naturtonene.",
+  }),
+  color({
+    id: "all-year-blue-mist",
+    label: "Blue Mist",
+    token: "--color-all-year-blue-mist",
+    value: "#6e97ab",
+    description: "Kjølig mellomtone for luftige støtteflater, illustrasjon og sekundære markører.",
+    psychology:
+      "Blågrå toner oppleves rolige og oversiktlige. De demper varme farger og gjør paletten mer helårsrobust.",
+  }),
+  color({
+    id: "all-year-terracotta",
+    label: "Terracotta",
+    token: "--color-all-year-terracotta",
+    value: "#b75e3d",
+    description: "Varm aksent for tydelige highlights, kampanjedetaljer og små callouts.",
+    psychology:
+      "Terracotta gir varme, jordlighet og menneskelighet. Den bør brukes med kontroll for å beholde roen.",
+  }),
+  color({
+    id: "all-year-teal",
+    label: "Teal",
+    token: "--color-all-year-teal",
+    value: "#2e7275",
+    description: "Maritim støttefarge for aktive markører, lenkeflater og grafiske detaljer.",
+    psychology:
+      "Teal binder blå stabilitet sammen med grønn vitalitet. Den gir energi uten å forlate det maritime.",
+  }),
+  color({
+    id: "all-year-white",
+    label: "White",
+    token: "--color-all-year-white",
+    value: "#ffffff",
+    description: "Ren hvit for kontrast, luft og nøytrale innholdsflater.",
+    psychology:
+      "Hvit gir klarhet og presisjon. I denne paletten bør den balanseres med linen og dype toner for å unngå hardhet.",
+  }),
+  color({
+    id: "all-year-clay",
+    label: "Clay",
+    token: "--color-all-year-clay",
+    value: "#b77050",
+    description: "Mykere varm tone for sekundære highlights, produktflater og illustrasjon.",
+    psychology:
+      "Clay føles mer dempet enn terracotta og kan bære varme over større flater uten å rope.",
+  }),
+  color({
+    id: "all-year-pine",
+    label: "Pine",
+    token: "--color-all-year-pine",
+    value: "#26453a",
+    description: "Dyp grønn for naturforankring, tekstnære markører og rolige mørke moduler.",
+    psychology:
+      "Pine tilfører trygghet, natur og varighet. Den fungerer som jordnær motvekt til blåtonene.",
+  }),
+  color({
+    id: "all-year-moss",
+    label: "Moss",
+    token: "--color-all-year-moss",
+    value: "#516f55",
+    description: "Mellomgrønn for støttegrafikk, badges og lavmælte positive signaler.",
+    psychology:
+      "Moss er stabil og organisk. Den gjør paletten varmere og mer taktil uten å bli sesongspesifikk.",
+  }),
+  color({
+    id: "all-year-linen",
+    label: "Linen",
+    token: "--color-all-year-linen",
+    value: "#e6ddcd",
+    description: "Varm lys base for rolige flater, whitespace og lesbare dokumentasjonssoner.",
+    psychology:
+      "Linen gir en myk, materiell følelse og gjør store lyse flater roligere enn ren hvit.",
+  }),
 ];
 
 const tealScale: ScaleColorInput[] = [
@@ -467,71 +523,54 @@ const paletteDocs: Record<PaletteDocId, PaletteDoc> = {
     shortTitle: "All Year",
     href: "/theme/palettes/all-year-palette" as Route,
     summary:
-      "En varm, sesongrobust støttepalett basert på amber og yellow. Den bør brukes til signaler, highlights og visuell varme — ikke som hovedstruktur.",
-    sourceLabel: "PLAN.md — amber og yellow scales",
+      "En rolig helårspalett med dyp navy, maritime blågrønne toner, varme jordfarger, hvit og linen.",
+    sourceLabel: "Brukerdefinert All Year Palette — 9 faste hex-verdier",
     sourceDetail:
-      "All Year Palette samler de definerte amber- og yellow-verdiene i én dedikert side, slik at de ikke forstyrrer theme-sidene.",
+      "All Year Palette skal vise disse faste verdiene alene. Amber/yellow-signaltoner dokumenteres ikke som All Year-farger.",
     intent:
-      "Skal gi kontrollerte varme aksenter for kampanjer, varsler, highlights og produktkort uten å svekke den maritime grunnidentiteten.",
-    colors: [
-      ...makeScale({
-        idPrefix: "amber",
-        labelPrefix: "Amber",
-        tokenPrefix: "--color-amber",
-        colors: amberScale,
-        psychology:
-          "Amber gir oppmerksomhet, optimisme og varme. Den fungerer best når den brukes som kontrollert signal mot rolige nøytraler.",
-      }),
-      ...makeScale({
-        idPrefix: "yellow",
-        labelPrefix: "Yellow",
-        tokenPrefix: "--color-yellow",
-        colors: yellowScale,
-        psychology:
-          "Yellow oppleves mer direkte og energisk enn amber. Den bør brukes smått og målrettet for å unngå støy.",
-      }),
-    ],
+      "Skal gi en helårsretning som fungerer for brandflater, dokumentasjon, produktkort og visuell rytme uten å føles som kampanjefarger.",
+    colors: allYearColors,
     tokenMappings: [
       token(
         "--token-color-background-warning-subtle",
-        "--color-amber-100",
-        "Subtil warning",
-        "Milde varslingsflater og forklarende bokser.",
+        "--color-all-year-linen",
+        "Varm rolig flate",
+        "Rolige forklaringsbokser og store lyse områder.",
       ),
       token(
         "--token-color-background-warning",
-        "--color-amber-400",
-        "Warning",
-        "Tydelig varsel, badge eller statusmarkør.",
+        "--color-all-year-terracotta",
+        "Varm aksent",
+        "Tydelig highlight, badge eller kampanjedetalj.",
       ),
       token(
         "--token-color-icon-warning",
-        "--color-amber-700",
-        "Warning icon",
+        "--color-all-year-clay",
+        "Varmt ikon",
         "Ikoner som skal signalisere oppmerksomhet uten feiltilstand.",
       ),
       token(
         "--token-color-decorative-second-base",
-        "--color-yellow-400",
-        "Dekorativ energi",
-        "Små grafiske markører og kampanjedetaljer.",
+        "--color-all-year-moss",
+        "Dekorativ støtte",
+        "Små grafiske markører, badges og naturlige detaljer.",
       ),
       token(
         "--token-color-text-warning",
-        "--color-amber-900",
-        "Warning text",
-        "Tekst på lyse warning-flater.",
+        "--color-all-year-deep-navy",
+        "Mørk tekst",
+        "Tekst på lyse all-year-flater.",
       ),
     ],
     usage: [
-      "Bruk amber til varmere og mer beherskede signaler.",
-      "Bruk yellow når elementet faktisk må fange oppmerksomhet raskt.",
-      "Kombiner med Parchment/Cloud Dancer for å holde uttrykket premium og rolig.",
+      "Bruk Deep Navy og Pine til tyngde, struktur og mørke flater.",
+      "Bruk Linen, White og Blue Mist til ro, luft og lesbar dokumentasjon.",
+      "Bruk Terracotta, Clay, Teal og Moss som kontrollerte aksenter.",
     ],
     avoid: [
-      "Ikke bruk yellow som stor bakgrunn bak mye tekst.",
-      "Ikke bland amber og yellow med rød/oransje uten tydelig statuslogikk.",
-      "Ikke bruk varm palett til primær navigasjon med mindre siden er en kampanjevariant.",
+      "Ikke gjør Terracotta og Clay til dominerende navigasjonsfarger samtidig.",
+      "Ikke legg små tekststørrelser på Blue Mist, Moss eller Clay uten kontrastsjekk.",
+      "Ikke bland inn amber/yellow-skalaene på denne siden; de er ikke All Year Palette.",
     ],
   },
   teal: {

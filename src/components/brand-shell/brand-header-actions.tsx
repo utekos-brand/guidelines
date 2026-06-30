@@ -25,7 +25,10 @@ export function BrandHeaderActions() {
                 aria-current={isActive ? "page" : undefined}
                 data-slot="brand-header-button"
                 data-active={isActive ? "" : undefined}
-                className={cn(brandHeaderButtonVariants({ active: isActive }))}
+                className={cn(
+                  brandHeaderButtonVariants({ active: isActive }),
+                  item.variant === "identity" && "brand-header-button-identity",
+                )}
               >
                 {item.label}
               </Link>
