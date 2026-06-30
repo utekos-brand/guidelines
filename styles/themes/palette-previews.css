@@ -1,0 +1,521 @@
+:is(
+  [data-theme="custom"],
+  [data-theme="hovedpalett"],
+  [data-theme="all-year-palette"],
+  [data-theme="primary-blue"],
+  [data-theme="teal"],
+  [data-theme="maritime-monochromatic"],
+  [data-theme="maritime-monochromatic-secondary"]
+)[data-color-mode] {
+  --token-radius-xs: 0.25rem;
+  --token-radius-sm: 0.375rem;
+  --token-radius-md: 0.625rem;
+  --token-radius-lg: 0.875rem;
+  --token-radius-xl: 1.25rem;
+  --token-radius-full: 999px;
+
+  --token-color-background-page-background: var(--palette-page);
+  --token-color-background-neutral: var(--palette-surface);
+  --token-color-background-neutral-subtle: var(--palette-surface-subtle);
+  --token-color-background-action: var(--palette-primary);
+  --token-color-background-action-hover: var(--palette-primary-hover);
+  --token-color-background-action-pressed: var(--palette-primary-hover);
+  --token-color-background-selected-subtle: var(--palette-accent);
+  --token-color-background-warning-subtle: color-mix(
+    in oklab,
+    var(--palette-warning) 22%,
+    var(--palette-page)
+  );
+  --token-color-background-warning: var(--palette-warning);
+  --token-color-background-positive-subtle: color-mix(
+    in oklab,
+    var(--palette-positive) 18%,
+    var(--palette-page)
+  );
+  --token-color-background-positive: var(--palette-positive);
+  --token-color-background-info-subtle: color-mix(
+    in oklab,
+    var(--palette-info) 18%,
+    var(--palette-page)
+  );
+  --token-color-background-info: var(--palette-info);
+  --token-color-background-error-subtle: color-mix(
+    in oklab,
+    var(--palette-error) 16%,
+    var(--palette-page)
+  );
+  --token-color-background-error: var(--palette-error);
+  --token-color-background-inverse: var(--palette-text);
+
+  --token-color-text-neutral: var(--palette-text);
+  --token-color-text-neutral-alternative: var(--palette-text-muted);
+  --token-color-text-neutral-inverse: var(--palette-primary-foreground);
+  --token-color-text-action: var(--palette-primary);
+  --token-color-text-action-hover: var(--palette-primary-hover);
+  --token-color-text-action-pressed: var(--palette-primary-hover);
+  --token-color-text-warning: var(--palette-warning);
+  --token-color-text-positive: var(--palette-positive);
+  --token-color-text-info: var(--palette-info);
+  --token-color-text-error: var(--palette-error);
+
+  --token-color-icon-neutral: var(--palette-text);
+  --token-color-icon-neutral-alternative: var(--palette-text-muted);
+  --token-color-icon-action: var(--palette-primary);
+  --token-color-icon-warning: var(--palette-warning);
+  --token-color-icon-positive: var(--palette-positive);
+  --token-color-icon-info: var(--palette-info);
+  --token-color-icon-error: var(--palette-error);
+
+  --token-color-stroke-neutral: var(--palette-border);
+  --token-color-stroke-neutral-subtle: color-mix(in oklab, var(--palette-border) 72%, transparent);
+  --token-color-stroke-action: var(--palette-primary);
+  --token-color-stroke-action-hover: var(--palette-primary-hover);
+  --token-color-stroke-action-focus: var(--palette-ring);
+  --token-color-stroke-selected: var(--palette-primary);
+  --token-color-stroke-warning: var(--palette-warning);
+  --token-color-stroke-positive: var(--palette-positive);
+  --token-color-stroke-info: var(--palette-info);
+  --token-color-stroke-error: var(--palette-error);
+
+  --token-color-decorative-first-base: var(--palette-chart-1);
+  --token-color-decorative-second-base: var(--palette-chart-2);
+  --token-color-decorative-third-base: var(--palette-chart-3);
+
+  --radius: var(--token-radius-lg);
+  --background: var(--palette-page);
+  --foreground: var(--palette-text);
+  --card: var(--palette-surface);
+  --card-foreground: var(--palette-text);
+  --popover: var(--palette-surface);
+  --popover-foreground: var(--palette-text);
+  --primary: var(--palette-primary);
+  --primary-foreground: var(--palette-primary-foreground);
+  --secondary: var(--palette-surface-subtle);
+  --secondary-foreground: var(--palette-text);
+  --muted: var(--palette-surface-subtle);
+  --muted-foreground: var(--palette-text-muted);
+  --accent: var(--palette-accent);
+  --accent-foreground: var(--palette-accent-foreground);
+  --destructive: var(--palette-error);
+  --destructive-foreground: #ffffff;
+  --border: var(--palette-border);
+  --input: var(--palette-border);
+  --ring: var(--palette-ring);
+  --header-nav-active: var(--palette-primary);
+  --header-nav-active-foreground: var(--palette-primary-foreground);
+  --chart-1: var(--palette-chart-1);
+  --chart-2: var(--palette-chart-2);
+  --chart-3: var(--palette-chart-3);
+  --chart-4: var(--palette-chart-4);
+  --chart-5: var(--palette-chart-5);
+  --sidebar: var(--palette-surface);
+  --sidebar-foreground: var(--palette-text);
+  --sidebar-primary: var(--palette-primary);
+  --sidebar-primary-foreground: var(--palette-primary-foreground);
+  --sidebar-accent: var(--palette-surface-subtle);
+  --sidebar-accent-foreground: var(--palette-text);
+  --sidebar-border: var(--palette-border);
+  --sidebar-ring: var(--palette-ring);
+}
+
+:is(
+  [data-theme="custom"],
+  [data-theme="hovedpalett"],
+  [data-theme="all-year-palette"],
+  [data-theme="primary-blue"],
+  [data-theme="teal"],
+  [data-theme="maritime-monochromatic"],
+  [data-theme="maritime-monochromatic-secondary"]
+)[data-color-mode="light"] {
+  color-scheme: light;
+}
+
+:is(
+  [data-theme="custom"],
+  [data-theme="hovedpalett"],
+  [data-theme="all-year-palette"],
+  [data-theme="primary-blue"],
+  [data-theme="teal"],
+  [data-theme="maritime-monochromatic"],
+  [data-theme="maritime-monochromatic-secondary"]
+)[data-color-mode="dark"] {
+  color-scheme: dark;
+}
+
+/* Custom */
+
+[data-theme="custom"][data-color-mode="light"] {
+  --palette-page: var(--color-cloud-dancer);
+  --palette-surface: #ffffff;
+  --palette-surface-subtle: var(--color-parchment-100);
+  --palette-text: var(--color-havdyp-950);
+  --palette-text-muted: color-mix(in oklab, var(--color-havdyp-950) 68%, transparent);
+  --palette-primary: var(--color-primary-blue-scale-700);
+  --palette-primary-hover: var(--color-primary-blue-scale-800);
+  --palette-primary-foreground: #ffffff;
+  --palette-accent: color-mix(in oklab, var(--color-primary-800) 18%, var(--palette-page));
+  --palette-accent-foreground: var(--color-havdyp-950);
+  --palette-warning: var(--color-amber-400);
+  --palette-positive: var(--color-teal-600);
+  --palette-info: var(--color-primary-800);
+  --palette-error: oklch(0.55 0.18 25);
+  --palette-border: color-mix(in oklab, var(--color-havdyp-950) 18%, transparent);
+  --palette-ring: var(--color-primary-800);
+  --palette-chart-1: var(--color-primary-blue-scale-600);
+  --palette-chart-2: var(--color-primary-800);
+  --palette-chart-3: var(--color-teal-600);
+  --palette-chart-4: var(--color-amber-400);
+  --palette-chart-5: var(--color-iced-apricot);
+}
+
+[data-theme="custom"][data-color-mode="dark"] {
+  --palette-page: var(--color-vargnatt);
+  --palette-surface: var(--color-havdyp-900);
+  --palette-surface-subtle: var(--color-havdyp-800);
+  --palette-text: var(--color-cloud-dancer);
+  --palette-text-muted: color-mix(in oklab, var(--color-cloud-dancer) 72%, transparent);
+  --palette-primary: var(--color-primary-800);
+  --palette-primary-hover: var(--color-primary-blue-scale-300);
+  --palette-primary-foreground: var(--color-havdyp-950);
+  --palette-accent: color-mix(in oklab, var(--color-primary-800) 24%, var(--palette-surface));
+  --palette-accent-foreground: var(--color-cloud-dancer);
+  --palette-warning: var(--color-amber-300);
+  --palette-positive: var(--color-teal-300);
+  --palette-info: var(--color-primary-blue-scale-300);
+  --palette-error: oklch(0.78 0.15 25);
+  --palette-border: color-mix(in oklab, var(--color-cloud-dancer) 18%, transparent);
+  --palette-ring: var(--color-primary-800);
+  --palette-chart-1: var(--color-primary-800);
+  --palette-chart-2: var(--color-primary-blue-scale-300);
+  --palette-chart-3: var(--color-teal-300);
+  --palette-chart-4: var(--color-amber-300);
+  --palette-chart-5: var(--color-iced-apricot);
+}
+
+/* Hovedpalett */
+
+[data-theme="hovedpalett"][data-color-mode="light"] {
+  --palette-page: var(--color-parchment-50);
+  --palette-surface: var(--color-cloud-dancer);
+  --palette-surface-subtle: var(--color-parchment-100);
+  --palette-text: var(--color-havdyp-950);
+  --palette-text-muted: color-mix(in oklab, var(--color-havdyp-950) 70%, transparent);
+  --palette-primary: var(--color-maritime-blue);
+  --palette-primary-hover: var(--color-maritime-700);
+  --palette-primary-foreground: var(--color-cloud-dancer);
+  --palette-accent: var(--color-iced-apricot);
+  --palette-accent-foreground: var(--color-havdyp-950);
+  --palette-warning: var(--color-amber-400);
+  --palette-positive: var(--color-teal-600);
+  --palette-info: var(--color-fjellbla);
+  --palette-error: oklch(0.55 0.18 25);
+  --palette-border: color-mix(in oklab, var(--color-havdyp-950) 16%, transparent);
+  --palette-ring: var(--color-primary-blue-scale-500);
+  --palette-chart-1: var(--color-maritime-blue);
+  --palette-chart-2: var(--color-teal-600);
+  --palette-chart-3: var(--color-amber-400);
+  --palette-chart-4: var(--color-fjellbla);
+  --palette-chart-5: var(--color-iced-apricot);
+}
+
+[data-theme="hovedpalett"][data-color-mode="dark"] {
+  --palette-page: var(--color-havdyp-950);
+  --palette-surface: var(--color-havdyp-900);
+  --palette-surface-subtle: var(--color-havdyp-800);
+  --palette-text: var(--color-cloud-dancer);
+  --palette-text-muted: color-mix(in oklab, var(--color-cloud-dancer) 72%, transparent);
+  --palette-primary: var(--color-maritime-secondary-300);
+  --palette-primary-hover: var(--color-maritime-secondary-200);
+  --palette-primary-foreground: var(--color-havdyp-950);
+  --palette-accent: color-mix(
+    in oklab,
+    var(--color-maritime-secondary-400) 18%,
+    var(--palette-surface)
+  );
+  --palette-accent-foreground: var(--color-cloud-dancer);
+  --palette-warning: var(--color-amber-300);
+  --palette-positive: var(--color-teal-300);
+  --palette-info: var(--color-primary-blue-scale-300);
+  --palette-error: oklch(0.78 0.15 25);
+  --palette-border: color-mix(in oklab, var(--color-cloud-dancer) 14%, transparent);
+  --palette-ring: var(--color-primary-blue-scale-300);
+  --palette-chart-1: var(--color-maritime-secondary-300);
+  --palette-chart-2: var(--color-teal-300);
+  --palette-chart-3: var(--color-amber-300);
+  --palette-chart-4: var(--color-primary-blue-scale-300);
+  --palette-chart-5: var(--color-iced-apricot);
+}
+
+/* All-year palette */
+
+[data-theme="all-year-palette"][data-color-mode="light"] {
+  --palette-page: var(--color-all-year-linen);
+  --palette-surface: var(--color-all-year-white);
+  --palette-surface-subtle: color-mix(
+    in oklab,
+    var(--color-all-year-blue-mist) 20%,
+    var(--color-all-year-linen)
+  );
+  --palette-text: var(--color-all-year-deep-navy);
+  --palette-text-muted: color-mix(in oklab, var(--color-all-year-deep-navy) 68%, transparent);
+  --palette-primary: var(--color-all-year-teal);
+  --palette-primary-hover: var(--color-all-year-deep-navy);
+  --palette-primary-foreground: var(--color-all-year-white);
+  --palette-accent: color-mix(
+    in oklab,
+    var(--color-all-year-terracotta) 20%,
+    var(--color-all-year-linen)
+  );
+  --palette-accent-foreground: var(--color-all-year-deep-navy);
+  --palette-warning: var(--color-all-year-clay);
+  --palette-positive: var(--color-all-year-moss);
+  --palette-info: var(--color-all-year-blue-mist);
+  --palette-error: var(--color-all-year-terracotta);
+  --palette-border: color-mix(in oklab, var(--color-all-year-deep-navy) 20%, transparent);
+  --palette-ring: var(--color-all-year-teal);
+  --palette-chart-1: var(--color-all-year-deep-navy);
+  --palette-chart-2: var(--color-all-year-blue-mist);
+  --palette-chart-3: var(--color-all-year-terracotta);
+  --palette-chart-4: var(--color-all-year-teal);
+  --palette-chart-5: var(--color-all-year-moss);
+}
+
+[data-theme="all-year-palette"][data-color-mode="dark"] {
+  --palette-page: var(--color-all-year-deep-navy);
+  --palette-surface: var(--color-all-year-pine);
+  --palette-surface-subtle: color-mix(
+    in oklab,
+    var(--color-all-year-pine) 72%,
+    var(--color-all-year-deep-navy)
+  );
+  --palette-text: var(--color-all-year-linen);
+  --palette-text-muted: color-mix(in oklab, var(--color-all-year-linen) 72%, transparent);
+  --palette-primary: var(--color-all-year-blue-mist);
+  --palette-primary-hover: var(--color-all-year-teal);
+  --palette-primary-foreground: var(--color-all-year-deep-navy);
+  --palette-accent: color-mix(
+    in oklab,
+    var(--color-all-year-terracotta) 28%,
+    var(--palette-surface)
+  );
+  --palette-accent-foreground: var(--color-all-year-linen);
+  --palette-warning: var(--color-all-year-clay);
+  --palette-positive: var(--color-all-year-moss);
+  --palette-info: var(--color-all-year-blue-mist);
+  --palette-error: var(--color-all-year-terracotta);
+  --palette-border: color-mix(in oklab, var(--color-all-year-linen) 18%, transparent);
+  --palette-ring: var(--color-all-year-blue-mist);
+  --palette-chart-1: var(--color-all-year-blue-mist);
+  --palette-chart-2: var(--color-all-year-terracotta);
+  --palette-chart-3: var(--color-all-year-teal);
+  --palette-chart-4: var(--color-all-year-clay);
+  --palette-chart-5: var(--color-all-year-moss);
+}
+
+/* Primary blue */
+
+[data-theme="primary-blue"][data-color-mode="light"] {
+  --palette-page: var(--color-primary-blue-scale-50);
+  --palette-surface: #ffffff;
+  --palette-surface-subtle: var(--color-primary-blue-scale-100);
+  --palette-text: var(--color-primary-blue-scale-950);
+  --palette-text-muted: color-mix(in oklab, var(--color-primary-blue-scale-950) 68%, transparent);
+  --palette-primary: var(--color-primary-blue-scale-600);
+  --palette-primary-hover: var(--color-primary-blue-scale-700);
+  --palette-primary-foreground: #ffffff;
+  --palette-accent: var(--color-primary-blue-scale-200);
+  --palette-accent-foreground: var(--color-primary-blue-scale-950);
+  --palette-warning: var(--color-amber-400);
+  --palette-positive: var(--color-teal-600);
+  --palette-info: var(--color-primary-blue-scale-500);
+  --palette-error: oklch(0.55 0.18 25);
+  --palette-border: color-mix(in oklab, var(--color-primary-blue-scale-950) 18%, transparent);
+  --palette-ring: var(--color-primary-blue-scale-500);
+  --palette-chart-1: var(--color-primary-blue-scale-600);
+  --palette-chart-2: var(--color-primary-blue-scale-400);
+  --palette-chart-3: var(--color-primary-blue-scale-800);
+  --palette-chart-4: var(--color-teal-600);
+  --palette-chart-5: var(--color-amber-400);
+}
+
+[data-theme="primary-blue"][data-color-mode="dark"] {
+  --palette-page: var(--color-primary-blue-scale-950);
+  --palette-surface: var(--color-primary-blue-scale-900);
+  --palette-surface-subtle: var(--color-primary-blue-scale-800);
+  --palette-text: var(--color-primary-blue-scale-50);
+  --palette-text-muted: color-mix(in oklab, var(--color-primary-blue-scale-50) 72%, transparent);
+  --palette-primary: var(--color-primary-blue-scale-300);
+  --palette-primary-hover: var(--color-primary-blue-scale-200);
+  --palette-primary-foreground: var(--color-primary-blue-scale-950);
+  --palette-accent: color-mix(
+    in oklab,
+    var(--color-primary-blue-scale-500) 25%,
+    var(--palette-surface)
+  );
+  --palette-accent-foreground: var(--color-primary-blue-scale-50);
+  --palette-warning: var(--color-amber-300);
+  --palette-positive: var(--color-teal-300);
+  --palette-info: var(--color-primary-blue-scale-300);
+  --palette-error: oklch(0.78 0.15 25);
+  --palette-border: color-mix(in oklab, var(--color-primary-blue-scale-50) 18%, transparent);
+  --palette-ring: var(--color-primary-blue-scale-300);
+  --palette-chart-1: var(--color-primary-blue-scale-300);
+  --palette-chart-2: var(--color-primary-blue-scale-500);
+  --palette-chart-3: var(--color-primary-blue-scale-100);
+  --palette-chart-4: var(--color-teal-300);
+  --palette-chart-5: var(--color-amber-300);
+}
+
+/* Teal */
+
+[data-theme="teal"][data-color-mode="light"] {
+  --palette-page: var(--color-teal-50);
+  --palette-surface: #ffffff;
+  --palette-surface-subtle: var(--color-teal-100);
+  --palette-text: var(--color-teal-950);
+  --palette-text-muted: color-mix(in oklab, var(--color-teal-950) 68%, transparent);
+  --palette-primary: var(--color-teal-700);
+  --palette-primary-hover: var(--color-teal-800);
+  --palette-primary-foreground: #ffffff;
+  --palette-accent: var(--color-teal-200);
+  --palette-accent-foreground: var(--color-teal-950);
+  --palette-warning: var(--color-amber-400);
+  --palette-positive: var(--color-teal-600);
+  --palette-info: var(--color-primary-blue-scale-600);
+  --palette-error: oklch(0.55 0.18 25);
+  --palette-border: color-mix(in oklab, var(--color-teal-950) 18%, transparent);
+  --palette-ring: var(--color-teal-500);
+  --palette-chart-1: var(--color-teal-700);
+  --palette-chart-2: var(--color-teal-500);
+  --palette-chart-3: var(--color-teal-300);
+  --palette-chart-4: var(--color-primary-blue-scale-600);
+  --palette-chart-5: var(--color-amber-400);
+}
+
+[data-theme="teal"][data-color-mode="dark"] {
+  --palette-page: var(--color-teal-950);
+  --palette-surface: var(--color-teal-900);
+  --palette-surface-subtle: var(--color-teal-800);
+  --palette-text: var(--color-teal-50);
+  --palette-text-muted: color-mix(in oklab, var(--color-teal-50) 72%, transparent);
+  --palette-primary: var(--color-teal-300);
+  --palette-primary-hover: var(--color-teal-200);
+  --palette-primary-foreground: var(--color-teal-950);
+  --palette-accent: color-mix(in oklab, var(--color-teal-400) 24%, var(--palette-surface));
+  --palette-accent-foreground: var(--color-teal-50);
+  --palette-warning: var(--color-amber-300);
+  --palette-positive: var(--color-teal-300);
+  --palette-info: var(--color-primary-blue-scale-300);
+  --palette-error: oklch(0.78 0.15 25);
+  --palette-border: color-mix(in oklab, var(--color-teal-50) 18%, transparent);
+  --palette-ring: var(--color-teal-300);
+  --palette-chart-1: var(--color-teal-300);
+  --palette-chart-2: var(--color-teal-500);
+  --palette-chart-3: var(--color-teal-100);
+  --palette-chart-4: var(--color-primary-blue-scale-300);
+  --palette-chart-5: var(--color-amber-300);
+}
+
+/* Maritime monochromatic */
+
+[data-theme="maritime-monochromatic"][data-color-mode="light"] {
+  --palette-page: var(--color-maritime-50);
+  --palette-surface: #ffffff;
+  --palette-surface-subtle: var(--color-maritime-100);
+  --palette-text: var(--color-maritime-950);
+  --palette-text-muted: color-mix(in oklab, var(--color-maritime-950) 68%, transparent);
+  --palette-primary: var(--color-maritime-700);
+  --palette-primary-hover: var(--color-maritime-800);
+  --palette-primary-foreground: #ffffff;
+  --palette-accent: var(--color-maritime-200);
+  --palette-accent-foreground: var(--color-maritime-950);
+  --palette-warning: var(--color-amber-400);
+  --palette-positive: var(--color-teal-600);
+  --palette-info: var(--color-fjellbla);
+  --palette-error: oklch(0.55 0.18 25);
+  --palette-border: color-mix(in oklab, var(--color-maritime-950) 18%, transparent);
+  --palette-ring: var(--color-maritime-500);
+  --palette-chart-1: var(--color-maritime-700);
+  --palette-chart-2: var(--color-maritime-500);
+  --palette-chart-3: var(--color-maritime-300);
+  --palette-chart-4: var(--color-fjellbla);
+  --palette-chart-5: var(--color-teal-600);
+}
+
+[data-theme="maritime-monochromatic"][data-color-mode="dark"] {
+  --palette-page: var(--color-maritime-950);
+  --palette-surface: var(--color-maritime-900);
+  --palette-surface-subtle: var(--color-maritime-800);
+  --palette-text: var(--color-maritime-50);
+  --palette-text-muted: color-mix(in oklab, var(--color-maritime-50) 72%, transparent);
+  --palette-primary: var(--color-maritime-300);
+  --palette-primary-hover: var(--color-maritime-200);
+  --palette-primary-foreground: var(--color-maritime-950);
+  --palette-accent: color-mix(in oklab, var(--color-maritime-500) 28%, var(--palette-surface));
+  --palette-accent-foreground: var(--color-maritime-50);
+  --palette-warning: var(--color-amber-300);
+  --palette-positive: var(--color-teal-300);
+  --palette-info: var(--color-primary-blue-scale-300);
+  --palette-error: oklch(0.78 0.15 25);
+  --palette-border: color-mix(in oklab, var(--color-maritime-50) 18%, transparent);
+  --palette-ring: var(--color-maritime-300);
+  --palette-chart-1: var(--color-maritime-300);
+  --palette-chart-2: var(--color-maritime-500);
+  --palette-chart-3: var(--color-maritime-100);
+  --palette-chart-4: var(--color-primary-blue-scale-300);
+  --palette-chart-5: var(--color-teal-300);
+}
+
+/* Maritime secondary */
+
+[data-theme="maritime-monochromatic-secondary"][data-color-mode="light"] {
+  --palette-page: var(--color-maritime-secondary-50);
+  --palette-surface: #ffffff;
+  --palette-surface-subtle: var(--color-maritime-secondary-100);
+  --palette-text: var(--color-maritime-secondary-950);
+  --palette-text-muted: color-mix(in oklab, var(--color-maritime-secondary-950) 68%, transparent);
+  --palette-primary: var(--color-maritime-secondary-700);
+  --palette-primary-hover: var(--color-maritime-secondary-800);
+  --palette-primary-foreground: #ffffff;
+  --palette-accent: var(--color-maritime-secondary-200);
+  --palette-accent-foreground: var(--color-maritime-secondary-950);
+  --palette-warning: var(--color-amber-400);
+  --palette-positive: var(--color-teal-600);
+  --palette-info: var(--color-primary-blue-scale-600);
+  --palette-error: oklch(0.55 0.18 25);
+  --palette-border: color-mix(in oklab, var(--color-maritime-secondary-950) 18%, transparent);
+  --palette-ring: var(--color-maritime-secondary-500);
+  --palette-chart-1: var(--color-maritime-secondary-700);
+  --palette-chart-2: var(--color-maritime-secondary-500);
+  --palette-chart-3: var(--color-maritime-secondary-300);
+  --palette-chart-4: var(--color-primary-blue-scale-600);
+  --palette-chart-5: var(--color-amber-400);
+}
+
+[data-theme="maritime-monochromatic-secondary"][data-color-mode="dark"] {
+  --palette-page: var(--color-maritime-secondary-950);
+  --palette-surface: var(--color-maritime-secondary-900);
+  --palette-surface-subtle: var(--color-maritime-secondary-800);
+  --palette-text: var(--color-maritime-secondary-50);
+  --palette-text-muted: color-mix(in oklab, var(--color-maritime-secondary-50) 72%, transparent);
+  --palette-primary: var(--color-maritime-secondary-300);
+  --palette-primary-hover: var(--color-maritime-secondary-200);
+  --palette-primary-foreground: var(--color-maritime-secondary-950);
+  --palette-accent: color-mix(
+    in oklab,
+    var(--color-maritime-secondary-500) 28%,
+    var(--palette-surface)
+  );
+  --palette-accent-foreground: var(--color-maritime-secondary-50);
+  --palette-warning: var(--color-amber-300);
+  --palette-positive: var(--color-teal-300);
+  --palette-info: var(--color-primary-blue-scale-300);
+  --palette-error: oklch(0.78 0.15 25);
+  --palette-border: color-mix(in oklab, var(--color-maritime-secondary-50) 18%, transparent);
+  --palette-ring: var(--color-maritime-secondary-300);
+  --palette-chart-1: var(--color-maritime-secondary-300);
+  --palette-chart-2: var(--color-maritime-secondary-500);
+  --palette-chart-3: var(--color-maritime-secondary-100);
+  --palette-chart-4: var(--color-primary-blue-scale-300);
+  --palette-chart-5: var(--color-amber-300);
+}

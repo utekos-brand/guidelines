@@ -1,20 +1,62 @@
-export const BRAND_THEMES = ["utekos", "havdyp", "dnb", "vy"] as const;
+export const BRAND_THEMES = [
+  "utekos",
+  "vy",
+  "dnb",
+  "havdyp",
+  "custom",
+  "hovedpalett",
+  "all-year-palette",
+  "primary-blue",
+  "teal",
+  "maritime-monochromatic",
+  "maritime-monochromatic-secondary",
+] as const;
 
 export type BrandTheme = (typeof BRAND_THEMES)[number];
+
+export type BrandThemeGroup = {
+  title: string;
+  themes: readonly BrandTheme[];
+};
+
+export const BRAND_THEME_GROUPS = [
+  {
+    title: "Theme",
+    themes: ["utekos", "vy", "dnb", "havdyp", "custom"],
+  },
+  {
+    title: "Paletter",
+    themes: [
+      "hovedpalett",
+      "all-year-palette",
+      "primary-blue",
+      "teal",
+      "maritime-monochromatic",
+      "maritime-monochromatic-secondary",
+    ],
+  },
+] as const satisfies readonly BrandThemeGroup[];
 
 export const COLOR_MODES = ["light", "dark"] as const;
 
 export type ColorMode = (typeof COLOR_MODES)[number];
 
-export const DEFAULT_THEME: BrandTheme = "utekos";
+export const DEFAULT_THEME: BrandTheme = "vy";
 
-export const DEFAULT_COLOR_MODE: ColorMode = "light";
+export const DEFAULT_COLOR_MODE: ColorMode = "dark";
 
 export const BRAND_THEME_LABELS: Record<BrandTheme, string> = {
   utekos: "Utekos",
-  havdyp: "Havdyp",
-  dnb: "DnB",
   vy: "Vy",
+  dnb: "DnB",
+  havdyp: "Havdyp",
+  custom: "Custom",
+  hovedpalett: "Hovedpalett",
+  "all-year-palette": "All-year palette",
+  "primary-blue": "Primary blue",
+  teal: "Teal",
+  "maritime-monochromatic": "Maritime monochromatic",
+  "maritime-monochromatic-secondary": "Maritime secondary",
 };
 
 export const THEME_COOKIE_NAME = "brand-theme";
