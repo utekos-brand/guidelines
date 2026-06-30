@@ -183,7 +183,7 @@
       "kind": "app-route",
       "status": "stub",
       "audience": ["design-system", "frontend", "codex", "cursor"],
-      "useWhen": "Planning or filling the Vy theme page.",
+      "useWhen": "Planning or filling the Vy page.",
       "authority": "runtime-source",
       "related": ["styles/themes/vy.css", "docs/mcp/spor-mcp/vyDigital-dark-tokens.md"]
     },

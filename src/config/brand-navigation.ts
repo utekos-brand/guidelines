@@ -112,7 +112,7 @@ export const brandNavSections: BrandNavSection[] = [
           },
           {
             title: "Tokens",
-            href: "/identitet/design/tokens",
+            href: "/theme",
             description: "Design tokens og semantiske koblinger",
           },
           {

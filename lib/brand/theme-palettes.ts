@@ -230,7 +230,7 @@ function buildVyPalette(): ThemePalette {
 
   return {
     theme: "vy",
-    title: "Vy theme",
+    title: "Vy",
     summary:
       "Vy-theme viser Spor/Vy-paletten med hovedfarger, semantikk, shades og alpha-toner fra repoets theme-CSS.",
     sourceLabel: "Spor MCP snapshot + styles/themes/vy.css",

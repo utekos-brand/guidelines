@@ -1,3 +1,6 @@
+import "@dnb/eufemia/style/dnb-ui-core.min.css";
+import "@dnb/eufemia/style/themes/ui/ui-theme-components.min.css";
+import "@dnb/eufemia/style/themes/ui/ui-theme-basis.min.css";
 import "./globals.css";
 import { Google_Sans_Flex } from "next/font/google";
 import Script from "next/script";

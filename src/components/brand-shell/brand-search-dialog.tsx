@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 
@@ -75,7 +75,7 @@ export function BrandSearchDialog() {
               autoFocus
               placeholder="Søk etter side..."
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
               className="pl-8"
             />
           </div>
