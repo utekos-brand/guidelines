@@ -111,11 +111,6 @@ export const brandNavSections: BrandNavSection[] = [
             description: "Systemregler for tokens og komponentbruk",
           },
           {
-            title: "Tokens",
-            href: "/theme",
-            description: "Design tokens og semantiske koblinger",
-          },
-          {
             title: "Ressurser",
             href: "/ressurser",
             description: "Filer, støtteinnhold og arbeidsressurser",
@@ -136,16 +131,16 @@ export const brandNavSections: BrandNavSection[] = [
       {
         title: "Utekos",
         href: "/theme/utekos",
-        description: "Primær Utekos-fargepallet",
+        description: "Primær Utekos-fargepalett",
       },
       {
         title: "Vy",
         href: "/theme/vy",
         badge: "Spor",
-        description: "Vy/Spor-inspirert fargepallet for sammenligning",
+        description: "Vy/Spor-inspirert fargepalett for sammenligning",
       },
       {
-        title: "DNB",
+        title: "DnB",
         href: "/theme/dnb",
         description: "DNB/Eufemia-inspirert theme for sammenligning",
       },
@@ -160,11 +155,6 @@ export const brandNavSections: BrandNavSection[] = [
         badge: "Lab",
         description: "Eksperimentell theme-konfigurasjon",
       },
-    ],
-  },
-  {
-    title: "Paletter",
-    items: [
       {
         title: "Hovedpalett",
         href: "/theme/palettes/hovedpalett",
@@ -183,7 +173,7 @@ export const brandNavSections: BrandNavSection[] = [
       {
         title: "Teal",
         href: "/theme/palettes/teal",
-        description: "Teal-basert theme-retning",
+        description: "Teal-basert fargeskala",
       },
       {
         title: "Maritime monochromatic",

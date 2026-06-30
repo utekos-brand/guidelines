@@ -182,11 +182,11 @@ function buildDnbPalette(): ThemePalette {
         ],
         rawVars,
       ),
-      createSemanticGroup("dnb-light-semantic", "Semantikk - light", {
+      createSemanticGroup("dnb-light-semantic", "Light", {
         sourceVars: lightSemanticVars,
         resolveVars: rawVars,
       }),
-      createSemanticGroup("dnb-dark-semantic", "Semantikk - dark", {
+      createSemanticGroup("dnb-dark-semantic", "Dark", {
         sourceVars: darkSemanticVars,
         resolveVars: rawVars,
       }),
@@ -257,7 +257,7 @@ function buildVyPalette(): ThemePalette {
         sourceVars: lightSemanticVars,
         resolveVars: rawVars,
       }),
-      createSemanticGroup("vy-dark-semantic", "Semantikk - dark", {
+      createSemanticGroup("vy-dark-semantic", "Dark", {
         sourceVars: darkSemanticVars,
         resolveVars: rawVars,
       }),
@@ -323,11 +323,11 @@ function buildUtekosPalette(): ThemePalette {
         ],
         baseVars,
       ),
-      createSemanticGroup("utekos-light-semantic", "Semantikk - light", {
+      createSemanticGroup("utekos-light-semantic", "Light", {
         sourceVars: lightSemanticVars,
         resolveVars: mergedLightVars,
       }),
-      createSemanticGroup("utekos-dark-semantic", "Semantikk - dark", {
+      createSemanticGroup("utekos-dark-semantic", "Dark", {
         sourceVars: darkSemanticVars,
         resolveVars: mergedDarkVars,
       }),
@@ -374,11 +374,11 @@ function buildHavdypPalette(): ThemePalette {
         ],
         baseVars,
       ),
-      createSemanticGroup("havdyp-light-semantic", "Semantikk - light", {
+      createSemanticGroup("havdyp-light-semantic", "Light", {
         sourceVars: lightSemanticVars,
         resolveVars: mergedLightVars,
       }),
-      createSemanticGroup("havdyp-dark-semantic", "Semantikk - dark", {
+      createSemanticGroup("havdyp-dark-semantic", "Dark", {
         sourceVars: darkSemanticVars,
         resolveVars: mergedDarkVars,
       }),

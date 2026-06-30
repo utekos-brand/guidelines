@@ -509,6 +509,8 @@
     display: inline-flex;
     width: fit-content;
     align-items: center;
+    min-height: 1.5rem !important;
+    padding: 0.1875rem 0.625rem !important;
     border: 1px solid var(--border);
     border-radius: 999px;
     background: var(--secondary);

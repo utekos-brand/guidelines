@@ -11,7 +11,7 @@ import {
   DEFAULT_THEME,
   THEME_COOKIE_NAME,
 } from "@/config/brand-themes";
-
+import { utekosText, utekosTextMedium } from "./fonts/font.config";
 const googleSansFlex = Google_Sans_Flex({
   variable: "--font-sans",
   subsets: ["latin"],
@@ -56,7 +56,7 @@ export default function RootLayout({
       lang="nb"
       data-theme={DEFAULT_THEME}
       data-color-mode={DEFAULT_COLOR_MODE}
-      className={googleSansFlex.variable}
+      className={`${googleSansFlex.variable} ${utekosText.variable} ${utekosTextMedium.variable}`}
       suppressHydrationWarning
     >
       <body>
