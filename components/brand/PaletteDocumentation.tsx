@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { CopyableColorTile } from "@/components/brand/CopyableColorTile";
 import {
   getPaletteDoc,
   getPaletteDocIndex,
@@ -32,7 +33,7 @@ export function PaletteDocumentation({ palette }: { palette: PaletteDocId }) {
   const doc = getPaletteDoc(palette);
 
   return (
-    <section className="brand-doc-wide space-y-14">
+    <section className="brand-doc-wide space-y-24">
       <PaletteOverview doc={doc} />
       <DerivedColorSection colors={doc.colors} />
       <RelatedPalettes current={doc.id} />
@@ -74,66 +75,61 @@ export function PaletteIndex() {
 
 function PaletteOverview({ doc }: { doc: PaletteDoc }) {
   return (
-    <section className="space-y-5">
-      <header className="max-w-3xl">
-        <h2 className="mdx-h2">Palett</h2>
-      </header>
+    <section className="space-y-8">
+      <PaletteSectionHeader title="Palett" />
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-4">
         {doc.colors.map((color) => (
-          <PaletteColorTile key={color.id} color={color} />
+          <CopyableColorTile
+            key={color.id}
+            color={color.color}
+            value={color.value}
+            label={color.label}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function PaletteColorTile({ color }: { color: PaletteDocColor }) {
-  return (
-    <article className="border-border bg-panel text-foreground block min-w-0 overflow-hidden rounded-xl border">
-      <span
-        aria-hidden="true"
-        className="block aspect-4/3 w-full"
-        style={{ backgroundColor: color.color }}
-      />
-      <span className="sr-only">{`${color.label} ${color.value}`}</span>
-    </article>
-  );
-}
-
 function DerivedColorSection({ colors }: { colors: PaletteDocColor[] }) {
   return (
-    <section className="space-y-6">
-      <header className="max-w-3xl">
-        <h2 className="mdx-h2">Nyanser</h2>
-      </header>
+    <section className="space-y-10">
+      <PaletteSectionHeader title="Nyanser" />
 
-      <div className="space-y-6">
+      <div className="grid gap-8">
         {colors.map((color) => (
-          <article key={color.id} className="border-border bg-panel rounded-xl border px-4 py-4">
-            <header className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-              <h3 className="text-foreground text-sm font-semibold">{color.label}</h3>
-              <code className="text-muted-foreground font-mono text-xs">{color.value}</code>
-            </header>
+          <article
+            key={color.id}
+            className="border-border bg-panel grid gap-4 rounded-xl border p-4 lg:grid-cols-[minmax(8rem,12rem)_minmax(0,1fr)]"
+          >
+            <CopyableColorTile
+              color={color.color}
+              value={color.value}
+              label={color.label}
+              className="aspect-4/3 w-full"
+            />
 
-            <div className="grid gap-4 lg:grid-cols-3">
+            <div className="grid min-w-0 gap-4 lg:grid-cols-3">
               {derivedRamps.map((ramp) => (
-                <div key={ramp.id} className="space-y-2">
-                  <p className="text-foreground text-xs font-semibold tracking-wide uppercase">
-                    {ramp.title}
-                  </p>
+                <div key={ramp.id} className="min-w-0">
+                  <span className="sr-only">{ramp.title}</span>
 
                   <div className="border-border grid grid-cols-6 overflow-hidden rounded-xl border">
-                    {derivedStops.map((amount) => (
-                      <span
-                        key={amount}
-                        className="aspect-square"
-                        title={`${color.label} ${ramp.title} ${amount}%`}
-                        style={{
-                          backgroundColor: `color-mix(in oklab, ${color.color} ${amount}%, ${ramp.mixWith})`,
-                        }}
-                      />
-                    ))}
+                    {derivedStops.map((amount) => {
+                      const value = `color-mix(in oklab, ${color.color} ${amount}%, ${ramp.mixWith})`;
+                      const label = `${color.label} ${ramp.title} ${amount}%`;
+
+                      return (
+                        <CopyableColorTile
+                          key={amount}
+                          color={value}
+                          value={value}
+                          label={label}
+                          className="aspect-square w-full rounded-none border-0 focus-visible:rounded-sm"
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -149,10 +145,9 @@ function RelatedPalettes({ current }: { current: PaletteDocId }) {
   const items = getPaletteDocIndex().filter((item) => item.id !== current);
 
   return (
-    <section className="space-y-4">
-      <header>
-        <h2 className="mdx-h2">Andre paletter</h2>
-      </header>
+    <section className="space-y-8">
+      <PaletteSectionHeader title="Andre paletter" />
+
       <div className="grid gap-3 lg:grid-cols-3">
         {items.map((item) => (
           <Link
@@ -166,6 +161,16 @@ function RelatedPalettes({ current }: { current: PaletteDocId }) {
         ))}
       </div>
     </section>
+  );
+}
+
+function PaletteSectionHeader({ title }: { title: string }) {
+  return (
+    <header className="max-w-none">
+      <h2 className="text-foreground text-4xl font-semibold tracking-tight text-balance md:text-5xl">
+        {title}
+      </h2>
+    </header>
   );
 }
 

@@ -187,6 +187,27 @@ export const brandNavSections: BrandNavSection[] = [
       },
     ],
   },
+  {
+    title: "Eufemia",
+    items: [
+      {
+        title: "Oversikt",
+        href: "/eufemia",
+        exact: true,
+        description: "Inngang til lokal Eufemia-style komponentdokumentasjon",
+      },
+      {
+        title: "Button",
+        href: "/eufemia/button",
+        description: "Button-dokumentasjon med demoer, properties og events",
+      },
+      {
+        title: "Upload",
+        href: "/eufemia/upload",
+        description: "Upload-dokumentasjon med filregler, demoer og focus mode",
+      },
+    ],
+  },
 ];
 
 export const brandNavGroups: BrandNavGroup[] = brandNavSections.flatMap((section) => [

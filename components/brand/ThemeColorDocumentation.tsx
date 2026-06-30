@@ -1,13 +1,15 @@
 import type { Route } from "next";
 import Link from "next/link";
 
+import { CopyableColorTile } from "@/components/brand/CopyableColorTile";
+import { CopyColorCodeButton } from "@/components/brand/CopyColorCodeButton";
+import { getPaletteDoc, type PaletteDocColor, type PaletteDocId } from "@/lib/brand/palette-docs";
 import {
   getThemePalette,
   type ThemeDocId,
   type ThemePaletteColor,
   type ThemePaletteGroup,
 } from "@/lib/brand/theme-palettes";
-import { getPaletteDoc, type PaletteDocColor, type PaletteDocId } from "@/lib/brand/palette-docs";
 
 type PaletteOverviewColor = {
   id: string;
@@ -169,32 +171,13 @@ function ThemeColorGroup({ theme, group }: { theme: ThemeDocId; group: ThemePale
 }
 
 function ThemeColorTile({ color }: { color: ThemePaletteColor }) {
-  const displayValue = extractHex(color.displayValue) ?? color.displayValue;
-
-  return (
-    <a
-      href={`#${color.id}-details`}
-      className="border-border bg-panel text-foreground hover:border-primary focus-visible:ring-ring group block min-w-0 overflow-hidden rounded-xl border no-underline transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-      aria-label={`${color.label}, ${displayValue}`}
-    >
-      <span
-        aria-hidden="true"
-        className="block aspect-4/3 w-full"
-        style={{ backgroundColor: color.color }}
-      />
-      <span className="sr-only">{`${color.label}, ${displayValue}`}</span>
-    </a>
-  );
+  return <CopyableColorTile color={color.color} value={color.copyValue} label={color.label} />;
 }
 
 function ThemeTokenDetails({ group }: { group: ThemePaletteGroup }) {
   return (
     <section className="space-y-3">
       <h3 className="text-foreground text-base font-semibold">Design tokens og detaljer</h3>
-      <p className="text-muted-foreground max-w-3xl text-sm leading-6">
-        Token-navn, kilde-token og tekniske verdier vises her i stedet for inne i palettgridet. Det
-        holder fargeoversikten ryddig, men bevarer sporbarheten.
-      </p>
 
       <div className="grid gap-3">
         {group.colors.map((color) => (
@@ -209,8 +192,10 @@ function ThemeTokenDetails({ group }: { group: ThemePaletteGroup }) {
                 className="border-border block aspect-square w-20 rounded-lg border"
                 style={{ backgroundColor: color.color }}
               />
+
               <div className="min-w-0">
                 <h4 className="text-foreground text-sm font-semibold">{color.label}</h4>
+
                 <dl className="mt-3 grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-3">
                   {color.cssVar ? (
                     <div className="min-w-0">
@@ -221,8 +206,13 @@ function ThemeTokenDetails({ group }: { group: ThemePaletteGroup }) {
 
                   <div className="min-w-0">
                     <dt className="text-muted-foreground">Verdi</dt>
-                    <dd className="text-foreground mt-1 font-mono break-all">
-                      {color.displayValue}
+                    <dd className="mt-1 max-w-md">
+                      <CopyColorCodeButton
+                        value={color.copyValue}
+                        displayValue={color.displayValue}
+                        label={`${color.label} fargekode`}
+                        compact
+                      />
                     </dd>
                   </div>
 
@@ -290,8 +280,4 @@ function mapPaletteDocColor(color: PaletteDocColor): PaletteOverviewColor {
 
 function isThemeDocumentationGroup(group: ThemePaletteGroup) {
   return !group.id.startsWith("plan-") && !group.id.startsWith("brand-token-");
-}
-
-function extractHex(value: string) {
-  return value.match(/#[0-9a-fA-F]{3,8}\b/)?.[0] ?? null;
 }
